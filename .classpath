@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="src"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.7"/>
+	<classpathentry kind="lib" path="D:/Projects/Sabre/lib/mongo-java-driver-2.13.0.jar" sourcepath="D:/Projects/Sabre/lib/mongo-java-driver-2.13.0-sources.jar">
+		<attributes>
+			<attribute name="javadoc_location" value="jar:file:/D:/Projects/Sabre/lib/mongo-java-driver-2.13.0-javadoc.jar!/"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry combineaccessrules="false" kind="src" path="/PacketWrapper"/>
+	<classpathentry kind="lib" path="D:/Projects/Sabre/lib/bukkit-1.8-R0.1-20150220.163627-184.jar">
+		<attributes>
+			<attribute name="javadoc_location" value="jar:file:/D:/Projects/Sabre/lib/bukkit-1.8-R0.1-20150220.163627-184-javadoc.jar!/"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="D:/Projects/Sabre/lib/spigot_server.jar"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/Combat-Tag"/>
+	<classpathentry kind="lib" path="D:/Projects/Sabre/lib/ProtocolLib.jar"/>
+	<classpathentry kind="output" path="bin"/>
+</classpath>

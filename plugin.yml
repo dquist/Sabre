@@ -1,0 +1,61 @@
+name: CivFactions
+main: com.gordonfreemanq.sabre.SabrePlugin
+version: 0.0.1
+description: CivFactions plugin
+author: GFQ
+depend: [PermissionsEx, CombatTag]
+commands:
+  sabre:
+    description: The Faction base command
+    aliases: [f]
+  msg:
+    description: Sends a player a message.
+    usage: /<command> <player> <message>
+    aliases: [message, tell, m, pm]
+  reply:
+    description: Reply to the last player who was messaged
+    usage: /<command> <message>
+    aliases: r
+  chat:
+    description: Sets the chat channel
+    usage: /<command> <group>
+    aliases: c
+  me:
+    description: Sends a me message
+    usage: /<command> <message>
+  help:
+    description: Gets plugin help
+    usage: /<command>
+    aliases: "?"
+  unknown:
+    description: Unknown commands
+    usage: /<command>
+    aliases: [ban, parson, give]
+  sbi:
+    description: Get block information
+    usage: /<command>
+    aliases:
+  sbf:
+    description: Build reinforced blocks
+    usage: /<command> <group>
+    aliases:
+  sbr:
+    description: Reinforces existing blocks
+    usage: /<command> <group>
+    aliases:
+  sbo:
+    description: Turns off building
+    usage: /<command>
+    aliases:
+  sbb:
+    description: Toggles bypass mode
+    usage: /<command>
+    aliases:
+  snitch:
+  pp:
+  speed:
+  tp:
+  tphere:
+  factory:
+   
+   
