@@ -59,6 +59,7 @@ public class SabrePlugin extends AbstractSabrePlugin
 	private CustomItems customItems;
 	private FactoryConfig factoryConfig;
 	private FactoryWorker factoryWorker;
+	private boolean isLoaded;
 	
 	/**
 	 * Gets the player manager
@@ -172,7 +173,7 @@ public class SabrePlugin extends AbstractSabrePlugin
 			
 			
 		} catch(Exception ex) {
-			throw new RuntimeException();
+			throw new RuntimeException(ex);
 		}
 	}
 
@@ -198,6 +199,9 @@ public class SabrePlugin extends AbstractSabrePlugin
 		this.globalChat = new GlobalChat(playerManager, config);
 		this.serverBcast = new ServerBroadcast(playerManager);
 		this.playerListener = new PlayerListener(playerManager, globalChat, this);
+		
+		getServer().getPluginManager().registerEvents(playerListener, this);
+		
 		this.blockListener = new BlockListener(playerManager, blockManager, config, this);
 		this.snitchLogger = new SnitchLogger(db, playerManager);
 		this.snitchListener = new SnitchListener(snitchLogger);
@@ -214,6 +218,7 @@ public class SabrePlugin extends AbstractSabrePlugin
 			playerListener.setPluginLoaded(true);
 		} catch(Exception ex) {
 			this.log(Level.SEVERE, "Failed to connect to MongoDB database!");
+			throw ex;
 		}
 
 
@@ -223,7 +228,6 @@ public class SabrePlugin extends AbstractSabrePlugin
 
 		playerListener.handleOnlinePlayers();
 		blockListener.handleLoadedChunks();
-		getServer().getPluginManager().registerEvents(playerListener, this);
 		getServer().getPluginManager().registerEvents(blockListener, this);
 		getServer().getPluginManager().registerEvents(snitchListener, this);
 		getServer().getPluginManager().registerEvents(pearlListener, this);
@@ -239,6 +243,7 @@ public class SabrePlugin extends AbstractSabrePlugin
 
 		postEnable();
 		this.loadSuccessful = true;
+		this.playerListener.setPluginLoaded(true);
 	}
 
 
@@ -260,7 +265,7 @@ public class SabrePlugin extends AbstractSabrePlugin
 	public boolean onCommand(CommandSender sender, Command cmd, String alias, String[] args)
 	{
 		// Roll any other accepted raw commands into subcommands
-		if (!cmd.getLabel().equalsIgnoreCase("factions")) {
+		if (!cmd.getLabel().equalsIgnoreCase("sabre")) {
 			
 			String[] args2 = new String[args.length + 1];
 			args2[0] = cmd.getLabel();
@@ -269,7 +274,7 @@ public class SabrePlugin extends AbstractSabrePlugin
 			}
 			
 			args = args2;
-			cmd.setLabel("f");
+			cmd.setLabel("s");
 		}
 		
 		

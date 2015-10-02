@@ -33,7 +33,7 @@ import com.gordonfreemanq.sabre.util.SabreUtil;
 
 public class PlayerListener implements Listener {
 	
-	private static final String LOAD_ERR = "The server did not load correctly.";
+	private static final String LOAD_ERR = "The server isn't loaded yet.";
 	
 	private final PlayerManager pm;
 	private final GlobalChat globalChat;
@@ -45,6 +45,7 @@ public class PlayerListener implements Listener {
 		this.pm = pm;
 		this.globalChat = globalChat;
 		this.logger = logger;
+		this.pluginLoaded = false;
 	}
 	
 	
