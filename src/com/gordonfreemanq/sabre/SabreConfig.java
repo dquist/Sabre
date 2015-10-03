@@ -161,8 +161,10 @@ public class SabreConfig {
 					durability = fc.getInt(duraKey);
 				}
 				
-				SabreItemStack is = new SabreItemStack(m, m.name(), 1, durability);
-				this.disabledRecipes.add(is);
+				if (m != null) {
+					SabreItemStack is = new SabreItemStack(m, m.name(), 1, durability);
+					this.disabledRecipes.add(is);
+				}
 			}
 		}
 		
