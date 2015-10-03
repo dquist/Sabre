@@ -146,7 +146,7 @@ public class Lang
 	public static final String factoryCreatedBaseFactory = "<g>You created a factory base.";
 	public static final String factoryNotFound = "<b>No factory was found.";
 	public static final String factoryNoRecipe = "<b>No recipe is selected.";
-	public static final String factoryMissingChests = "<b>Factory is missing chests.";
+	public static final String factoryMissingChests = "<b>Factory is missing chests. <i>Use <c>/factory configure";
 	public static final String factoryMissingFuel = "<b>Factory is out of fuel.";
 	public static final String factoryNeedFollowing = "<b>You are missing the following: <i>%s";
 	public static final String factoryActivated = "<g>Started recipe <a>%s<g>";
