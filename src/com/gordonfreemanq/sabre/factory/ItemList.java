@@ -21,9 +21,9 @@ public class ItemList<E extends SabreItemStack> extends ArrayList<E> {
 	{
 		boolean returnValue=true;
 		//Checks that the ItemList ItemStacks are contained in the inventory
-		for(ItemStack itemStack:this)
+		for(SabreItemStack itemStack : this)
 		{
-			returnValue=returnValue&&(amountAvailable(inventory,itemStack)==itemStack.getAmount());
+			returnValue=returnValue&&(amountAvailable(inventory, itemStack) == itemStack.getAmount());
 		}
 		//Checks that inventory has not ItemStacks in addition to the ones in the itemList
 		for(ItemStack invItemStack:inventory.getContents())
@@ -51,9 +51,9 @@ public class ItemList<E extends SabreItemStack> extends ArrayList<E> {
 		}
 		else
 		{
-			for(ItemStack itemStack:this)
+			for(SabreItemStack itemStack : this)
 			{
-				if (amountAvailable(inventory, itemStack)>=itemStack.getAmount())
+				if (amountAvailable(inventory, itemStack) >= itemStack.getAmount())
 				{
 					return true;
 				}
@@ -63,9 +63,9 @@ public class ItemList<E extends SabreItemStack> extends ArrayList<E> {
 	}
 	public boolean allIn(Inventory inventory)
 	{
-		for(ItemStack itemStack:this)
+		for(SabreItemStack itemStack : this)
 		{
-			if (amountAvailable(inventory, itemStack)<itemStack.getAmount())
+			if (amountAvailable(inventory, itemStack) < itemStack.getAmount())
 			{
 				return false;
 			}
@@ -140,9 +140,9 @@ public class ItemList<E extends SabreItemStack> extends ArrayList<E> {
 	public int amountAvailable(Inventory inventory)
 	{
 		int amountAvailable=0;
-		for(ItemStack itemStack:this)
+		for(SabreItemStack itemStack : this)
 		{
-			int currentAmountAvailable=amountAvailable(inventory,itemStack);
+			int currentAmountAvailable = amountAvailable(inventory,itemStack);
 			amountAvailable=amountAvailable>currentAmountAvailable ? amountAvailable : currentAmountAvailable;
 		}
 		return amountAvailable;
@@ -227,7 +227,7 @@ public class ItemList<E extends SabreItemStack> extends ArrayList<E> {
 	 * @param itemStack The item stack to compare
 	 * @return The number of items available
 	 */
-	private int amountAvailable(Inventory inventory, ItemStack itemStack)
+	private int amountAvailable(Inventory inventory, SabreItemStack itemStack)
 	{
 		int totalMaterial = 0;
 		for(ItemStack currentItemStack : inventory.all(itemStack.getType()).values())
@@ -237,13 +237,18 @@ public class ItemList<E extends SabreItemStack> extends ArrayList<E> {
 				if (itemStack.isSimilar(currentItemStack)) {
 					totalMaterial += currentItemStack.getAmount();
 				}
-				
-				/*
-				if (itemStack.isSimilar(currentItemStack) ||
-					(itemStack.getType() == Material.NETHER_WARTS && currentItemStack.getType() == Material.NETHER_WARTS))
-				{		
-					totalMaterial += currentItemStack.getAmount();
-				} */
+			}
+		}
+		
+		for(SabreItemStack substitute : itemStack.getSubstitutes()) {
+			for(ItemStack currentItemStack : inventory.all(substitute.getType()).values())
+			{
+				if(currentItemStack != null)
+				{	
+					if (substitute.isSimilar(currentItemStack)) {
+						totalMaterial += currentItemStack.getAmount();
+					}
+				}
 			}
 		}
 		

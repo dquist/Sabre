@@ -1,0 +1,15 @@
+Mining
+  - always drop the ore
+  - Prevent furnace smelting
+
+Disable crafting
+  - Tools
+  - Armor
+  - Weapons
+	
+Misc
+  - Disable placing blocks while hovering over air
+  
+Factories
+  - allow ways to replace incredients with other items
+  - show the name of the factory when switching recipes

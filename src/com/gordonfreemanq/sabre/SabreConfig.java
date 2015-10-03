@@ -4,11 +4,14 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
+import net.minecraft.server.v1_8_R1.ItemStack;
+
 import org.bukkit.Material;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 
 import com.gordonfreemanq.sabre.blocks.ReinforcementMaterial;
+import com.gordonfreemanq.sabre.blocks.SabreItemStack;
 
 public class SabreConfig {
 	
@@ -30,6 +33,7 @@ public class SabreConfig {
 		this.lockableItems = new ArrayList<Material>();
 		this.nonReinforceable = new ArrayList<Material>();
 		this.reinforcementMaterials = new ArrayList<ReinforcementMaterial>();
+		this.disabledRecipes = new ArrayList<SabreItemStack>();
 		this.prisonWorld = "world_the_end";
 		this.freeWorld = "world";
 	}
@@ -83,6 +87,8 @@ public class SabreConfig {
 	
 	
 	private List<ReinforcementMaterial> reinforcementMaterials;
+	private List<SabreItemStack> disabledRecipes;
+	
 	
 	
 	public int snitchEntryOverlap;
@@ -140,6 +146,24 @@ public class SabreConfig {
 			}
 		} else {
 			setDefaultReinforcements();
+		}
+
+		this.disabledRecipes.clear();
+		if (fc.contains("disabled_recipes")) {
+			Set<String> rKeys = fc.getConfigurationSection("disabled_recipes").getKeys(false);
+			for (String s : rKeys) {
+				String materialKey = String.format("disabled_recipes.%s.material", s);
+				String duraKey = String.format("disabled_recipes.%s.durability", s);
+				
+				Material m = Material.getMaterial(fc.getString(materialKey));
+				int durability = 0;
+				if (fc.contains(duraKey)) {
+					durability = fc.getInt(duraKey);
+				}
+				
+				SabreItemStack is = new SabreItemStack(m, m.name(), 1, durability);
+				this.disabledRecipes.add(is);
+			}
 		}
 		
 		if (fc.contains("build.lockable")) {
@@ -272,6 +296,13 @@ public class SabreConfig {
 		return null;
 	}
 	
+	/**
+	 * Gets the disabled crafting recipes
+	 * @return The disabled recipes
+	 */
+	public List<SabreItemStack> getDisabledRecipes() {
+		return this.disabledRecipes;
+	}
 	
 	/**
 	 * Checks whether a block type is non reinforceable

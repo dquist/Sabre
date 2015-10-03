@@ -166,12 +166,11 @@ public class FactoryConfig {
 		ItemList<SabreItemStack> items = new ItemList<SabreItemStack>();
 		if(configItems != null)
 		{
-			for(String commonName:configItems.getKeys(false))
+			for(String commonName : configItems.getKeys(false))
 			{
 				
-				ConfigurationSection configItem= configItems.getConfigurationSection(commonName);
+				ConfigurationSection configItem = configItems.getConfigurationSection(commonName);
 				
-
 				String materialName = "";
 				ItemStack sabreStack = null;
 				Material material = null;
@@ -196,13 +195,37 @@ public class FactoryConfig {
 					}
 				}
 				
-				short durability = (short)configItem.getInt("durability",0);
+				short durability = (short)configItem.getInt("durability", 0);
 				String displayName = configItem.getString("display_name");
 				String lore = configItem.getString("lore");
 				List<ProbabilisticEnchantment> compulsoryEnchantments = getEnchantments(configItem.getConfigurationSection("enchantments"));
 				List<ProbabilisticEnchantment> storedEnchantments = getEnchantments(configItem.getConfigurationSection("stored_enchantments"));
 				List<PotionEffect> potionEffects = getPotionEffects(configItem.getConfigurationSection("potion_effects"));
-				items.add(createItemStack(material, amount, durability, displayName, lore, commonName, sabreStack, compulsoryEnchantments, storedEnchantments, potionEffects));
+				
+				SabreItemStack is = createItemStack(material, amount, durability, displayName, lore, commonName, sabreStack, compulsoryEnchantments, storedEnchantments, potionEffects);
+				
+				// Get any possible item substitutes
+				if (configItem.contains("subs")) {
+					
+					ConfigurationSection subs = configItem.getConfigurationSection("subs");
+					for(String subName : subs.getKeys(false)) {
+						ConfigurationSection subItem = subs.getConfigurationSection(subName);
+						
+						String subMaterialName = subItem.getString("material");
+						Material subMaterial = Material.getMaterial(subMaterialName);
+						if (subMaterial == null) {
+							plugin.getLogger().severe(configItems.getCurrentPath() + " has invalid material " + subMaterial);
+							break;
+						}
+						
+						int subDurability = subItem.getInt("durability", 0);
+						
+						SabreItemStack subStack = new SabreItemStack(subMaterial, subMaterialName, 1, subDurability);
+						is.addSubstitute(subStack);
+					}
+				}
+				
+				items.add(is);
 			}
 		}
 		return items;

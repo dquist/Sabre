@@ -1,6 +1,8 @@
 package com.gordonfreemanq.sabre.blocks;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
@@ -16,6 +18,7 @@ public class SabreItemStack extends ItemStack {
 	protected final String name;
 	protected final List<String> lore;
 	protected Class<? extends SabreBlock> blockClass;
+	protected final Set<SabreItemStack> subItems;
 	
 	/**
 	 * Creates a new SabreItemStack instance
@@ -27,6 +30,7 @@ public class SabreItemStack extends ItemStack {
 		super(type, amount, (short)durability);
 		this.name = name;
 		this.lore = lore;
+		this.subItems = new HashSet<SabreItemStack>();
 		
 		if (lore != null) {
 			ItemMeta im = this.getItemMeta();
@@ -73,6 +77,32 @@ public class SabreItemStack extends ItemStack {
 		this.blockClass = blockClass;
 	}
 	
+	/**
+	 * Gets the substitute items
+	 */
+	public Set<SabreItemStack> getSubstitutes() {
+		return this.subItems;
+	}
+	
+	/**
+	 * Adds a substitute item
+	 * @param item
+	 */
+	public void addSubstitute(SabreItemStack item) {
+		this.subItems.add(item);
+	}
+	
+	public boolean isSubstitute(ItemStack stack) {
+		for (SabreItemStack item : this.subItems) {
+			if (item.getType() == stack.getType()) {
+				if (item.getDurability() == stack.getDurability()
+						|| item.getDurability() == -1) {
+					return true;
+				}
+			}
+		}
+		return false;
+	}
 	
 	public SabreItemStack clone()
 	{
@@ -114,11 +144,13 @@ public class SabreItemStack extends ItemStack {
         }
         
         boolean r1 = getType() == stack.getType();
-        boolean r2 = getDurability() == stack.getDurability();
+        boolean r2 = getDurability() == stack.getDurability()
+        				|| getDurability() == -1
+        				|| stack.getDurability() == -1;
         boolean r3 = hasItemMeta() == stack.hasItemMeta();
         boolean r4 = Bukkit.getItemFactory().equals(getItemMeta(), stack.getItemMeta());
         
-        return r1 && r2 && r3 && r4;
+        return (r1 && r2 && r3 && r4) || (isSubstitute(stack) && r3 && r4);
     }
 	
 	

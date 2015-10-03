@@ -207,7 +207,7 @@ public class SabrePlugin extends AbstractSabrePlugin
 		this.snitchListener = new SnitchListener(snitchLogger);
 		this.pearlManager = new PearlManager(db, config);
 		this.pearlListener = new PearlListener(pearlManager, playerManager);
-		this.miningListener = new MiningListener();
+		this.miningListener = new MiningListener(config);
 		this.factoryListener = new FactoryListener(playerManager, blockManager);
 		this.factoryConfig = new FactoryConfig();
 		this.customItems = new CustomItems();

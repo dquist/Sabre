@@ -12,18 +12,22 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
+import org.bukkit.event.inventory.PrepareItemCraftEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.inventory.ItemStack;
 
+import com.gordonfreemanq.sabre.SabreConfig;
 import com.gordonfreemanq.sabre.prisonpearl.PearlManager;
 import com.gordonfreemanq.sabre.util.SabreUtil;
+import com.gordonfreemanq.sabre.blocks.SabreItemStack;
 
 public class MiningListener implements Listener {
 
+	private final SabreConfig config;
 
 
-	public MiningListener() {
-
+	public MiningListener(SabreConfig config) {
+		this.config = config;
 	}
 	
 	
@@ -154,4 +158,17 @@ public class MiningListener implements Listener {
 			SabreUtil.tryToTeleport(e.getPlayer(), l.add(0, 10, 0));
 		}
 	}
+	
+	
+	
+	 @EventHandler
+    public void craftItem(PrepareItemCraftEvent e) {
+		ItemStack result = e.getRecipe().getResult();
+        
+        for(SabreItemStack is :config.getDisabledRecipes()) {
+        	if (is.isSimilar(result)) {
+            	e.getInventory().setResult(new ItemStack(Material.AIR));
+        	}
+        }
+    }
 }
