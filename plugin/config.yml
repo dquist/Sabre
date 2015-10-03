@@ -24,3 +24,22 @@ snitch:
 prison_pearl:
   free_world: world
   prison_world: world_the_end
+disabled_recipes:
+  Oak Planks:
+    material: WOOD
+    durability: 0
+  Spruce Planks:
+    material: WOOD
+    durability: 1
+  Birch Planks:
+    material: WOOD
+    durability: 2
+  Jungle Planks:
+    material: WOOD
+    durability: 3
+  Acacia Planks:
+    material: WOOD
+    durability: 4
+  Dark Oak Planks:
+    material: WOOD
+    durability: 5

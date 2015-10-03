@@ -31,3 +31,18 @@ upgrades:
       Ore Smelter 1:
         custom_item: Ore Smelter 1
         amount: 1
+  Lumber Mill 1 Upgrade:
+    fuel_cost: 10
+    inputs:
+      Logs:
+        material: LOG
+        durability: -1
+        amount: 256
+        subs:
+          Logs2:
+            material: LOG_2
+            durability: -1
+    outputs:
+      Lumber Mill 1:
+        custom_item: Lumber Mill 1
+        amount: 1

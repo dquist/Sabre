@@ -1,7 +1,7 @@
-name: Ore Smelter 1
+name: Lumber Mill 1
 production_speed: 1
 recipes:
-  Smelt Diamond Ore:
+  Process Logs:
     fuel_cost: 10
     inputs:
       Diamond Ore:
@@ -11,102 +11,14 @@ recipes:
       Diamond:
         material: DIAMOND
         amount: 12
-  Smelt Iron Ore:
-    fuel_cost: 10
-    inputs:
-      Iron Ore:
-        material: IRON_ORE
-        amount: 64
-    outputs:
-      Iron Ingot:
-        material: IRON_INGOT
-        amount: 48
-  Smelt Gold Ore:
-    fuel_cost: 10
-    inputs:
-      Gold Ore:
-        material: GOLD_ORE
-        amount: 32
-    outputs:
-      Gold:
-        material: GOLD_INGOT
-        amount: 24
-  Smelt Coal Ore:
-    fuel_cost: 10
-    inputs:
-      Coal Ore:
-        material: COAL_ORE
-        amount: 128
-    outputs:
-      Coal:
-        material: COAL
-        amount: 96
-  Smelt Lapis Ore:
-    fuel_cost: 10
-    inputs:
-      Lapis Ore:
-        material: LAPIS_ORE
-        amount: 32
-    outputs:
-      Lapis:
-        material: LAPIS
-        amount: 24
-  Smelt Redstone Ore:
-    fuel_cost: 10
-    inputs:
-      Redstone Ore:
-        material: REDSTONE_ORE
-        amount: 64
-    outputs:
-      Redstone:
-        material: REDSTONE
-        amount: 48
-  Smelt Nether Quartz Ore:
-    fuel_cost: 10
-    inputs:
-      Nether Quartz Ore:
-        material: QUARTZ_ORE
-        amount: 128
-    outputs:
-      Quartz:
-        material: QUARTZ
-        amount: 192
-  Aspect of Metallurgy:
-    fuel_cost: 10
-    inputs:
-      Diamond Block:
-        material: DIAMOND_BLOCK
-        amount: 16
-      Iron Block:
-        material: IRON_BLOCK
-        amount: 64
-      Gold Block:
-        material: GOLD_BLOCK
-        amount: 32
-      Coal Block:
-        material: COAL_BLOCK
-        amount: 256
-      Lapis Block:
-        material: LAPIS_BLOCK
-        amount: 32
-      Redstone Block:
-        material: REDSTONE_BLOCK
-        amount: 64
-      Quartz Block:
-        material: QUARTZ_BLOCK
-        amount: 128
-    outputs:
-      Aspect of Metallurgy:
-        custom_item: Aspect of Metallurgy
-        amount: 1
 upgrades:
-  Ore Smelter 2 Upgrade:
+  Lumber Mill 2 Upgrade:
     fuel_cost: 10
     inputs:
-      Aspect of Metallurgy:
-        custom_item: Aspect of Metallurgy
+      Aspect of Framing:
+        custom_item: Aspect of Framing
         amount: 8
     outputs:
-      Ore Smelter 2:
-        custom_item: Ore Smelter 2
+      Lumber Mill 2:
+        custom_item: Lumber Mill 2
         amount: 1

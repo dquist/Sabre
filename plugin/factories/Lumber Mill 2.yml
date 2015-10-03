@@ -1,0 +1,13 @@
+name: Lumber Mill 2
+production_speed: 2
+recipes:
+  Process Logs:
+    fuel_cost: 10
+    inputs:
+      Diamond Ore:
+        material: DIAMOND_ORE
+        amount: 16
+    outputs:
+      Diamond:
+        material: DIAMOND
+        amount: 12
