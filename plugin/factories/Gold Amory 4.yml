@@ -1,0 +1,64 @@
+name: Gold Armory 4
+production_speed: 4
+recipes:
+  Craft Gold Helmet:
+    fuel_cost: 30
+    inputs:
+      Gold:
+        material: GOLD_INGOT
+        amount: 25
+    outputs:
+      Gold Helmet:
+        material: GOLD_HELMET
+        amount: 8
+  Craft Gold Chestplate:
+    fuel_cost: 30
+    inputs:
+      Gold:
+        material: GOLD_INGOT
+        amount: 40
+    outputs:
+      Gold Helmet:
+        material: GOLD_CHESTPLATE
+        amount: 8
+  Craft Gold Leggings:
+    fuel_cost: 30
+    inputs:
+      Gold:
+        material: GOLD_INGOT
+        amount: 35
+    outputs:
+      Gold Helmet:
+        material: GOLD_LEGGINGS
+        amount: 8
+  Craft Gold Boots:
+    fuel_cost: 30
+    inputs:
+      Gold:
+        material: GOLD_INGOT
+        amount: 20
+    outputs:
+      Gold Helmet:
+        material: GOLD_BOOTS
+        amount: 8
+  Craft Gold Sword:
+    fuel_cost: 30
+    inputs:
+      Gold:
+        material: GOLD_INGOT
+        amount: 10
+    outputs:
+      Gold Helmet:
+        material: GOLD_SWORD
+        amount: 8
+upgrades:
+  Gold Armory 5 Upgrade:
+    fuel_cost: 10
+    inputs:
+      Gold:
+        material: GOLD_BLOCK
+        amount: 2048
+    outputs:
+      Gold Armory 5:
+        custom_item: Gold Armory 5
+        amount: 1

@@ -1,0 +1,64 @@
+name: Diamond Armory 3
+production_speed: 3
+recipes:
+  Craft Diamond Helmet:
+    fuel_cost: 30
+    inputs:
+      Diamond:
+        material: DIAMOND
+        amount: 25
+    outputs:
+      Diamond Helmet:
+        material: DIAMOND_HELMET
+        amount: 6
+  Craft Diamond Chestplate:
+    fuel_cost: 30
+    inputs:
+      Diamond:
+        material: DIAMOND
+        amount: 40
+    outputs:
+      Diamond Helmet:
+        material: DIAMOND_CHESTPLATE
+        amount: 6
+  Craft Diamond Leggings:
+    fuel_cost: 30
+    inputs:
+      Diamond:
+        material: DIAMOND
+        amount: 35
+    outputs:
+      Diamond Helmet:
+        material: DIAMOND_LEGGINGS
+        amount: 6
+  Craft Diamond Boots:
+    fuel_cost: 30
+    inputs:
+      Diamond:
+        material: DIAMOND
+        amount: 20
+    outputs:
+      Diamond Helmet:
+        material: DIAMOND_BOOTS
+        amount: 6
+  Craft Diamond Sword:
+    fuel_cost: 30
+    inputs:
+      Diamond:
+        material: DIAMOND
+        amount: 10
+    outputs:
+      Diamond Helmet:
+        material: DIAMOND_SWORD
+        amount: 6
+upgrades:
+  Diamond Armory 4 Upgrade:
+    fuel_cost: 10
+    inputs:
+      Diamond:
+        material: DIAMOND_BLOCK
+        amount: 1024
+    outputs:
+      Diamond Armory 4:
+        custom_item: Diamond Armory 4
+        amount: 1
