@@ -1,0 +1,101 @@
+name: Ore Smelter 5
+production_speed: 5
+recipes:
+  Smelt Diamond Ore:
+    fuel_cost: 10
+    inputs:
+      Diamond Ore:
+        material: DIAMOND_ORE
+        amount: 16
+    outputs:
+      Diamond:
+        material: DIAMOND
+        amount: 48
+  Smelt Iron Ore:
+    fuel_cost: 10
+    inputs:
+      Iron Ore:
+        material: IRON_ORE
+        amount: 64
+    outputs:
+      Iron Ingot:
+        material: IRON_INGOT
+        amount: 192
+  Smelt Gold Ore:
+    fuel_cost: 10
+    inputs:
+      Gold Ore:
+        material: GOLD_ORE
+        amount: 32
+    outputs:
+      Gold:
+        material: GOLD_INGOT
+        amount: 96
+  Smelt Coal Ore:
+    fuel_cost: 10
+    inputs:
+      Coal Ore:
+        material: COAL_ORE
+        amount: 128
+    outputs:
+      Coal:
+        material: COAL
+        amount: 384
+  Smelt Lapis Ore:
+    fuel_cost: 10
+    inputs:
+      Lapis Ore:
+        material: LAPIS_ORE
+        amount: 32
+    outputs:
+      Lapis:
+        material: LAPIS
+        amount: 96
+  Smelt Redstone Ore:
+    fuel_cost: 10
+    inputs:
+      Redstone Ore:
+        material: REDSTONE_ORE
+        amount: 64
+    outputs:
+      Redstone:
+        material: REDSTONE
+        amount: 192
+  Smelt Nether Quartz Ore:
+    fuel_cost: 10
+    inputs:
+      Nether Quartz Ore:
+        material: QUARTZ_ORE
+        amount: 128
+    outputs:
+      Quartz:
+        material: QUARTZ
+        amount: 768
+  Aspect of Metallurgy:
+    fuel_cost: 10
+    inputs:
+      Diamond Block:
+        material: DIAMOND_BLOCK
+        amount: 16
+      Iron Block:
+        material: IRON_BLOCK
+        amount: 64
+      Gold Block:
+        material: GOLD_BLOCK
+        amount: 32
+      Coal Block:
+        material: COAL_BLOCK
+        amount: 256
+      Lapis Block:
+        material: LAPIS_BLOCK
+        amount: 32
+      Redstone Block:
+        material: REDSTONE_BLOCK
+        amount: 64
+      Quartz Block:
+        material: QUARTZ_BLOCK
+        amount: 128
+    outputs:
+      Aspect of Metallurgy:
+        custom_item: Aspect of Metallurgy
+        amount: 1

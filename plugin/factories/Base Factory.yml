@@ -1,5 +1,5 @@
 name: Base Factory
-production_speed: 1
+production_speed: 2
 recipes:
   Forge Steel Doors:
     fuel_cost: 10
@@ -11,3 +11,23 @@ recipes:
       Steel Door:
         custom_item: Steel Door
         amount: 2
+upgrades:
+  Ore Smelter 1 Upgrade:
+    fuel_cost: 10
+    inputs:
+      Diamond Ore:
+        material: DIAMOND_ORE
+        amount: 32
+      Iron Ore:
+        material: IRON_ORE
+        amount: 128
+      Gold Ore:
+        material: GOLD_ORE
+        amount: 16
+      Coal Ore:
+        material: COAL_ORE
+        amount: 256
+    outputs:
+      Ore Smelter 1:
+        custom_item: Ore Smelter 1
+        amount: 1
