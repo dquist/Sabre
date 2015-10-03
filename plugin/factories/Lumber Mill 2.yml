@@ -1,13 +1,101 @@
 name: Lumber Mill 2
 production_speed: 2
 recipes:
-  Process Logs:
+  Cut Oak Planks:
     fuel_cost: 10
     inputs:
-      Diamond Ore:
-        material: DIAMOND_ORE
-        amount: 16
+      Logs:
+        material: LOG
+        durability: -1
+        amount: 256
+        subs:
+          Logs2:
+            material: LOG_2
+            durability: -1
     outputs:
-      Diamond:
-        material: DIAMOND
-        amount: 12
+      Oak Planks:
+        material: WOOD
+        durability: 0
+        amount: 192
+  Cut Spruce Planks:
+    fuel_cost: 10
+    inputs:
+      Spruce Logs:
+        material: LOG
+        durability: 1
+        amount: 256
+    outputs:
+      Spruce Planks:
+        material: WOOD
+        durability: 1
+        amount: 192
+  Cut Birch Planks:
+    fuel_cost: 10
+    inputs:
+      Birch Logs:
+        material: LOG
+        durability: 2
+        amount: 256
+    outputs:
+      Birch Planks:
+        material: WOOD
+        durability: 2
+        amount: 192
+  Cut Jungle Planks:
+    fuel_cost: 10
+    inputs:
+      Jungle Logs:
+        material: LOG
+        durability: 3
+        amount: 256
+    outputs:
+      Jungle Planks:
+        material: WOOD
+        durability: 3
+        amount: 192
+  Cut Acacia Planks:
+    fuel_cost: 10
+    inputs:
+      Acacia Logs:
+        material: LOG_2
+        durability: 0
+        amount: 256
+    outputs:
+      Acacia Planks:
+        material: WOOD
+        durability: 4
+        amount: 192
+  Cut Dark Oak Planks:
+    fuel_cost: 10
+    inputs:
+      Dark Oak Logs:
+        material: LOG_2
+        durability: 1
+        amount: 256
+    outputs:
+      Dark Oak Planks:
+        material: WOOD
+        durability: 5
+        amount: 192
+  Craft Aspect of Framing:
+    fuel_cost: 10
+    inputs:
+      Planks:
+        material: WOOD
+        durability: -1
+        amount: 1024
+    outputs:
+      Aspect of Framing:
+        custom_item: Aspect of Framing
+        amount: 8
+upgrades:
+  Lumber Mill 3 Upgrade:
+    fuel_cost: 10
+    inputs:
+      Aspect of Framing:
+        custom_item: Aspect of Framing
+        amount: 192
+    outputs:
+      Lumber Mill 3:
+        custom_item: Lumber Mill 3
+        amount: 1

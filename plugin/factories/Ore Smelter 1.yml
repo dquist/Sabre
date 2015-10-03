@@ -72,7 +72,7 @@ recipes:
       Quartz:
         material: QUARTZ
         amount: 192
-  Aspect of Metallurgy:
+  Craft Aspect of Metallurgy:
     fuel_cost: 10
     inputs:
       Diamond Block:
@@ -99,14 +99,14 @@ recipes:
     outputs:
       Aspect of Metallurgy:
         custom_item: Aspect of Metallurgy
-        amount: 1
+        amount: 8
 upgrades:
   Ore Smelter 2 Upgrade:
     fuel_cost: 10
     inputs:
       Aspect of Metallurgy:
         custom_item: Aspect of Metallurgy
-        amount: 8
+        amount: 64
     outputs:
       Ore Smelter 2:
         custom_item: Ore Smelter 2

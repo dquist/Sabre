@@ -72,7 +72,7 @@ recipes:
       Quartz:
         material: QUARTZ
         amount: 768
-  Aspect of Metallurgy:
+  Craft Aspect of Metallurgy:
     fuel_cost: 10
     inputs:
       Diamond Block:
@@ -99,4 +99,4 @@ recipes:
     outputs:
       Aspect of Metallurgy:
         custom_item: Aspect of Metallurgy
-        amount: 1
+        amount: 8

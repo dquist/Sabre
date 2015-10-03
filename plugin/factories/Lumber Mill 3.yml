@@ -1,5 +1,5 @@
-name: Lumber Mill 1
-production_speed: 1
+name: Lumber Mill 3
+production_speed: 3
 recipes:
   Cut Oak Planks:
     fuel_cost: 10
@@ -16,7 +16,7 @@ recipes:
       Oak Planks:
         material: WOOD
         durability: 0
-        amount: 128
+        amount: 256
   Cut Spruce Planks:
     fuel_cost: 10
     inputs:
@@ -28,7 +28,7 @@ recipes:
       Spruce Planks:
         material: WOOD
         durability: 1
-        amount: 128
+        amount: 256
   Cut Birch Planks:
     fuel_cost: 10
     inputs:
@@ -40,7 +40,7 @@ recipes:
       Birch Planks:
         material: WOOD
         durability: 2
-        amount: 128
+        amount: 256
   Cut Jungle Planks:
     fuel_cost: 10
     inputs:
@@ -52,7 +52,7 @@ recipes:
       Jungle Planks:
         material: WOOD
         durability: 3
-        amount: 128
+        amount: 256
   Cut Acacia Planks:
     fuel_cost: 10
     inputs:
@@ -64,7 +64,7 @@ recipes:
       Acacia Planks:
         material: WOOD
         durability: 4
-        amount: 128
+        amount: 256
   Cut Dark Oak Planks:
     fuel_cost: 10
     inputs:
@@ -76,7 +76,7 @@ recipes:
       Dark Oak Planks:
         material: WOOD
         durability: 5
-        amount: 128
+        amount: 256
   Craft Aspect of Framing:
     fuel_cost: 10
     inputs:
@@ -89,13 +89,13 @@ recipes:
         custom_item: Aspect of Framing
         amount: 8
 upgrades:
-  Lumber Mill 2 Upgrade:
+  Lumber Mill 4 Upgrade:
     fuel_cost: 10
     inputs:
       Aspect of Framing:
         custom_item: Aspect of Framing
-        amount: 64
+        amount: 512
     outputs:
-      Lumber Mill 2:
-        custom_item: Lumber Mill 2
+      Lumber Mill 4:
+        custom_item: Lumber Mill 4
         amount: 1
