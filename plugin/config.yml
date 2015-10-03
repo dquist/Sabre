@@ -1,0 +1,26 @@
+general:
+  config_version: 1
+database:
+  address: localhost
+  port: 27017
+  name: sabre
+  user: ''
+  pass: ''
+chat:
+  global_radius: 1000
+build:
+  reinforcements:
+    STONE:
+      strength: 150
+    IRON_INGOT:
+      strength: 1500
+    DIAMOND:
+      strength: 4500
+    DIAMOND_BLOCK:
+      strength: 10000
+snitch:
+  overlap_time: 0
+  overlap_depth: 0
+prison_pearl:
+  free_world: world
+  prison_world: world_the_end

@@ -1,0 +1,13 @@
+name: Base Factory
+production_speed: 1
+recipes:
+  Forge Steel Doors:
+    fuel_cost: 10
+    inputs:
+      Iron:
+        material: IRON_INGOT
+        amount: 2
+    outputs:
+      Steel Door:
+        custom_item: Steel Door
+        amount: 2

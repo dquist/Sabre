@@ -1,0 +1,9 @@
+name: Secure Sign
+material: SIGN
+class: com.gordonfreemanq.sabre.customitems.SecureSign
+amount: 1
+lore:
+  - '<c>When reinforced to a group, the text on this sign will only be visible'
+  - '<c>to members of the group.'
+  - '<c>The visibility of the sign can be toggled by hitting the sign with a stick.'
+  - '<c>The text will show up as <blue>dark blue <c>when it is in secure mode.'

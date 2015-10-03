@@ -23,7 +23,10 @@ public class CmdFactoryCreate extends SabreCommand {
 	@Override
 	public void perform() 
 	{
-		if (!me.getPlayer().getItemInHand().getType().equals(Material.FURNACE)) {
+		ItemStack inHand = me.getPlayer().getItemInHand();
+		if (!inHand.getType().equals(Material.FURNACE) 
+				|| inHand.getAmount() != 1
+				|| inHand.hasItemMeta()) {
 			me.msg(Lang.factoryMustHoldFurnace);
 			return;
 		}

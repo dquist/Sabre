@@ -1,0 +1,5 @@
+name: Plasma
+material: MAGMA_CREAM
+amount: 1
+lore:
+  - '<c>Highly volatile material'

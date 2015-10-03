@@ -1,0 +1,7 @@
+name: Base Factory
+material: FURNACE
+class: com.gordonfreemanq.sabre.factory.BaseFactory
+amount: 1
+lore:
+  - '<c>Place this block to create a base factory, then hit'
+  - '<c>the block with a stick to create a factory controller.'

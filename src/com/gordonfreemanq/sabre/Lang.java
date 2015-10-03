@@ -142,7 +142,7 @@ public class Lang
 	
 	
 	// FACTORY
-	public static final String factoryMustHoldFurnace = "<b>You must be holding a furnace to do this.";
+	public static final String factoryMustHoldFurnace = "<b>You must be holding a single furnace to do this.";
 	public static final String factoryCreatedBaseFactory = "<g>You created a factory base.";
 	public static final String factoryNotFound = "<b>No factory was found.";
 	public static final String factoryNoRecipe = "<b>No recipe is selected.";
