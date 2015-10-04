@@ -188,16 +188,21 @@ public class TextUtil
 	private final static int titleizeBalance = -1;
 	public String titleize(String str)
 	{
-		String center = ".[ "+ parseTags("<l>") + str + parseTags("<a>")+ " ].";
+		return titleize("<a>", str);
+	}
+	
+	public String titleize(String colorCode, String str)
+	{
+		String center = ".[ "+ parseTags("<l>") + str + parseTags(colorCode)+ " ].";
 		int centerlen = ChatColor.stripColor(center).length();
 		int pivot = titleizeLine.length() / 2;
 		int eatLeft = (centerlen / 2) - titleizeBalance;
 		int eatRight = (centerlen - eatLeft) + titleizeBalance;
 
 		if (eatLeft < pivot)
-			return parseTags("<a>")+titleizeLine.substring(0, pivot - eatLeft) + center + titleizeLine.substring(pivot + eatRight);
+			return parseTags(colorCode)+titleizeLine.substring(0, pivot - eatLeft) + center + titleizeLine.substring(pivot + eatRight);
 		else
-			return parseTags("<a>")+center;
+			return parseTags(colorCode)+center;
 	}
 	
 	public ArrayList<String> getPage(List<String> lines, int pageHumanBased, String title)

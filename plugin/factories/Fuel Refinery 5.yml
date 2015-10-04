@@ -1,0 +1,33 @@
+name: Fuel Refinery 5
+production_speed: 5
+recipes:
+  Smelt Logs:
+    fuel_cost: 60
+    inputs:
+      Logs:
+        material: LOG
+        durability: -1
+        amount: 256
+        subs:
+          Logs2:
+            material: LOG_2
+            durability: -1
+    outputs:
+      Charcoal:
+        material: COAL
+        durability: 1
+        amount: 256
+  Smelt Plasma:
+    fuel_cost: 10
+    inputs:
+      Charcoal:
+        material: COAL
+        durability: 1
+        amount: 256
+      Sand:
+        material: SAND
+        amount: 64
+    outputs:
+      Plasma:
+        custom_item: Plasma
+        amount: 12

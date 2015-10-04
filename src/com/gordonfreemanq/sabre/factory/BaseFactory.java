@@ -21,6 +21,7 @@ import org.bukkit.material.MaterialData;
 
 import com.gordonfreemanq.sabre.Lang;
 import com.gordonfreemanq.sabre.SabrePlayer;
+import com.gordonfreemanq.sabre.SabrePlugin;
 import com.gordonfreemanq.sabre.blocks.BlockManager;
 import com.gordonfreemanq.sabre.blocks.CustomItems;
 import com.gordonfreemanq.sabre.blocks.SabreBlock;
@@ -74,14 +75,14 @@ public class BaseFactory extends SpecialBlock {
 
 		fuels = new ArrayList<FactoryFuel>();
 		
-		fuels.add(new FactoryFuel(CustomItems.getInstance().getByName("Plasma"), 50));
+		fuels.add(new FactoryFuel(CustomItems.getInstance().getByName("Plasma"), 64));
 		
-		FactoryFuel lavaFuel = new FactoryFuel(new SabreItemStack(Material.LAVA_BUCKET, "Lava Bucket", 1), 10);
+		FactoryFuel lavaFuel = new FactoryFuel(new SabreItemStack(Material.LAVA_BUCKET, "Lava Bucket", 1), 16);
 		lavaFuel.addReturnItem(new SabreItemStack(Material.BUCKET, "Bucket", 1));
 		
 		fuels.add(lavaFuel);
-		fuels.add(new FactoryFuel(new SabreItemStack(Material.BLAZE_ROD, "Blaze Rod", 1), 5));
-		fuels.add(new FactoryFuel(new SabreItemStack(Material.COAL, "Charcoal", 1, 1), 2));
+		fuels.add(new FactoryFuel(new SabreItemStack(Material.BLAZE_ROD, "Blaze Rod", 1), 4));
+		fuels.add(new FactoryFuel(new SabreItemStack(Material.COAL, "Charcoal", 1, 1), 1));
 	}
 	
 	
@@ -376,7 +377,8 @@ public class BaseFactory extends SpecialBlock {
 			nextRecipeName = recipes.get(0).getName();
 		}
 		
-		msg("<i>-----------------------------------------------------");
+		msg(SabrePlugin.getPlugin().txt.titleize("<silver>" + this.name));
+		//msg("<i>-----------------------------------------------------");
 		msg("<g>Switched recipe to: <c>%s", recipe.getName());
 		msg("<g>Next recipe is: <i><it>%s", nextRecipeName);
 		

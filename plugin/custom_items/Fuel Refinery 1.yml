@@ -1,0 +1,6 @@
+name: Fuel Refinery 1
+material: FURNACE
+class: com.gordonfreemanq.sabre.factory.BaseFactory
+amount: 1
+lore:
+  - '<c>A basic fuel refinery.'

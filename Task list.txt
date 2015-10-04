@@ -8,4 +8,3 @@ Misc
   - Disable reinforcing with lore items
   
 Factories
-  - show the name of the factory when switching recipes

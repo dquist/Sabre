@@ -26,6 +26,17 @@ upgrades:
       Stone Smelter 1:
         custom_item: Stone Smelter 1
         amount: 1
+  Fuel Refinery 1 Upgrade:
+    fuel_cost: 10
+    inputs:
+      Charcoal:
+        material: COAL
+        durability: 1
+        amount: 768
+    outputs:
+      Fuel Refinery 1:
+        custom_item: Fuel Refinery 1
+        amount: 1
   Ore Smelter 1 Upgrade:
     fuel_cost: 10
     inputs:
