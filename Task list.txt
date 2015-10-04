@@ -2,10 +2,10 @@ Mining
   - always drop the ore
   - Prevent furnace smelting
 
-Disable crafting
-	
 Misc
   - Disable placing blocks while hovering over air
+  - Disable crafting for lore items
+  - Disable reinforcing with lore items
   
 Factories
   - show the name of the factory when switching recipes

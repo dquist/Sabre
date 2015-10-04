@@ -45,6 +45,22 @@ upgrades:
       Ore Smelter 1:
         custom_item: Ore Smelter 1
         amount: 1
+  Foundry 1 Upgrade:
+    fuel_cost: 10
+    inputs:
+      Aspect of Masonry:
+        custom_item: Aspect of Masonry
+        amount: 8
+      Aspect of Framing:
+        custom_item: Aspect of Framing
+        amount: 8
+      Aspect of Metallurgy:
+        custom_item: Aspect of Metallurgy
+        amount: 8
+    outputs:
+      Foundry 1:
+        custom_item: Foundry 1
+        amount: 1
   Stone Smithy 1 Upgrade:
     fuel_cost: 10
     inputs:

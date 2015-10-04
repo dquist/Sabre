@@ -1,0 +1,57 @@
+name: Foundry 2
+production_speed: 2
+recipes:
+  Cast Steel Ingot:
+    fuel_cost: 100
+    inputs:
+      Iron Ingot:
+        material: IRON_INGOT
+        amount: 64
+      Diamond:
+        material: DIAMOND
+        amount: 32
+    outputs:
+      Steel Ingot:
+        custom_item: Steel Ingot
+        amount: 48
+  Cast Steel Door:
+    fuel_cost: 100
+    inputs:
+      Steel Ingot:
+        custom_item: Steel Ingot
+        amount: 16
+    outputs:
+      Steel Door:
+        custom_item: Steel Door
+        amount: 2
+  Cast Steel Plate:
+    fuel_cost: 100
+    inputs:
+      Steel Ingot:
+        custom_item: Steel Ingot
+        amount: 8
+    outputs:
+      Steel Plate:
+        custom_item: Steel Plate
+        amount: 2
+  Craft Aspect of Casting:
+    fuel_cost: 10
+    inputs:
+      Steel Ingot:
+        custom_item: Steel Ingot
+        amount: 512
+    outputs:
+      Aspect of Casting:
+        custom_item: Aspect of Casting
+        amount: 8
+upgrades:
+  Foundry 3 Upgrade:
+    fuel_cost: 10
+    inputs:
+      Aspect of Casting:
+        custom_item: Aspect of Casting
+        amount: 64
+    outputs:
+      Foundry 3:
+        custom_item: Foundry 3
+        amount: 1

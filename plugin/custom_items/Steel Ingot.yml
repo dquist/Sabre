@@ -1,0 +1,6 @@
+name: Steel Ingot
+material: IRON_INGOT
+durability: 0
+amount: 1
+lore:
+  - '<c>Harder than iron.'
