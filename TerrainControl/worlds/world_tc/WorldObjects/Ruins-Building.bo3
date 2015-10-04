@@ -1,0 +1,233 @@
+
+#######################################################################
+# +-----------------------------------------------------------------+ #
+# |                            BO3 object                           | #
+# +-----------------------------------------------------------------+ #
+#######################################################################
+
+# This is the config file of a custom object.
+# If you add this object correctly to your BiomeConfigs, it will spawn in the world.
+
+# This is the creator of this BO3 object
+Author:LanToaster
+
+# A short description of this BO3 object
+Description:No description given
+
+# The BO3 version, don't change this! It can be used by external applications to do a version check.
+Version:3
+
+# The settings mode, WriteAll, WriteWithoutComments or WriteDisable. See WorldConfig.
+SettingsMode:WriteDisable
+
+#######################################################################
+# +-----------------------------------------------------------------+ #
+# |                          Main settings                          | #
+# +-----------------------------------------------------------------+ #
+#######################################################################
+
+# This needs to be set to true to spawn the object in the Tree and Sapling resources.
+Tree:false
+
+# The frequency of the BO3 from 1 to 200. Tries this many times to spawn this BO3 when using the CustomObject(...) resource.
+# Ignored by Tree(..), Sapling(..) and CustomStructure(..)
+Frequency:1
+
+# The rarity of the BO3 from 0 to 100. Each spawn attempt has rarity% chance to succeed when using the CustomObject(...) resource.
+# Ignored by Tree(..), Sapling(..) and CustomStructure(..)
+Rarity:100.0
+
+# If you set this to true, the BO3 will be placed with a random rotation.
+RotateRandomly:false
+
+# The spawn height of the BO3 - randomY, highestBlock or highestSolidBlock.
+SpawnHeight:highestBlock
+
+# The height limits for the BO3.
+MinHeight:0
+MaxHeight:256
+
+# Objects can have other objects attacthed to it: branches. Branches can also
+# have branches attached to it, which can also have branches, etc. This is the
+# maximum branch depth for this objects.
+MaxBranchDepth:10
+
+# When spawned with the UseWorld keyword, this BO3 should NOT spawn in the following biomes.
+# If you write the BO3 name directly in the BiomeConfigs, this will be ignored.
+ExcludedBiomes:All
+
+#######################################################################
+# +-----------------------------------------------------------------+ #
+# |                      Source block settings                      | #
+# +-----------------------------------------------------------------+ #
+#######################################################################
+
+# The block the BO3 should spawn in
+SourceBlock:0
+
+# The maximum percentage of the BO3 that can be outside the SourceBlock.
+# The BO3 won't be placed on a location with more blocks outside the SourceBlock than this percentage.
+MaxPercentageOutsideSourceBlock:100
+
+# What to do when a block is about to be placed outside the SourceBlock? (dontPlace, placeAnyway)
+OutsideSourceBlock:placeAnyway
+
+#######################################################################
+# +-----------------------------------------------------------------+ #
+# |                              Blocks                             | #
+# +-----------------------------------------------------------------+ #
+#######################################################################
+
+# All the blocks used in the BO3 are listed here. Possible blocks:
+# Block(x,y,z,id[.data][,nbtfile.nbt)
+# RandomBlock(x,y,z,id[:data][,nbtfile.nbt],chance[,id[:data][,nbtfile.nbt],chance[,...]])
+# So RandomBlock(0,0,0,CHEST,chest.nbt,50,CHEST,anotherchest.nbt,100) will spawn a chest at
+# the BO3 origin, and give it a 50% chance to have the contents of chest.nbt, or, if that
+# fails, a 100% percent chance to have the contents of anotherchest.nbt.
+RandomBlock(0,-1,-4,COBBLESTONE,40,MOSSY_COBBLESTONE,100)
+RandomBlock(0,-1,-3,COBBLESTONE,40,MOSSY_COBBLESTONE,100)
+RandomBlock(0,-1,-2,COBBLESTONE,40,MOSSY_COBBLESTONE,100)
+RandomBlock(0,-1,-1,GRASS,33,STEP:3,50,COBBLESTONE,50,MOSSY_COBBLESTONE,100)
+RandomBlock(0,-1,0,GRASS,33,STEP:3,50,COBBLESTONE,50,MOSSY_COBBLESTONE,100)
+RandomBlock(0,-1,1,GRASS,33,STEP:3,50,COBBLESTONE,50,MOSSY_COBBLESTONE,100)
+RandomBlock(0,-1,2,COBBLESTONE,40,MOSSY_COBBLESTONE,100)
+RandomBlock(0,-1,3,COBBLESTONE,40,MOSSY_COBBLESTONE,100)
+RandomBlock(0,-1,4,COBBLESTONE,40,MOSSY_COBBLESTONE,100)
+RandomBlock(0,0,-4,COBBLESTONE,40,MOSSY_COBBLESTONE,100)
+RandomBlock(0,0,-3,COBBLESTONE,40,MOSSY_COBBLESTONE,100)
+RandomBlock(0,0,-2,GRASS,33,STEP:3,50,COBBLESTONE,50,MOSSY_COBBLESTONE,100)
+Block(0,0,-1,AIR)
+Block(0,0,0,AIR)
+Block(0,0,1,AIR)
+RandomBlock(0,0,2,GRASS,33,STEP:3,50,COBBLESTONE,50,MOSSY_COBBLESTONE,100)
+RandomBlock(0,0,3,GRASS,33,STEP:3,50,COBBLESTONE,50,MOSSY_COBBLESTONE,100)
+RandomBlock(0,0,4,GRASS,33,STEP:3,50,COBBLESTONE,50,MOSSY_COBBLESTONE,100)
+RandomBlock(0,1,-4,COBBLESTONE,40,MOSSY_COBBLESTONE,100)
+RandomBlock(0,1,-3,GRASS,33,STEP:3,50,COBBLESTONE,50,MOSSY_COBBLESTONE,100)
+Block(0,1,-1,AIR)
+Block(0,1,0,AIR)
+Block(0,1,1,AIR)
+RandomBlock(0,2,-4,GRASS,33,STEP:3,50,COBBLESTONE,50,MOSSY_COBBLESTONE,100)
+RandomBlock(1,-1,-4,COBBLESTONE,40,MOSSY_COBBLESTONE,100)
+RandomBlock(1,-1,-3,GRASS,33,STEP:3,50,COBBLESTONE,50,MOSSY_COBBLESTONE,100)
+RandomBlock(1,-1,-2,GRASS,33,STEP:3,50,COBBLESTONE,50,MOSSY_COBBLESTONE,100)
+RandomBlock(1,-1,-1,GRASS,33,STEP:3,50,COBBLESTONE,50,MOSSY_COBBLESTONE,100)
+RandomBlock(1,-1,0,GRASS,33,STEP:3,50,COBBLESTONE,50,MOSSY_COBBLESTONE,100)
+RandomBlock(1,-1,1,GRASS,33,STEP:3,50,COBBLESTONE,50,MOSSY_COBBLESTONE,100)
+RandomBlock(1,-1,2,GRASS,33,STEP:3,50,COBBLESTONE,50,MOSSY_COBBLESTONE,100)
+RandomBlock(1,-1,3,GRASS,33,STEP:3,50,COBBLESTONE,50,MOSSY_COBBLESTONE,100)
+RandomBlock(1,-1,4,COBBLESTONE,40,MOSSY_COBBLESTONE,100)
+RandomBlock(1,0,-4,COBBLESTONE,40,MOSSY_COBBLESTONE,100)
+RandomBlock(1,0,4,GRASS,33,STEP:3,50,COBBLESTONE,50,MOSSY_COBBLESTONE,100)
+RandomBlock(1,1,-4,GRASS,33,STEP:3,50,COBBLESTONE,50,MOSSY_COBBLESTONE,100)
+RandomBlock(2,-1,-4,COBBLESTONE,40,MOSSY_COBBLESTONE,100)
+RandomBlock(2,-1,-3,GRASS,33,STEP:3,50,COBBLESTONE,50,MOSSY_COBBLESTONE,100)
+RandomBlock(2,-1,-2,GRASS,33,STEP:3,50,COBBLESTONE,50,MOSSY_COBBLESTONE,100)
+RandomBlock(2,-1,-1,GRASS,33,STEP:3,50,COBBLESTONE,50,MOSSY_COBBLESTONE,100)
+RandomBlock(2,-1,0,GRASS,33,STEP:3,50,COBBLESTONE,50,MOSSY_COBBLESTONE,100)
+RandomBlock(2,-1,1,GRASS,33,STEP:3,50,COBBLESTONE,50,MOSSY_COBBLESTONE,100)
+RandomBlock(2,-1,2,GRASS,33,STEP:3,50,COBBLESTONE,50,MOSSY_COBBLESTONE,100)
+RandomBlock(2,-1,3,GRASS,33,STEP:3,50,COBBLESTONE,50,MOSSY_COBBLESTONE,100)
+RandomBlock(2,-1,4,COBBLESTONE,40,MOSSY_COBBLESTONE,100)
+RandomBlock(2,0,-4,COBBLESTONE,40,MOSSY_COBBLESTONE,100)
+RandomBlock(2,0,4,COBBLESTONE,40,MOSSY_COBBLESTONE,100)
+RandomBlock(2,1,-4,GRASS,33,STEP:3,50,COBBLESTONE,50,MOSSY_COBBLESTONE,100)
+RandomBlock(2,1,4,GRASS,33,STEP:3,50,COBBLESTONE,50,MOSSY_COBBLESTONE,100)
+RandomBlock(3,-1,-4,COBBLESTONE,40,MOSSY_COBBLESTONE,100)
+RandomBlock(3,-1,-3,GRASS,33,STEP:3,50,COBBLESTONE,50,MOSSY_COBBLESTONE,100)
+RandomBlock(3,-1,-2,GRASS,33,STEP:3,50,COBBLESTONE,50,MOSSY_COBBLESTONE,100)
+RandomBlock(3,-1,-1,GRASS,33,STEP:3,50,COBBLESTONE,50,MOSSY_COBBLESTONE,100)
+RandomBlock(3,-1,0,GRASS,33,STEP:3,50,COBBLESTONE,50,MOSSY_COBBLESTONE,100)
+RandomBlock(3,-1,1,GRASS,33,STEP:3,50,COBBLESTONE,50,MOSSY_COBBLESTONE,100)
+RandomBlock(3,-1,2,GRASS,33,STEP:3,50,COBBLESTONE,50,MOSSY_COBBLESTONE,100)
+RandomBlock(3,-1,3,GRASS,33,STEP:3,50,COBBLESTONE,50,MOSSY_COBBLESTONE,100)
+RandomBlock(3,-1,4,COBBLESTONE,40,MOSSY_COBBLESTONE,100)
+RandomBlock(3,0,-4,GRASS,33,STEP:3,50,COBBLESTONE,50,MOSSY_COBBLESTONE,100)
+RandomBlock(3,0,4,COBBLESTONE,40,MOSSY_COBBLESTONE,100)
+RandomBlock(3,1,4,GRASS,33,STEP:3,50,COBBLESTONE,50,MOSSY_COBBLESTONE,100)
+RandomBlock(4,-1,-4,COBBLESTONE,40,MOSSY_COBBLESTONE,100)
+RandomBlock(4,-1,-3,GRASS,33,STEP:3,50,COBBLESTONE,50,MOSSY_COBBLESTONE,100)
+RandomBlock(4,-1,-2,GRASS,33,STEP:3,50,COBBLESTONE,50,MOSSY_COBBLESTONE,100)
+RandomBlock(4,-1,-1,GRASS,33,STEP:3,50,COBBLESTONE,50,MOSSY_COBBLESTONE,100)
+RandomBlock(4,-1,0,GRASS,33,STEP:3,50,COBBLESTONE,50,MOSSY_COBBLESTONE,100)
+RandomBlock(4,-1,1,GRASS,33,STEP:3,50,COBBLESTONE,50,MOSSY_COBBLESTONE,100)
+RandomBlock(4,-1,2,GRASS,33,STEP:3,50,COBBLESTONE,50,MOSSY_COBBLESTONE,100)
+RandomBlock(4,-1,3,GRASS,33,STEP:3,50,COBBLESTONE,50,MOSSY_COBBLESTONE,100)
+RandomBlock(4,-1,4,COBBLESTONE,40,MOSSY_COBBLESTONE,100)
+RandomBlock(4,0,-4,GRASS,33,STEP:3,50,COBBLESTONE,50,MOSSY_COBBLESTONE,100)
+RandomBlock(4,0,4,COBBLESTONE,40,MOSSY_COBBLESTONE,100)
+RandomBlock(4,1,4,COBBLESTONE,40,MOSSY_COBBLESTONE,100)
+RandomBlock(4,2,4,GRASS,33,STEP:3,50,COBBLESTONE,50,MOSSY_COBBLESTONE,100)
+RandomBlock(5,-1,-4,COBBLESTONE,40,MOSSY_COBBLESTONE,100)
+RandomBlock(5,-1,-3,GRASS,33,STEP:3,50,COBBLESTONE,50,MOSSY_COBBLESTONE,100)
+RandomBlock(5,-1,-2,GRASS,33,STEP:3,50,COBBLESTONE,50,MOSSY_COBBLESTONE,100)
+RandomBlock(5,-1,-1,GRASS,33,STEP:3,50,COBBLESTONE,50,MOSSY_COBBLESTONE,100)
+RandomBlock(5,-1,0,GRASS,33,STEP:3,50,COBBLESTONE,50,MOSSY_COBBLESTONE,100)
+RandomBlock(5,-1,1,GRASS,33,STEP:3,50,COBBLESTONE,50,MOSSY_COBBLESTONE,100)
+RandomBlock(5,-1,2,GRASS,33,STEP:3,50,COBBLESTONE,50,MOSSY_COBBLESTONE,100)
+RandomBlock(5,-1,3,GRASS,33,STEP:3,50,COBBLESTONE,50,MOSSY_COBBLESTONE,100)
+RandomBlock(5,-1,4,COBBLESTONE,40,MOSSY_COBBLESTONE,100)
+RandomBlock(5,0,-4,GRASS,33,STEP:3,50,COBBLESTONE,50,MOSSY_COBBLESTONE,100)
+RandomBlock(5,0,4,GRASS,33,STEP:3,50,COBBLESTONE,50,MOSSY_COBBLESTONE,100)
+RandomBlock(6,-1,-4,COBBLESTONE,40,MOSSY_COBBLESTONE,100)
+RandomBlock(6,-1,-3,GRASS,33,STEP:3,50,COBBLESTONE,50,MOSSY_COBBLESTONE,100)
+RandomBlock(6,-1,-2,GRASS,33,STEP:3,50,COBBLESTONE,50,MOSSY_COBBLESTONE,100)
+RandomBlock(6,-1,-1,GRASS,33,STEP:3,50,COBBLESTONE,50,MOSSY_COBBLESTONE,100)
+RandomBlock(6,-1,0,GRASS,33,STEP:3,50,COBBLESTONE,50,MOSSY_COBBLESTONE,100)
+RandomBlock(6,-1,1,GRASS,33,STEP:3,50,COBBLESTONE,50,MOSSY_COBBLESTONE,100)
+RandomBlock(6,-1,2,GRASS,33,STEP:3,50,COBBLESTONE,50,MOSSY_COBBLESTONE,100)
+RandomBlock(6,-1,3,GRASS,33,STEP:3,50,COBBLESTONE,50,MOSSY_COBBLESTONE,100)
+RandomBlock(6,-1,4,COBBLESTONE,40,MOSSY_COBBLESTONE,100)
+RandomBlock(6,0,-4,COBBLESTONE,40,MOSSY_COBBLESTONE,100)
+RandomBlock(6,0,4,GRASS,33,STEP:3,50,COBBLESTONE,50,MOSSY_COBBLESTONE,100)
+RandomBlock(6,1,-4,GRASS,33,STEP:3,50,COBBLESTONE,50,MOSSY_COBBLESTONE,100)
+RandomBlock(7,-1,-4,COBBLESTONE,40,MOSSY_COBBLESTONE,100)
+RandomBlock(7,-1,-3,COBBLESTONE,40,MOSSY_COBBLESTONE,100)
+RandomBlock(7,-1,-2,COBBLESTONE,40,MOSSY_COBBLESTONE,100)
+RandomBlock(7,-1,-1,COBBLESTONE,40,MOSSY_COBBLESTONE,100)
+RandomBlock(7,-1,0,COBBLESTONE,40,MOSSY_COBBLESTONE,100)
+RandomBlock(7,-1,1,COBBLESTONE,40,MOSSY_COBBLESTONE,100)
+RandomBlock(7,-1,2,COBBLESTONE,40,MOSSY_COBBLESTONE,100)
+RandomBlock(7,-1,3,COBBLESTONE,40,MOSSY_COBBLESTONE,100)
+RandomBlock(7,-1,4,COBBLESTONE,40,MOSSY_COBBLESTONE,100)
+RandomBlock(7,0,-4,COBBLESTONE,40,MOSSY_COBBLESTONE,100)
+RandomBlock(7,0,-3,COBBLESTONE,40,MOSSY_COBBLESTONE,100)
+RandomBlock(7,0,-2,COBBLESTONE,40,MOSSY_COBBLESTONE,100)
+RandomBlock(7,0,-1,COBBLESTONE,40,MOSSY_COBBLESTONE,100)
+RandomBlock(7,0,0,COBBLESTONE,40,MOSSY_COBBLESTONE,100)
+RandomBlock(7,0,1,GRASS,33,STEP:3,50,COBBLESTONE,50,MOSSY_COBBLESTONE,100)
+RandomBlock(7,0,2,GRASS,33,STEP:3,50,COBBLESTONE,50,MOSSY_COBBLESTONE,100)
+RandomBlock(7,0,3,GRASS,33,STEP:3,50,COBBLESTONE,50,MOSSY_COBBLESTONE,100)
+RandomBlock(7,0,4,GRASS,33,STEP:3,50,COBBLESTONE,50,MOSSY_COBBLESTONE,100)
+RandomBlock(7,1,-4,GRASS,33,STEP:3,50,COBBLESTONE,50,MOSSY_COBBLESTONE,100)
+RandomBlock(7,1,-3,COBBLESTONE,40,MOSSY_COBBLESTONE,100)
+RandomBlock(7,1,-2,COBBLESTONE,40,MOSSY_COBBLESTONE,100)
+RandomBlock(7,1,-1,GRASS,33,STEP:3,50,COBBLESTONE,50,MOSSY_COBBLESTONE,100)
+RandomBlock(7,1,0,GRASS,33,STEP:3,50,COBBLESTONE,50,MOSSY_COBBLESTONE,100)
+RandomBlock(7,2,-3,GRASS,33,STEP:3,50,COBBLESTONE,50,MOSSY_COBBLESTONE,100)
+RandomBlock(7,2,-2,GRASS,33,STEP:3,50,COBBLESTONE,50,MOSSY_COBBLESTONE,100)
+
+#######################################################################
+# +-----------------------------------------------------------------+ #
+# |                            BO3 checks                           | #
+# +-----------------------------------------------------------------+ #
+#######################################################################
+
+# Require a condition at a certain location in order for the BO3 to be spawned.
+# BlockCheck(x,y,z,id[:data][,id[:data][,...]])
+# LightCheck(x,y,z,minLightLevel,maxLightLevel)
+
+#######################################################################
+# +-----------------------------------------------------------------+ #
+# |                             Branches                            | #
+# +-----------------------------------------------------------------+ #
+#######################################################################
+
+# Branches are objects that will spawn when this object spawns when it is used in
+# the CustomStructure resource. Branches can also have branches, making complex
+# structures possible.
+# Branch(x,y,z,branchName,rotation,chance[,anotherBranchName,rotation,chance[,...]])
+# branchName - name of the object to spawn.
+# rotation - NORTH, SOUTH, EAST or WEST.
+
+
