@@ -15,7 +15,7 @@ BiomeExtends:
 # to the resources queue of this biome. If a resource in the parent biome looks
 # very similar to that of a child biome (for example, two ores of the same type)
 # it won't be copied.
-ResourceInheritance: true
+ResourceInheritance: false
 
 
 #######################################################################
@@ -31,7 +31,7 @@ ResourceInheritance: true
 # Isle biomes:   BiomeSizeWhenIsle (see below)
 # Border biomes: BiomeSizeWhenBorder (see below)
 # River biomes:  RiverSize (see WorldConfig)
-BiomeSize: 4
+BiomeSize: 13
 
 # Biome rarity from 100 to 1. If this is normal or ice biome - chance for spawn this biome then others.
 # Example for normal biome :
@@ -39,7 +39,7 @@ BiomeSize: 4
 #   50 rarity mean 1/11 chance than other
 # For isle biomes see the BiomeRarityWhenIsle setting below.
 # Doesn`t work on Ocean and River (frozen versions too) biomes when not added as normal biome.
-BiomeRarity: 100
+BiomeRarity: 1
 
 # The hexadecimal color value of this biome. Used in the output of the /tc map command,
 # and used in the input of BiomeMode: FromImage.
@@ -62,7 +62,7 @@ IsleInBiome: Ocean, Deep Ocean
 # Valid values range from 0 to GenerationDepth.
 # Larger numbers give *smaller* islands. The biome must be smaller than the biome it's going
 # to spawn in, so the BiomeSizeWhenIsle number must be larger than the BiomeSize of the other biome.
-BiomeSizeWhenIsle: 6
+BiomeSizeWhenIsle: 13
 
 # Rarity of this biome when spawned as an ilse biome.
 BiomeRarityWhenIsle: 1
@@ -87,7 +87,7 @@ NotBorderNear:
 # Valid values range from 0 to GenerationDepth.
 # Larger numbers give *smaller* borders. The biome must be smaller than the biome it's going
 # to spawn in, so the BiomeSizeWhenBorder number must be larger than the BiomeSize of the other biome.
-BiomeSizeWhenBorder: 9
+BiomeSizeWhenBorder: 13
 
 
 #######################################################################
@@ -165,14 +165,14 @@ RiverBiome:
 # Only available when ImprovedRivers is set to true in the WorldConfig.
 
 # Works the same as BiomeHeight (scroll up), but is used where a river is generated in this biome
-RiverHeight: -1.0
+RiverHeight: -1.5
 
 # Works the same as BiomeVolatility (scroll up), but is used where a river is generated in this biome
-RiverVolatility: 0.3
+RiverVolatility: 0.05
 
 # Works the same as WaterLevelMax (scroll down), but is used where a river is generated in this biome
 # Can be used to create elevated rivers
-RiverWaterLevel: 63
+RiverWaterLevel: 90
 
 # Works the same as CustomHeightControl (scroll up), but is used where a river is generated in this biome
 RiverCustomHeightControl: 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0
@@ -219,10 +219,10 @@ ReplacedBlocks: None
 #################
 
 # Set this to false to use the water and ice settings of this biome.
-UseWorldWaterLevel: true
+UseWorldWaterLevel: false
 
 # Set water level. Every empty between this levels will be fill water or another block from WaterBlock.
-WaterLevelMax: 63
+WaterLevelMax: 90
 
 WaterLevelMin: 0
 
@@ -334,20 +334,20 @@ SmallLake(WATER,4,7.0,8,120)
 SmallLake(LAVA,2,1.0,8,120)
 UnderGroundLake(25,60,2,5.0,0,50)
 Dungeon(8,100.0,0,128)
-Ore(DIRT,33,10,100.0,0,256,STONE)
-Ore(GRAVEL,33,8,100.0,0,256,STONE)
-Ore(STONE:1,33,10,100.0,0,80,STONE)
-Ore(STONE:3,33,10,100.0,0,80,STONE)
-Ore(STONE:5,33,10,100.0,0,80,STONE)
-Ore(COAL_ORE,17,20,100.0,0,128,STONE)
-Ore(IRON_ORE,9,20,100.0,0,64,STONE)
-Ore(GOLD_ORE,9,2,100.0,0,32,STONE)
-Ore(REDSTONE_ORE,8,8,100.0,0,16,STONE)
-Ore(DIAMOND_ORE,8,1,100.0,0,16,STONE)
-Ore(LAPIS_ORE,7,1,100.0,0,16,STONE)
-UnderWaterOre(SAND,7,3,100.0,DIRT,GRASS)
-UnderWaterOre(CLAY,4,1,100.0,DIRT,CLAY)
-UnderWaterOre(GRAVEL,6,1,100.0,DIRT,GRASS)
+Ore(STONE:1,8,10,100.0,0,128,STONE)
+Ore(STONE:3,8,10,100.0,0,128,STONE)
+Ore(STONE:5,8,10,100.0,0,128,STONE)
+Ore(GRAVEL,8,10,100.0,0,128,STONE)
+Ore(COAL_ORE,6,20,20.0,0,128,DIRT,STONE)
+Ore(QUARTZ_ORE,6,20,5.0,0,75,DIRT,STONE)
+Ore(IRON_ORE,12,20,20.0,0,128,DIRT,STONE)
+Ore(GOLD_ORE,7,2,20.0,0,80,STONE)
+Ore(REDSTONE_ORE,5,8,20.0,0,80,STONE)
+Ore(DIAMOND_ORE,5,1,20.0,0,80,STONE)
+Ore(LAPIS_ORE,5,1,20.0,0,80,STONE)
+Vein(DIAMOND_ORE,100,201,0.05,3,90,25,0,80,STONE,DIRT,GRAVEL)
+Vein(DIAMOND_ORE,25,50,0.003,3,90,60,0,50,STONE,DIRT,GRAVEL)
+Vein(DIAMOND_ORE,10,20,0.15,3,90,85,0,12,STONE,DIRT,GRAVEL)
 CustomObject(UseWorld)
 AboveWaterRes(WATER_LILY,1,100.0)
 Plant(RedMushroom,2,50.0,0,128,MYCEL,DIRT)
