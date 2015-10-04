@@ -50,10 +50,10 @@ upgrades:
     inputs:
       Aspect of Masonry:
         custom_item: Aspect of Masonry
-        amount: 8
+        amount: 4
       Aspect of Framing:
         custom_item: Aspect of Framing
-        amount: 8
+        amount: 4
     outputs:
       Stone Smithy 1:
         custom_item: Stone Smithy 1
@@ -64,9 +64,12 @@ upgrades:
       Iron Block:
         material: IRON_BLOCK
         amount: 512
+      Aspect of Masonry:
+        custom_item: Aspect of Masonry
+        amount: 4
       Aspect of Framing:
         custom_item: Aspect of Framing
-        amount: 8
+        amount: 4
     outputs:
       Iron Smithy 1:
         custom_item: Iron Smithy 1
@@ -77,9 +80,12 @@ upgrades:
       Gold Block:
         material: GOLD_BLOCK
         amount: 128
+      Aspect of Masonry:
+        custom_item: Aspect of Masonry
+        amount: 4
       Aspect of Framing:
         custom_item: Aspect of Framing
-        amount: 8
+        amount: 4
     outputs:
       Gold Smithy 1:
         custom_item: Gold Smithy 1
@@ -90,10 +96,77 @@ upgrades:
       Diamond Block:
         material: DIAMOND_BLOCK
         amount: 64
+      Aspect of Masonry:
+        custom_item: Aspect of Masonry
+        amount: 4
       Aspect of Framing:
         custom_item: Aspect of Framing
-        amount: 8
+        amount: 4
     outputs:
       Diamond Smithy 1:
         custom_item: Diamond Smithy 1
+        amount: 1
+  Leather Armory 1 Upgrade:
+    fuel_cost: 10
+    inputs:
+      Leather:
+        material: LEATHER
+        amount: 256
+      Aspect of Masonry:
+        custom_item: Aspect of Masonry
+        amount: 4
+      Aspect of Framing:
+        custom_item: Aspect of Framing
+        amount: 4
+    outputs:
+      Leather Armory 1:
+        custom_item: Leather Armory 1
+        amount: 1
+  Iron Armory 1 Upgrade:
+    fuel_cost: 10
+    inputs:
+      Iron:
+        material: IRON_BLOCK
+        amount: 100
+      Aspect of Masonry:
+        custom_item: Aspect of Masonry
+        amount: 4
+      Aspect of Framing:
+        custom_item: Aspect of Framing
+        amount: 4
+    outputs:
+      Iron Armory 1:
+        custom_item: Iron Armory 1
+        amount: 1
+  Gold Armory 1 Upgrade:
+    fuel_cost: 10
+    inputs:
+      Gold:
+        material: GOLD_BLOCK
+        amount: 60
+      Aspect of Masonry:
+        custom_item: Aspect of Masonry
+        amount: 4
+      Aspect of Framing:
+        custom_item: Aspect of Framing
+        amount: 4
+    outputs:
+      Gold Armory 1:
+        custom_item: Gold Armory 1
+        amount: 1
+  Diamond Armory 1 Upgrade:
+    fuel_cost: 10
+    inputs:
+      Diamond Block:
+        material: DIAMOND_BLOCK
+        amount: 40
+      Aspect of Masonry:
+        custom_item: Aspect of Masonry
+        amount: 4
+      Aspect of Framing:
+        custom_item: Aspect of Framing
+        amount: 4
+    outputs:
+      Diamond Armory 1:
+        custom_item: Diamond Armory 1
         amount: 1
