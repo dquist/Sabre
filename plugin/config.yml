@@ -100,3 +100,12 @@ disabled_recipes:
     material: DIAMOND_LEGGINGS
   Diamond Boots:
     material: DIAMOND_BOOTS
+  Granite:
+    material: STONE
+    durability: 2
+  Diorite:
+    material: STONE
+    durability: 4
+  Andesite:
+    material: STONE
+    durability: 6

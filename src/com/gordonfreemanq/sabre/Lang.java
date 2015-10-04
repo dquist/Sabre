@@ -89,6 +89,7 @@ public class Lang
 	public static String blockFailedToReinforce = "<b>Failed to create reinforcement.";
 	public static String blockNoChange = "<i>No change was made.";
 	public static String blockChanged = "<i>Changed to <n>%s <i>with <n>%s<i>.";
+	public static String blockCantPlace = "<i>You cannot place this block.";
 	
 	
 	// ADMIN

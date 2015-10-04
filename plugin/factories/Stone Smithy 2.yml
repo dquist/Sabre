@@ -1,0 +1,54 @@
+name: Stone Smithy 2
+production_speed: 2
+recipes:
+  Craft Stone Spade:
+    fuel_cost: 30
+    inputs:
+      Stone:
+        material: STONE
+        amount: 5
+    outputs:
+      Stone Space:
+        material: STONE_SPADE
+        amount: 4
+  Craft Stone Pickaxe:
+    fuel_cost: 30
+    inputs:
+      Stone:
+        material: STONE
+        amount: 15
+    outputs:
+      Stone Pickaxe:
+        material: STONE_PICKAXE
+        amount: 4
+  Craft Stone Axe:
+    fuel_cost: 30
+    inputs:
+      Stone:
+        material: STONE
+        amount: 15
+    outputs:
+      Stone Axe:
+        material: STONE_AXE
+        amount: 4
+  Craft Stone Hoe:
+    fuel_cost: 30
+    inputs:
+      Stone:
+        material: STONE
+        amount: 10
+    outputs:
+      Stone Hoe:
+        material: STONE_HOE
+        amount: 4
+upgrades:
+  Stone Smithy 3 Upgrade:
+    fuel_cost: 10
+    inputs:
+      Stone:
+        material: STONE
+        amount: 256
+    outputs:
+      Stone Smithy 3:
+        custom_item: Stone Smithy 3
+        amount: 1

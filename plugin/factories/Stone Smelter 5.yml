@@ -1,0 +1,61 @@
+name: Stone Smelter 5
+production_speed: 5
+recipes:
+  Refine Cobblestone:
+    fuel_cost: 100
+    inputs:
+      Cobblestone:
+        material: COBBLESTONE
+        amount: 1024
+    outputs:
+      Stone:
+        material: STONE
+        durability: 0
+        amount: 2048
+  Refine Granite:
+    fuel_cost: 100
+    inputs:
+      Granite:
+        material: STONE
+        durability: 1
+        amount: 256
+    outputs:
+      Stone:
+        material: STONE
+        durability: 2
+        amount: 512
+  Refine Diorite:
+    fuel_cost: 100
+    inputs:
+      Diorite:
+        material: STONE
+        durability: 3
+        amount: 256
+    outputs:
+      Stone:
+        material: STONE
+        durability: 4
+        amount: 512
+  Refine Andesite:
+    fuel_cost: 100
+    inputs:
+      Andesite:
+        material: STONE
+        durability: 5
+        amount: 256
+    outputs:
+      Stone:
+        material: STONE
+        durability: 6
+        amount: 512
+  Craft Aspect of Masonry:
+    fuel_cost: 10
+    inputs:
+      Stone:
+        material: STONE
+        durability: 0
+        amount: 3072
+    outputs:
+      Aspect of Masonry:
+        custom_item: Aspect of Masonry
+        amount: 8

@@ -73,6 +73,7 @@ public class CustomItems {
 					continue;
 				}
 		    	
+				short durability = (short)config.getInt("durability", 0);
 		    	int amount = config.getInt("amount");
 		    	
 		    	List<String> loreStrings = config.getStringList("lore");
@@ -83,7 +84,7 @@ public class CustomItems {
 		    		lore.add(plugin.txt.parse(s));
 		    	}
 		    	
-		    	SabreItemStack item = new SabreItemStack(material, itemName, amount, lore);
+		    	SabreItemStack item = new SabreItemStack(material, itemName, amount, durability, lore);
 		    	
 		    	String className = config.getString("class");
 		    	if (className != null) {

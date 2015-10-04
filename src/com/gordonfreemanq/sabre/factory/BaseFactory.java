@@ -652,6 +652,12 @@ public class BaseFactory extends SpecialBlock {
 		SabreItemStack item = recipe.getOutputs().get(0);
 		
 		SabreBlock upgradeBlock = BlockManager.createBlockFromItem(item, this.getLocation());
+		
+		if(upgradeBlock == null) {
+			runner.msg(Lang.factoryError);
+			throw new RuntimeException();
+		}
+		
 		upgradeBlock.setReinforcement(this.getReinforcement());
 		
 		if (upgradeBlock instanceof BaseFactory) {

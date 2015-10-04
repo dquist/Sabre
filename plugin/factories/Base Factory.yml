@@ -1,6 +1,31 @@
 name: Base Factory
 production_speed: 5
 upgrades:
+  Lumber Mill 1 Upgrade:
+    fuel_cost: 10
+    inputs:
+      Logs:
+        material: LOG
+        durability: -1
+        amount: 256
+        subs:
+          Logs2:
+            material: LOG_2
+            durability: -1
+    outputs:
+      Lumber Mill 1:
+        custom_item: Lumber Mill 1
+        amount: 1
+  Stone Smelter 1 Upgrade:
+    fuel_cost: 10
+    inputs:
+      Cobblestone:
+        material: COBBLESTONE
+        amount: 3072
+    outputs:
+      Stone Smelter 1:
+        custom_item: Stone Smelter 1
+        amount: 1
   Ore Smelter 1 Upgrade:
     fuel_cost: 10
     inputs:
@@ -20,18 +45,55 @@ upgrades:
       Ore Smelter 1:
         custom_item: Ore Smelter 1
         amount: 1
-  Lumber Mill 1 Upgrade:
+  Stone Smithy 1 Upgrade:
     fuel_cost: 10
     inputs:
-      Logs:
-        material: LOG
-        durability: -1
-        amount: 256
-        subs:
-          Logs2:
-            material: LOG_2
-            durability: -1
+      Aspect of Masonry:
+        custom_item: Aspect of Masonry
+        amount: 8
+      Aspect of Framing:
+        custom_item: Aspect of Framing
+        amount: 8
     outputs:
-      Lumber Mill 1:
-        custom_item: Lumber Mill 1
+      Stone Smithy 1:
+        custom_item: Stone Smithy 1
+        amount: 1
+  Iron Smithy 1 Upgrade:
+    fuel_cost: 10
+    inputs:
+      Iron Block:
+        material: IRON_BLOCK
+        amount: 512
+      Aspect of Framing:
+        custom_item: Aspect of Framing
+        amount: 8
+    outputs:
+      Iron Smithy 1:
+        custom_item: Iron Smithy 1
+        amount: 1
+  Gold Smithy 1 Upgrade:
+    fuel_cost: 10
+    inputs:
+      Gold Block:
+        material: GOLD_BLOCK
+        amount: 128
+      Aspect of Framing:
+        custom_item: Aspect of Framing
+        amount: 8
+    outputs:
+      Gold Smithy 1:
+        custom_item: Gold Smithy 1
+        amount: 1
+  Diamond Smithy 1 Upgrade:
+    fuel_cost: 10
+    inputs:
+      Diamond Block:
+        material: DIAMOND_BLOCK
+        amount: 64
+      Aspect of Framing:
+        custom_item: Aspect of Framing
+        amount: 8
+    outputs:
+      Diamond Smithy 1:
+        custom_item: Diamond Smithy 1
         amount: 1

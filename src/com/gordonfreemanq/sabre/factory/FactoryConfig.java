@@ -170,10 +170,11 @@ public class FactoryConfig {
 			{
 				
 				ConfigurationSection configItem = configItems.getConfigurationSection(commonName);
-				
+
 				String materialName = "";
 				ItemStack sabreStack = null;
 				Material material = null;
+				short durability = 0;
 				String customItem = configItem.getString("custom_item");
 				int amount = configItem.getInt("amount",1);
 				if (customItem != null) {
@@ -184,6 +185,7 @@ public class FactoryConfig {
 					}
 					
 					material = sabreStack.getType();
+					durability = sabreStack.getDurability();
 				}
 				
 				if (sabreStack == null) {
@@ -193,9 +195,10 @@ public class FactoryConfig {
 						plugin.getLogger().severe(configItems.getCurrentPath() + " has invalid material " + materialName);
 						return items;
 					}
+					durability = (short)configItem.getInt("durability", 0);
 				}
 				
-				short durability = (short)configItem.getInt("durability", 0);
+				
 				String displayName = configItem.getString("display_name");
 				String lore = configItem.getString("lore");
 				List<ProbabilisticEnchantment> compulsoryEnchantments = getEnchantments(configItem.getConfigurationSection("enchantments"));

@@ -1,0 +1,54 @@
+name: Iron Smithy 3
+production_speed: 3
+recipes:
+  Craft Iron Spade:
+    fuel_cost: 30
+    inputs:
+      Iron:
+        material: IRON_INGOT
+        amount: 5
+    outputs:
+      Iron Space:
+        material: IRON_SPADE
+        amount: 6
+  Craft Iron Pickaxe:
+    fuel_cost: 30
+    inputs:
+      Iron:
+        material: IRON_INGOT
+        amount: 15
+    outputs:
+      Iron Pickaxe:
+        material: IRON_PICKAXE
+        amount: 6
+  Craft Iron Axe:
+    fuel_cost: 30
+    inputs:
+      Iron:
+        material: IRON_INGOT
+        amount: 15
+    outputs:
+      Iron Axe:
+        material: IRON_AXE
+        amount: 6
+  Craft Iron Hoe:
+    fuel_cost: 30
+    inputs:
+      Iron:
+        material: IRON_INGOT
+        amount: 10
+    outputs:
+      Iron Hoe:
+        material: IRON_HOE
+        amount: 6
+upgrades:
+  Iron Smithy 4 Upgrade:
+    fuel_cost: 10
+    inputs:
+      Iron:
+        material: IRON_BLOCK
+        amount: 256
+    outputs:
+      Iron Smithy 4:
+        custom_item: Iron Smithy 4
+        amount: 1

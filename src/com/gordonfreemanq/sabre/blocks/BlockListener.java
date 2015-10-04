@@ -117,6 +117,12 @@ public class BlockListener implements Listener {
 
 			// Create a new block instance and save it if the item in hand has block data
 			SabreBlock b = BlockManager.createBlockFromItem(e.getItemInHand(), e.getBlock().getLocation());
+			
+			if (b == null) {
+				e.setCancelled(true);
+				p.msg(Lang.blockCantPlace);
+				return;
+			}
 
 			// Create the reinforcement if we can
 			if (p.getBuildState().getMode() == BuildMode.FORTIFY) {

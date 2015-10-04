@@ -1,0 +1,6 @@
+name: Aspect of Masonry
+material: SMOOTH_BRICK
+durability: 3
+amount: 1
+lore:
+  - '<c>Aspect of Masonry'

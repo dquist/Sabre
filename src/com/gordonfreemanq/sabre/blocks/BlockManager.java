@@ -177,11 +177,6 @@ public class BlockManager {
 			if (b != null) {
 				b.setDisplayName(displayName);
 			}
-
-			if (b == null) {
-				SabrePlugin.getPlugin().log(Level.SEVERE, "Failed to create item block %s", typeName);
-				throw new RuntimeException();
-			}
 		}
 		
 		return b;

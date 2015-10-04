@@ -1,0 +1,54 @@
+name: Gold Smithy 1
+production_speed: 1
+recipes:
+  Craft Gold Spade:
+    fuel_cost: 30
+    inputs:
+      Gold:
+        material: GOLD_INGOT
+        amount: 5
+    outputs:
+      Gold Space:
+        material: GOLD_SPADE
+        amount: 2
+  Craft Gold Pickaxe:
+    fuel_cost: 30
+    inputs:
+      Gold:
+        material: GOLD_INGOT
+        amount: 15
+    outputs:
+      Gold Pickaxe:
+        material: GOLD_PICKAXE
+        amount: 2
+  Craft Gold Axe:
+    fuel_cost: 30
+    inputs:
+      Gold:
+        material: GOLD_INGOT
+        amount: 15
+    outputs:
+      Gold Axe:
+        material: GOLD_AXE
+        amount: 2
+  Craft Gold Hoe:
+    fuel_cost: 30
+    inputs:
+      Gold:
+        material: GOLD_INGOT
+        amount: 10
+    outputs:
+      Gold Hoe:
+        material: GOLD_HOE
+        amount: 2
+upgrades:
+  Gold Smithy 2 Upgrade:
+    fuel_cost: 10
+    inputs:
+      Gold:
+        material: GOLD_BLOCK
+        amount: 256
+    outputs:
+      Gold Smithy 2:
+        custom_item: Gold Smithy 2
+        amount: 1
