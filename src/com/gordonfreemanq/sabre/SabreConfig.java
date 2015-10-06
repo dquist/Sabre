@@ -1,10 +1,9 @@
 package com.gordonfreemanq.sabre;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-
-import net.minecraft.server.v1_8_R1.ItemStack;
 
 import org.bukkit.Material;
 import org.bukkit.configuration.ConfigurationSection;
@@ -34,6 +33,7 @@ public class SabreConfig {
 		this.nonReinforceable = new ArrayList<Material>();
 		this.reinforcementMaterials = new ArrayList<ReinforcementMaterial>();
 		this.disabledRecipes = new ArrayList<SabreItemStack>();
+		this.disabledItemDrops = new HashSet<Material>();
 		this.prisonWorld = "world_the_end";
 		this.freeWorld = "world";
 	}
@@ -88,6 +88,7 @@ public class SabreConfig {
 	
 	private List<ReinforcementMaterial> reinforcementMaterials;
 	private List<SabreItemStack> disabledRecipes;
+	private Set<Material> disabledItemDrops;
 	
 	
 	
@@ -148,6 +149,7 @@ public class SabreConfig {
 			setDefaultReinforcements();
 		}
 
+		
 		this.disabledRecipes.clear();
 		if (fc.contains("disabled_recipes")) {
 			Set<String> rKeys = fc.getConfigurationSection("disabled_recipes").getKeys(false);
@@ -164,6 +166,26 @@ public class SabreConfig {
 				if (m != null) {
 					SabreItemStack is = new SabreItemStack(m, m.name(), 1, durability);
 					this.disabledRecipes.add(is);
+				}
+			}
+		}
+		
+		
+		this.disabledItemDrops.clear();
+		if (fc.contains("disabled_item_drops")) {
+			Set<String> rKeys = fc.getConfigurationSection("disabled_item_drops").getKeys(false);
+			for (String s : rKeys) {
+				String materialKey = String.format("disabled_item_drops.%s.material", s);
+				String duraKey = String.format("disabled_item_drops.%s.durability", s);
+				
+				Material m = Material.getMaterial(fc.getString(materialKey));
+				int durability = 0;
+				if (fc.contains(duraKey)) {
+					durability = fc.getInt(duraKey);
+				}
+				
+				if (m != null) {
+					this.disabledItemDrops.add(m);
 				}
 			}
 		}
@@ -305,6 +327,17 @@ public class SabreConfig {
 	public List<SabreItemStack> getDisabledRecipes() {
 		return this.disabledRecipes;
 	}
+	
+	/**
+	 * Gets the disabled entity drops
+	 * @return The disabled entity drops
+	 */
+	public Set<Material> getDisabledEntityDrops() {
+		return this.disabledItemDrops;
+	}
+	
+	
+	
 	
 	/**
 	 * Checks whether a block type is non reinforceable

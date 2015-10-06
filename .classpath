@@ -16,5 +16,6 @@
 	<classpathentry kind="lib" path="D:/Projects/Sabre/lib/spigot_server.jar"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/Combat-Tag"/>
 	<classpathentry kind="lib" path="D:/Projects/Sabre/lib/ProtocolLib.jar"/>
+	<classpathentry kind="lib" path="D:/Projects/Sabre/lib/CombatTag.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

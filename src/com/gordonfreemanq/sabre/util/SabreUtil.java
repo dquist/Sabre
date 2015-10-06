@@ -1,6 +1,5 @@
 package com.gordonfreemanq.sabre.util;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
@@ -300,8 +299,6 @@ public class SabreUtil {
 	// *------------------------------------------------------------------------------------------------------------*
 
 	public static Location chooseSpawn(World world, int distance) {
-
-		String worldName = world.getName();			
 
 		List<Integer> blacklist = Arrays.asList(new Integer[]{8,9,10,11,18,51,81});	
 		

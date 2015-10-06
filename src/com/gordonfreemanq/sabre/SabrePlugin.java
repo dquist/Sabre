@@ -24,11 +24,11 @@ import com.gordonfreemanq.sabre.factory.FactoryConfig;
 import com.gordonfreemanq.sabre.factory.FactoryListener;
 import com.gordonfreemanq.sabre.factory.FactoryWorker;
 import com.gordonfreemanq.sabre.groups.GroupManager;
-import com.gordonfreemanq.sabre.mining.MiningListener;
 import com.gordonfreemanq.sabre.prisonpearl.PearlListener;
 import com.gordonfreemanq.sabre.prisonpearl.PearlManager;
 import com.gordonfreemanq.sabre.snitch.SnitchListener;
 import com.gordonfreemanq.sabre.snitch.SnitchLogger;
+import com.gordonfreemanq.sabre.util.CombatTagManager;
 
 
 public class SabrePlugin extends AbstractSabrePlugin
@@ -54,12 +54,12 @@ public class SabrePlugin extends AbstractSabrePlugin
 	private SabreConfig config;
 	private SignHandler signHandler;
 	private StatsTracker statsTracker;
-	private MiningListener miningListener;
+	private SabreTweaks sabreTweaks;
 	private FactoryListener factoryListener;
 	private CustomItems customItems;
 	private FactoryConfig factoryConfig;
 	private FactoryWorker factoryWorker;
-	private boolean isLoaded;
+	private CombatTagManager combatTag;
 	
 	/**
 	 * Gets the player manager
@@ -77,6 +77,13 @@ public class SabrePlugin extends AbstractSabrePlugin
 		return this.groupManager;
 	}
 	
+	/**
+	 * Gets the group manager
+	 * @return The group manager
+	 */
+	public CombatTagManager getCombatTag() {
+		return this.combatTag;
+	}
 	
 	/**
 	 * Returns the global chat instance
@@ -207,10 +214,11 @@ public class SabrePlugin extends AbstractSabrePlugin
 		this.snitchListener = new SnitchListener(snitchLogger);
 		this.pearlManager = new PearlManager(db, config);
 		this.pearlListener = new PearlListener(pearlManager, playerManager);
-		this.miningListener = new MiningListener(config);
+		this.sabreTweaks = new SabreTweaks(config);
 		this.factoryListener = new FactoryListener(playerManager, blockManager);
 		this.factoryConfig = new FactoryConfig();
 		this.customItems = new CustomItems();
+		this.combatTag = new CombatTagManager();
 		
 		// Try to connect to the database and load the data
 		try {
@@ -231,7 +239,7 @@ public class SabrePlugin extends AbstractSabrePlugin
 		getServer().getPluginManager().registerEvents(blockListener, this);
 		getServer().getPluginManager().registerEvents(snitchListener, this);
 		getServer().getPluginManager().registerEvents(pearlListener, this);
-		getServer().getPluginManager().registerEvents(miningListener, this);
+		getServer().getPluginManager().registerEvents(sabreTweaks, this);
 		getServer().getPluginManager().registerEvents(factoryListener, this);
 		signHandler = new SignHandler();
 		ProtocolLibrary.getProtocolManager().addPacketListener(signHandler);
@@ -239,7 +247,7 @@ public class SabrePlugin extends AbstractSabrePlugin
 		statsTracker.start();
 		factoryWorker = new FactoryWorker();
 		factoryWorker.start();
-		
+		this.sabreTweaks.registerTimerForPearlCheck();		
 
 		postEnable();
 		this.loadSuccessful = true;
