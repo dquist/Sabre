@@ -1038,13 +1038,30 @@ public class SabreTweaks implements Listener {
 			event.setCancelled(true);
 		}
 	}
+
+	// there is a bug in minecraft 1.8, which allows fire and vines to spread
+	// into unloaded chunks
+	// where they can replace any existing block
+	@EventHandler(priority = EventPriority.LOWEST)
+	public void fixSpreadInUnloadedChunks(BlockSpreadEvent e) {
+		if (!e.getBlock().getChunk().isLoaded()) {
+			e.setCancelled(true);
+		}
+	}
 	
-	  //there is a bug in minecraft 1.8, which allows fire and vines to spread into unloaded chunks
-	  //where they can replace any existing block
-	  @EventHandler(priority = EventPriority.LOWEST)
-	  public void fixSpreadInUnloadedChunks(BlockSpreadEvent e) {
-		  if (!e.getBlock().getChunk().isLoaded()) {
-			  e.setCancelled(true);
-		  }
-	  }
+	
+	/**
+	 * Ores always drop the ore, not the mineral item
+	 * @param e The event
+	 */
+	@EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
+	public void onBlockBreakEvent(BlockBreakEvent e) {
+		Material m = e.getBlock().getType();
+		
+		if (m == Material.REDSTONE_ORE) {
+			e.setCancelled(true);
+			e.getBlock().setType(Material.AIR);
+			e.getPlayer().getWorld().dropItemNaturally(e.getPlayer().getLocation(), new ItemStack(m, 1));
+		}
+	}
 }
