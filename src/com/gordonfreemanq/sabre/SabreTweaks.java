@@ -10,6 +10,7 @@ import java.util.TreeSet;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Chunk;
+import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
@@ -1051,17 +1052,84 @@ public class SabreTweaks implements Listener {
 	
 	
 	/**
+	 * Checks if a material can mine ores other than iron
+	 * @param m The material
+	 * @return true if it's a pick type
+	 */
+	public static boolean isOrePick(Material m) {
+		switch (m) {
+		case IRON_PICKAXE:
+		case GOLD_PICKAXE:
+		case DIAMOND_PICKAXE:
+			return true;
+		default:
+			return false;
+		}
+	}
+	
+	
+	/**
+	 * A better version of dropNaturally so the dropped item is placed
+	 * where you would expect it to be
+	 * @param l The location
+	 * @param is The item to drop
+	 */
+	public static void dropItemAtLocation(Location l, ItemStack is) {
+		l.getWorld().dropItem(l.add(0.5, 0.5, 0.5), is).setVelocity(new Vector(0, 0.05, 0));
+	}
+	
+	/**
+	 * A better version of dropNaturally so the dropped item is placed
+	 * where you would expect it to be
+	 * @param b The block to drop it at
+	 * @param is The item to drop
+	 */
+	public static void dropItemAtLocation(Block b, ItemStack is) {
+		dropItemAtLocation(b.getLocation(), is);
+	}
+	
+	
+	/**
 	 * Ores always drop the ore, not the mineral item
-	 * @param e The event
+	 * 
+	 * @param e
+	 *            The event
 	 */
 	@EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
 	public void onBlockBreakEvent(BlockBreakEvent e) {
 		Material m = e.getBlock().getType();
+		Material dropItem = Material.AIR;
 		
-		if (m == Material.REDSTONE_ORE) {
+		// Ignore if not using a pick
+		if (!isOrePick(e.getPlayer().getItemInHand().getType())) {
+			return;
+		}
+		
+		// Ignore players in creative mode
+		if (e.getPlayer().getGameMode() == GameMode.CREATIVE) {
+			return;
+		}
+		
+		switch (m) {
+		case GLOWING_REDSTONE_ORE:
+			dropItem = Material.REDSTONE_ORE;
+			break;
+			
+		case DIAMOND_ORE:
+		case LAPIS_ORE:
+		case QUARTZ_ORE:
+		case COAL_ORE:
+			dropItem = m;
+			break;
+		default:
+			break;
+		}
+		
+		if (dropItem != Material.AIR) {
+
 			e.setCancelled(true);
 			e.getBlock().setType(Material.AIR);
-			e.getPlayer().getWorld().dropItemNaturally(e.getPlayer().getLocation(), new ItemStack(m, 1));
+			dropItemAtLocation(e.getBlock(), new ItemStack(dropItem, 1));
 		}
 	}
 }
