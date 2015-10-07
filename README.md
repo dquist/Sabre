@@ -56,6 +56,8 @@ To build the plugin, open build.ant and click the Run icon. This will build a ne
 * All work should be done in feature branches off of develop
 * When a feature branch is ready to be merged, create a pull-request and I will merge it
 * Develop will be merged into master on each major release
+* Each Jira issue should ideally get its own feature branch.
+* Use smart commits to auto-change Jira issues: https://confluence.atlassian.com/bitbucket/processing-jira-software-issues-with-smart-commit-messages-298979931.html
 * For more reference, visit http://nvie.com/posts/a-successful-git-branching-model/
 
 \- Gordon
