@@ -45,7 +45,9 @@ First, clone both projects to your local workstation with the following director
 
 The build script is set up to copy the build output directly to the server plugin folder.
 
-Open an eclipse workstation in the CivFactions/Plugin/ directory and import the Sabre project. All the dependencies should already be included.
+Open an eclipse workstation in the CivFactions/Plugin/ directory and import the Sabre project. All the dependencies should already be included as long as you have Java 7 configured.
+
+To build the plugin, open build.ant and click the Run icon. This will build a new jar file in the server plugins directory.
 
 ## Workflow ##
 
