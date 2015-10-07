@@ -36,12 +36,14 @@ Combining the code for all these concepts into a single plugin allows for easier
 
 This repo contains everything required to start developing and debugging the Sabre plugin. 
 
-First, clone both projects to your local workstation with the following directory structure. The build script is set up to copy the build output directly to the server plugin folder.
+First, clone both projects to your local workstation with the following directory structure - I recommend using SourceTree because it interfaces nicely with BitBucket. 
 
     - CivFactions
       - Plugin
         - Sabre  <-- Clone civfactions/sabre here
       - Server   <-- Clone civfactions/server here
+
+The build script is set up to copy the build output directly to the server plugin folder.
 
 Open an eclipse workstation in the CivFactions/Plugin/ directory and import the Sabre project. All the dependencies should already be included.
 
