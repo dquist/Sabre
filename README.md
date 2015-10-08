@@ -28,7 +28,9 @@ Sabre is the main plugin for the server and replaces the following civcraft plug
 * RealisticBiomes
 * JukeAlert
 * Bastion
+* CivChat
 * Humbug
+* RandomSpawn
 
 Combining the code for all these concepts into a single plugin allows for easier development and ultimately drives a much cleaner and unified gaming experience for the players.
 
