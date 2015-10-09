@@ -75,7 +75,7 @@ public class Lang
 	public static String blockNotMaterial = "<i>%s <b>is not a valid reinforcement material.";
 	public static String blockMaterialDepleted = "<n>%s <i>depleted, left fortification mode.";
 	public static String blockNotReinforceable = "<b>That block cannot be reinforced.";
-	public static String blockShowType = "<i>That is a <n>%s<i>.";
+	public static String blockShowType = "<i>That's a <n>%s<i>.";
 	public static String blockShowInfo = "<b>%s with <n>%s <b>at <n>%s%% <b>health.";
 	public static String blockShowInfoAccess = "<g>%s to <c>%s <g>with <n>%s <g>at <n>%s%% <g>health.";
 	public static String blockShowInfoSpecial = "<n>%s <b>is %s with <n>%s <b>at <n>%s%% <b>health.";

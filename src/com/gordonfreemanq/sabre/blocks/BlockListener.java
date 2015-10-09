@@ -309,28 +309,42 @@ public class BlockListener implements Listener {
 			SabreBlock sb = bm.getBlockAt(b.getLocation());
 			if (sb != null) {
 
+				// Show the special block name if player interacts with a stick
+				boolean showBlockName = sb.isSpecial() && p.getPlayer().getItemInHand().getType() != Material.STICK;
+				
 				canAccess = bm.playerCanAccessBlock(p, sb);
 
 				// Disallow container access for those not in the group
-				if (a.equals(Action.RIGHT_CLICK_BLOCK) && config.blockIsLockable(b.getType()) && !canAccess) {
-
-					if (p.getAdminBypass()) {
-						String groupName = sb.getReinforcement().getGroup().getName();
-						p.msg(Lang.adminYouBypassed, groupName);
-					} else {
-						if (!state.getInfo()) {
-							if (sb.isSpecial()) {
-								p.msg(Lang.blockIsLockedSpecial, sb.getTypeName());
-							} else {
-								p.msg(Lang.blockIsLocked, b.getType());
+				if (a.equals(Action.RIGHT_CLICK_BLOCK)) {
+					if (config.blockIsLockable(b.getType()) && !canAccess) {
+						if (p.getAdminBypass()) {
+							String groupName = sb.getReinforcement().getGroup().getName();
+							p.msg(Lang.adminYouBypassed, groupName);
+						} else {
+							if (!state.getInfo()) {
+								if (sb.isSpecial()) {
+									p.msg(Lang.blockIsLockedSpecial, sb.getTypeName());
+								} else {
+									p.msg(Lang.blockIsLocked, b.getType());
+								}
+								
+								// Already showing a message, so don't show another message later
+								showBlockName = false;
 							}
+							
+							e.setCancelled(true);
 						}
-						
-						e.setCancelled(true);
-					}
+					} 
+
 				} 
 				if (state.getInfo()) {
 					showBlockInfo(p, sb);
+				}
+				// Interacting with a special block will notify the player what type of block it is.
+				// Ignore if holding a stick though, since that's the default interaction item, it makes
+				// the chat too noisy when cycling the factory recipes
+				else if (showBlockName) {
+					p.msg(Lang.blockShowType, sb.getDisplayName());
 				}
 			} else if (state.getInfo()) {
 				p.msg(Lang.blockNoReinforcement);
