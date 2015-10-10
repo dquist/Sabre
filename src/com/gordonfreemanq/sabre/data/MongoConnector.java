@@ -628,7 +628,7 @@ public class MongoConnector implements IDataAccess {
 					Material mat = Material.matchMaterial(rein.getString("material", ""));
 					int strength = rein.getInt("strength", 0);
 					long createdOn = rein.getLong("created_on", 0);
-					int startStrength = config.getReinforcementMaterial(mat).strength;
+					int startStrength = config.getReinforcementMaterial(mat, (short)0).strength;
 					boolean isPublic = rein.getBoolean("public", false);
 					boolean isInsecure = rein.getBoolean("insecure", false);
 				

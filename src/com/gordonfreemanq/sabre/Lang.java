@@ -72,7 +72,7 @@ public class Lang
 	public static String blockBypassDisable = "<i>BYPASS mode is now <b>disabled<i>.";
 	public static String blockBuildMode = "<i>Build mode set to <n>%s<i>.";
 	public static String blockBuildModeGroup = "<g>Build mode set to <n>%s <g>for <c>%s<g>.";
-	public static String blockNotMaterial = "<i>%s <b>is not a valid reinforcement material.";
+	public static String blockNotMaterial = "<b>That is not a valid reinforcement material.";
 	public static String blockMaterialDepleted = "<n>%s <i>depleted, left fortification mode.";
 	public static String blockNotReinforceable = "<b>That block cannot be reinforced.";
 	public static String blockShowType = "<i>That's a <n>%s<i>.";
@@ -90,6 +90,7 @@ public class Lang
 	public static String blockNoChange = "<i>No change was made.";
 	public static String blockChanged = "<i>Changed to <n>%s <i>with <n>%s<i>.";
 	public static String blockCantPlace = "<i>You cannot place this block.";
+	public static String blockMaterialHasLore = "<b>You cannot reinforce with lore items.";
 	
 	
 	// ADMIN
