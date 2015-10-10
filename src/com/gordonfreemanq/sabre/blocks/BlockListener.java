@@ -451,7 +451,7 @@ public class BlockListener implements Listener {
 			if (slotItem == null) {
 				continue;
 			}
-			if (slotItem.getType().equals(rm.material)) {
+			if (slotItem.getType().equals(rm.material) && slotItem.getDurability() == rm.durability) {
 
 				// Prevent named and lore items from being used
 				if (slotItem.hasItemMeta() && (slotItem.getItemMeta().hasLore() || slotItem.getItemMeta().hasDisplayName())) {
@@ -474,6 +474,8 @@ public class BlockListener implements Listener {
 		Reinforcement r = new Reinforcement(l, g.getID(), rm.material, rm.strength, (new Date()).getTime());
 		r.setPublic(state.getPublic());
 		r.setInsecure(state.getInsecure());
+		
+		boolean refundItem = false;
 
 		// Is it already the same as the existing?
 		if (existing != null) {
@@ -485,7 +487,7 @@ public class BlockListener implements Listener {
 				// Tell the player the block was updated
 				String groupStr = p.getBuildState().getBuildGroupString();
 				p.msg(Lang.blockChanged, groupStr, r.getMaterial().toString());
-				return r;
+				refundItem = true;
 			}
 		}
 
@@ -498,6 +500,11 @@ public class BlockListener implements Listener {
 		slotItem.setAmount(slotItem.getAmount() - amount);
 		inv.setItem(slot, slotItem);
 		p.getPlayer().updateInventory();
+		
+		// If the reinforcement changed, give original item back
+		if (refundItem) {
+			refundItemToPlayer(p.getPlayer(), existing.getMaterial(), b.getLocation());
+		}
 
 		return r;
 	}

@@ -8,6 +8,7 @@ import java.util.Set;
 import org.bukkit.Material;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.inventory.ItemStack;
 
 import com.gordonfreemanq.sabre.blocks.ReinforcementMaterial;
 import com.gordonfreemanq.sabre.blocks.SabreItemStack;
@@ -332,14 +333,23 @@ public class SabreConfig {
 	 * @param m The material to check
 	 * @return The reinforcement material instance
 	 */
-	public ReinforcementMaterial getReinforcementMaterial(Material m) {		
+	public ReinforcementMaterial getReinforcementMaterial(Material m, short durability) {		
 		for (ReinforcementMaterial r : reinforcementMaterials) {
-			if (r.material.equals(m)) {
+			if (r.material.equals(m) && r.durability == durability) {
 				return r;
 			}
 		}
 		
 		return null;
+	}
+	
+	/**
+	 * Gets a reinforcement material by material if it exists
+	 * @param m The material to check
+	 * @return The reinforcement material instance
+	 */
+	public ReinforcementMaterial getReinforcementMaterial(ItemStack is) {		
+		return getReinforcementMaterial(is.getType(), is.getDurability());		
 	}
 	
 	/**
