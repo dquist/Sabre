@@ -170,6 +170,8 @@ public class Lang
 	public static String noPermission = "<b>You don't have permission to do that.";
 	public static String mustHoldController = "<i>You must be holding a <c>%s<i>.";
 	public static String unknownWorld = "<b>Unknown world <c>%s<b>.";
+	public static String noCraftingLore = "<i>You cannot craft with lore items.";
+	public static String recipeDisabled = "<i>That crafting recipe is disabled.";
 	public static String exceptionGeneral = "<b>An internal error occurred.";
 	public static String exceptionLogin = "An internal server error occurred.";
 	public static String exceptionConsoleDuring = "An exception error occurred during \"%s\"";

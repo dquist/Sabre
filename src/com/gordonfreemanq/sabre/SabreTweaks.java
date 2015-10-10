@@ -214,18 +214,41 @@ public class SabreTweaks implements Listener {
 	}
 
 	/**
-	 * Disable crafting disabled recipes
+	 * Disable crafting for lore items and disabled recipes
 	 * 
 	 * @param e
 	 *            The PrepareItemCraftEvent
 	 */
 	@EventHandler
 	public void craftItem(PrepareItemCraftEvent e) {
+		
+		for (ItemStack is : e.getInventory().getContents()) {
+			if (is.hasItemMeta() && is.getItemMeta().hasLore()) {
+				e.getInventory().setResult(new ItemStack(Material.AIR));
+				
+	            for(HumanEntity he : e.getViewers()) {
+	                if(he instanceof Player) {
+	                	PlayerManager.getInstance().getPlayerById(he.getUniqueId()).msg(Lang.noCraftingLore);
+	                }
+	            }
+	            
+				return;
+			}
+		}
+		
+		
 		ItemStack result = e.getRecipe().getResult();
 
 		for (SabreItemStack is : config.getDisabledRecipes()) {
 			if (is.isSimilar(result)) {
 				e.getInventory().setResult(new ItemStack(Material.AIR));
+				
+	            for(HumanEntity he : e.getViewers()) {
+	                if(he instanceof Player) {
+	                	PlayerManager.getInstance().getPlayerById(he.getUniqueId()).msg(Lang.recipeDisabled);
+	                }
+	            }
+				return;
 			}
 		}
 	}
