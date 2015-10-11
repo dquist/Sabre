@@ -1,0 +1,54 @@
+name: Kiln 4
+production_speed: 4
+recipes:
+  Bake Clay Blocks:
+    fuel_cost: 40
+    inputs:
+      Clay Block:
+        material: CLAY
+        amount: 512
+    outputs:
+      Hardened Clay:
+        material: HARD_CLAY
+        amount: 640
+  Bake Bricks:
+    fuel_cost: 40
+    inputs:
+      Clay:
+        material: CLAY
+        amount: 128
+    outputs:
+      Brick:
+        material: CLAY_BRICK
+        amount: 640
+  Bake Brick Blocks:
+    fuel_cost: 40
+    inputs:
+      Clay:
+        material: CLAY
+        amount: 128
+    outputs:
+      Brick block:
+        material: BRICK
+        amount: 160
+  Create Aspect of Ceramics:
+    fuel_cost: 10
+    inputs:
+      Hardened Clay:
+        material: HARD_CLAY
+        amount: 1024
+    outputs:
+      Hardened Clay:
+        custom_item: Aspect of Ceramics
+        amount: 2
+upgrades:
+  Kiln 5 Upgrade:
+    fuel_cost: 10
+    inputs:
+      Aspect of Ceramics:
+        custom_item: Aspect of Ceramics
+        amount: 32
+    outputs:
+      Kiln 5:
+        custom_item: Kiln 5
+        amount: 1

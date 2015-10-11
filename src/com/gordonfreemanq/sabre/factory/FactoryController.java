@@ -27,10 +27,8 @@ public class FactoryController extends AbstractController {
 		
 		List<String> lore = new ArrayList<String>();
 		lore.add(parse("<l>%s", name));
-		lore.add(parse("<a>World: <n>%s", l.getWorld().getName()));
-		lore.add(parse("<a>Location: <n>%d, %d, %d", l.getBlockX(), l.getBlockY(), l.getBlockZ()));
-
 		lore.add(parse("<a>Type: <n>%s", factory.getTypeName()));
+		lore.add(parse("<a>Location: <n>%d, %d, %d, %s", l.getBlockX(), l.getBlockY(), l.getBlockZ(), l.getWorld().getName()));
 
 		Location input = factory.getInputLocation();
 		if (input != null) {

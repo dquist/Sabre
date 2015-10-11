@@ -1,0 +1,65 @@
+name: Dharma Factory 3
+production_speed: 3
+recipes:
+  Craft Cuendillar:
+    fuel_cost: 100
+    inputs:
+      Obsidian:
+        material: OBSIDIAN
+        amount: 128
+      Diamond:
+        material: DIAMOND
+        amount: 16
+      Emerald:
+        material: EMERALD
+        amount: 16
+      Plasma:
+        custom_item: Plasma
+        amount: 8
+    outputs:
+      Cuendillar:
+        custom_item: Cuendillar
+        amount: 32
+  Craft Moksha Rod:
+    fuel_cost: 100
+    inputs:
+      Diamond:
+        material: DIAMOND
+        amount: 256
+      Blaze Rod:
+        material: BLAZE_ROD
+        amount: 128
+      Emerald Block:
+        material: EMERALD_BLOCK
+        amount: 32
+    outputs:
+      Moksha Rod:
+        custom_item: Moksha Rod
+        amount: 1
+  Craft Aspect of End:
+    fuel_cost: 10
+    inputs:
+      End Stone:
+        material: ENDER_STONE
+        amount: 2048
+      Cuendillar:
+        custom_item: Cuendillar
+        amount: 512
+      Eye of Ender:
+        material: EYE_OF_ENDER
+        amount: 256
+    outputs:
+      Aspect of End:
+        custom_item: Aspect of End
+        amount: 2
+upgrades:
+  Dharma Factory 4 Upgrade:
+    fuel_cost: 10
+    inputs:
+      Aspect of End:
+        custom_item: Aspect of End
+        amount: 24
+    outputs:
+      Dharma Factory 4:
+        custom_item: Dharma Factory 4
+        amount: 1

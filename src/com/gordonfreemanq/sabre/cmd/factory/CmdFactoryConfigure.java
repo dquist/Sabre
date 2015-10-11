@@ -16,7 +16,7 @@ public class CmdFactoryConfigure extends SabreCommand {
 		super();
 		this.aliases.add("configure");
 
-		this.setHelpShort("Configures a factory");
+		this.setHelpShort("Configures the factory chests");
 		
 		this.senderMustBePlayer = true;
 	}

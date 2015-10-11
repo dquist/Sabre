@@ -143,7 +143,7 @@ public class BaseFactory extends SpecialBlock {
      */
     public Long getPercentComplete() {
     	Double dbl = new Double((double)fuelCounter / recipe.getFuelCost());
-    	return Math.round(dbl * 100.0);
+    	return Math.min(Math.round(dbl * 100.0), 100);
     }
 	
 	

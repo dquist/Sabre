@@ -1,11 +1,9 @@
 package com.gordonfreemanq.sabre;
 
 import java.util.Date;
-import java.util.List;
 import java.util.logging.Level;
 
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.Material;

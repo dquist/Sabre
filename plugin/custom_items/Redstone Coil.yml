@@ -1,0 +1,5 @@
+name: Redstone Coil
+material: REDSTONE
+amount: 1
+lore:
+  - '<c>An industrial electric component.'

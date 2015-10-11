@@ -1,0 +1,6 @@
+name: Aspect of Silica
+material: STAINED_GLASS
+durability: 6
+amount: 1
+lore:
+  - '<c>A concentrated essence of silica.'

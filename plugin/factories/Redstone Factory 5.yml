@@ -1,0 +1,90 @@
+name: Redstone Factory 5
+production_speed: 5
+recipes:
+  Produce Redstone Torches:
+    fuel_cost: 10
+    inputs:
+      Redstone:
+        material: REDSTONE
+        amount: 128
+      Stick:
+        material: STICK
+        amount: 128
+    outputs:
+      Redstone Torch:
+        amount: 256
+        material: REDSTONE_TORCH_ON
+  Produce Repeaters:
+    fuel_cost: 10
+    inputs:
+      Redstone:
+        material: REDSTONE
+        amount: 192
+      Stick:
+        material: STICK
+        amount: 128
+      Stone:
+        material: STONE
+        amount: 384
+    outputs:
+      Redstone Repeater:
+        amount: 128
+        material: DIODE
+  Produce Redstone Comparators:
+    fuel_cost: 10
+    inputs:
+      Redstone:
+        material: REDSTONE
+        amount: 192
+      Stick:
+        material: STICK
+        amount: 128
+      Stone:
+        material: STONE
+        amount: 384
+      Quartz:
+        material: QUARTZ
+        amount: 64
+    outputs:
+      Redstone Comparator:
+        amount: 128
+        material: REDSTONE_COMPARATOR
+  Produce Daylight Sensors:
+    fuel_cost: 10
+    inputs:
+      Redstone:
+        material: REDSTONE
+        amount: 32
+      Glass:
+        material: GLASS
+        amount: 96
+      Plank:
+        material: WOOD
+        durability: -1
+        amount: 96
+      Quartz:
+        material: QUARTZ
+        amount: 96
+    outputs:
+      Daylight Detector:
+        amount: 64
+        material: DAYLIGHT_DETECTOR
+  Produce Redstone Coil:
+    fuel_cost: 10
+    inputs:
+      Redstone Block:
+        material: REDSTONE_BLOCK
+        amount: 64
+      Quartz Block:
+        material: QUARTZ_BLOCK
+        amount: 32
+      Glass:
+        material: GLASS
+        amount: 512
+      Aspect of Framing:
+        custom_item: Aspect of Framing
+        amount: 2
+    outputs:
+      Redstone Coil:
+        amount: 2
+        custom_item: Redstone Coil
