@@ -1,0 +1,5 @@
+name: Gearbox
+material: WATCH
+amount: 1
+lore:
+  - '<c>An industrial mechanics component.'

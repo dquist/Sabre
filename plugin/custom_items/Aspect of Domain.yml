@@ -1,0 +1,5 @@
+name: Aspect of Domain
+material: IRON_BLOCK
+amount: 1
+lore:
+  - '<c>An aspect of territorial control.'

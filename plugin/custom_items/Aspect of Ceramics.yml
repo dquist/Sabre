@@ -1,0 +1,5 @@
+name: Aspect of Ceramics
+material: CLAY_BRICK
+amount: 1
+lore:
+  - '<c>A concentrated essence of ceramics.'

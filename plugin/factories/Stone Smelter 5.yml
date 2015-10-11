@@ -58,4 +58,4 @@ recipes:
     outputs:
       Aspect of Masonry:
         custom_item: Aspect of Masonry
-        amount: 8
+        amount: 2

@@ -109,3 +109,20 @@ disabled_recipes:
   Andesite:
     material: STONE
     durability: 6
+no_smelt:
+  Coal Ore:
+    material: COAL_ORE
+  Iron Ore:
+    material: IRON_ORE
+  Gold Ore:
+    material: GOLD_ORE
+  Diamond Ore:
+    material: DIAMOND_ORE
+  Redstone Ore:
+    material: REDSTONE_ORE
+  Lapis Ore:
+    material: LAPIS_ORE
+  Quartz Ore:
+    material: QUARTZ_ORE
+  Emerald Ore:
+    material: EMERALD_ORE

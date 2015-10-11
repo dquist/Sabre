@@ -1,0 +1,6 @@
+name: Redstone Factory 3
+material: FURNACE
+class: com.gordonfreemanq.sabre.factory.BaseFactory
+amount: 1
+lore:
+  - '<c>A moderately advanced redstone factory.'

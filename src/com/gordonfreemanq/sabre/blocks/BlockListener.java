@@ -55,6 +55,7 @@ import com.gordonfreemanq.sabre.PlayerManager;
 import com.gordonfreemanq.sabre.SabreConfig;
 import com.gordonfreemanq.sabre.SabrePlayer;
 import com.gordonfreemanq.sabre.SabrePlugin;
+import com.gordonfreemanq.sabre.SabreTweaks;
 import com.gordonfreemanq.sabre.core.ISabreLog;
 import com.gordonfreemanq.sabre.groups.SabreGroup;
 import com.gordonfreemanq.sabre.groups.SabreMember;
@@ -264,7 +265,7 @@ public class BlockListener implements Listener {
 							// Cancel the break event, set the block to air, and drop the new item, this way
 							// we can override the default block that drops
 							l.getBlock().setType(Material.AIR);
-							l.getWorld().dropItem(l, is);
+							SabreTweaks.dropItemAtLocation(l, is);
 						}
 					}
 
@@ -605,9 +606,11 @@ public class BlockListener implements Listener {
 				SabreBlock sb = bm.getBlockAt(adjacent.getLocation());
 				if (sb != null) {
 					Reinforcement r = sb.getReinforcement();
-					SabreGroup g = r.getGroup();
-					if (!g.isMember(p)) {
-						return false;
+					if (r != null) {
+						SabreGroup g = r.getGroup();
+						if (!g.isMember(p)) {
+							return false;
+						}
 					}
 				}
 			}
@@ -808,7 +811,7 @@ public class BlockListener implements Listener {
 		for(ItemStack leftover : inv.addItem(
 				is)
 				.values()) {
-			l.getWorld().dropItem(l, leftover);
+			SabreTweaks.dropItemAtLocation(l, leftover);
 		}
 	}
 
@@ -888,7 +891,7 @@ public class BlockListener implements Listener {
 					// Cancel the break event, set the block to air, and drop the new item, this way
 					// we can override the default block that drops
 					l.getBlock().setType(Material.AIR);
-					l.getWorld().dropItem(l, is);
+					SabreTweaks.dropItemAtLocation(l, is);
 					e.setCancelled(true);
 				}
 			}

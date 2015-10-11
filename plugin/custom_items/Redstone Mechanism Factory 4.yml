@@ -1,0 +1,6 @@
+name: Redstone Mechanism Factory 4
+material: FURNACE
+class: com.gordonfreemanq.sabre.factory.BaseFactory
+amount: 1
+lore:
+  - '<c>A very advanced redstone mechanism factory.'
