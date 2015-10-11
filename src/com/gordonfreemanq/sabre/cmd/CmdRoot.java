@@ -14,10 +14,10 @@ public class CmdRoot extends SabreCommand {
 	{
 		super();
 		
-		this.aliases.add("s");
+		this.aliases.add("f");
 		this.aliases.removeAll(Collections.singletonList(null));  // remove any nulls from extra commas
 		
-		this.setHelpShort("The Sabre base command");
+		this.setHelpShort("The Faction base command");
 		this.optionalArgs.put("page", "1");
 		
 		
