@@ -273,7 +273,7 @@ public class SabrePlugin extends AbstractSabrePlugin
 	public boolean onCommand(CommandSender sender, Command cmd, String alias, String[] args)
 	{
 		// Roll any other accepted raw commands into subcommands
-		if (!cmd.getLabel().equalsIgnoreCase("sabre")) {
+		if (!cmd.getLabel().equalsIgnoreCase("faction")) {
 			
 			String[] args2 = new String[args.length + 1];
 			args2[0] = cmd.getLabel();
@@ -282,7 +282,7 @@ public class SabrePlugin extends AbstractSabrePlugin
 			}
 			
 			args = args2;
-			cmd.setLabel("s");
+			cmd.setLabel("f");
 		}
 		
 		

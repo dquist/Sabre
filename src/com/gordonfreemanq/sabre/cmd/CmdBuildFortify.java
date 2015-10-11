@@ -16,7 +16,7 @@ public class CmdBuildFortify extends SabreCommand {
 	{
 		super();
 		this.aliases.add("fortify");
-		this.aliases.add("sbf");
+		this.aliases.add("fbf");
 		
 		this.requiredArgs.add("group");
 		this.optionalArgs.put("mode", "public,insecure");

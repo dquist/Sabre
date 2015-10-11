@@ -16,7 +16,7 @@ public class CmdBuildReinforce extends SabreCommand {
 	{
 		super();
 		this.aliases.add("reinforce");
-		this.aliases.add("sbr");
+		this.aliases.add("fbr");
 		
 		this.requiredArgs.add("group");
 		this.optionalArgs.put("mode", "public,insecure");
