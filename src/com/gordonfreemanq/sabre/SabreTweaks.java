@@ -89,45 +89,17 @@ public class SabreTweaks implements Listener {
 	}
 
 	/**
-	 * Prevent placing blocks directly under you
+	 * CobbleStone and dirt act like sand/gravel
 	 * 
 	 * @param e
 	 */
 	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
 	public void onBlockPlaceEvent(BlockPlaceEvent e) {
-
-		Player p = e.getPlayer();
-		Entity ent = (Entity) p;
-
-		if (!ent.isOnGround()) {
-			e.setCancelled(true);
-			return;
-		}
-
-		Location under = p.getLocation().getBlock().getLocation()
-				.subtract(0, 1, 0);
-
-		if (under.getBlock().getType() == Material.AIR) {
-			e.setCancelled(true);
-			return;
-		}
-
 		Block b = e.getBlock();
-
-		if (under.getBlock() == b) {
-			e.setCancelled(true);
-			return;
-		}
-
-		if (b.getLocation().subtract(0, 1, 0).getBlock().getType() != Material.AIR) {
-			return;
-		}
-
 		Material m = b.getType();
 
 		if (m.equals(Material.COBBLESTONE) || m.equals(Material.DIRT)) {
-			e.getBlock().getWorld()
-					.spawnFallingBlock(b.getLocation(), m, b.getData());
+			e.getBlock().getWorld().spawnFallingBlock(b.getLocation(), m, b.getData());
 			b.setType(Material.AIR);
 		}
 	}
