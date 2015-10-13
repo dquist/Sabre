@@ -50,6 +50,7 @@ public class PrisonPearl {
 	private boolean summoned;
 	private boolean canDamage;
 	private Location returnLocation;
+	private int sealStrength;
 
 	/**
 	 * Creates a new prison pearl instance
@@ -64,6 +65,7 @@ public class PrisonPearl {
 		this.setHolder(holder);
 		this.summoned = false;
 		this.canDamage = false;
+		this.sealStrength = 0;
 	}
 
 
@@ -244,6 +246,28 @@ public class PrisonPearl {
     public void setCanDamage(boolean canDamage) {
     	this.canDamage = canDamage;
     }
+
+    
+    /**
+     * Gets the pearl seal strength
+     * @return The damage status
+     */
+    public int getSealStrength() {
+    	return this.sealStrength;
+    }
+    
+    
+    /**
+     * Sets the pearl seal strength
+     * @param The damage status
+     */
+    public void setSealStrength(int sealStrength) {
+    	if (sealStrength < 0) {
+    		sealStrength = 0;
+    	}
+    	
+    	this.sealStrength = sealStrength;
+    }
     
     
     /**
@@ -274,6 +298,7 @@ public class PrisonPearl {
 		lore.add(parse("<l>%s", ITEM_NAME));
 		lore.add(parse("<a>Player: <n>%s", this.getName()));
 		lore.add(parse("<a>UUID: <n>%s", playerId.toString()));
+		lore.add(parse("<a>Strength: <n>%d", this.sealStrength));
 		lore.add(parse("<a>Pearled on: <n>%s", new SimpleDateFormat("yyyy-MM-dd").format(pearledOn)));
 		lore.add(parse(""));
 		lore.add(parse("<l>Commands:"));
@@ -342,6 +367,9 @@ public class PrisonPearl {
 
 		UUID id = getIDFromItemStack(is);
 		if (id != null && id.equals(this.playerId)) {
+			
+			// re-create the item stack to update the values
+			is = createItemStack();
 			return true;
 		}
 		

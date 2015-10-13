@@ -891,6 +891,7 @@ public class MongoConnector implements IDataAccess {
 				Location l = new Location(Bukkit.getWorld(worldName), x, y, z);
 				boolean summoned = o.getBoolean("summoned");
 				boolean canDamage = o.getBoolean("can_damage");
+				int sealStrength = o.getInt("seal_strength", 0);
 				Location returnLocation = null;
 				
 				if (o.containsField("return_location")) {
@@ -910,6 +911,7 @@ public class MongoConnector implements IDataAccess {
 				p.setSummoned(summoned);
 				p.setCanDamage(canDamage);
 				p.setReturnLocation(returnLocation);
+				p.setSealStrength(sealStrength);
 				
 				records.add(p);
 				
@@ -938,7 +940,8 @@ public class MongoConnector implements IDataAccess {
 		.append("y", l.getBlockY())
 		.append("z", l.getBlockZ())
 		.append("summoned", pp.getSummoned())
-		.append("can_damage", pp.getCanDamage());
+		.append("can_damage", pp.getCanDamage())
+		.append("seal_strength", pp.getSealStrength());
 
 		colPearls.insert(doc);
 	}
@@ -960,7 +963,8 @@ public class MongoConnector implements IDataAccess {
 		.append("y", l.getBlockY())
 		.append("z", l.getBlockZ())
 		.append("summoned", pp.getSummoned())
-		.append("can_damage", pp.getCanDamage()));
+		.append("can_damage", pp.getCanDamage())
+		.append("seal_strength", pp.getSealStrength()));
 		
 		BasicDBObject where = new BasicDBObject()
 		.append("_id", pp.getPlayerID().toString());
@@ -1000,6 +1004,22 @@ public class MongoConnector implements IDataAccess {
 		
 		BasicDBObject doc = new BasicDBObject("$set", new BasicDBObject()
 		.append("return_location", SabreUtil.serializeLocation(l)));
+		
+		BasicDBObject where = new BasicDBObject()
+		.append("_id", pp.getPlayerID().toString());
+
+		colPearls.update(where, doc);
+	}
+	
+	
+	/**
+	 * Updates the strength of a prison pearl
+	 * @param pp The pearl to update
+	 */
+	@Override
+	public void pearlUpdateSealStrength(PrisonPearl pp) {		
+		BasicDBObject doc = new BasicDBObject("$set", new BasicDBObject()
+		.append("seal_strength", pp.getSealStrength()));
 		
 		BasicDBObject where = new BasicDBObject()
 		.append("_id", pp.getPlayerID().toString());
