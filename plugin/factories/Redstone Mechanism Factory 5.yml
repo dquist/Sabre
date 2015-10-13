@@ -157,6 +157,23 @@ recipes:
       Snitch:
         custom_item: Snitch
         amount: 16
+  Produce Secure Sign:
+    fuel_cost: 10
+    inputs:
+      Planks:
+        material: WOOD
+        durability: -1
+        amount: 160
+      Redstone:
+        material: REDSTONE
+        amount: 80
+      Iron:
+        material: IRON_INGOT
+        amount: 10
+    outputs:
+      Secure Sign:
+        custom_item: Secure Sign
+        amount: 12
   Produce Gearbox:
     fuel_cost: 10
     inputs:

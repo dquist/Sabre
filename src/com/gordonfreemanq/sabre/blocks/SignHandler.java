@@ -77,30 +77,18 @@ public class SignHandler extends PacketAdapter {
 	 */
 	public void updateSign(SecureSign sign) {
 		
-		// Broken
-		return;
-		
-		/*
 		Location l = sign.getLocation();
 		for (SabrePlayer p : pm.getOnlinePlayers()) {
 			
 			if (p.getPlayer().getLocation().distance(l) < 64) {
 				WrapperPlayServerUpdateSign w = new WrapperPlayServerUpdateSign();
 				w.setLocation(new BlockPosition(sign.getLocation().toVector()));
-				BlockState bs = sign.getLocation().getBlock().getState();
 				
-				if (bs instanceof Sign) {
-					Sign signBlock = (Sign)bs;
-					WrappedChatComponent[] lines = w.getLines();
-					for (int i = 0; i < lines.length; i++) {
-						lines[i] = WrappedChatComponent.fromText(signBlock.getLine(i));
-					}
-					
-					updateSignPacket(w, sign, p);
-					w.sendPacket(p.getPlayer());
-				}
+				// Update the sign packet and send it off
+				updateSignPacket(w, sign, p);
+				w.sendPacket(p.getPlayer());
 			}
-		} */
+		} 
 	}
 	
 	
@@ -117,21 +105,30 @@ public class SignHandler extends PacketAdapter {
 			return;
 		}
 		
-		// broken
-		/*
-		if (!sign.getVisible()) {
+		BlockState bs = sign.getLocation().getBlock().getState();
+		if (!(bs instanceof Sign)) {
+			return;
+		}
+		
+		Sign signBlock = (Sign)bs;
+		WrappedChatComponent[] lines = new WrappedChatComponent[4];
+		
+		if (sign.getVisible()) {
+			// Sign is visible, just send the data
+			for (int i = 0; i < lines.length; i++) {
+				lines[i] = WrappedChatComponent.fromText(signBlock.getLine(i));
+			}
+		} else {
 			// Sign is hidden, remove text for those not in the group
 			SabreGroup g = r.getGroup();
-			WrappedChatComponent[] lines = w.getLines();
 			
 			if (g.isMember(p)) {
 				// For group members, the text shows up blue
 				for (int i = 0; i < lines.length; i++) {
-					String l = ChatColor.DARK_BLUE + lines[i].getJson();
+					String l = ChatColor.DARK_BLUE + signBlock.getLine(i);
 					if (l.length() > 15) {
 						l = l.substring(0, 15);
 					}
-					
 					lines[i] = WrappedChatComponent.fromText(l);
 				}
 			} else {
@@ -140,6 +137,8 @@ public class SignHandler extends PacketAdapter {
 					lines[i] = WrappedChatComponent.fromText("");
 				}
 			}
-		} */
+		}
+
+		w.setLines(lines);
 	}
 }
