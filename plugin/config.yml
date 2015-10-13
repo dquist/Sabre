@@ -162,3 +162,21 @@ no_smelt:
     material: HARD_CLAY
   Clay Brick:
     material: CLAY_BRICK
+
+
+ # Farm Factory Settings
+ # This section defines how the factory farms operate.
+ #
+ # survey_period: The amount of time, in minutes, between when all the farms are surveyed.
+ #    A lower number means this task will run more often, using more CPU
+ #
+ # survey_tick_spacing: The number of ticks between the surveying of each farm
+ #    A higher number will spread out the CPU load over some time
+ #
+ # production_ticks: How often, in factory ticks, the farms produce more items.
+ #    This operation uses the values calculated in the survey operation
+ #    A value of 1 means the farms will produce every factory tick
+ farm:
+  survey_period: 60
+  survey_tick_spacing: 20
+  production_ticks: 300

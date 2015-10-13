@@ -106,6 +106,12 @@ public class SabreConfig {
 	public String prisonWorld;
 	
 	
+	
+	private int farmSurveyPeriod;
+	private int farmSurveySpacing;
+	private int farmProductionTicks;
+	
+	
 	/**
 	 * Factory method for creating a new config class
 	 * @param fc The file configuration instance
@@ -136,6 +142,11 @@ public class SabreConfig {
 		this.snitchOverlapSearch = fc.getInt("snitch.overlap_depth", this.snitchOverlapSearch);
 		this.prisonWorld = fc.getString("prison_pearl.prison_world", this.prisonWorld);
 		this.freeWorld = fc.getString("prison_pearl.free_world", this.freeWorld);
+		
+		
+		this.farmSurveyPeriod = fc.getInt("farm.survey_period", 60);
+		this.farmSurveySpacing = fc.getInt("farm.survey_tick_spacing", 20);
+		this.farmProductionTicks = fc.getInt("farm.production_ticks", 6000);
 		
 		this.reinforcementMaterials.clear();
 		this.lockableItems.clear();
@@ -408,5 +419,29 @@ public class SabreConfig {
 		}
 		
 		return false;
+	}
+	
+	/**
+	 * Gets the farm survey period
+	 * @return The farm survey period
+	 */
+	public int getFarmSurveyPeriod() {
+		return this.farmSurveyPeriod;
+	}
+	
+	/**
+	 * Gets the farm survey tick spacing
+	 * @return The farm survey tick spacing
+	 */
+	public int getFarmSurveyTickSpacing() {
+		return this.farmSurveySpacing;
+	}
+	
+	/**
+	 * Gets the farm production period
+	 * @return The farm production period
+	 */
+	public int getFarmProductionTicks() {
+		return this.farmProductionTicks;
 	}
 }
