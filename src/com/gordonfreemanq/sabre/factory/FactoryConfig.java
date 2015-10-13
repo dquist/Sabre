@@ -71,8 +71,8 @@ public class FactoryConfig {
 	    	
 	    	// Load the recipes for the file
 	    	try {
-	    		ArrayList<FactoryRecipe> recipes = new ArrayList<FactoryRecipe>();
-	    		ArrayList<FactoryRecipe> upgrades = new ArrayList<FactoryRecipe>();
+	    		ArrayList<IRecipe> recipes = new ArrayList<IRecipe>();
+	    		ArrayList<IRecipe> upgrades = new ArrayList<IRecipe>();
 	    		
 		    	FileConfiguration config = YamlConfiguration.loadConfiguration(f);
 		    	String factoryName = config.getString("name");
@@ -81,9 +81,7 @@ public class FactoryConfig {
 			    FactoryProperties fp = new FactoryProperties(factoryName, recipes, upgrades);
 			    
 			    if (config.getBoolean("farm", false)) {
-			    	ArrayList<FarmRecipe> farmRecipes = new ArrayList<FarmRecipe>();
-			    	loadFarmRecipes(config, farmRecipes);
-			    	fp.setFarmRecipes(farmRecipes);
+			    	loadFarmRecipes(config, recipes);
 			    }
 			    
 			    factoryProperties.put(factoryName, fp);
@@ -113,7 +111,7 @@ public class FactoryConfig {
 	 * @param recipes the list of production recipes
 	 * @param upgrades the list of upgrade recipes
 	 */
-	private void loadRecipes(FileConfiguration config, List<FactoryRecipe> recipes, List<FactoryRecipe> upgrades) {
+	private void loadRecipes(FileConfiguration config, List<IRecipe> recipes, List<IRecipe> upgrades) {
 		
 
 		int defaultSpeed = config.getInt("production_speed", 1);
@@ -137,7 +135,7 @@ public class FactoryConfig {
 	 * @param config The config instance to read
 	 * @param rate the list of farm recipes
 	 */
-	private void loadFarmRecipes(FileConfiguration config, ArrayList<FarmRecipe> farmRecipes) {
+	private void loadFarmRecipes(FileConfiguration config, List<IRecipe> farmRecipes) {
 		
 		ConfigurationSection section = config.getConfigurationSection("farm_recipes");
 		
@@ -162,7 +160,7 @@ public class FactoryConfig {
 	 * @param section The section to read
 	 * @param defaultSpeed The default run speed
 	 */
-	private void readRecipeSection(List<FactoryRecipe> recipes, ConfigurationSection section, int defaultSpeed) {
+	private void readRecipeSection(List<IRecipe> recipes, ConfigurationSection section, int defaultSpeed) {
 		Iterator<String> recipeTitles = section.getKeys(false).iterator();
 		while (recipeTitles.hasNext())
 		{

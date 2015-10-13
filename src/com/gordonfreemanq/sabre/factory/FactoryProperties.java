@@ -10,10 +10,8 @@ import java.util.List;
 public class FactoryProperties
 {
 	private final String name;
-	private final List<FactoryRecipe> recipes;
-	private final List<FactoryRecipe> upgrades;
-	
-	private List<FarmRecipe> farmRecipes;
+	private final List<IRecipe> recipes;
+	private final List<IRecipe> upgrades;
 	
 	/**
 	 * Creates a new FactoryProperties instance
@@ -21,12 +19,11 @@ public class FactoryProperties
 	 * @param recipes The factory recipes
 	 * @param upgrades The factory upgrades
 	 */
-	public FactoryProperties(String name, List<FactoryRecipe> recipes, List<FactoryRecipe> upgrades)
+	public FactoryProperties(String name, List<IRecipe> recipes, List<IRecipe> upgrades)
 	{
 		this.name = name;
 		this.recipes = recipes;
 		this.upgrades = upgrades;
-		this.farmRecipes = null;
 	}
 	
 	
@@ -44,7 +41,7 @@ public class FactoryProperties
 	 * Gets the list of recipes
 	 * @return The recipes
 	 */
-	public List<FactoryRecipe> getRecipes() {
+	public List<IRecipe> getRecipes() {
 		return this.recipes;
 	}
 	
@@ -53,25 +50,7 @@ public class FactoryProperties
 	 * Gets the list of upgrades
 	 * @return The upgrades
 	 */
-	public List<FactoryRecipe> getUpgrades() {
+	public List<IRecipe> getUpgrades() {
 		return this.upgrades;
-	}
-	
-	
-	/**
-	 * Gets the farm recipes
-	 * @return The farm recipes
-	 */
-	public List<FarmRecipe> getFarmRecipes() {
-		return this.farmRecipes;
-	}
-	
-	
-	/** 
-	 * Sets the farm recipes
-	 * @param farmRecipes The farm recipes
-	 */
-	public void setFarmRecipes(List<FarmRecipe> farmRecipes) {
-		this.farmRecipes = farmRecipes;
 	}
 }

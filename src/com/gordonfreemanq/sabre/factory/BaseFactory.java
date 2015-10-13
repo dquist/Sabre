@@ -62,7 +62,7 @@ public class BaseFactory extends SpecialBlock {
 		// Get the recipes for this factory
 		this.properties = FactoryConfig.getInstance().getFactoryProperties(this.typeName);
 		
-		List<FactoryRecipe> recipes = properties.getRecipes();
+		List<IRecipe> recipes = properties.getRecipes();
 		
 		// Set the current recipe
 		if (recipeIndex < recipes.size()) {
@@ -262,7 +262,7 @@ public class BaseFactory extends SpecialBlock {
 		}
 		this.recipeIndex = o.getInt("recipe");
 
-		List<FactoryRecipe> recipes = properties.getRecipes();
+		List<IRecipe> recipes = properties.getRecipes();
 		if (recipes.size() > 0) {
 			if (recipeIndex >= recipes.size()) {
 				recipeIndex = 0;
@@ -321,7 +321,9 @@ public class BaseFactory extends SpecialBlock {
 	 * @param e The event args
 	 */
 	public void onBlockBreaking(SabrePlayer p, BlockBreakEvent e) {
-		// Do nothing
+		if (running) {
+			powerOff();
+		}
 	}
 	
 	
@@ -350,7 +352,12 @@ public class BaseFactory extends SpecialBlock {
 			return;
 		}
 		
-		List<FactoryRecipe> recipes;
+		// force upgrade mode for factories with no normal recipes
+		if (properties.getRecipes().size() == 0 && properties.getUpgrades().size() > 0) {
+			upgradeMode = true;
+		}
+		
+		List<IRecipe> recipes;
 		if (upgradeMode) {
 			recipes = properties.getUpgrades();
 		} else {

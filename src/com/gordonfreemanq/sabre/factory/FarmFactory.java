@@ -6,6 +6,7 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 
 import com.gordonfreemanq.sabre.SabrePlayer;
+import com.gordonfreemanq.sabre.SabrePlugin;
 
 /**
  * Class that provides core functionality for all the farm factories
@@ -13,6 +14,18 @@ import com.gordonfreemanq.sabre.SabrePlayer;
  *
  */
 public class FarmFactory extends BaseFactory {
+	
+	// How many factory ticks to wait before producing
+	int farmProductionTicks;
+	
+	// The current production tick counter for when the farm is running
+	int farmTickCounter;
+	
+	// The crop coverage from 0 to 1.0
+	private double coverage;
+	
+	// Efficiency factory based on proximity to other farms from 0 to 1.0
+	private double proximityFactor;
 
 	/**
 	 * Creates a new FarmFactory instance
@@ -21,6 +34,11 @@ public class FarmFactory extends BaseFactory {
 	 */
 	public FarmFactory(Location location, String typeName) {
 		super(location, typeName);
+		this.farmProductionTicks = SabrePlugin.getPlugin().getSabreConfig().getFarmProductionTicks();
+		this.farmTickCounter = 0;
+		this.coverage = 0;
+		this.proximityFactor = 1.0;
+		
 	}
 	
 	
@@ -70,10 +88,43 @@ public class FarmFactory extends BaseFactory {
 	 */
 	@Override
 	public void update() {
-		// TODO
+		
+		if (!running) {
+			return;
+		}
+		
+		if (recipe instanceof FactoryRecipe) {
+			super.update();
+		} else {
+			if (farmTickCounter++ >= farmProductionTicks) {
+				farmTickCounter = 0;
+				runFarmRecipe();
+			}
+		}
+	}
+	
+	protected void runFarmRecipe() {
+		if (!running) {
+			return;
+		}
+		
+		if (!(recipe instanceof FarmRecipe)) {
+			return;
+		}
+		
+		FarmRecipe fr = (FarmRecipe)recipe;
+		
+		// Just a quick sanity check on these numbers
+		this.coverage = Math.min(coverage, 1.0);
+		this.proximityFactor = Math.min(proximityFactor, 1.0);
+		
+		int realOutput = (int)(fr.getProductionRate() * coverage * proximityFactor);
 	}
 	
 	
+	/**
+	 * Calculates the coverage and proximity factor values
+	 */
 	public void survey() {
 		// TODO
 	}
