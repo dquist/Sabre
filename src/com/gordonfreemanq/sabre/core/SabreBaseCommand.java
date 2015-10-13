@@ -364,7 +364,12 @@ public abstract class SabreBaseCommand<T extends AbstractSabrePlugin>
 	
 	public void msg(String str, Object... args)
 	{
-		me.msg(str, args);
+		if (senderIsConsole) {
+			String message = SabrePlugin.getPlugin().txt.parse(str, args);
+			sender.sendMessage(message);
+		} else {
+			me.msg(str, args);
+		}
 	}
 	
 	public void msg(List<String> msgs)
