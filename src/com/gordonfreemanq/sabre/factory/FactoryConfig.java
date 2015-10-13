@@ -77,7 +77,16 @@ public class FactoryConfig {
 		    	FileConfiguration config = YamlConfiguration.loadConfiguration(f);
 		    	String factoryName = config.getString("name");
 			    loadRecipes(config, recipes, upgrades);
-			    factoryProperties.put(factoryName, new FactoryProperties(factoryName, recipes, upgrades));
+			    
+			    FactoryProperties fp = new FactoryProperties(factoryName, recipes, upgrades);
+			    
+			    if (config.getBoolean("farm", false)) {
+			    	ArrayList<FarmRecipe> farmRecipes = new ArrayList<FarmRecipe>();
+			    	loadFarmRecipes(config, farmRecipes);
+			    	fp.setFarmRecipes(farmRecipes);
+			    }
+			    
+			    factoryProperties.put(factoryName, fp);
 			    
 	    	} catch (Exception ex) {
 	    		plugin.log(Level.SEVERE, "Failed to read factory config file %s", f.getName());
@@ -120,6 +129,30 @@ public class FactoryConfig {
 	    if (section != null) {
 		    readRecipeSection(upgrades, section, defaultSpeed);
 	    }
+	}
+	
+	
+	/**
+	 * Loads the farm recipes
+	 * @param config The config instance to read
+	 * @param rate the list of farm recipes
+	 */
+	private void loadFarmRecipes(FileConfiguration config, ArrayList<FarmRecipe> farmRecipes) {
+		
+		ConfigurationSection section = config.getConfigurationSection("farm_recipes");
+		
+		for (String recipeName : section.getKeys(false)) {
+
+			ConfigurationSection configSection = section.getConfigurationSection(recipeName);
+			
+			CropType cropType = CropType.valueOf(configSection.getString("crop"));
+			if (cropType == null) {
+				continue;
+			}
+			
+			int rate = configSection.getInt("rate", 0);
+			farmRecipes.add(new FarmRecipe(recipeName, cropType, rate));
+		}
 	}
 	
 	

@@ -1,35 +1,32 @@
 package com.gordonfreemanq.sabre.factory;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import com.gordonfreemanq.sabre.blocks.SabreItemStack;
 
 /**
- * Represents a production recipe to be used in a factory
+ * Represents a farm factory production recipe
  * @author GFQ
  *
  */
-public class FactoryRecipe implements IRecipe {
+public class FarmRecipe implements IRecipe {
 
 	private final String name;
-	private final int productionSpeed;
-	private final int fuelCost;
-	private final ItemList<SabreItemStack> inputs;
-	private final ItemList<SabreItemStack> outputs;
-	private final List<ProbabilisticEnchantment> enchants;
+	private final CropType crop;
+	private final int productionRate;
+	
+	private static final ItemList<SabreItemStack> nullStack = new ItemList<SabreItemStack>();
+	private static final List<ProbabilisticEnchantment> nullEnchants = new ArrayList<ProbabilisticEnchantment>();
 	
 	
 	/**
 	 * Creates a new Factory Recipe instance
 	 */
-	public FactoryRecipe(String name, int productionSpeed, int fuelCost, ItemList<SabreItemStack> inputs, 
-			ItemList<SabreItemStack> outputs, List<ProbabilisticEnchantment> enchants) {
+	public FarmRecipe(String name, CropType crop, int productionRate) {
 		this.name = name;
-		this.productionSpeed = productionSpeed;
-		this.fuelCost = fuelCost;
-		this.inputs = inputs;
-		this.outputs = outputs;
-		this.enchants = enchants;
+		this.crop = crop;
+		this.productionRate = productionRate;
 	}
 	
 	
@@ -41,13 +38,29 @@ public class FactoryRecipe implements IRecipe {
 		return this.name;
 	}
 	
+	/**
+	 * Gets the crop type
+	 * @return The crop type
+	 */
+	public CropType getCrop() {
+		return crop;
+	}
+	
+	/**
+	 * Gets the production rate
+	 * @return The production rate
+	 */
+	public int getProductionRate() {
+		return this.productionRate;
+	}
+	
 	
 	/**
 	 * Gets the recipe production speed
 	 * @return The recipe production speed
 	 */
 	public int getProductionSpeed() {
-		return this.productionSpeed;
+		return 1;
 	}
 	
 	
@@ -56,7 +69,7 @@ public class FactoryRecipe implements IRecipe {
 	 * @return The recipe fuel cost
 	 */
 	public int getFuelCost() {
-		return this.fuelCost;
+		return 0;
 	}
 	
 	
@@ -65,7 +78,7 @@ public class FactoryRecipe implements IRecipe {
 	 * @return The recipe inputs
 	 */
 	public ItemList<SabreItemStack> getInputs() {
-		return this.inputs;
+		return nullStack;
 	}
 	
 	
@@ -74,7 +87,7 @@ public class FactoryRecipe implements IRecipe {
 	 * @return The recipe outputs
 	 */
 	public ItemList<SabreItemStack> getOutputs() {
-		return this.outputs;
+		return nullStack;
 	}
 	
 	
@@ -83,6 +96,6 @@ public class FactoryRecipe implements IRecipe {
 	 * @return The recipe enchants
 	 */
 	public List<ProbabilisticEnchantment> getEnchants() {
-		return this.enchants;
+		return nullEnchants;
 	}
 }

@@ -41,7 +41,7 @@ public class BaseFactory extends SpecialBlock {
 	
 	// Not saved
 	protected final FactoryProperties properties;
-	protected FactoryRecipe recipe;
+	protected IRecipe recipe;
 	protected boolean running;
 	protected int fuelPerBurn;
 	protected int fuelCounter;
@@ -313,7 +313,6 @@ public class BaseFactory extends SpecialBlock {
 		} else {
 			cyclePower(sp);
 		}
-		
 	}
 	
 	
@@ -330,7 +329,7 @@ public class BaseFactory extends SpecialBlock {
 	 * Creates the factory controller
 	 * @param sp The player
 	 */
-	private void createController(SabrePlayer sp) {
+	protected void createController(SabrePlayer sp) {
 		ItemStack is = (new FactoryController(this)).toItemStack();
 		sp.getPlayer().getInventory().setItemInHand(is);
 	}
@@ -341,7 +340,7 @@ public class BaseFactory extends SpecialBlock {
 	 * Cycles the recipe
 	 * @param sp The player
 	 */
-	private void cycleRecipe(SabrePlayer runner) {
+	protected void cycleRecipe(SabrePlayer runner) {
 		
 		this.runner = runner;
 		

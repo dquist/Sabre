@@ -13,6 +13,8 @@ public class FactoryProperties
 	private final List<FactoryRecipe> recipes;
 	private final List<FactoryRecipe> upgrades;
 	
+	private List<FarmRecipe> farmRecipes;
+	
 	/**
 	 * Creates a new FactoryProperties instance
 	 * @param name The factory name
@@ -24,6 +26,7 @@ public class FactoryProperties
 		this.name = name;
 		this.recipes = recipes;
 		this.upgrades = upgrades;
+		this.farmRecipes = null;
 	}
 	
 	
@@ -52,5 +55,23 @@ public class FactoryProperties
 	 */
 	public List<FactoryRecipe> getUpgrades() {
 		return this.upgrades;
+	}
+	
+	
+	/**
+	 * Gets the farm recipes
+	 * @return The farm recipes
+	 */
+	public List<FarmRecipe> getFarmRecipes() {
+		return this.farmRecipes;
+	}
+	
+	
+	/** 
+	 * Sets the farm recipes
+	 * @param farmRecipes The farm recipes
+	 */
+	public void setFarmRecipes(List<FarmRecipe> farmRecipes) {
+		this.farmRecipes = farmRecipes;
 	}
 }
