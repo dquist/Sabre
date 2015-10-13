@@ -98,9 +98,11 @@ public class SabreTweaks implements Listener {
 		Block b = e.getBlock();
 		Material m = b.getType();
 
-		if (m.equals(Material.COBBLESTONE) || m.equals(Material.DIRT)) {
-			e.getBlock().getWorld().spawnFallingBlock(b.getLocation(), m, b.getData());
-			b.setType(Material.AIR);
+		if (b.getRelative(BlockFace.DOWN).getType() == Material.AIR) {
+			if (m.equals(Material.COBBLESTONE) || m.equals(Material.DIRT)) {
+				b.setType(Material.AIR);
+				e.getBlock().getWorld().spawnFallingBlock(b.getLocation(), m, b.getData());
+			}
 		}
 	}
 
