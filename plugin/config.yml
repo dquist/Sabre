@@ -109,6 +109,38 @@ disabled_recipes:
   Andesite:
     material: STONE
     durability: 6
+  Enchanting Table:
+    material: ENCHANTMENT_TABLE
+  Anvil:
+    material: ANVIL
+  Redstone Torch:
+    material: REDSTONE_TORCH_ON
+  Repeater:
+    material: DIODE
+  Comparator:
+    material: REDSTONE_COMPARATOR
+  Daylight Detector:
+    material: DAYLIGHT_DETECTOR
+  Redstone Lamp:
+    material: REDSTONE_LAMP_OFF
+  Piston:
+    material: PISTON_BASE
+  Sticky Piston:
+    material: PISTON_STICKY_BASE
+  Jukebox:
+    material: JUKEBOX
+  Noteblock:
+    material: NOTE_BLOCK
+  Hopper:
+    material: HOPPER
+  Dropper:
+    material: DROPPER
+  Dispenser:
+    material: DISPENSER
+  Glass Pane:
+    material: THIN_GLASS
+  Glass Pane:
+    material: GLASS_BOTTLE
 no_smelt:
   Coal Ore:
     material: COAL_ORE
@@ -126,3 +158,7 @@ no_smelt:
     material: QUARTZ_ORE
   Emerald Ore:
     material: EMERALD_ORE
+  Hard Clay:
+    material: HARD_CLAY
+  Clay Brick:
+    material: CLAY_BRICK
