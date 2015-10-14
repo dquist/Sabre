@@ -1,8 +1,10 @@
-package com.gordonfreemanq.sabre.factory;
+package com.gordonfreemanq.sabre.factory.recipe;
 
 import java.util.List;
 
 import com.gordonfreemanq.sabre.blocks.SabreItemStack;
+import com.gordonfreemanq.sabre.factory.ItemList;
+import com.gordonfreemanq.sabre.factory.ProbabilisticEnchantment;
 
 public interface IRecipe {
 	

@@ -1,15 +1,17 @@
-package com.gordonfreemanq.sabre.factory;
+package com.gordonfreemanq.sabre.factory.recipe;
 
 import java.util.List;
 
 import com.gordonfreemanq.sabre.blocks.SabreItemStack;
+import com.gordonfreemanq.sabre.factory.ItemList;
+import com.gordonfreemanq.sabre.factory.ProbabilisticEnchantment;
 
 /**
  * Represents a production recipe to be used in a factory
  * @author GFQ
  *
  */
-public class FactoryRecipe implements IRecipe {
+public class ProductionRecipe implements IRecipe {
 
 	private final String name;
 	private final int productionSpeed;
@@ -22,7 +24,7 @@ public class FactoryRecipe implements IRecipe {
 	/**
 	 * Creates a new Factory Recipe instance
 	 */
-	public FactoryRecipe(String name, int productionSpeed, int fuelCost, ItemList<SabreItemStack> inputs, 
+	public ProductionRecipe(String name, int productionSpeed, int fuelCost, ItemList<SabreItemStack> inputs, 
 			ItemList<SabreItemStack> outputs, List<ProbabilisticEnchantment> enchants) {
 		this.name = name;
 		this.productionSpeed = productionSpeed;

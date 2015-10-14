@@ -1,9 +1,12 @@
-package com.gordonfreemanq.sabre.factory;
+package com.gordonfreemanq.sabre.factory.recipe;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import com.gordonfreemanq.sabre.blocks.SabreItemStack;
+import com.gordonfreemanq.sabre.factory.CropType;
+import com.gordonfreemanq.sabre.factory.ItemList;
+import com.gordonfreemanq.sabre.factory.ProbabilisticEnchantment;
 
 /**
  * Represents a farm factory production recipe

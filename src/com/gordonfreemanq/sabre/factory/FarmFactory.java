@@ -7,6 +7,8 @@ import org.bukkit.inventory.ItemStack;
 
 import com.gordonfreemanq.sabre.SabrePlayer;
 import com.gordonfreemanq.sabre.SabrePlugin;
+import com.gordonfreemanq.sabre.factory.recipe.ProductionRecipe;
+import com.gordonfreemanq.sabre.factory.recipe.FarmRecipe;
 
 /**
  * Class that provides core functionality for all the farm factories
@@ -57,7 +59,7 @@ public class FarmFactory extends BaseFactory {
 		Action a = e.getAction();
 		if (a == Action.RIGHT_CLICK_BLOCK) {
 			if (running) {
-				if (recipe instanceof FactoryRecipe) {
+				if (recipe instanceof ProductionRecipe) {
 					sp.msg("<a>Status: <n>%d%%", this.getPercentComplete());
 				} else if (recipe instanceof FarmRecipe) {
 					FarmRecipe fr = (FarmRecipe)recipe;
@@ -93,7 +95,7 @@ public class FarmFactory extends BaseFactory {
 			return;
 		}
 		
-		if (recipe instanceof FactoryRecipe) {
+		if (recipe instanceof ProductionRecipe) {
 			super.update();
 		} else {
 			if (farmTickCounter++ >= farmProductionTicks) {

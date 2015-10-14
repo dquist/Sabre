@@ -2,6 +2,8 @@ package com.gordonfreemanq.sabre.factory;
 
 import java.util.List;
 
+import com.gordonfreemanq.sabre.factory.recipe.IRecipe;
+
 
 /**
  * Holds information about a factory

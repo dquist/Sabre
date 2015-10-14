@@ -21,6 +21,9 @@ import org.bukkit.potion.PotionEffectType;
 import com.gordonfreemanq.sabre.SabrePlugin;
 import com.gordonfreemanq.sabre.blocks.CustomItems;
 import com.gordonfreemanq.sabre.blocks.SabreItemStack;
+import com.gordonfreemanq.sabre.factory.recipe.ProductionRecipe;
+import com.gordonfreemanq.sabre.factory.recipe.FarmRecipe;
+import com.gordonfreemanq.sabre.factory.recipe.IRecipe;
 
 /**
  * Reads all the factory recipes from disk
@@ -181,7 +184,7 @@ public class FactoryConfig {
 			// Enchantments of the recipe, empty of there are no inputs
 			List<ProbabilisticEnchantment> enchants = getEnchantments(configSection.getConfigurationSection("enchantments"));
 			
-			FactoryRecipe recipe = new FactoryRecipe(recipeName, productionSpeed, fuelCost, inputs, outputs, enchants);
+			ProductionRecipe recipe = new ProductionRecipe(recipeName, productionSpeed, fuelCost, inputs, outputs, enchants);
 			recipes.add(recipe);
 		}
 	}

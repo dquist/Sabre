@@ -27,6 +27,7 @@ import com.gordonfreemanq.sabre.blocks.CustomItems;
 import com.gordonfreemanq.sabre.blocks.SabreBlock;
 import com.gordonfreemanq.sabre.blocks.SabreItemStack;
 import com.gordonfreemanq.sabre.customitems.SpecialBlock;
+import com.gordonfreemanq.sabre.factory.recipe.IRecipe;
 import com.gordonfreemanq.sabre.util.SabreUtil;
 import com.mongodb.BasicDBObject;
 
