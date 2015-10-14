@@ -21,9 +21,23 @@ build:
 snitch:
   overlap_time: 0
   overlap_depth: 0
+
+
+# Prison Pearl Settings
+# free_world: The normal playing world
+# prison_world: The world players are prisoned in
+# default_strength: The strength value that pearls are given when they are created
+# weaken_interval_min: The interval that pearl strength is reduced, in minutes
+# weaken_amount: The amount that pearls are weakened
+# days_inactive_threshold: how many days a player must be inactive before their pearls stop weakening
 prison_pearl:
   free_world: world
   prison_world: world_the_end
+  default_strength: 120
+  weaken_interval_min: 60
+  weaken_amount: 1
+  days_inactive_threshold: 7
+  
 disabled_recipes:
   Planks:
     material: WOOD

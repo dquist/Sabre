@@ -67,6 +67,7 @@ public interface IDataAccess {
 	public void pearlUpdate(PrisonPearl pp);
 	public void pearlUpdateSummoned(PrisonPearl pp);
 	public void pearlUpdateReturnLocation(PrisonPearl pp);
+	public void pearlUpdateSealStrength(PrisonPearl pp);
 	public void pearlRemove(PrisonPearl pp);
 	
 	

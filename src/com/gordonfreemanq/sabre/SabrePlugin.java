@@ -28,6 +28,7 @@ import com.gordonfreemanq.sabre.factory.FarmSurveyWorker;
 import com.gordonfreemanq.sabre.groups.GroupManager;
 import com.gordonfreemanq.sabre.prisonpearl.PearlListener;
 import com.gordonfreemanq.sabre.prisonpearl.PearlManager;
+import com.gordonfreemanq.sabre.prisonpearl.PearlWorker;
 import com.gordonfreemanq.sabre.snitch.SnitchListener;
 import com.gordonfreemanq.sabre.snitch.SnitchLogger;
 import com.gordonfreemanq.sabre.util.CombatTagManager;
@@ -61,6 +62,7 @@ public class SabrePlugin extends AbstractSabrePlugin
 	private CustomItems customItems;
 	private FactoryConfig factoryConfig;
 	private FactoryWorker factoryWorker;
+	private PearlWorker pearlWorker;
 	private FarmSurveyScheduler farmScheduler;
 	private CombatTagManager combatTag;
 	
@@ -251,6 +253,9 @@ public class SabrePlugin extends AbstractSabrePlugin
 		factoryWorker = new FactoryWorker();
 		factoryWorker.start();
 		this.sabreTweaks.registerTimerForPearlCheck();
+		
+		pearlWorker = new PearlWorker(pearlManager, config);
+		pearlWorker.start();
 		
 		farmScheduler = new FarmSurveyScheduler(new FarmSurveyWorker(), config);
 		farmScheduler.start();
