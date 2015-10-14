@@ -24,6 +24,7 @@ import com.gordonfreemanq.sabre.blocks.SabreItemStack;
 import com.gordonfreemanq.sabre.factory.recipe.ProductionRecipe;
 import com.gordonfreemanq.sabre.factory.recipe.FarmRecipe;
 import com.gordonfreemanq.sabre.factory.recipe.IRecipe;
+import com.gordonfreemanq.sabre.factory.recipe.SpecialRecipeType;
 
 /**
  * Reads all the factory recipes from disk
@@ -174,6 +175,18 @@ public class FactoryConfig {
 			// Production time of the recipe
 			int productionSpeed = configSection.getInt("production_speed", defaultSpeed);
 			int fuelCost = configSection.getInt("fuel_cost", 2);
+			
+			// Is it a special recipe, then look up the class type and create a new instance
+			if (configSection.contains("special")) {
+				SpecialRecipeType specialType = SpecialRecipeType.valueOf(configSection.getString("special"));
+				if (specialType != null) {
+					IRecipe recipe = specialType.getRecipeInstance(recipeName, productionSpeed, fuelCost);
+					if (recipe != null) {
+						recipes.add(recipe);
+					}
+					break;
+				}
+			}
 			
 			// Inputs of the recipe, empty of there are no inputs
 			ItemList<SabreItemStack> inputs = getItems(configSection.getConfigurationSection("inputs"));
