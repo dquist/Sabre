@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.gordonfreemanq.sabre.blocks.SabreItemStack;
+import com.gordonfreemanq.sabre.factory.BaseFactory;
 import com.gordonfreemanq.sabre.factory.CropType;
 import com.gordonfreemanq.sabre.factory.ItemList;
 import com.gordonfreemanq.sabre.factory.ProbabilisticEnchantment;
@@ -78,6 +79,7 @@ public class FarmRecipe implements IRecipe {
 	
 	/**
 	 * Gets the recipe inputs
+	 * @param inventory The input inventory
 	 * @return The recipe inputs
 	 */
 	public ItemList<SabreItemStack> getInputs() {
@@ -87,6 +89,7 @@ public class FarmRecipe implements IRecipe {
 	
 	/**
 	 * Gets the recipe outputs
+	 * @param inventory The input inventory
 	 * @return The recipe outputs
 	 */
 	public ItemList<SabreItemStack> getOutputs() {
@@ -100,5 +103,30 @@ public class FarmRecipe implements IRecipe {
 	 */
 	public List<ProbabilisticEnchantment> getEnchants() {
 		return nullEnchants;
+	}
+	
+	/**
+	 * A method to handle switching to the recipe
+	 * @param factory The factory instance
+	 */
+	public void onRecipeStart(BaseFactory factory) {
+		// Do nothing
+	}
+	
+	
+	/**
+	 * A method to handle completing the recipe
+	 * @param factory The factory instance
+	 */
+	public void onRecipeComplete(BaseFactory factory) {
+		// Do nothing
+	}
+	
+	/**
+	 * Clones the recipe
+	 * @return The clone
+	 */
+	public IRecipe clone() {
+		return this;
 	}
 }

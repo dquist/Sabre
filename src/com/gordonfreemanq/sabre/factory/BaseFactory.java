@@ -418,6 +418,8 @@ public class BaseFactory extends SpecialBlock {
 				return;
 			}
 			
+			recipe.onRecipeStart(this);
+			
 			if (!checkMaterials()) {
 				ItemList<SabreItemStack> needAll = new ItemList<SabreItemStack>();
 				needAll.addAll(recipe.getInputs().getDifference(getInputInventory()));
@@ -539,7 +541,7 @@ public class BaseFactory extends SpecialBlock {
 	 * Gets the input chest inventory
 	 * @return The input inventory
 	 */
-	private Inventory getInputInventory() {
+	public Inventory getInputInventory() {
 		Chest chest = (Chest)inputLocation.getBlock().getState();
 		return chest.getInventory();
 	}
@@ -549,7 +551,7 @@ public class BaseFactory extends SpecialBlock {
 	 * Gets the output chest inventory
 	 * @return The output inventory
 	 */
-	private Inventory getOutputInventory() {
+	public Inventory getOutputInventory() {
 		Chest chest = (Chest)outputLocation.getBlock().getState();
 		return chest.getInventory();
 	}
@@ -559,7 +561,7 @@ public class BaseFactory extends SpecialBlock {
 	 * Gets the fuel chest inventory
 	 * @return The fuel inventory
 	 */
-	private Inventory getFuelInventory() {
+	public Inventory getFuelInventory() {
 		Chest chest = (Chest)fuelLocation.getBlock().getState();
 		return chest.getInventory();
 	}
@@ -637,6 +639,7 @@ public class BaseFactory extends SpecialBlock {
 					performUpgrade();
 				} else {
 					recipe.getOutputs().putIn(getOutputInventory());
+					recipe.onRecipeComplete(this);
 				}
 				
 				if (runner != null) {

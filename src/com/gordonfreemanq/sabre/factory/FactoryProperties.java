@@ -1,5 +1,6 @@
 package com.gordonfreemanq.sabre.factory;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import com.gordonfreemanq.sabre.factory.recipe.IRecipe;
@@ -54,5 +55,27 @@ public class FactoryProperties
 	 */
 	public List<IRecipe> getUpgrades() {
 		return this.upgrades;
+	}
+	
+	public FactoryProperties clone()
+	{
+		try{
+			ArrayList<IRecipe> recipes = new ArrayList<IRecipe>();
+			ArrayList<IRecipe> upgrades = new ArrayList<IRecipe>();
+			
+			for (IRecipe r : this.recipes) {
+				recipes.add(r.clone());
+			}
+			
+			for (IRecipe r : this.upgrades) {
+				upgrades.add(r.clone());
+			}
+			
+			FactoryProperties props = new FactoryProperties(name, recipes, upgrades);
+			return props;
+		}
+		catch (Error e) {
+		throw e;
+		}
 	}
 }

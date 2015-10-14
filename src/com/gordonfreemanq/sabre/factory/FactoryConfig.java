@@ -92,7 +92,7 @@ public class FactoryConfig {
 	    	} catch (Exception ex) {
 	    		plugin.log(Level.SEVERE, "Failed to read factory config file %s", f.getName());
 	    	}
-	    }	    
+	    }
 
 	}
 	
@@ -103,7 +103,7 @@ public class FactoryConfig {
 	 * @return The factory properties
 	 */
 	public FactoryProperties getFactoryProperties(String name) {
-		return factoryProperties.get(name);
+		return factoryProperties.get(name).clone();
 	}
 	
 	

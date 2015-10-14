@@ -3,6 +3,7 @@ package com.gordonfreemanq.sabre.factory.recipe;
 import java.util.List;
 
 import com.gordonfreemanq.sabre.blocks.SabreItemStack;
+import com.gordonfreemanq.sabre.factory.BaseFactory;
 import com.gordonfreemanq.sabre.factory.ItemList;
 import com.gordonfreemanq.sabre.factory.ProbabilisticEnchantment;
 
@@ -31,6 +32,7 @@ public interface IRecipe {
 	
 	/**
 	 * Gets the recipe inputs
+	 * @param inventory The input inventory
 	 * @return The recipe inputs
 	 */
 	public ItemList<SabreItemStack> getInputs();
@@ -38,6 +40,7 @@ public interface IRecipe {
 	
 	/**
 	 * Gets the recipe outputs
+	 * @param inventory The input inventory
 	 * @return The recipe outputs
 	 */
 	public ItemList<SabreItemStack> getOutputs();
@@ -48,4 +51,25 @@ public interface IRecipe {
 	 * @return The recipe enchants
 	 */
 	public List<ProbabilisticEnchantment> getEnchants();
+	
+	
+	/**
+	 * A method to handle starting the recipe
+	 * @param factory The factory instance
+	 */
+	public void onRecipeStart(BaseFactory factory);
+	
+	
+	/**
+	 * A method to handle completing the recipe
+	 * @param factory The factory instance
+	 */
+	public void onRecipeComplete(BaseFactory factory);
+	
+	
+	/**
+	 * Clones the recipe
+	 * @return The clone
+	 */
+	public IRecipe clone();
 }

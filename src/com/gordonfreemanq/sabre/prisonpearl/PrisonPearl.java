@@ -28,6 +28,7 @@ import org.bukkit.util.Vector;
 import com.gordonfreemanq.sabre.PlayerManager;
 import com.gordonfreemanq.sabre.SabrePlayer;
 import com.gordonfreemanq.sabre.SabrePlugin;
+import com.gordonfreemanq.sabre.blocks.SabreItemStack;
 import com.gordonfreemanq.sabre.cmd.pearl.CmdPearl;
 import com.gordonfreemanq.sabre.util.TextUtil;
 
@@ -293,7 +294,7 @@ public class PrisonPearl {
 	 * Creates an item stack for the pearl
 	 * @return The new item stack
 	 */
-	public ItemStack createItemStack() {
+	public SabreItemStack createItemStack() {
 		List<String> lore = new ArrayList<String>();
 		lore.add(parse("<l>%s", ITEM_NAME));
 		lore.add(parse("<a>Player: <n>%s", this.getName()));
@@ -308,7 +309,7 @@ public class PrisonPearl {
 		lore.add(parse(CmdPearl.getInstance().cmdKill.getUseageTemplate(true)));
 		
 
-		ItemStack is = new ItemStack(Material.ENDER_PEARL, 1);
+		SabreItemStack is = new SabreItemStack(Material.ENDER_PEARL, "Prison Pearl", 1);
 		ItemMeta im = is.getItemMeta();
 		im.setDisplayName(this.getName());
 		im.setLore(lore);
@@ -539,5 +540,22 @@ public class PrisonPearl {
 
 	protected static String parse(String str, Object... args) {
 		return String.format(parse(str), args);
+	}
+	
+	
+	/**
+	 * Gets the item stack from an inventory if it exists
+	 * @param inv The inventory to search
+	 * @return The pearl item
+	 */
+	public ItemStack getItemFromInventory(Inventory inv) {
+		
+		for (ItemStack item : inv.all(Material.ENDER_PEARL).values()) {
+			if (this.validateItemStack(item)) {
+				return item;
+			}
+		}
+		
+		return null;
 	}
 }

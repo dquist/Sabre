@@ -1,7 +1,9 @@
 package com.gordonfreemanq.sabre.prisonpearl;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map.Entry;
 import java.util.logging.Level;
 import java.util.UUID;
@@ -238,10 +240,19 @@ public class PearlManager {
 	/**
 	 * Weakens a pearl seal strength
 	 * @param pearl The pearl to update
-	 * @param weakenAmount The amount to weaken the strength by
+	 * @param weakenAmount The amount to decrease the strength by
 	 */
-	public void weakenSealStrength(PrisonPearl pp, int weakenAmount) {
-		this.setSealStrength(pp, pp.getSealStrength() - weakenAmount);
+	public void decreaseSealStrength(PrisonPearl pp, int amount) {
+		this.setSealStrength(pp, pp.getSealStrength() - amount);
+	}
+	
+	/**
+	 * Increases a pearl seal strength
+	 * @param pearl The pearl to update
+	 * @param weakenAmount The amount to increase the strength by
+	 */
+	public void increaseSealStrength(PrisonPearl pp, int amount) {
+		this.setSealStrength(pp, pp.getSealStrength() + amount);
 	}
 	
 	
@@ -409,5 +420,47 @@ public class PearlManager {
 		SummonEvent event = new SummonEvent(pp, type, loc);
 		Bukkit.getPluginManager().callEvent(event);
 		return !event.isCancelled();
+	}
+    
+
+	/**
+	 * Gets a list of pearls located in an inventory
+	 * @param inv The inventory to search
+	 * @return The list of contained pearls
+	 */
+	public List<PrisonPearl> getInventoryPrisonPearls(Inventory inv) {
+		List<PrisonPearl> pearls = new ArrayList<PrisonPearl>();
+		
+		for (ItemStack is : inv.all(Material.ENDER_PEARL).values()) {
+			if (is.hasItemMeta() && is.getItemMeta().hasLore()) {
+				UUID id = PrisonPearl.getIDFromItemStack(is);
+				if (id != null) {
+					PrisonPearl pp = this.getById(id);
+					if (pp != null) {
+						pearls.add(pp);
+					}
+				}
+			}
+		}
+		
+		return pearls;
+	}
+	
+	
+	/**
+	 * Gets the prison pearl stacks located in an inventory
+	 * @param inv The inventory to search
+	 * @return The list of contained pearls
+	 */
+	public List<ItemStack> getInventoryPearlStacks(Inventory inv) {
+		List<ItemStack> pearls = new ArrayList<ItemStack>();
+		
+		for (ItemStack is : inv.all(Material.ENDER_PEARL).values()) {
+			if (is.hasItemMeta() && is.getItemMeta().hasLore()) {
+				pearls.add(is);
+			}
+		}
+		
+		return pearls;
 	}
 }
