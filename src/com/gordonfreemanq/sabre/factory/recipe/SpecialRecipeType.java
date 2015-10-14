@@ -11,10 +11,10 @@ public enum SpecialRecipeType {
 	
 	
 	/**
-	 * Gets a special recipe instance from the type
+	 * Creates a special recipe instance from the type
 	 * @return
 	 */
-	public IRecipe getRecipeInstance(String name, int productionSpeed, int fuelCost) {
+	public IRecipe createRecipe(String name, int productionSpeed, int fuelCost) {
 		switch (this)
 		{
 		case STRENGTHEN_PRISON_PEARL:

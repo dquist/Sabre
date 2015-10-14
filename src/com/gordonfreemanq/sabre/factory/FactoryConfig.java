@@ -180,7 +180,7 @@ public class FactoryConfig {
 			if (configSection.contains("special")) {
 				SpecialRecipeType specialType = SpecialRecipeType.valueOf(configSection.getString("special"));
 				if (specialType != null) {
-					IRecipe recipe = specialType.getRecipeInstance(recipeName, productionSpeed, fuelCost);
+					IRecipe recipe = specialType.createRecipe(recipeName, productionSpeed, fuelCost);
 					if (recipe != null) {
 						recipes.add(recipe);
 					}

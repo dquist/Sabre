@@ -88,7 +88,9 @@ public class StrengthenPrisonPearlRecipe implements IRecipe {
 		generateRecipe();
 	}
 	
-	
+	/**
+	 * Dynamically generates the recipe based on the contents of the input chest.
+	 */
 	private void generateRecipe() {
 		inputs.clear();
 		outputs.clear();
@@ -128,6 +130,9 @@ public class StrengthenPrisonPearlRecipe implements IRecipe {
 	
 	/**
 	 * A method to handle completing the recipe
+	 * 
+	 * This will update modified prison pearl in the output chest
+	 * 
 	 * @param factory The factory instance
 	 */
 	public void onRecipeComplete(BaseFactory factory) {
