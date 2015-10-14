@@ -101,9 +101,12 @@ public class SabreConfig {
 	public int snitchOverlapSearch;
 	
 	
-	public String freeWorld;
-	
-	public String prisonWorld;
+	private String freeWorld;
+	private String prisonWorld;
+	private int pearlDefaultStrength;
+	private int pearlWeakenInterval;
+	private int pearlWeakenAmount;
+	private int pearlDaysInactiveThreshold;
 	
 	
 	/**
@@ -134,8 +137,13 @@ public class SabreConfig {
 		this.ChatRadius = fc.getInt("chat.global_radius", this.ChatRadius);
 		this.snitchEntryOverlap = fc.getInt("snitch.overlap_time", this.snitchEntryOverlap);
 		this.snitchOverlapSearch = fc.getInt("snitch.overlap_depth", this.snitchOverlapSearch);
+		
 		this.prisonWorld = fc.getString("prison_pearl.prison_world", this.prisonWorld);
 		this.freeWorld = fc.getString("prison_pearl.free_world", this.freeWorld);
+		this.pearlDefaultStrength = fc.getInt("prison_pearl.default_strength", 120);
+		this.pearlWeakenInterval = fc.getInt("prison_pearl.weaken_interval_min", 60);
+		this.pearlWeakenAmount = fc.getInt("prison_pearl.weaken_amount", 1);
+		this.pearlDaysInactiveThreshold = fc.getInt("prison_pearl.days_inactive_threshold", 7);
 		
 		this.reinforcementMaterials.clear();
 		this.lockableItems.clear();
@@ -409,4 +417,55 @@ public class SabreConfig {
 		
 		return false;
 	}
+	
+	/**
+	 * Gets the free world name
+	 * @return The free world name
+	 */
+	public String getFreeWorldName() {
+		return this.freeWorld;
+	}
+	
+	/**
+	 * Gets the prison world name
+	 * @return The prison world name
+	 */
+	public String getPrisonWorldName() {
+		return this.prisonWorld;
+	}
+	
+	/**
+	 * Gets how strong a pearl is when a player is captured
+	 * @return The pearl default strength
+	 */
+	public int getPearlDefaultStrength() {
+		return this.pearlDefaultStrength;
+	}
+	
+	/**
+	 * Gets how often the pearl weaken task runs, in minutes
+	 * @return The pearl weaken interval
+	 */
+	public int getPearlWeakenInterval() {
+		return this.pearlWeakenInterval;
+	}
+	
+	/**
+	 * Gets how much to weaken the pearls by
+	 * @return The pearl weaken amount
+	 */
+	public int getPearlWeakenAmount() {
+		return this.pearlWeakenAmount;
+	}
+	
+	/**
+	 * Gets how many days a player has to be inactive before the pearl
+	 * stops weakening
+	 * @return The inactive threshold
+	 */
+	public int getPearlDaysInactiveThreshold() {
+		return this.pearlDaysInactiveThreshold;
+	}
+	
+	
 }

@@ -54,7 +54,6 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.InventoryHolder;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
-import org.bukkit.util.Vector;
 import org.bukkit.craftbukkit.v1_8_R1.CraftServer;
 
 import com.gordonfreemanq.sabre.Lang;

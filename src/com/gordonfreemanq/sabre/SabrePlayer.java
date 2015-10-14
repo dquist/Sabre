@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
+import java.util.concurrent.TimeUnit;
 
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
@@ -145,6 +146,18 @@ public class SabrePlayer implements INamed, IChatChannel {
 	 */
 	public Date getLastLogin() {
 		return this.lastLogin;
+	}
+	
+	
+	/**
+	 * Gets the number of days since last login
+	 * @return The number of days since last login
+	 */
+	public int getDaysSinceLastLogin() {
+		Date now = new Date();
+		long timeDiff = now.getTime() - lastLogin.getTime();
+		long diffDays = TimeUnit.DAYS.convert(timeDiff, TimeUnit.MILLISECONDS);
+		return (int)diffDays;
 	}
 	
 	

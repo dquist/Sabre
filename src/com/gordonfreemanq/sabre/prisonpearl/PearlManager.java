@@ -139,6 +139,7 @@ public class PearlManager {
 		
 		
 		PrisonPearl pp = new PrisonPearl(imprisoned, imprisoner);
+		pp.setSealStrength(config.getPearlDefaultStrength());
 		pp.markMove();
 		
 
@@ -196,6 +197,7 @@ public class PearlManager {
 	/**
 	 * Updates a pearl summoned status
 	 * @param pearl The pearl to update
+	 * @param summoned Whether the player is summoned
 	 */
 	public void setPearlSummoned(PrisonPearl pp, boolean summoned) {
 		pp.setSummoned(summoned);
@@ -206,10 +208,40 @@ public class PearlManager {
 	/**
 	 * Updates a pearl return location
 	 * @param pearl The pearl to update
+	 * @param returnLocation The pearl return location
 	 */
 	public void setReturnLocation(PrisonPearl pp, Location returnLocation) {
 		pp.setReturnLocation(returnLocation);
 		db.pearlUpdateReturnLocation(pp);
+	}
+	
+	
+	/**
+	 * Updates a pearl seal strength
+	 * @param pearl The pearl to update
+	 * @param sealStrength The new strength
+	 */
+	public void setSealStrength(PrisonPearl pp, int sealStrength) {
+    	if (sealStrength < 0) {
+    		sealStrength = 0;
+    	}
+    	
+    	if (sealStrength > 0) {
+    		pp.setSealStrength(sealStrength);
+    		db.pearlUpdateSealStrength(pp);
+    	} else {
+    		this.freePearl(pp);
+    	}
+	}
+	
+	
+	/**
+	 * Weakens a pearl seal strength
+	 * @param pearl The pearl to update
+	 * @param weakenAmount The amount to weaken the strength by
+	 */
+	public void weakenSealStrength(PrisonPearl pp, int weakenAmount) {
+		this.setSealStrength(pp, pp.getSealStrength() - weakenAmount);
 	}
 	
 	
@@ -292,7 +324,7 @@ public class PearlManager {
 	 * @return The free world
 	 */
 	public World getFreeWorld() {
-		return Bukkit.getWorld(config.freeWorld);
+		return Bukkit.getWorld(config.getFreeWorldName());
 	}
 	
 	
@@ -301,7 +333,7 @@ public class PearlManager {
 	 * @return The prison world
 	 */
 	public World getPrisonWorld() {
-		return Bukkit.getWorld(config.prisonWorld);
+		return Bukkit.getWorld(config.getPrisonWorldName());
 	}
 	
 	
