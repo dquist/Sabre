@@ -144,6 +144,10 @@ public class Lang
 	public static final String pearlNotHoldingMoksha = "<b>You are not holding a moksha rod.";
 	public static final String pearlPlayerNotImprisoned = "<i>That player is not imprisoned.";
 	public static final String pearlBoundMoksha = "<g>You bound <c>%s to a moksha rod.";
+	public static final String pearlMokshaNotBound = "<i>This rod is not bound to anyone.";
+	public static final String pearlMokshaAddStrength = "<i>This rod has no strength.";
+	public static final String pearlJailbreakPass = "<g>You broke <c>%s<g> out of prison!";
+	public static final String pearlJailbreakFail = "<b>Your jailbreak attempt was too weak and failed.";
 	
 	
 	// FACTORY
