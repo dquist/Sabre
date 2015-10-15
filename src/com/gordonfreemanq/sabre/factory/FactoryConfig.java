@@ -22,7 +22,6 @@ import com.gordonfreemanq.sabre.SabrePlugin;
 import com.gordonfreemanq.sabre.blocks.CustomItems;
 import com.gordonfreemanq.sabre.blocks.SabreItemStack;
 import com.gordonfreemanq.sabre.factory.recipe.ProductionRecipe;
-import com.gordonfreemanq.sabre.factory.recipe.FarmRecipe;
 import com.gordonfreemanq.sabre.factory.recipe.IRecipe;
 import com.gordonfreemanq.sabre.factory.recipe.SpecialRecipeType;
 
@@ -84,10 +83,6 @@ public class FactoryConfig {
 			    
 			    FactoryProperties fp = new FactoryProperties(factoryName, recipes, upgrades);
 			    
-			    if (config.getBoolean("farm", false)) {
-			    	//loadFarmRecipes(config, recipes);
-			    }
-			    
 			    factoryProperties.put(factoryName, fp);
 			    
 	    	} catch (Exception ex) {
@@ -131,30 +126,6 @@ public class FactoryConfig {
 	    if (section != null) {
 		    readRecipeSection(upgrades, section, defaultSpeed);
 	    }
-	}
-	
-	
-	/**
-	 * Loads the farm recipes
-	 * @param config The config instance to read
-	 * @param rate the list of farm recipes
-	 */
-	private void loadFarmRecipes(FileConfiguration config, List<IRecipe> farmRecipes) {
-		
-		ConfigurationSection section = config.getConfigurationSection("farm_recipes");
-		
-		for (String recipeName : section.getKeys(false)) {
-
-			ConfigurationSection configSection = section.getConfigurationSection(recipeName);
-			
-			CropType cropType = CropType.valueOf(configSection.getString("crop"));
-			if (cropType == null) {
-				continue;
-			}
-			
-			int rate = configSection.getInt("rate", 0);
-			farmRecipes.add(new FarmRecipe(recipeName, cropType, rate));
-		}
 	}
 	
 	

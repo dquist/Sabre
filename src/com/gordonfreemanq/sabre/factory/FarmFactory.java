@@ -1,5 +1,7 @@
 package com.gordonfreemanq.sabre.factory;
 
+import java.util.HashMap;
+
 import org.bukkit.Location;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
@@ -28,6 +30,9 @@ public class FarmFactory extends BaseFactory {
 	
 	// Efficiency factory based on proximity to other farms from 0 to 1.0
 	private double proximityFactor;
+	
+	// The amount of farmed goods
+	private HashMap<CropType, Integer> farmedCrops;
 
 	/**
 	 * Creates a new FarmFactory instance
@@ -40,6 +45,7 @@ public class FarmFactory extends BaseFactory {
 		this.farmTickCounter = 0;
 		this.coverage = 0;
 		this.proximityFactor = 1.0;
+		this.farmedCrops = new HashMap<CropType, Integer>();
 		
 	}
 	
@@ -120,7 +126,10 @@ public class FarmFactory extends BaseFactory {
 		this.coverage = Math.min(coverage, 1.0);
 		this.proximityFactor = Math.min(proximityFactor, 1.0);
 		
+		CropType cropType = fr.getCrop();
 		int realOutput = (int)(fr.getProductionRate() * coverage * proximityFactor);
+		int alreadyFarmed = farmedCrops.get(cropType);
+		farmedCrops.put(cropType, alreadyFarmed + realOutput);
 	}
 	
 	
@@ -130,5 +139,15 @@ public class FarmFactory extends BaseFactory {
 	public void survey() {
 		// TODO
 	}
+	
+	
+	/**
+	 * Gets the farmed crops
+	 * @return The farmed crops
+	 */
+	public HashMap<CropType, Integer> getFarmedCrops() {
+		return this.farmedCrops;
+	}
+	
 
 }
