@@ -19,6 +19,8 @@ public enum SpecialRecipeType {
 		{
 		case STRENGTHEN_PRISON_PEARL:
 			return new StrengthenPrisonPearlRecipe(name, productionSpeed, fuelCost);
+		case CHARGE_MOKSHA_ROD:
+			return new ChargeMokshaRodRecipe(name, productionSpeed, fuelCost);
 		default:
 			return null;
 		}

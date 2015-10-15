@@ -3,16 +3,15 @@ package com.gordonfreemanq.sabre.factory.recipe;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 
+import com.gordonfreemanq.sabre.SabrePlugin;
 import com.gordonfreemanq.sabre.blocks.CustomItems;
 import com.gordonfreemanq.sabre.blocks.SabreItemStack;
+import com.gordonfreemanq.sabre.customitems.MokshaRod;
 import com.gordonfreemanq.sabre.factory.BaseFactory;
 import com.gordonfreemanq.sabre.factory.ItemList;
 import com.gordonfreemanq.sabre.factory.ProbabilisticEnchantment;
-import com.gordonfreemanq.sabre.prisonpearl.PearlManager;
-import com.gordonfreemanq.sabre.prisonpearl.PrisonPearl;
 
 /**
  * Recipe that charges a prison pearl strength
@@ -23,11 +22,12 @@ public class ChargeMokshaRodRecipe implements IRecipe {
 
 	private final String name;
 	private final int productionSpeed;
+	private final int costFactor;
+	
 	private int configFuelCost;
 	private int fuelCost;
 	private BaseFactory factory;
 	
-	private PrisonPearl recipePearl;
 	private int recipeStrengthAmount;
 	
 	private final ItemList<SabreItemStack> inputs;
@@ -41,6 +41,7 @@ public class ChargeMokshaRodRecipe implements IRecipe {
 	public ChargeMokshaRodRecipe(String name, int productionSpeed, int fuelCost) {
 		this.name = name;
 		this.productionSpeed = productionSpeed;
+		this.costFactor = SabrePlugin.getPlugin().getSabreConfig().getJailbreakCostFactor();
 		this.configFuelCost = fuelCost;
 		this.inputs = new ItemList<SabreItemStack>();
 		this.outputs = new ItemList<SabreItemStack>();
@@ -96,23 +97,24 @@ public class ChargeMokshaRodRecipe implements IRecipe {
 		outputs.clear();
 		fuelCost = configFuelCost;
 		
-		// Add a default unmatchable prison-pearl item with 1 durability
-		SabreItemStack pearlStack = new SabreItemStack(Material.ENDER_PEARL, "Prison Pearl", 1, 1);
+		// Default item
+		SabreItemStack mokshaStack = new MokshaRod();
 		
-		// If a prison pearl exists in the inventory, then replace the default ingredient pearl with that item
-		List<PrisonPearl> pearls = PearlManager.getInstance().getInventoryPrisonPearls(factory.getInputInventory());
-		if (pearls.size() > 0) {
-			recipePearl = pearls.get(0);
-			pearlStack = recipePearl.createItemStack();
-			outputs.add(pearlStack);
+		// Get the rod from the inventory if it exists
+		ItemStack is = MokshaRod.getFromInventory(factory.getInputInventory());
+		if (is != null) {
+			mokshaStack = MokshaRod.getRodFromItem(is);
+			
+			// Add the pearl to the recipe
+			outputs.add(mokshaStack);
 		}
 		
 		// Add the pearl to the recipe
-		inputs.add(pearlStack);
+		inputs.add(mokshaStack);
 		
-		// The default recipe requires at least 1 cuendillar item
+		// The default recipe requires at least the factor amount of cuendillar
 		SabreItemStack inputCuendillar = CustomItems.getInstance().getByName("Cuendillar");
-		inputCuendillar.setAmount(1);
+		inputCuendillar.setAmount(costFactor);
 		
 		// Change the recipe to use however much cuendillar is available in the inventory
 		recipeStrengthAmount = ItemList.amountAvailable(factory.getInputInventory(), inputCuendillar);
@@ -136,16 +138,17 @@ public class ChargeMokshaRodRecipe implements IRecipe {
 	 * @param factory The factory instance
 	 */
 	public void onRecipeComplete(BaseFactory factory) {
-
-		// Update the new location for the pearl
-		recipePearl.setHolder(factory.getLocation());
 		
-		// Update the new strength
-		PearlManager.getInstance().increaseSealStrength(recipePearl, recipeStrengthAmount);
-		
-		// Gets the item stack from the chest and validate it, which will update the strength lore
-		ItemStack is = recipePearl.getItemFromInventory(factory.getOutputInventory());
-		recipePearl.validateItemStack(is);
+		// Get the rod from the inventory if it exists
+		ItemStack is = MokshaRod.getFromInventory(factory.getInputInventory());
+		if (is != null) {
+			MokshaRod mokshaStack = MokshaRod.getRodFromItem(is);
+			
+			// jailbreaking is more expensive than pearl holding
+			int increase = (int)(recipeStrengthAmount / costFactor);
+			
+			mokshaStack.setStrength(mokshaStack.getStrength() + increase);
+		}
 	}
 	
 	/**

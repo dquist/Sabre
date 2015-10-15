@@ -107,6 +107,7 @@ public class SabreConfig {
 	private int pearlWeakenInterval;
 	private int pearlWeakenAmount;
 	private int pearlDaysInactiveThreshold;
+	private int pearlJailbreakCostFactor;
 	
 	
 	
@@ -150,6 +151,8 @@ public class SabreConfig {
 		this.pearlWeakenInterval = fc.getInt("prison_pearl.weaken_interval_min", 60);
 		this.pearlWeakenAmount = fc.getInt("prison_pearl.weaken_amount", 1);
 		this.pearlDaysInactiveThreshold = fc.getInt("prison_pearl.days_inactive_threshold", 7);
+		this.pearlJailbreakCostFactor = fc.getInt("prison_pearl.jailbreak_cost_factor", 8);
+		
 		
 		this.farmSurveyPeriod = fc.getInt("farm.survey_period", 60);
 		this.farmSurveySpacing = fc.getInt("farm.survey_tick_spacing", 20);
@@ -475,6 +478,14 @@ public class SabreConfig {
 	 */
 	public int getPearlDaysInactiveThreshold() {
 		return this.pearlDaysInactiveThreshold;
+	}
+	
+	/**
+	 * Gets how much more expensive jailbreaking is than pearling
+	 * @return The cost factor
+	 */
+	public int getJailbreakCostFactor() {
+		return this.pearlJailbreakCostFactor;
 	}
 	
 	

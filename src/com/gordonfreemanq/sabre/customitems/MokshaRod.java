@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.regex.Pattern;
 
 import org.bukkit.Material;
+import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
@@ -137,5 +138,21 @@ public class MokshaRod extends SabreItemStack {
 		}
 		
 		return SabreUtil.itemContainsLoreString(is, strengthPrefix);
+	}
+	
+	
+	/**
+	 * Gets a rod from an inventory
+	 * @param inv The inventory to search
+	 * @return The list of contained pearls
+	 */
+	public static ItemStack getFromInventory(Inventory inv) {		
+		for (ItemStack is : inv.all(Material.BLAZE_ROD).values()) {
+			if (isMoksha(is)) {
+				return is;
+			}
+		}
+		
+		return null;
 	}
 }
