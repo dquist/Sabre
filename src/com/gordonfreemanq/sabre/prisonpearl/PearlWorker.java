@@ -55,6 +55,7 @@ public class PearlWorker implements Runnable {
 			// Only weaken the pearls of the players that have logged in within the threshold
 			if (pp.getPlayer().getDaysSinceLastLogin() < daysInactiveThreshold) {
 				pm.decreaseSealStrength(pp, weakenAmount);
+				pp.verifyLocation();
 			}
 		}
 	}

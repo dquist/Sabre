@@ -164,8 +164,8 @@ public class SabrePlugin extends AbstractSabrePlugin
 	@Override
 	public void saveConfig() {
 		if (config != null) {
-			config.save();
-			super.saveConfig();
+			//config.save();
+			//super.saveConfig();
 		}
 	}
 

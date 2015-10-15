@@ -295,6 +295,20 @@ public class PrisonPearl {
 	 * @return The new item stack
 	 */
 	public SabreItemStack createItemStack() {
+		List<String> lore = generateLore();
+		SabreItemStack is = new SabreItemStack(Material.ENDER_PEARL, "Prison Pearl", 1);
+		ItemMeta im = is.getItemMeta();
+		im.setDisplayName(this.getName());
+		im.setLore(lore);
+		is.setItemMeta(im);
+		return is;
+	}
+	
+	/**
+	 * Generates the lore for the pearl
+	 * @return The pearl lore
+	 */
+	public List<String> generateLore() {
 		List<String> lore = new ArrayList<String>();
 		lore.add(parse("<l>%s", ITEM_NAME));
 		lore.add(parse("<a>Player: <n>%s", this.getName()));
@@ -307,14 +321,7 @@ public class PrisonPearl {
 		lore.add(parse(CmdPearl.getInstance().cmdSummon.getUseageTemplate(true)));
 		lore.add(parse(CmdPearl.getInstance().cmdReturn.getUseageTemplate(true)));
 		lore.add(parse(CmdPearl.getInstance().cmdKill.getUseageTemplate(true)));
-		
-
-		SabreItemStack is = new SabreItemStack(Material.ENDER_PEARL, "Prison Pearl", 1);
-		ItemMeta im = is.getItemMeta();
-		im.setDisplayName(this.getName());
-		im.setLore(lore);
-		is.setItemMeta(im);
-		return is;
+		return lore;
 	}
 
 	private static Pattern idPattern = Pattern.compile(parse("<a>UUID: <n>(.+)"));
@@ -370,7 +377,9 @@ public class PrisonPearl {
 		if (id != null && id.equals(this.playerId)) {
 			
 			// re-create the item stack to update the values
-			is = createItemStack();
+			ItemMeta im = is.getItemMeta();
+			im.setLore(this.generateLore());
+			is.setItemMeta(im);
 			return true;
 		}
 		

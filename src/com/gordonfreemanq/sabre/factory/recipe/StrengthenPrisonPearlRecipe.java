@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 
 import com.gordonfreemanq.sabre.blocks.CustomItems;
 import com.gordonfreemanq.sabre.blocks.SabreItemStack;
@@ -124,7 +125,7 @@ public class StrengthenPrisonPearlRecipe implements IRecipe {
 		inputs.add(inputCuendillar);
 		
 		// update fuel cost based on the strength
-		fuelCost = recipeStrengthAmount * 10;
+		fuelCost = recipeStrengthAmount * 2;
 	}
 	
 	
@@ -146,6 +147,9 @@ public class StrengthenPrisonPearlRecipe implements IRecipe {
 		// Gets the item stack from the chest and validate it, which will update the strength lore
 		ItemStack is = recipePearl.getItemFromInventory(factory.getOutputInventory());
 		recipePearl.validateItemStack(is);
+		//ItemMeta im = is.getItemMeta();
+		//im.setLore(recipePearl.generateLore());
+		//is.setItemMeta(im);
 	}
 	
 	/**

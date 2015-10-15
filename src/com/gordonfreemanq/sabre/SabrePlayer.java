@@ -150,6 +150,15 @@ public class SabrePlayer implements INamed, IChatChannel {
 	
 	
 	/**
+	 * Sets the last login time
+	 * @param lastLogin The first login time
+	 */
+	public void setLastLogin(Date lastLogin) {
+		this.lastLogin = lastLogin;
+	}
+	
+	
+	/**
 	 * Gets the number of days since last login
 	 * @return The number of days since last login
 	 */
@@ -158,15 +167,6 @@ public class SabrePlayer implements INamed, IChatChannel {
 		long timeDiff = now.getTime() - lastLogin.getTime();
 		long diffDays = TimeUnit.DAYS.convert(timeDiff, TimeUnit.MILLISECONDS);
 		return (int)diffDays;
-	}
-	
-	
-	/**
-	 * Sets the last login time
-	 * @param lastLogin The first login time
-	 */
-	public void setLastLogin(Date lastLogin) {
-		this.lastLogin = lastLogin;
 	}
 	
 	

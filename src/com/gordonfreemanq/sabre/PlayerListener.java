@@ -139,7 +139,7 @@ public class PlayerListener implements Listener {
 		
 		// Update the player model
 		sp.setPlayer(p);
-		sp.setLastLogin(new Date());
+		pm.setLastLogin(sp, new Date());
 		
 		// This ensures the player name always stays the same
 		p.setDisplayName(sp.getName());

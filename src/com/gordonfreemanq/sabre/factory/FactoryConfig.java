@@ -85,7 +85,7 @@ public class FactoryConfig {
 			    FactoryProperties fp = new FactoryProperties(factoryName, recipes, upgrades);
 			    
 			    if (config.getBoolean("farm", false)) {
-			    	loadFarmRecipes(config, recipes);
+			    	//loadFarmRecipes(config, recipes);
 			    }
 			    
 			    factoryProperties.put(factoryName, fp);

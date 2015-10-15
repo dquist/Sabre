@@ -39,9 +39,6 @@ prison_pearl:
   days_inactive_threshold: 7
   
 disabled_recipes:
-  Planks:
-    material: WOOD
-    durability: -1
   Leather Helmet:
     material: LEATHER_HELMET
   Leather Chestplate:

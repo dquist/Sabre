@@ -123,7 +123,7 @@ public class SabreConfig {
 	public static SabreConfig load(FileConfiguration fc) {
 		SabreConfig config = new SabreConfig(fc);
 		config.read();
-		config.save();
+		//config.save();
 		return config;
 	}
 	
