@@ -9,6 +9,8 @@ public class CmdPearl extends SabreCommand {
 	public final SabreCommand cmdLocate = new CmdPearlLocate();
 	public final SabreCommand cmdReturn = new CmdPearlReturn();
 	public final SabreCommand cmdSummon = new CmdPearlSummon();
+	public final SabreCommand cmdMokshaBind = new CmdMokshaBind();
+	public final SabreCommand cmdMokshaJailbreak = new CmdMokshaJailbreak();
 	
 	private static CmdPearl instance;
 	public static CmdPearl getInstance() {
@@ -29,6 +31,8 @@ public class CmdPearl extends SabreCommand {
 		this.addSubCommand(cmdLocate);
 		this.addSubCommand(cmdReturn);
 		this.addSubCommand(cmdSummon);
+		this.addSubCommand(cmdMokshaBind);
+		this.addSubCommand(cmdMokshaJailbreak);
 		
 		instance = this;
 	}

@@ -19,7 +19,7 @@ import com.gordonfreemanq.sabre.prisonpearl.PrisonPearl;
  * @author GFQ
  *
  */
-public class StrengthenPrisonPearlRecipe implements IRecipe {
+public class ChargeMokshaRodRecipe implements IRecipe {
 
 	private final String name;
 	private final int productionSpeed;
@@ -38,7 +38,7 @@ public class StrengthenPrisonPearlRecipe implements IRecipe {
 	/**
 	 * Creates a new ChargePrisonPearlRecipe instance
 	 */
-	public StrengthenPrisonPearlRecipe(String name, int productionSpeed, int fuelCost) {
+	public ChargeMokshaRodRecipe(String name, int productionSpeed, int fuelCost) {
 		this.name = name;
 		this.productionSpeed = productionSpeed;
 		this.configFuelCost = fuelCost;
@@ -153,6 +153,6 @@ public class StrengthenPrisonPearlRecipe implements IRecipe {
 	 * @return The clone
 	 */
 	public IRecipe clone() {
-		return new StrengthenPrisonPearlRecipe(this.name, this.productionSpeed, this.configFuelCost);
+		return new ChargeMokshaRodRecipe(this.name, this.productionSpeed, this.configFuelCost);
 	}
 }

@@ -47,9 +47,9 @@ public class Lang
 	public static String groupPlayerTransferred = "<c>%s <i>transferred <c>%s <i>to you.";
 	public static String groupAutoJoinEnabled = "<i>Set auto-join status to <g>enabled<i>.";
 	public static String groupAutoJoinDisabled = "<i>Set auto-join status to <b>disabled<i>.";
-	public static String groupJoinHelp = "<i>Use '<c>/s join <c>%s<i>' to join.";
-	public static String groupLeaveHelp = "<i>Use '<c>/s leave <c>%s<i>' to leave.";
-	public static String groupTransferHelp = "<i>Use '<c>/s transfer <c>%s<i>' to transfer the group.";
+	public static String groupJoinHelp = "<i>Use '<c>/f join <c>%s<i>' to join.";
+	public static String groupLeaveHelp = "<i>Use '<c>/f leave <c>%s<i>' to leave.";
+	public static String groupTransferHelp = "<i>Use '<c>/f transfer <c>%s<i>' to transfer the group.";
 	
 	
 	// CHAT
@@ -141,6 +141,9 @@ public class Lang
 	public static final String pearlYouReturned = "<g>You returned <c>%s <g>to prison.";
 	public static final String pearlYouKilled = "<g>You killed <c>%s<g>.";
 	public static final String pearlAlreadyPearled = "<c>%s <b>is already held by a prison pearl.";
+	public static final String pearlNotHoldingMoksha = "<b>You are not holding a moksha rod.";
+	public static final String pearlPlayerNotImprisoned = "<i>That player is not imprisoned.";
+	public static final String pearlBoundMoksha = "<g>You bound <c>%s to a moksha rod.";
 	
 	
 	// FACTORY

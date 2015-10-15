@@ -163,6 +163,20 @@ public class SabreItemStack extends ItemStack {
 	}
 	
 	
+	/**
+	 * Updates the lore on the item stack
+	 */
+	public void updateLore() {
+		List<String> lore = this.getLore();
+		if (lore != null) {
+			ItemMeta im = this.getItemMeta();
+			im.setDisplayName(name);
+			im.setLore(this.getLore());
+			this.setItemMeta(im);
+		}
+	}
+	
+	
 	protected static String parse(String str) {
 		return SabrePlugin.getPlugin().txt.parse(str);
 	}
