@@ -156,7 +156,7 @@ public class SabreConfig {
 		
 		this.farmSurveyPeriod = fc.getInt("farm.survey_period", 60);
 		this.farmSurveySpacing = fc.getInt("farm.survey_tick_spacing", 20);
-		this.farmProductionTicks = fc.getInt("farm.production_ticks", 6000);
+		this.farmProductionTicks = fc.getInt("farm.production_ticks", 300);
 		
 		this.reinforcementMaterials.clear();
 		this.lockableItems.clear();

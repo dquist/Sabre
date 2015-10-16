@@ -9,7 +9,6 @@ import org.bukkit.inventory.ItemStack;
 
 import com.gordonfreemanq.sabre.SabrePlayer;
 import com.gordonfreemanq.sabre.SabrePlugin;
-import com.gordonfreemanq.sabre.factory.recipe.ProductionRecipe;
 import com.gordonfreemanq.sabre.factory.recipe.FarmRecipe;
 
 /**
@@ -31,6 +30,9 @@ public class FarmFactory extends BaseFactory {
 	// Efficiency factory based on proximity to other farms from 0 to 1.0
 	private double proximityFactor;
 	
+	// Biome specific efficiency factor
+	private double biomeFactor;
+	
 	// The amount of farmed goods
 	private HashMap<CropType, Integer> farmedCrops;
 
@@ -43,8 +45,9 @@ public class FarmFactory extends BaseFactory {
 		super(location, typeName);
 		this.farmProductionTicks = SabrePlugin.getPlugin().getSabreConfig().getFarmProductionTicks();
 		this.farmTickCounter = 0;
-		this.coverage = 0;
-		this.proximityFactor = 1.0;
+		this.coverage = 1.0; // TODO
+		this.proximityFactor = 1.0; // TODO
+		this.biomeFactor = 1.0; // TODO
 		this.farmedCrops = new HashMap<CropType, Integer>();
 		
 	}
@@ -65,11 +68,12 @@ public class FarmFactory extends BaseFactory {
 		Action a = e.getAction();
 		if (a == Action.RIGHT_CLICK_BLOCK) {
 			if (running) {
-				if (recipe instanceof ProductionRecipe) {
-					sp.msg("<a>Status: <n>%d%%", this.getPercentComplete());
-				} else if (recipe instanceof FarmRecipe) {
+				if (recipe instanceof FarmRecipe) {
 					FarmRecipe fr = (FarmRecipe)recipe;
-					sp.msg("<a>Status: <n>Farming %s", fr.getCrop().toString());
+					sp.msg("<a>Status: <n>Farming %s, %d ready for harvest", fr.getCrop().toString(), this.farmedCrops.get(((FarmRecipe) recipe).getCrop()));
+
+				} else {
+					sp.msg("<a>Status: <n>%d%%", this.getPercentComplete());
 				}
 			} else {
 				cycleRecipe(sp);
@@ -101,13 +105,13 @@ public class FarmFactory extends BaseFactory {
 			return;
 		}
 		
-		if (recipe instanceof ProductionRecipe) {
-			super.update();
-		} else {
+		if (recipe instanceof FarmRecipe) {
 			if (farmTickCounter++ >= farmProductionTicks) {
 				farmTickCounter = 0;
 				runFarmRecipe();
 			}
+		} else {
+			super.update();
 		}
 	}
 	
@@ -125,9 +129,10 @@ public class FarmFactory extends BaseFactory {
 		// Just a quick sanity check on these numbers
 		this.coverage = Math.min(coverage, 1.0);
 		this.proximityFactor = Math.min(proximityFactor, 1.0);
+		this.biomeFactor = Math.min(biomeFactor, 1.0);
 		
 		CropType cropType = fr.getCrop();
-		int realOutput = (int)(fr.getProductionRate() * coverage * proximityFactor);
+		int realOutput = (int)(fr.getProductionRate() * coverage * proximityFactor * biomeFactor);
 		int alreadyFarmed = farmedCrops.get(cropType);
 		farmedCrops.put(cropType, alreadyFarmed + realOutput);
 	}

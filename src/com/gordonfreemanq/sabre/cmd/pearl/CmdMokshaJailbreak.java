@@ -1,7 +1,5 @@
 package com.gordonfreemanq.sabre.cmd.pearl;
 
-import org.bukkit.Material;
-
 import com.gordonfreemanq.sabre.Lang;
 import com.gordonfreemanq.sabre.SabrePlayer;
 import com.gordonfreemanq.sabre.cmd.SabreCommand;

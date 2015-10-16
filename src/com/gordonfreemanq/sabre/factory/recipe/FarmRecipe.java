@@ -2,10 +2,12 @@ package com.gordonfreemanq.sabre.factory.recipe;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import com.gordonfreemanq.sabre.blocks.SabreItemStack;
 import com.gordonfreemanq.sabre.factory.BaseFactory;
 import com.gordonfreemanq.sabre.factory.CropType;
+import com.gordonfreemanq.sabre.factory.FarmFactory;
 import com.gordonfreemanq.sabre.factory.ItemList;
 import com.gordonfreemanq.sabre.factory.ProbabilisticEnchantment;
 
@@ -110,7 +112,16 @@ public class FarmRecipe implements IRecipe {
 	 * @param factory The factory instance
 	 */
 	public void onRecipeStart(BaseFactory factory) {
-		// Do nothing
+		if (!(factory instanceof FarmFactory)) {
+			return;
+		}
+		
+		FarmFactory farm = (FarmFactory)factory;
+		
+		Map<CropType, Integer> farmedCrops = farm.getFarmedCrops();
+		if (!farmedCrops.containsKey(this.crop)) {
+			farmedCrops.put(this.crop, 0);
+		}
 	}
 	
 	
