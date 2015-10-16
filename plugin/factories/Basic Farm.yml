@@ -1,13 +1,14 @@
 name: Basic Farm
 production_speed: 1
-farm: true
-farm_recipes:
+recipes:
   Farm Wheat:
-    crop: WHEAT
-    rate: 5
+    special: FARM_WHEAT
+    production_speed: 5
   Farm Carrots:
-    crop: CARROT
-    rate: 5
+    special: FARM_CARROTS
+    production_speed: 5
   Farm Potatos:
-    crop: POTATO
-    rate: 5
+    special: FARM_POTATOS
+    production_speed: 5
+  Harvest Crops:
+    special: HARVEST_CROPS

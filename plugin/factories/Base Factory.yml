@@ -315,3 +315,16 @@ upgrades:
       Glass Smelter 1:
         custom_item: Glass Smelter 1
         amount: 1
+  Basic Farm:
+    fuel_cost: 10
+    inputs:
+      Dirt:
+        material: DIRT
+        amount: 2048
+      Cobblestone:
+        material: COBBLESTONE
+        amount: 1024
+    outputs:
+      Basic Farm:
+        custom_item: Basic Farm
+        amount: 1
