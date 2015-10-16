@@ -28,6 +28,7 @@ import org.bukkit.util.Vector;
 import com.gordonfreemanq.sabre.PlayerManager;
 import com.gordonfreemanq.sabre.SabrePlayer;
 import com.gordonfreemanq.sabre.SabrePlugin;
+import com.gordonfreemanq.sabre.blocks.SabreItemStack;
 import com.gordonfreemanq.sabre.cmd.pearl.CmdPearl;
 import com.gordonfreemanq.sabre.util.TextUtil;
 
@@ -293,7 +294,21 @@ public class PrisonPearl {
 	 * Creates an item stack for the pearl
 	 * @return The new item stack
 	 */
-	public ItemStack createItemStack() {
+	public SabreItemStack createItemStack() {
+		List<String> lore = generateLore();
+		SabreItemStack is = new SabreItemStack(Material.ENDER_PEARL, "Prison Pearl", 1);
+		ItemMeta im = is.getItemMeta();
+		im.setDisplayName(this.getName());
+		im.setLore(lore);
+		is.setItemMeta(im);
+		return is;
+	}
+	
+	/**
+	 * Generates the lore for the pearl
+	 * @return The pearl lore
+	 */
+	public List<String> generateLore() {
 		List<String> lore = new ArrayList<String>();
 		lore.add(parse("<l>%s", ITEM_NAME));
 		lore.add(parse("<a>Player: <n>%s", this.getName()));
@@ -306,14 +321,7 @@ public class PrisonPearl {
 		lore.add(parse(CmdPearl.getInstance().cmdSummon.getUseageTemplate(true)));
 		lore.add(parse(CmdPearl.getInstance().cmdReturn.getUseageTemplate(true)));
 		lore.add(parse(CmdPearl.getInstance().cmdKill.getUseageTemplate(true)));
-		
-
-		ItemStack is = new ItemStack(Material.ENDER_PEARL, 1);
-		ItemMeta im = is.getItemMeta();
-		im.setDisplayName(this.getName());
-		im.setLore(lore);
-		is.setItemMeta(im);
-		return is;
+		return lore;
 	}
 
 	private static Pattern idPattern = Pattern.compile(parse("<a>UUID: <n>(.+)"));
@@ -369,7 +377,9 @@ public class PrisonPearl {
 		if (id != null && id.equals(this.playerId)) {
 			
 			// re-create the item stack to update the values
-			is = createItemStack();
+			ItemMeta im = is.getItemMeta();
+			im.setLore(this.generateLore());
+			is.setItemMeta(im);
 			return true;
 		}
 		
@@ -539,5 +549,22 @@ public class PrisonPearl {
 
 	protected static String parse(String str, Object... args) {
 		return String.format(parse(str), args);
+	}
+	
+	
+	/**
+	 * Gets the item stack from an inventory if it exists
+	 * @param inv The inventory to search
+	 * @return The pearl item
+	 */
+	public ItemStack getItemFromInventory(Inventory inv) {
+		
+		for (ItemStack item : inv.all(Material.ENDER_PEARL).values()) {
+			if (this.validateItemStack(item)) {
+				return item;
+			}
+		}
+		
+		return null;
 	}
 }

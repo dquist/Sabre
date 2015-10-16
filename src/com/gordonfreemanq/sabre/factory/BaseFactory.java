@@ -27,6 +27,7 @@ import com.gordonfreemanq.sabre.blocks.CustomItems;
 import com.gordonfreemanq.sabre.blocks.SabreBlock;
 import com.gordonfreemanq.sabre.blocks.SabreItemStack;
 import com.gordonfreemanq.sabre.customitems.SpecialBlock;
+import com.gordonfreemanq.sabre.factory.recipe.IRecipe;
 import com.gordonfreemanq.sabre.util.SabreUtil;
 import com.mongodb.BasicDBObject;
 
@@ -41,7 +42,7 @@ public class BaseFactory extends SpecialBlock {
 	
 	// Not saved
 	protected final FactoryProperties properties;
-	protected FactoryRecipe recipe;
+	protected IRecipe recipe;
 	protected boolean running;
 	protected int fuelPerBurn;
 	protected int fuelCounter;
@@ -62,7 +63,7 @@ public class BaseFactory extends SpecialBlock {
 		// Get the recipes for this factory
 		this.properties = FactoryConfig.getInstance().getFactoryProperties(this.typeName);
 		
-		List<FactoryRecipe> recipes = properties.getRecipes();
+		List<IRecipe> recipes = properties.getRecipes();
 		
 		// Set the current recipe
 		if (recipeIndex < recipes.size()) {
@@ -262,7 +263,7 @@ public class BaseFactory extends SpecialBlock {
 		}
 		this.recipeIndex = o.getInt("recipe");
 
-		List<FactoryRecipe> recipes = properties.getRecipes();
+		List<IRecipe> recipes = properties.getRecipes();
 		if (recipes.size() > 0) {
 			if (recipeIndex >= recipes.size()) {
 				recipeIndex = 0;
@@ -313,7 +314,6 @@ public class BaseFactory extends SpecialBlock {
 		} else {
 			cyclePower(sp);
 		}
-		
 	}
 	
 	
@@ -322,7 +322,9 @@ public class BaseFactory extends SpecialBlock {
 	 * @param e The event args
 	 */
 	public void onBlockBreaking(SabrePlayer p, BlockBreakEvent e) {
-		// Do nothing
+		if (running) {
+			powerOff();
+		}
 	}
 	
 	
@@ -330,7 +332,7 @@ public class BaseFactory extends SpecialBlock {
 	 * Creates the factory controller
 	 * @param sp The player
 	 */
-	private void createController(SabrePlayer sp) {
+	protected void createController(SabrePlayer sp) {
 		ItemStack is = (new FactoryController(this)).toItemStack();
 		sp.getPlayer().getInventory().setItemInHand(is);
 	}
@@ -341,7 +343,7 @@ public class BaseFactory extends SpecialBlock {
 	 * Cycles the recipe
 	 * @param sp The player
 	 */
-	private void cycleRecipe(SabrePlayer runner) {
+	protected void cycleRecipe(SabrePlayer runner) {
 		
 		this.runner = runner;
 		
@@ -351,7 +353,12 @@ public class BaseFactory extends SpecialBlock {
 			return;
 		}
 		
-		List<FactoryRecipe> recipes;
+		// force upgrade mode for factories with no normal recipes
+		if (properties.getRecipes().size() == 0 && properties.getUpgrades().size() > 0) {
+			upgradeMode = true;
+		}
+		
+		List<IRecipe> recipes;
 		if (upgradeMode) {
 			recipes = properties.getUpgrades();
 		} else {
@@ -410,6 +417,8 @@ public class BaseFactory extends SpecialBlock {
 				msg(Lang.factoryMissingFuel);
 				return;
 			}
+			
+			recipe.onRecipeStart(this);
 			
 			if (!checkMaterials()) {
 				ItemList<SabreItemStack> needAll = new ItemList<SabreItemStack>();
@@ -532,7 +541,7 @@ public class BaseFactory extends SpecialBlock {
 	 * Gets the input chest inventory
 	 * @return The input inventory
 	 */
-	private Inventory getInputInventory() {
+	public Inventory getInputInventory() {
 		Chest chest = (Chest)inputLocation.getBlock().getState();
 		return chest.getInventory();
 	}
@@ -542,7 +551,7 @@ public class BaseFactory extends SpecialBlock {
 	 * Gets the output chest inventory
 	 * @return The output inventory
 	 */
-	private Inventory getOutputInventory() {
+	public Inventory getOutputInventory() {
 		Chest chest = (Chest)outputLocation.getBlock().getState();
 		return chest.getInventory();
 	}
@@ -552,7 +561,7 @@ public class BaseFactory extends SpecialBlock {
 	 * Gets the fuel chest inventory
 	 * @return The fuel inventory
 	 */
-	private Inventory getFuelInventory() {
+	public Inventory getFuelInventory() {
 		Chest chest = (Chest)fuelLocation.getBlock().getState();
 		return chest.getInventory();
 	}
@@ -574,6 +583,11 @@ public class BaseFactory extends SpecialBlock {
 	public void update() 
 	{
 		if (!running) {
+			return;
+		}
+		
+		// Ignore non-loaded factories
+		if (!this.location.getChunk().isLoaded()) {
 			return;
 		}
 		
@@ -625,6 +639,7 @@ public class BaseFactory extends SpecialBlock {
 					performUpgrade();
 				} else {
 					recipe.getOutputs().putIn(getOutputInventory());
+					recipe.onRecipeComplete(this);
 				}
 				
 				if (runner != null) {

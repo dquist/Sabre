@@ -1,0 +1,13 @@
+name: Basic Farm
+production_speed: 1
+farm: true
+farm_recipes:
+  Farm Wheat:
+    crop: WHEAT
+    rate: 5
+  Farm Carrots:
+    crop: CARROT
+    rate: 5
+  Farm Potatos:
+    crop: POTATO
+    rate: 5

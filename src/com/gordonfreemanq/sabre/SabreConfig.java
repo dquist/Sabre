@@ -107,6 +107,13 @@ public class SabreConfig {
 	private int pearlWeakenInterval;
 	private int pearlWeakenAmount;
 	private int pearlDaysInactiveThreshold;
+	private int pearlJailbreakCostFactor;
+	
+	
+	
+	private int farmSurveyPeriod;
+	private int farmSurveySpacing;
+	private int farmProductionTicks;
 	
 	
 	/**
@@ -117,7 +124,7 @@ public class SabreConfig {
 	public static SabreConfig load(FileConfiguration fc) {
 		SabreConfig config = new SabreConfig(fc);
 		config.read();
-		config.save();
+		//config.save();
 		return config;
 	}
 	
@@ -144,6 +151,12 @@ public class SabreConfig {
 		this.pearlWeakenInterval = fc.getInt("prison_pearl.weaken_interval_min", 60);
 		this.pearlWeakenAmount = fc.getInt("prison_pearl.weaken_amount", 1);
 		this.pearlDaysInactiveThreshold = fc.getInt("prison_pearl.days_inactive_threshold", 7);
+		this.pearlJailbreakCostFactor = fc.getInt("prison_pearl.jailbreak_cost_factor", 8);
+		
+		
+		this.farmSurveyPeriod = fc.getInt("farm.survey_period", 60);
+		this.farmSurveySpacing = fc.getInt("farm.survey_tick_spacing", 20);
+		this.farmProductionTicks = fc.getInt("farm.production_ticks", 300);
 		
 		this.reinforcementMaterials.clear();
 		this.lockableItems.clear();
@@ -467,5 +480,37 @@ public class SabreConfig {
 		return this.pearlDaysInactiveThreshold;
 	}
 	
+	/**
+	 * Gets how much more expensive jailbreaking is than pearling
+	 * @return The cost factor
+	 */
+	public int getJailbreakCostFactor() {
+		return this.pearlJailbreakCostFactor;
+	}
 	
+	
+	
+	/**
+	 * Gets the farm survey period
+	 * @return The farm survey period
+	 */
+	public int getFarmSurveyPeriod() {
+		return this.farmSurveyPeriod;
+	}
+	
+	/**
+	 * Gets the farm survey tick spacing
+	 * @return The farm survey tick spacing
+	 */
+	public int getFarmSurveyTickSpacing() {
+		return this.farmSurveySpacing;
+	}
+	
+	/**
+	 * Gets the farm production period
+	 * @return The farm production period
+	 */
+	public int getFarmProductionTicks() {
+		return this.farmProductionTicks;
+	}
 }

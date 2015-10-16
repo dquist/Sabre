@@ -3,6 +3,9 @@ package com.gordonfreemanq.sabre.util;
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.UUID;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -13,6 +16,8 @@ import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.BlockState;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.material.Bed;
 import org.bukkit.material.Door;
 import org.bukkit.material.MaterialData;
@@ -21,6 +26,7 @@ import org.bukkit.material.PistonExtensionMaterial;
 import org.bukkit.util.Vector;
 
 import com.gordonfreemanq.sabre.Lang;
+import com.gordonfreemanq.sabre.SabrePlugin;
 import com.mongodb.BasicDBObject;
 
 @SuppressWarnings("deprecation")
@@ -427,5 +433,103 @@ public class SabreUtil {
 			player.sendBlockChange(block.getLocation(), block.getType(), block.getData());
 		}
 
+	}
+
+	private static String uuidStartString = parse("<a>UUID: <n>");
+	private static Pattern uuidPattern = Pattern.compile(parse(uuidStartString + "(.+)"));
+	//private static Pattern keyValuePattern = Pattern.compile(parse(".+: (.+)"));
+	
+	/**
+	 * Finds the UUID value in a lore list in the form of
+	 * UUID: <UUID-value>
+	 * @param lore The lore to search
+	 * @return The UUID if it was found
+	 */
+	public static UUID parseLoreId(List<String> lore) {
+		
+		String value = parseLoreString(lore, uuidStartString, uuidPattern);
+		if (value != null) {
+			return UUID.fromString(value);
+		}
+		
+		return null;
+	}
+	
+	/**
+	 * Parses a lore int
+	 * @param lore The lore to parse
+	 * @param key A key value
+	 * @return The parsed value
+	 */
+	public static int parseLoreInt(List<String> lore, String startString, Pattern pattern) {
+		return Integer.parseInt(parseLoreString(lore, startString, pattern));
+	}
+	
+	
+	/**
+	 * Parses a generic lore value
+	 * @param lore The lore to parse
+	 * @param key A key value
+	 * @return The parsed value
+	 */
+	public static String parseLoreString(List<String> lore, String startString, Pattern pattern) {
+		if (lore == null) {
+			return null;
+		}
+		
+		for (String s : lore) {
+			if (s.startsWith(startString)) {
+				Matcher match = pattern.matcher(s);
+				
+				if (match.find()) {
+					return match.group(1);
+				}				
+			}
+		}
+		
+		return null;
+	}
+	
+	/**
+	 * Checks if the lore contains a specific string 
+	 * @param lore The lore to check
+	 * @param field The string to match
+	 * @return true if it is contained
+	 */
+	public static boolean itemContainsLoreString(ItemStack is, String match) {
+		ItemMeta im = is.getItemMeta();
+		if (im == null) {
+			return false;
+		}
+		
+		return loreContainsString(im.getLore(), match);
+	}
+	
+	/**
+	 * Checks if the lore contains a specific string 
+	 * @param lore The lore to check
+	 * @param field The string to match
+	 * @return true if it is contained
+	 */
+	public static boolean loreContainsString(List<String> lore, String match) {
+		if (lore == null) {
+			return false;
+		}
+		
+		for (String s : lore) {
+			if (s.contains(match)) {
+				return true;
+			}
+		}
+		return false;
+	}
+	
+	
+	protected static String parse(String str) {
+		return SabrePlugin.getPlugin().txt.parse(str);
+	}
+	
+	public static String parse(String str, Object... args) {
+		return String.format(parse(str), args);
 	}
 }

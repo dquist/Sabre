@@ -28,8 +28,7 @@ public class SnitchController extends AbstractController {
 		
 		List<String> lore = new ArrayList<String>();
 		lore.add(parse("<l>%s", name));
-		lore.add(parse("<a>World: <n>%s", l.getWorld().getName()));
-		lore.add(parse("<a>Location: <n>%d, %d, %d", l.getBlockX(), l.getBlockY(), l.getBlockZ()));
+		lore.add(parse("<a>Location: <n>%d, %d, %d, %s", l.getBlockX(), l.getBlockY(), l.getBlockZ(), l.getWorld().getName()));
 		lore.add(parse("<a>Name: <n>%s", snitch.getSnitchName()));
 		lore.add(parse("<a>Group: <n>%s", snitch.getGroupName()));
 		lore.add(parse("<a>Placed by: <n>%s", snitch.getPlacedByName()));

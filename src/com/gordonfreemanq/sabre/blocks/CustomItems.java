@@ -11,6 +11,7 @@ import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 
 import com.gordonfreemanq.sabre.SabrePlugin;
+import com.gordonfreemanq.sabre.customitems.MokshaRod;
 
 /**
  * Holds the custom item types
@@ -49,7 +50,7 @@ public class CustomItems {
 	    
 		this.customItems = new HashMap<String, SabreItemStack>();
 		
-		
+		customItems.put(MokshaRod.itemName, new MokshaRod());
 
 	    File[] files = folder.listFiles();
 	    

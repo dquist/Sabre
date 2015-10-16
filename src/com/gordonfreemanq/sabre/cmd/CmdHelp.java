@@ -48,7 +48,7 @@ public class CmdHelp extends SabreCommand {
 		pageLines.add( plugin.txt.parse("<i>CivFactions is a server that allows players"));
 		pageLines.add( plugin.txt.parse("<i>to build cities, nations, and civilizations."));
 		pageLines.add( "" );
-		pageLines.add( plugin.txt.parse("<i>Type \"<c>/s <page><i>\" to see the full command list."));
+		pageLines.add( plugin.txt.parse("<i>Type \"<c>/f <page><i>\" to see the full command list."));
 		helpPages.add(pageLines);
 	}
 }

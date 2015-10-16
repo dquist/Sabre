@@ -1,15 +1,18 @@
-package com.gordonfreemanq.sabre.factory;
+package com.gordonfreemanq.sabre.factory.recipe;
 
 import java.util.List;
 
 import com.gordonfreemanq.sabre.blocks.SabreItemStack;
+import com.gordonfreemanq.sabre.factory.BaseFactory;
+import com.gordonfreemanq.sabre.factory.ItemList;
+import com.gordonfreemanq.sabre.factory.ProbabilisticEnchantment;
 
 /**
  * Represents a production recipe to be used in a factory
  * @author GFQ
  *
  */
-public class FactoryRecipe {
+public class ProductionRecipe implements IRecipe {
 
 	private final String name;
 	private final int productionSpeed;
@@ -22,7 +25,7 @@ public class FactoryRecipe {
 	/**
 	 * Creates a new Factory Recipe instance
 	 */
-	public FactoryRecipe(String name, int productionSpeed, int fuelCost, ItemList<SabreItemStack> inputs, 
+	public ProductionRecipe(String name, int productionSpeed, int fuelCost, ItemList<SabreItemStack> inputs, 
 			ItemList<SabreItemStack> outputs, List<ProbabilisticEnchantment> enchants) {
 		this.name = name;
 		this.productionSpeed = productionSpeed;
@@ -62,6 +65,7 @@ public class FactoryRecipe {
 	
 	/**
 	 * Gets the recipe inputs
+	 * @param inventory The input inventory
 	 * @return The recipe inputs
 	 */
 	public ItemList<SabreItemStack> getInputs() {
@@ -71,6 +75,7 @@ public class FactoryRecipe {
 	
 	/**
 	 * Gets the recipe outputs
+	 * @param inventory The input inventory
 	 * @return The recipe outputs
 	 */
 	public ItemList<SabreItemStack> getOutputs() {
@@ -84,5 +89,32 @@ public class FactoryRecipe {
 	 */
 	public List<ProbabilisticEnchantment> getEnchants() {
 		return this.enchants;
+	}
+	
+	
+	/**
+	 * A method to handle switching to the recipe
+	 * @param factory The factory instance
+	 */
+	public void onRecipeStart(BaseFactory factory) {
+		// Do nothing
+	}
+	
+	
+	/**
+	 * A method to handle completing the recipe
+	 * @param factory The factory instance
+	 */
+	public void onRecipeComplete(BaseFactory factory) {
+		// Do nothing
+	}
+	
+	
+	/**
+	 * Clones the recipe
+	 * @return The clone
+	 */
+	public IRecipe clone() {
+		return this;
 	}
 }

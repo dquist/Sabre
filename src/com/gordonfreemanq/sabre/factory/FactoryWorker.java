@@ -1,6 +1,7 @@
 package com.gordonfreemanq.sabre.factory;
 
 import java.util.HashSet;
+import java.util.Set;
 
 import org.bukkit.Bukkit;
 
@@ -73,5 +74,12 @@ public class FactoryWorker implements Runnable {
 	public void removeRunning(BaseFactory f) {
 		runningFactories.remove(f);
 	}
-
+	
+	/**
+	 * Gets the running factories
+	 * @return The running factories
+	 */
+	public Set<BaseFactory> getRunningFactories() {
+		return runningFactories;
+	}
 }
