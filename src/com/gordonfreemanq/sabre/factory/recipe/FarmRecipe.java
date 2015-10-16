@@ -6,10 +6,10 @@ import java.util.Map;
 
 import com.gordonfreemanq.sabre.blocks.SabreItemStack;
 import com.gordonfreemanq.sabre.factory.BaseFactory;
-import com.gordonfreemanq.sabre.factory.CropType;
-import com.gordonfreemanq.sabre.factory.FarmFactory;
 import com.gordonfreemanq.sabre.factory.ItemList;
 import com.gordonfreemanq.sabre.factory.ProbabilisticEnchantment;
+import com.gordonfreemanq.sabre.factory.farm.CropType;
+import com.gordonfreemanq.sabre.factory.farm.FarmFactory;
 
 /**
  * Represents a farm factory production recipe

@@ -1,4 +1,4 @@
-package com.gordonfreemanq.sabre.factory;
+package com.gordonfreemanq.sabre.factory.farm;
 
 import java.util.HashMap;
 
@@ -9,6 +9,8 @@ import org.bukkit.inventory.ItemStack;
 
 import com.gordonfreemanq.sabre.SabrePlayer;
 import com.gordonfreemanq.sabre.SabrePlugin;
+import com.gordonfreemanq.sabre.factory.BaseFactory;
+import com.gordonfreemanq.sabre.factory.FactoryController;
 import com.gordonfreemanq.sabre.factory.recipe.FarmRecipe;
 
 /**

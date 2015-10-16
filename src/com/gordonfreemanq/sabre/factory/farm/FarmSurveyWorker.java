@@ -1,4 +1,4 @@
-package com.gordonfreemanq.sabre.factory;
+package com.gordonfreemanq.sabre.factory.farm;
 
 import java.util.Queue;
 

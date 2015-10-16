@@ -1,6 +1,6 @@
 package com.gordonfreemanq.sabre.factory.recipe;
 
-import com.gordonfreemanq.sabre.factory.CropType;
+import com.gordonfreemanq.sabre.factory.farm.CropType;
 
 /**
  * The types of special recipes

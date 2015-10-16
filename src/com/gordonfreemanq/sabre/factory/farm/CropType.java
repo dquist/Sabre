@@ -1,4 +1,4 @@
-package com.gordonfreemanq.sabre.factory;
+package com.gordonfreemanq.sabre.factory.farm;
 
 import com.gordonfreemanq.sabre.blocks.CustomItems;
 import com.gordonfreemanq.sabre.blocks.SabreItemStack;

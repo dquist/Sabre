@@ -1,4 +1,4 @@
-package com.gordonfreemanq.sabre.factory;
+package com.gordonfreemanq.sabre.factory.farm;
 
 import java.util.Queue;
 import java.util.concurrent.LinkedBlockingQueue;
@@ -7,6 +7,8 @@ import org.bukkit.Bukkit;
 
 import com.gordonfreemanq.sabre.SabreConfig;
 import com.gordonfreemanq.sabre.SabrePlugin;
+import com.gordonfreemanq.sabre.factory.BaseFactory;
+import com.gordonfreemanq.sabre.factory.FactoryWorker;
 
 /**
  * Schedules the periodic survey of farm factories
