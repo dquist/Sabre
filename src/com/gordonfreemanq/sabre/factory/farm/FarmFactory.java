@@ -11,6 +11,7 @@ import com.gordonfreemanq.sabre.SabrePlayer;
 import com.gordonfreemanq.sabre.SabrePlugin;
 import com.gordonfreemanq.sabre.factory.BaseFactory;
 import com.gordonfreemanq.sabre.factory.FactoryController;
+import com.gordonfreemanq.sabre.factory.FactoryWorker;
 import com.gordonfreemanq.sabre.factory.recipe.FarmRecipe;
 
 /**
@@ -22,6 +23,9 @@ public class FarmFactory extends BaseFactory {
 	
 	// How many factory ticks to wait before producing
 	int farmProductionTicks;
+	
+	// How far away it has to be away from another running farm
+	int farmProximity;
 	
 	// The current production tick counter for when the farm is running
 	int farmTickCounter;
@@ -46,6 +50,7 @@ public class FarmFactory extends BaseFactory {
 	public FarmFactory(Location location, String typeName) {
 		super(location, typeName);
 		this.farmProductionTicks = SabrePlugin.getPlugin().getSabreConfig().getFarmProductionTicks();
+		this.farmProximity = SabrePlugin.getPlugin().getSabreConfig().getFarmProductionTicks();
 		this.farmTickCounter = 0;
 		this.coverage = 1.0; // TODO
 		this.proximityFactor = 1.0; // TODO
@@ -72,7 +77,8 @@ public class FarmFactory extends BaseFactory {
 			if (running) {
 				if (recipe instanceof FarmRecipe) {
 					FarmRecipe fr = (FarmRecipe)recipe;
-					sp.msg("<a>Status: <n>Farming %s, %d ready for harvest", fr.getCrop().toString(), this.farmedCrops.get(((FarmRecipe) recipe).getCrop()));
+					sp.msg("<a>Status: <n>Farming %s, %d ready for harvest", fr.getCrop().toString(), 
+							this.farmedCrops.get(((FarmRecipe) recipe).getCrop()));
 
 				} else {
 					sp.msg("<a>Status: <n>%d%%", this.getPercentComplete());
@@ -144,7 +150,54 @@ public class FarmFactory extends BaseFactory {
 	 * Calculates the coverage and proximity factor values
 	 */
 	public void survey() {
+		calculateLayoutFactor();
+		calculateBiomeFactor();
+		calculateProximityFactor();
+	}
+	
+	
+	/**
+	 * Calculates the farm layout factor
+	 */
+	private void calculateLayoutFactor() {
 		// TODO
+	}
+	
+	
+	/**
+	 * Calculates the biome factor
+	 */
+	private void calculateBiomeFactor() {
+		// TODO
+	}
+	
+	
+	/**
+	 * Calculates the farm proximity factor
+	 */
+	private void calculateProximityFactor() {
+		double factor = 1.0;
+		
+		for (BaseFactory f : FactoryWorker.getInstance().getRunningFactories()) {
+			if (!(f instanceof FarmFactory)) {
+				continue;
+			}
+			
+			double dist = f.getLocation().distance(this.location);
+			
+			// The proximity factor will drop proportionally to each farm that is within
+			// the exclusion zone
+			if (dist < farmProximity) {
+				factor = Math.max(0, factor - ((farmProximity - dist) / farmProximity));
+			}
+			
+			// No need to go below zero
+			if (factor == 0) {
+				break;
+			}
+		}
+		
+		this.proximityFactor = factor;
 	}
 	
 	
