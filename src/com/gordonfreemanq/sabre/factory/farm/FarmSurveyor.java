@@ -4,8 +4,11 @@ import java.util.Random;
 
 import org.bukkit.Chunk;
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.block.Biome;
+import org.bukkit.block.Block;
+import org.bukkit.block.BlockFace;
 
 import com.gordonfreemanq.sabre.SabrePlugin;
 
@@ -23,6 +26,12 @@ import com.gordonfreemanq.sabre.SabrePlugin;
 public class FarmSurveyor {
 	
 	private static final int MAX_SAMPLE_ATTEMPTS = 100;
+	
+	// Maximum light level on a block
+	private static final double MAX_LIGHT_INTENSITY = 15.0;
+	
+	// How much solid ground must be under the crop
+	private static final int FARM_DEPTH = 5;
 
 	// The calculated coverage factor
 	private double coverageFactor;
@@ -46,6 +55,9 @@ public class FarmSurveyor {
 	
 	// The biome the farm is located in
 	protected Biome farmBiome;
+	
+	// The farm material
+	protected Material material;
 	
 	/**
 	 * Creates a new FarmSurveyor instance
@@ -115,13 +127,26 @@ public class FarmSurveyor {
 	
 	/**
 	 * Samples the given crop location
-	 * @param w The sample world
+	 * 
+	 * The default pass criteria are follows
+	 * 		- the crop must have sunlight, glass roof is fine
+	 * 		- there must be 5 solid blocks under the crop
+	 * 
 	 * @param x The sample x
 	 * @param z The sample z
-	 * @return Whether it passed or failed
+	 * @return true if the sample passed
 	 */
 	public boolean sampleLocation(int x, int z) {
-		return true;
+		Block b = findBottomLightBlock(x, z);
+		boolean hasLight = blockHasSunlight(b);
+		boolean isCrop = b.getType().equals(this.material);
+		boolean hasDepth = false;
+		
+		if (hasLight && isCrop) {
+			hasDepth = validateBlockEarth(b, FARM_DEPTH);
+		}
+		
+		return hasLight && isCrop && hasDepth;
 	}
 	
 	
@@ -143,5 +168,88 @@ public class FarmSurveyor {
 	}
 	
 	
+	/**
+	 * Gets the crop material
+	 * @return The crop material
+	 */
+	public Material getMaterial() {
+		return this.material;
+	}
+	
+	
+	/**
+	 * Sets the crop material
+	 * @param material The crop material
+	 */
+	public void setMaterial(Material material) {
+		this.material = material;
+	}
+	
+	
+	/**
+	 * Gets whether a block has full sunlight
+	 * @param block The block to check
+	 * @return true if it has full intensity
+	 */
+	public static boolean blockHasSunlight(Block block) {
+		int sunlightIntensity;
+		if (block.getType().isTransparent()) {
+			sunlightIntensity = block.getLightFromSky();
+		} else {
+			sunlightIntensity = block.getRelative(BlockFace.UP).getLightFromSky();
+		}
+		// apply multiplier if the sunlight is not at maximum
+		if (sunlightIntensity == MAX_LIGHT_INTENSITY) {
+			return true;
+		}
+		return false;
+	}
+	
+	
+	/**
+	 * Finds the lowest block with full sunlight intensity. This should be the crop
+	 * @param x The X coord
+	 * @param z the Z coord
+	 * @return the block location
+	 */
+	public Block findBottomLightBlock(int x, int z) {
+
+		Block b = farmWorld.getHighestBlockAt(x, z);
+		int min = 0;
+		int max = b.getY();
+		int searchY = 0;
+		int diff = 0;
+		
+		while(diff > 1) {
+			searchY = min + (diff >> 1);
+			b = farmWorld.getBlockAt(x, searchY, z);
+			if (b.getLightFromSky() == MAX_LIGHT_INTENSITY) {
+				max = searchY;
+			} else {
+				min = searchY;
+			}
+			diff = max - min;
+		}
+		
+		return b;
+	}
+	
+	
+	/**
+	 * Validates that there is enough ground under a crop
+	 * @param b The block to validate
+	 * @return true if there is enough ground under it
+	 */
+	private boolean validateBlockEarth(Block b, int num) {
+		
+		for (int i = 0; i < num; i++) {
+			b = b.getRelative(BlockFace.DOWN);
+			if (b.getType() == Material.AIR) {
+				return false;
+			}
+		}
+		
+		return true;
+	}
 	
 }
