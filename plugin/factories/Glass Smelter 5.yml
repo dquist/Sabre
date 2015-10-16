@@ -50,4 +50,4 @@ recipes:
     outputs:
       Aspect of Silica:
         custom_item: Aspect of Silica
-        amount: 2
+        amount: 1

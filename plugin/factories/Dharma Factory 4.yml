@@ -20,6 +20,8 @@ recipes:
       Cuendillar:
         custom_item: Cuendillar
         amount: 48
+  Strengthen Prison Pearl:
+    special: STRENGTHEN_PRISON_PEARL
   Craft Moksha Rod:
     fuel_cost: 100
     inputs:
@@ -36,6 +38,8 @@ recipes:
       Moksha Rod:
         custom_item: Moksha Rod
         amount: 1
+  Charge Moksha Rod:
+    special: CHARGE_MOKSHA_ROD
   Craft Aspect of End:
     fuel_cost: 10
     inputs:

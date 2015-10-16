@@ -37,13 +37,10 @@ upgrades:
     inputs:
       Aspect of Masonry:
         custom_item: Aspect of Masonry
-        amount: 16
+        amount: 2
       Aspect of Framing:
         custom_item: Aspect of Framing
-        amount: 16
-      Aspect of Metallurgy:
-        custom_item: Aspect of Metallurgy
-        amount: 16
+        amount: 2
       Plasma:
         custom_item: Plasma
         amount: 256

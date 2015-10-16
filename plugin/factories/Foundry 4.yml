@@ -2,7 +2,7 @@ name: Foundry 4
 production_speed: 4
 recipes:
   Cast Steel Ingot:
-    fuel_cost: 100
+    fuel_cost: 60
     inputs:
       Iron Ingot:
         material: IRON_INGOT
@@ -15,7 +15,7 @@ recipes:
         custom_item: Steel Ingot
         amount: 96
   Cast Steel Door:
-    fuel_cost: 100
+    fuel_cost: 40
     inputs:
       Steel Ingot:
         custom_item: Steel Ingot
@@ -25,7 +25,7 @@ recipes:
         custom_item: Steel Door
         amount: 2
   Cast Steel Plate:
-    fuel_cost: 100
+    fuel_cost: 40
     inputs:
       Steel Ingot:
         custom_item: Steel Ingot
@@ -43,14 +43,14 @@ recipes:
     outputs:
       Aspect of Casting:
         custom_item: Aspect of Casting
-        amount: 8
+        amount: 1
 upgrades:
   Foundry 5 Upgrade:
     fuel_cost: 10
     inputs:
       Aspect of Casting:
         custom_item: Aspect of Casting
-        amount: 256
+        amount: 64
     outputs:
       Foundry 5:
         custom_item: Foundry 5

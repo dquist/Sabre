@@ -81,10 +81,7 @@ recipes:
       Glass:
         material: GLASS
         amount: 512
-      Aspect of Framing:
-        custom_item: Aspect of Framing
-        amount: 2
     outputs:
       Redstone Coil:
-        amount: 2
+        amount: 1
         custom_item: Redstone Coil

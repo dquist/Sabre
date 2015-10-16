@@ -40,14 +40,14 @@ recipes:
     outputs:
       Hardened Clay:
         custom_item: Aspect of Ceramics
-        amount: 2
+        amount: 1
 upgrades:
   Kiln 2 Upgrade:
     fuel_cost: 10
     inputs:
       Aspect of Ceramics:
         custom_item: Aspect of Ceramics
-        amount: 8
+        amount: 16
     outputs:
       Kiln 2:
         custom_item: Kiln 2

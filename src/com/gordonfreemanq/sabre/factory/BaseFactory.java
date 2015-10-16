@@ -76,14 +76,13 @@ public class BaseFactory extends SpecialBlock {
 
 		fuels = new ArrayList<FactoryFuel>();
 		
-		fuels.add(new FactoryFuel(CustomItems.getInstance().getByName("Plasma"), 64));
-		
+		fuels.add(new FactoryFuel(new SabreItemStack(Material.COAL, "Coal", 1, 0), 1));
+		fuels.add(new FactoryFuel(new SabreItemStack(Material.COAL, "Charcoal", 1, 1), 1));
+		fuels.add(new FactoryFuel(new SabreItemStack(Material.BLAZE_ROD, "Blaze Rod", 1), 4));
 		FactoryFuel lavaFuel = new FactoryFuel(new SabreItemStack(Material.LAVA_BUCKET, "Lava Bucket", 1), 16);
 		lavaFuel.addReturnItem(new SabreItemStack(Material.BUCKET, "Bucket", 1));
-		
 		fuels.add(lavaFuel);
-		fuels.add(new FactoryFuel(new SabreItemStack(Material.BLAZE_ROD, "Blaze Rod", 1), 4));
-		fuels.add(new FactoryFuel(new SabreItemStack(Material.COAL, "Charcoal", 1, 1), 1));
+		fuels.add(new FactoryFuel(CustomItems.getInstance().getByName("Plasma"), 64));
 	}
 	
 	

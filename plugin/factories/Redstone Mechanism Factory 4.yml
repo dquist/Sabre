@@ -180,22 +180,16 @@ recipes:
       Glowstone:
         material: GLOWSTONE
         amount: 256
-      Iron Block:
-        material: IRON_BLOCK
-        amount: 32
       Redstone Block:
         material: REDSTONE_BLOCK
         amount: 32
-      Aspect of Masonry:
-        custom_item: Aspect of Masonry
-        amount: 4
-      Aspect of Framing:
-        custom_item: Aspect of Framing
-        amount: 4
+      Iron Block:
+        material: IRON_BLOCK
+        amount: 8
     outputs:
       Gearbox:
         custom_item: Gearbox
-        amount: 8
+        amount: 1
 upgrades:
   Redstone Mechanism Factory 4 Upgrade:
     fuel_cost: 10

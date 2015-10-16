@@ -50,14 +50,14 @@ recipes:
     outputs:
       Aspect of Silica:
         custom_item: Aspect of Silica
-        amount: 2
+        amount: 1
 upgrades:
   Glass Smelter 3 Upgrade:
     fuel_cost: 10
     inputs:
       Aspect of Silica:
         custom_item: Aspect of Silica
-        amount: 8
+        amount: 32
     outputs:
       Glass Smelter 3:
         custom_item: Glass Smelter 3

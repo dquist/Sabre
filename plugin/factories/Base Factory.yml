@@ -62,13 +62,13 @@ upgrades:
     inputs:
       Aspect of Masonry:
         custom_item: Aspect of Masonry
-        amount: 8
+        amount: 1
       Aspect of Framing:
         custom_item: Aspect of Framing
-        amount: 8
+        amount: 1
       Aspect of Metallurgy:
         custom_item: Aspect of Metallurgy
-        amount: 8
+        amount: 1
     outputs:
       Foundry 1:
         custom_item: Foundry 1
@@ -78,10 +78,10 @@ upgrades:
     inputs:
       Aspect of Masonry:
         custom_item: Aspect of Masonry
-        amount: 4
+        amount: 1
       Aspect of Framing:
         custom_item: Aspect of Framing
-        amount: 4
+        amount: 1
     outputs:
       Stone Smithy 1:
         custom_item: Stone Smithy 1
@@ -100,7 +100,7 @@ upgrades:
         amount: 32
       Aspect of Framing:
         custom_item: Aspect of Framing
-        amount: 2
+        amount: 1
     outputs:
       Redstone Factory 1:
         custom_item: Redstone Factory 1
@@ -122,10 +122,10 @@ upgrades:
         amount: 64
       Aspect of Masonry:
         custom_item: Aspect of Masonry
-        amount: 4
+        amount: 1
       Aspect of Framing:
         custom_item: Aspect of Framing
-        amount: 4
+        amount: 1
     outputs:
       Redstone Mechanism Factory 1:
         custom_item: Redstone Mechanism Factory 1
@@ -138,10 +138,10 @@ upgrades:
         amount: 512
       Aspect of Masonry:
         custom_item: Aspect of Masonry
-        amount: 4
+        amount: 1
       Aspect of Framing:
         custom_item: Aspect of Framing
-        amount: 4
+        amount: 1
     outputs:
       Iron Smithy 1:
         custom_item: Iron Smithy 1
@@ -170,10 +170,10 @@ upgrades:
         amount: 64
       Aspect of Masonry:
         custom_item: Aspect of Masonry
-        amount: 4
+        amount: 1
       Aspect of Framing:
         custom_item: Aspect of Framing
-        amount: 4
+        amount: 1
     outputs:
       Diamond Smithy 1:
         custom_item: Diamond Smithy 1
@@ -186,10 +186,10 @@ upgrades:
         amount: 256
       Aspect of Masonry:
         custom_item: Aspect of Masonry
-        amount: 4
+        amount: 1
       Aspect of Framing:
         custom_item: Aspect of Framing
-        amount: 4
+        amount: 1
     outputs:
       Leather Armory 1:
         custom_item: Leather Armory 1
@@ -202,10 +202,10 @@ upgrades:
         amount: 100
       Aspect of Masonry:
         custom_item: Aspect of Masonry
-        amount: 4
+        amount: 1
       Aspect of Framing:
         custom_item: Aspect of Framing
-        amount: 4
+        amount: 1
     outputs:
       Iron Armory 1:
         custom_item: Iron Armory 1
@@ -218,10 +218,10 @@ upgrades:
         amount: 60
       Aspect of Masonry:
         custom_item: Aspect of Masonry
-        amount: 4
+        amount: 1
       Aspect of Framing:
         custom_item: Aspect of Framing
-        amount: 4
+        amount: 1
     outputs:
       Gold Armory 1:
         custom_item: Gold Armory 1
@@ -234,10 +234,10 @@ upgrades:
         amount: 40
       Aspect of Masonry:
         custom_item: Aspect of Masonry
-        amount: 4
+        amount: 1
       Aspect of Framing:
         custom_item: Aspect of Framing
-        amount: 4
+        amount: 1
     outputs:
       Diamond Armory 1:
         custom_item: Diamond Armory 1
@@ -263,13 +263,13 @@ upgrades:
     inputs:
       Aspect of Masonry:
         custom_item: Aspect of Masonry
-        amount: 64
+        amount: 2
       Aspect of Framing:
         custom_item: Aspect of Framing
-        amount: 64
+        amount: 2
       Aspect of Metallurgy:
         custom_item: Aspect of Metallurgy
-        amount: 16
+        amount: 2
       Aspect of Casting:
         custom_item: Aspect of Casting
         amount: 16
@@ -291,10 +291,10 @@ upgrades:
         amount: 1280
       Aspect of Masonry:
         custom_item: Aspect of Masonry
-        amount: 4
+        amount: 1
       Aspect of Framing:
         custom_item: Aspect of Framing
-        amount: 4
+        amount: 1
     outputs:
       Kiln 1:
         custom_item: Kiln 1
@@ -307,10 +307,10 @@ upgrades:
         amount: 1536
       Aspect of Masonry:
         custom_item: Aspect of Masonry
-        amount: 4
+        amount: 1
       Aspect of Framing:
         custom_item: Aspect of Framing
-        amount: 4
+        amount: 1
     outputs:
       Glass Smelter 1:
         custom_item: Glass Smelter 1

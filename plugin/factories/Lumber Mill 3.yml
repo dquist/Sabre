@@ -83,18 +83,18 @@ recipes:
       Planks:
         material: WOOD
         durability: -1
-        amount: 1024
+        amount: 2048
     outputs:
       Aspect of Framing:
         custom_item: Aspect of Framing
-        amount: 8
+        amount: 1
 upgrades:
   Lumber Mill 4 Upgrade:
     fuel_cost: 10
     inputs:
       Aspect of Framing:
         custom_item: Aspect of Framing
-        amount: 512
+        amount: 32
     outputs:
       Lumber Mill 4:
         custom_item: Lumber Mill 4

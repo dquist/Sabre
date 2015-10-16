@@ -6,12 +6,12 @@ recipes:
     inputs:
       Cobblestone:
         material: COBBLESTONE
-        amount: 1024
+        amount: 512
     outputs:
       Stone:
         material: STONE
         durability: 0
-        amount: 1536
+        amount: 768
   Refine Granite:
     fuel_cost: 100
     inputs:
@@ -58,14 +58,14 @@ recipes:
     outputs:
       Aspect of Masonry:
         custom_item: Aspect of Masonry
-        amount: 2
+        amount: 1
 upgrades:
   Stone Smelter 5 Upgrade:
     fuel_cost: 10
     inputs:
       Aspect of Masonry:
         custom_item: Aspect of Masonry
-        amount: 64
+        amount: 256
     outputs:
       Stone Smelter 5:
         custom_item: Stone Smelter 5

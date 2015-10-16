@@ -6,7 +6,7 @@ recipes:
     inputs:
       Aspect of Domain:
         custom_item: Aspect of Domain
-        amount: 62
+        amount: 7
     outputs:
       Keep Bastion:
         custom_item: Keep Bastion
@@ -16,17 +16,17 @@ recipes:
     inputs:
       Aspect of Domain:
         custom_item: Aspect of Domain
-        amount: 6
+        amount: 1
     outputs:
       Town Bastion:
         custom_item: Town Bastion
-        amount: 4
+        amount: 6
   Produce Outpost Bastion:
     fuel_cost: 10
     inputs:
       Aspect of Domain:
         custom_item: Aspect of Domain
-        amount: 14
+        amount: 1
     outputs:
       Outpost Bastion:
         custom_item: Outpost Bastion
@@ -36,20 +36,20 @@ recipes:
     inputs:
       Aspect of Domain:
         custom_item: Aspect of Domain
-        amount: 6
+        amount: 1
     outputs:
       Resource Bastion:
         custom_item: Resource Bastion
-        amount: 1
+        amount: 4
   Craft Aspect of Domain:
     fuel_cost: 10
     inputs:
       Aspect of Masonry:
         custom_item: Aspect of Masonry
-        amount: 16
+        amount: 4
       Aspect of Framing:
         custom_item: Aspect of Framing
-        amount: 16
+        amount: 4
       Aspect of Metallurgy:
         custom_item: Aspect of Metallurgy
         amount: 2
@@ -65,14 +65,14 @@ recipes:
     outputs:
       Aspect of Domain:
         custom_item: Aspect of Domain
-        amount: 4
+        amount: 1
 upgrades:
   Civics Factory 3 Upgrade:
     fuel_cost: 10
     inputs:
       Aspect of Domain:
         custom_item: Aspect of Domain
-        amount: 72
+        amount: 32
     outputs:
       Civics Factory 3:
         custom_item: Civics Factory 3
