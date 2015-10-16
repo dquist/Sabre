@@ -126,7 +126,7 @@ public class ChargeMokshaRodRecipe implements IRecipe {
 		inputs.add(inputCuendillar);
 		
 		// update fuel cost based on the strength
-		fuelCost = recipeStrengthAmount * 2;
+		fuelCost = recipeStrengthAmount / costFactor * 2;
 	}
 	
 	
@@ -148,6 +148,7 @@ public class ChargeMokshaRodRecipe implements IRecipe {
 			int increase = (int)(recipeStrengthAmount / costFactor);
 			
 			mokshaStack.setStrength(mokshaStack.getStrength() + increase);
+			is.setItemMeta(mokshaStack.getItemMeta());
 		}
 	}
 	

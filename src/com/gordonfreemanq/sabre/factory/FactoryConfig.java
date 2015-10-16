@@ -136,11 +136,8 @@ public class FactoryConfig {
 	 * @param defaultSpeed The default run speed
 	 */
 	private void readRecipeSection(List<IRecipe> recipes, ConfigurationSection section, int defaultSpeed) {
-		Iterator<String> recipeTitles = section.getKeys(false).iterator();
-		while (recipeTitles.hasNext())
+		for (String recipeName : section.getKeys(false))
 		{
-			// Section header in recipe file, also serves as unique identifier for the recipe
-			String recipeName = recipeTitles.next();
 			ConfigurationSection configSection = section.getConfigurationSection(recipeName);
 			
 			// Production time of the recipe
@@ -155,7 +152,7 @@ public class FactoryConfig {
 					if (recipe != null) {
 						recipes.add(recipe);
 					}
-					break;
+					continue;
 				}
 			}
 			

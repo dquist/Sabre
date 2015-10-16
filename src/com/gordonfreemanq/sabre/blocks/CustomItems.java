@@ -49,8 +49,8 @@ public class CustomItems {
 	    }
 	    
 		this.customItems = new HashMap<String, SabreItemStack>();
-		customItems.put(MokshaRod.itemName, new MokshaRod());
 		
+		customItems.put(MokshaRod.itemName, new MokshaRod());
 
 	    File[] files = folder.listFiles();
 	    

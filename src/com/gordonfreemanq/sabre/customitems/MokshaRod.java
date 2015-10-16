@@ -63,6 +63,7 @@ public class MokshaRod extends SabreItemStack {
 	 */
 	public void setBoundPlayer(SabrePlayer boundPlayer) {
 		this.boundPlayer = boundPlayer;
+		this.updateLore();
 	}
 	
 	
@@ -80,13 +81,20 @@ public class MokshaRod extends SabreItemStack {
 		lore.add(parse("<c>An ancient tool used to summon the dead."));
 		lore.add(parse("<a>Strength: <n>%d", this.strength));
 		
+		if (boundPlayer == null) {
+			lore.add(parse("<a>Player: "));
+			lore.add(parse("<a>UUID: "));
+		} else {
+			lore.add(parse("<a>Player: <n>%s", boundPlayer.getName()));
+			lore.add(parse("<a>UUID: <n>%s", boundPlayer.getID().toString()));
+		}
 		
-		lore.add(parse("<a>Player: <n>%s", this.getName()));
-		
-		lore.add(parse(""));
-		lore.add(parse("<l>Commands:"));
-		lore.add(parse(CmdPearl.getInstance().cmdMokshaBind.getUseageTemplate(true)));
-		lore.add(parse(CmdPearl.getInstance().cmdMokshaJailbreak.getUseageTemplate(true)));
+		if (CmdPearl.getInstance() != null) {
+			lore.add(parse(""));
+			lore.add(parse("<l>Commands:"));
+			lore.add(parse(CmdPearl.getInstance().cmdMokshaBind.getUseageTemplate(true)));
+			lore.add(parse(CmdPearl.getInstance().cmdMokshaJailbreak.getUseageTemplate(true)));
+		}
 		
 		return lore;
 	}
@@ -113,8 +121,15 @@ public class MokshaRod extends SabreItemStack {
 		try {
 			List<String> lore = is.getItemMeta().getLore();
 			
-			created.setStrength(SabreUtil.parseLoreInt(lore, strengthPrefix, strengthPattern));
-			created.setBoundPlayer(PlayerManager.getInstance().getPlayerById(SabreUtil.parseLoreId(lore)));
+			if (SabreUtil.loreContainsString(lore, "Strength:")) {
+				created.setStrength(SabreUtil.parseLoreInt(lore, strengthPrefix, strengthPattern));
+			}
+			
+			if (SabreUtil.loreContainsString(lore, "UUID:")) {
+				created.setBoundPlayer(PlayerManager.getInstance().getPlayerById(SabreUtil.parseLoreId(lore)));
+			}
+			
+			is.setItemMeta(created.getItemMeta());
 			return created;
 			
 		} catch (Exception ex){
@@ -133,11 +148,11 @@ public class MokshaRod extends SabreItemStack {
 			return false;
 		}
 		
-		if (im.getDisplayName() != itemName) {
+		if (!im.hasDisplayName() || !im.getDisplayName().equals(itemName)) {
 			return false;
 		}
 		
-		return SabreUtil.itemContainsLoreString(is, strengthPrefix);
+		return im.hasLore();
 	}
 	
 	

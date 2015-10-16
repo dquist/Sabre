@@ -59,6 +59,6 @@ public class CmdMokshaJailbreak extends SabreCommand {
 		}
 		
 		// Consume the item
-		me.getPlayer().getItemInHand().setType(Material.AIR);
+		me.getPlayer().setItemInHand(null);
 	}
 }

@@ -16,7 +16,7 @@ import com.gordonfreemanq.sabre.SabrePlugin;
 public class SabreItemStack extends ItemStack {
 	
 	protected final String name;
-	protected final List<String> lore;
+	protected List<String> lore;
 	protected Class<? extends SabreBlock> blockClass;
 	protected final Set<SabreItemStack> subItems;
 	
@@ -32,7 +32,11 @@ public class SabreItemStack extends ItemStack {
 		this.lore = lore;
 		this.subItems = new HashSet<SabreItemStack>();
 		
-		if (lore != null) {
+		if (this.lore == null) {
+			this.lore = this.getLore();
+		}
+		
+		if (this.lore != null) {
 			ItemMeta im = this.getItemMeta();
 			im.setDisplayName(name);
 			im.setLore(this.getLore());

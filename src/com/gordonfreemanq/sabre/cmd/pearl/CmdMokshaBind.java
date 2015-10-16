@@ -30,7 +30,7 @@ public class CmdMokshaBind extends SabreCommand {
 		
 		SabrePlayer p = this.argAsPlayer(0);
 		if (p == null) {
-			msg(Lang.unknownPlayer);
+			msg(Lang.unknownPlayer, this.argAsString(0));
 			return;
 		}
 		
@@ -42,6 +42,6 @@ public class CmdMokshaBind extends SabreCommand {
 		rod.setBoundPlayer(p);
 		rod.updateLore();
 		me.getPlayer().setItemInHand(rod);
-		msg(Lang.pearlBoundMoksha);
+		msg(Lang.pearlBoundMoksha, p.getName());
 	}
 }
