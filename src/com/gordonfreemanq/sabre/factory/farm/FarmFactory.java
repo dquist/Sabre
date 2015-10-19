@@ -94,6 +94,7 @@ public class FarmFactory extends BaseFactory {
 				}
 			} else {
 				cycleRecipe(sp);
+				checkSurvey(true);
 			}
 		} else {
 			cyclePower(sp);
@@ -106,7 +107,7 @@ public class FarmFactory extends BaseFactory {
 	}
 	
 	protected void onPowerOn() {
-		checkSurvey();
+		checkSurvey(false);
 	}
 	
 	
@@ -131,7 +132,7 @@ public class FarmFactory extends BaseFactory {
 			return;
 		}
 		
-		checkSurvey();
+		checkSurvey(false);
 		if (recipe instanceof FarmRecipe) {
 			if (farmTickCounter++ >= farmProductionTicks) {
 				farmTickCounter = 0;
@@ -169,12 +170,12 @@ public class FarmFactory extends BaseFactory {
 	/**
 	 * Calculates the coverage and proximity factor values
 	 */
-	public void checkSurvey() {
+	public void checkSurvey(boolean force) {
 		Date now = new Date();
 		long timeDiff = now.getTime() - lastSurvey.getTime();
 		long diffMin = TimeUnit.MINUTES.convert(timeDiff, TimeUnit.MILLISECONDS);
 		
-		if (diffMin >= this.surveyPeriodMin) {
+		if (force || diffMin >= this.surveyPeriodMin) {
 			calculateLayoutFactor();
 			calculateBiomeFactor();
 			calculateProximityFactor();

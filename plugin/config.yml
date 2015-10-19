@@ -163,7 +163,9 @@ no_smelt:
     material: HARD_CLAY
   Clay Brick:
     material: CLAY_BRICK
-  farm:
-    survey_period: 60
-    survey_tick_spacing: 20
-    production_ticks: 300
+farm:
+  survey_period: 10
+  production_ticks: 300
+  proximity: 500
+  chunk_radius: 0
+  survey_sample_size: 20
