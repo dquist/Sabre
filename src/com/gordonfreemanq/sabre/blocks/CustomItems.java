@@ -99,7 +99,7 @@ public class CustomItems {
 		    	customItems.put(itemName, item);
 			    
 	    	} catch (Exception ex) {
-	    		plugin.log(Level.SEVERE, "Failed to read factory config file %s", f.getName());
+	    		plugin.log(Level.SEVERE, "Failed to read item config file %s", f.getName());
 	    	}
 	    }
 	}

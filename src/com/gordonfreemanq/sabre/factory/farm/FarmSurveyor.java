@@ -9,6 +9,9 @@ import org.bukkit.World;
 import org.bukkit.block.Biome;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
+import org.bukkit.block.BlockState;
+import org.bukkit.material.Crops;
+import org.bukkit.material.MaterialData;
 
 import com.gordonfreemanq.sabre.SabrePlugin;
 
@@ -57,12 +60,16 @@ public class FarmSurveyor {
 	protected Biome farmBiome;
 	
 	// The farm material
-	protected Material material;
+	protected final Material material;
+	
+	private int minY;
+	private int maxY;
 	
 	/**
 	 * Creates a new FarmSurveyor instance
 	 */
-	public FarmSurveyor() {
+	public FarmSurveyor(Material cropMaterial) {
+		this.material = cropMaterial;
 		this.coverageFactor = 0.0;
 		this.chunkRadius = SabrePlugin.getPlugin().getSabreConfig().getFarmChunkRadius();
 		this.numSamples = SabrePlugin.getPlugin().getSabreConfig().getFarmSurveySampleSize();
@@ -83,6 +90,9 @@ public class FarmSurveyor {
 			return coverageFactor;
 		}
 		
+		minY = l.getBlockY() - 20;
+		maxY = l.getBlockY() + 20;
+		
 		// Get the corners of the farm
 		farmWorld = l.getWorld();
 		farmBiome = l.getBlock().getBiome();
@@ -93,6 +103,8 @@ public class FarmSurveyor {
 		int curSample = 0;
 		int x = 0;
 		int z = 0;
+		boolean result;
+		int passedSamples = 0;
 		
 		// Attempt to get the amount of farm samples
 		for (int i = 0; i < MAX_SAMPLE_ATTEMPTS; i++) {
@@ -101,7 +113,11 @@ public class FarmSurveyor {
 			
 			// Skip over locations that are not loaded
 			if (farmWorld.isChunkLoaded(x >> 4, z >> 4)) {
-				samples[curSample++] = this.sampleLocation(x, z);
+				result = this.sampleLocation(x, z);
+				if (result) {
+					passedSamples++;
+				}
+				samples[curSample++] = result;
 				
 				// See if have enough good samples
 				if (curSample >= numSamples) {
@@ -110,17 +126,8 @@ public class FarmSurveyor {
 			}
 		}
 		
-		int passedSamples = 0;
-		
-		// Calculate the factor
-		for (int i = 0; i < curSample; i++) {
-			if (samples[i]) {
-				passedSamples++;
-			}
-		}
-		
 		// Calculate and return the new coverage factor
-		this.coverageFactor = passedSamples / curSample;
+		this.coverageFactor = (double)passedSamples / curSample;
 		return coverageFactor;
 	}
 	
@@ -138,15 +145,18 @@ public class FarmSurveyor {
 	 */
 	public boolean sampleLocation(int x, int z) {
 		Block b = findBottomLightBlock(x, z);
+		Material blockType = b.getType();
 		boolean hasLight = blockHasSunlight(b);
-		boolean isCrop = b.getType().equals(this.material);
+		boolean isCrop = blockType.equals(this.material);
 		boolean hasDepth = false;
+		boolean mature = false;
 		
 		if (hasLight && isCrop) {
 			hasDepth = validateBlockEarth(b, FARM_DEPTH);
+			mature = isCropMature(b);
 		}
 		
-		return hasLight && isCrop && hasDepth;
+		return hasLight && isCrop && hasDepth && mature;
 	}
 	
 	
@@ -174,15 +184,6 @@ public class FarmSurveyor {
 	 */
 	public Material getMaterial() {
 		return this.material;
-	}
-	
-	
-	/**
-	 * Sets the crop material
-	 * @param material The crop material
-	 */
-	public void setMaterial(Material material) {
-		this.material = material;
 	}
 	
 	
@@ -215,10 +216,26 @@ public class FarmSurveyor {
 	public Block findBottomLightBlock(int x, int z) {
 
 		Block b = farmWorld.getHighestBlockAt(x, z);
-		int min = 0;
-		int max = b.getY();
+		Material blockType = b.getType();
+		if (blockType == Material.AIR) {
+			b = b.getRelative(BlockFace.DOWN);
+		}
+		
+		// Some easy checks
+		if (b.getY() <= maxY && b.getY() >= minY) {
+			if (b.getType() == this.material) {
+				return b;
+			}
+			
+			if (blockHasSunlight(b) && !blockHasSunlight(b.getRelative(BlockFace.DOWN))) {
+				return b;
+			}
+		}
+		
+		int min = minY;
+		int max = maxY;
 		int searchY = 0;
-		int diff = 0;
+		int diff = max - min;
 		
 		while(diff > 1) {
 			searchY = min + (diff >> 1);
@@ -250,6 +267,27 @@ public class FarmSurveyor {
 		}
 		
 		return true;
+	}
+	
+	
+	/**
+	 * Checks if a crop is mature
+	 * @param b The block to check
+	 * @return true if the block is mature
+	 */
+	@SuppressWarnings("deprecation")
+	private boolean isCropMature(Block b) {
+		BlockState state = b.getState();
+		MaterialData data = state.getData();
+		
+		if (data instanceof Crops) {
+			if (b.getData() == 7) {
+				return true;
+			}
+		}
+		
+		
+		return false;
 	}
 	
 }

@@ -10,6 +10,7 @@ import com.gordonfreemanq.sabre.factory.ItemList;
 import com.gordonfreemanq.sabre.factory.ProbabilisticEnchantment;
 import com.gordonfreemanq.sabre.factory.farm.CropType;
 import com.gordonfreemanq.sabre.factory.farm.FarmFactory;
+import com.gordonfreemanq.sabre.factory.farm.FarmSurveyor;
 
 /**
  * Represents a farm factory production recipe
@@ -21,6 +22,7 @@ public class FarmRecipe implements IRecipe {
 	private final String name;
 	private final CropType crop;
 	private final int productionRate;
+	private final FarmSurveyor surveyor;
 	
 	private static final ItemList<SabreItemStack> nullStack = new ItemList<SabreItemStack>();
 	private static final List<ProbabilisticEnchantment> nullEnchants = new ArrayList<ProbabilisticEnchantment>();
@@ -33,6 +35,7 @@ public class FarmRecipe implements IRecipe {
 		this.name = name;
 		this.crop = crop;
 		this.productionRate = productionRate;
+		this.surveyor = crop.createSurveyor();
 	}
 	
 	
@@ -106,6 +109,16 @@ public class FarmRecipe implements IRecipe {
 	public List<ProbabilisticEnchantment> getEnchants() {
 		return nullEnchants;
 	}
+	
+	
+	/**
+	 * Gets the farm surveyor
+	 * @return The farm surveyor
+	 */
+	public FarmSurveyor getSurveyor() {
+		return this.surveyor;
+	}
+	
 	
 	/**
 	 * A method to handle switching to the recipe
