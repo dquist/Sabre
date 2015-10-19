@@ -20,7 +20,6 @@ import com.gordonfreemanq.sabre.data.IDataAccess;
 import com.gordonfreemanq.sabre.factory.BaseFactory;
 import com.gordonfreemanq.sabre.factory.FactoryCollection;
 import com.gordonfreemanq.sabre.factory.FactoryWorker;
-import com.gordonfreemanq.sabre.factory.farm.FarmFactory;
 import com.gordonfreemanq.sabre.groups.SabreGroup;
 import com.gordonfreemanq.sabre.groups.SabreMember;
 import com.gordonfreemanq.sabre.snitch.Snitch;

@@ -6,6 +6,7 @@ import java.util.Map.Entry;
 import java.util.concurrent.TimeUnit;
 
 import org.bukkit.Location;
+import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
@@ -53,6 +54,9 @@ public class FarmFactory extends BaseFactory {
 	private FarmSurveyor surveyor;
 	
 	private Date lastSurvey;
+	
+	// The most crops the factory can hold at a time
+	private int storageSize;
 
 	/**
 	 * Creates a new FarmFactory instance
@@ -70,7 +74,19 @@ public class FarmFactory extends BaseFactory {
 		this.biomeFactor = 1.0;
 		this.farmedCrops = new HashMap<CropType, Integer>();
 		this.lastSurvey = new Date(0);
-		
+		this.storageSize = 64;
+		readCustomConfig();
+	}
+	
+	
+	/**
+	 * Reads the custom farm config
+	 */
+	private void readCustomConfig() {
+		ConfigurationSection farmConfig = this.properties.getCustomConfig();
+		if (farmConfig != null) {
+			this.storageSize = farmConfig.getInt("storage_size", storageSize);
+		}
 	}
 	
 	
@@ -160,9 +176,19 @@ public class FarmFactory extends BaseFactory {
 		this.biomeFactor = Math.min(biomeFactor, 1.0);
 		
 		CropType cropType = fr.getCrop();
-		int realOutput = (int)(fr.getProductionRate() * layoutFactor * proximityFactor * biomeFactor);
 		int alreadyFarmed = farmedCrops.get(cropType);
-		farmedCrops.put(cropType, alreadyFarmed + realOutput);
+		int realOutput = (int)(fr.getProductionRate() * layoutFactor * proximityFactor * biomeFactor);
+		int total = alreadyFarmed + realOutput;
+		
+		// Limit the output to the storage size of the factory
+		total = Math.min(this.storageSize, total);
+		farmedCrops.put(cropType, total);
+		
+		// Power the factory off if it's full
+		if (total == storageSize) {
+			powerOff();
+		}
+		
 		saveSettings();
 	}
 	
@@ -198,15 +224,6 @@ public class FarmFactory extends BaseFactory {
 	
 	
 	/**
-	 * Calculates the biome factor
-	 */
-	private void calculateBiomeFactor() {
-		this.biomeFactor = 1.0;
-		// TODO
-	}
-	
-	
-	/**
 	 * Calculates the farm proximity factor
 	 */
 	private void calculateProximityFactor() {
@@ -236,6 +253,15 @@ public class FarmFactory extends BaseFactory {
 		}
 		
 		this.proximityFactor = factor;
+	}
+	
+	
+	/**
+	 * Calculates the biome factor
+	 */
+	private void calculateBiomeFactor() {
+		this.biomeFactor = 1.0;
+		// TODO
 	}
 	
 	
@@ -358,6 +384,6 @@ public class FarmFactory extends BaseFactory {
      * @return
      */
     public boolean runUnloaded() {
-    	return true;
+    	return (recipe instanceof FarmRecipe);
     }
 }

@@ -80,7 +80,12 @@ public class FactoryConfig {
 		    	String factoryName = config.getString("name");
 			    loadRecipes(config, recipes, upgrades);
 			    
-			    FactoryProperties fp = new FactoryProperties(factoryName, recipes, upgrades);
+			    ConfigurationSection customConfig = null;
+			    if (config.contains("custom")) {
+			    	customConfig = config.getConfigurationSection("custom");
+			    }
+			    
+			    FactoryProperties fp = new FactoryProperties(factoryName, recipes, upgrades, customConfig);
 			    
 			    factoryProperties.put(factoryName, fp);
 			    

@@ -611,8 +611,9 @@ public class BaseFactory extends SpecialBlock {
 			return;
 		}
 		
-		// Ignore non-loaded factories
+		// Power off non-loaded factories
 		if (!this.location.getChunk().isLoaded()) {
+			powerOff();
 			return;
 		}
 		
