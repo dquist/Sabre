@@ -351,4 +351,13 @@ public class FarmFactory extends BaseFactory {
 		
 		super.loadSettings(o);
 	}
+    
+    
+    /**
+     * Whether the factory should run while unloaded
+     * @return
+     */
+    public boolean runUnloaded() {
+    	return true;
+    }
 }

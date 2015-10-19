@@ -838,4 +838,13 @@ public class BaseFactory extends SpecialBlock {
     public IRecipe getRecipe() {
     	return this.recipe;
     }
+    
+    
+    /**
+     * Whether the factory should run while unloaded
+     * @return
+     */
+    public boolean runUnloaded() {
+    	return false;
+    }
 }

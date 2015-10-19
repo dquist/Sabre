@@ -48,6 +48,7 @@ public interface IDataAccess {
 	
 	// Blocks
 	public Collection<SabreBlock> blockGetChunkRecords(Chunk c);
+	public Collection<SabreBlock> blockGetRunningFactories();
 	public void blockInsert(SabreBlock b);
 	public void blockRemove(SabreBlock b);
 	public void blockSetReinforcement(SabreBlock b);

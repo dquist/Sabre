@@ -250,6 +250,9 @@ public class SabrePlugin extends AbstractSabrePlugin
 		factoryWorker = new FactoryWorker();
 		factoryWorker.start();
 		
+		// Load the running factories
+		blockManager.loadRunningFactories();
+		
 		this.sabreTweaks.registerTimerForPearlCheck();
 		
 		pearlWorker = new PearlWorker(pearlManager, config);
