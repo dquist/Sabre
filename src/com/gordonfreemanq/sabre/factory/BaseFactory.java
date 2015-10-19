@@ -83,6 +83,8 @@ public class BaseFactory extends SpecialBlock {
 		lavaFuel.addReturnItem(new SabreItemStack(Material.BUCKET, "Bucket", 1));
 		fuels.add(lavaFuel);
 		fuels.add(new FactoryFuel(CustomItems.getInstance().getByName("Plasma"), 64));
+		
+		setFurnaceState(false);
 	}
 	
 	
@@ -239,6 +241,9 @@ public class BaseFactory extends SpecialBlock {
 			doc = doc.append("fuel", SabreUtil.serializeLocation(this.fuelLocation));
 		}
 		
+		doc = doc.append("running", this.running);
+		doc = doc.append("factory", true);
+		
 		return doc;
 	}
 	
@@ -268,6 +273,11 @@ public class BaseFactory extends SpecialBlock {
 				recipeIndex = 0;
 			}
 			recipe = recipes.get(recipeIndex);
+		}
+		
+		this.running = o.getBoolean("running", false);
+		if (this.running) {
+			this.powerOn();
 		}
 	}
 	
@@ -434,30 +444,24 @@ public class BaseFactory extends SpecialBlock {
 	}
 	
 	
+	protected void onPowerOn() {
+		// Do nothing
+	}
+	
+	
 	/**
 	 * Turns the factory on
 	 * @param sp The player
 	 */
-	@SuppressWarnings("deprecation")
-	private void powerOn() {
-		
+	protected void powerOn() {
+
 		running = true;
+		onPowerOn();
 		fuelCounter = 0;
 		energyTimer = 0;
 		FactoryWorker.getInstance().addRunning(this);
 		setActivationLever(true);
-		
-		if (location.getBlock().getType().equals(Material.FURNACE)) {
-			Furnace furnace = (Furnace) location.getBlock().getState();
-			byte data = furnace.getData().getData();
-			ItemStack[] oldContents = furnace.getInventory().getContents();
-			furnace.getInventory().clear();
-			location.getBlock().setType(Material.BURNING_FURNACE);
-			furnace = (Furnace) location.getBlock().getState();
-			furnace.setRawData(data);
-			furnace.update();
-			furnace.getInventory().setContents(oldContents);
-		}
+		setFurnaceState(true);
 	}
 	
 	
@@ -465,27 +469,49 @@ public class BaseFactory extends SpecialBlock {
 	 * Turns the factory off
 	 * @param sp The player
 	 */
-	@SuppressWarnings("deprecation")
-	private void powerOff() {
+	protected void powerOff() {
 		running = false;
 		fuelCounter = 0;
 		energyTimer = 0;
 		setActivationLever(false);
 		FactoryWorker.getInstance().removeRunning(this);
-		
-		if (location.getBlock().getType().equals(Material.BURNING_FURNACE)) {
-			Furnace furnace = (Furnace) location.getBlock().getState();
-			byte data = furnace.getData().getData();
-			ItemStack[] oldContents = furnace.getInventory().getContents();
-			furnace.getInventory().clear();
-			location.getBlock().setType(Material.FURNACE);
-			furnace = (Furnace) location.getBlock().getState();
-			furnace.setRawData(data);
-			furnace.update();
-			furnace.getInventory().setContents(oldContents);
-		}
+		setFurnaceState(false);
 		
 		this.runner = null;
+	}
+	
+	
+	/**
+	 * Sets the state of the furnace block
+	 * @param state The state of the furnace
+	 */
+	@SuppressWarnings("deprecation")
+	protected void setFurnaceState(boolean state) {		
+		if (state) {
+			if (location.getBlock().getType().equals(Material.FURNACE)) {
+				Furnace furnace = (Furnace) location.getBlock().getState();
+				byte data = furnace.getData().getData();
+				ItemStack[] oldContents = furnace.getInventory().getContents();
+				furnace.getInventory().clear();
+				location.getBlock().setType(Material.BURNING_FURNACE);
+				furnace = (Furnace) location.getBlock().getState();
+				furnace.setRawData(data);
+				furnace.update();
+				furnace.getInventory().setContents(oldContents);
+			}
+		} else {
+			if (location.getBlock().getType().equals(Material.BURNING_FURNACE)) {
+				Furnace furnace = (Furnace) location.getBlock().getState();
+				byte data = furnace.getData().getData();
+				ItemStack[] oldContents = furnace.getInventory().getContents();
+				furnace.getInventory().clear();
+				location.getBlock().setType(Material.FURNACE);
+				furnace = (Furnace) location.getBlock().getState();
+				furnace.setRawData(data);
+				furnace.update();
+				furnace.getInventory().setContents(oldContents);
+			}
+		}
 	}
 	
 	
@@ -803,4 +829,13 @@ public class BaseFactory extends SpecialBlock {
 		
 		runner.msg(str, args);
 	}
+    
+    
+    /**
+     * Gets the current recipe
+     * @return
+     */
+    public IRecipe getRecipe() {
+    	return this.recipe;
+    }
 }

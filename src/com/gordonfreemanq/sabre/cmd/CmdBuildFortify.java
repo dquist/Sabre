@@ -16,7 +16,8 @@ public class CmdBuildFortify extends SabreCommand {
 	{
 		super();
 		this.aliases.add("fortify");
-		this.aliases.add("fbf");
+		this.aliases.add("ff");
+		this.aliases.add("ctf");
 		
 		this.requiredArgs.add("group");
 		this.optionalArgs.put("mode", "public,insecure");
@@ -64,14 +65,14 @@ public class CmdBuildFortify extends SabreCommand {
 		
 		ItemStack handItem = me.getPlayer().getItemInHand();
 		
-		if (handItem.hasItemMeta() && (handItem.getItemMeta().hasLore() || handItem.getItemMeta().hasDisplayName())) {
-			msg(Lang.blockMaterialHasLore);
-			return;
-		}
-		
 		ReinforcementMaterial rm = config.getReinforcementMaterial(handItem);
 		if (rm == null) {
 			msg(Lang.blockNotMaterial);
+			return;
+		}
+		
+		if (handItem.hasItemMeta() && (handItem.getItemMeta().hasLore() || handItem.getItemMeta().hasDisplayName())) {
+			msg(Lang.blockMaterialHasLore);
 			return;
 		}
 		

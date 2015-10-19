@@ -4,12 +4,14 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map.Entry;
 
+import org.bukkit.Material;
+
 import com.gordonfreemanq.sabre.blocks.SabreItemStack;
 import com.gordonfreemanq.sabre.factory.BaseFactory;
-import com.gordonfreemanq.sabre.factory.CropType;
-import com.gordonfreemanq.sabre.factory.FarmFactory;
 import com.gordonfreemanq.sabre.factory.ItemList;
 import com.gordonfreemanq.sabre.factory.ProbabilisticEnchantment;
+import com.gordonfreemanq.sabre.factory.farm.CropType;
+import com.gordonfreemanq.sabre.factory.farm.FarmFactory;
 
 /**
  * Represents a farm factory production recipe
@@ -110,6 +112,10 @@ public class HarvestRecipe implements IRecipe {
 			return;
 		}
 		
+		this.inputs.clear();
+		this.outputs.clear();
+		boolean cropsToHarvest = false;
+		
 		FarmFactory farm = (FarmFactory)factory;
 		
 		for (Entry<CropType, Integer> e : farm.getFarmedCrops().entrySet()) {
@@ -118,8 +124,13 @@ public class HarvestRecipe implements IRecipe {
 				if (crop != null) {
 					crop.setAmount(e.getValue());
 					this.outputs.add(crop);
+					cropsToHarvest = true;
 				}
 			}
+		}
+		
+		if (!cropsToHarvest) {
+			this.inputs.add(new SabreItemStack(Material.STONE, "Farmed Crops", 1, 99));
 		}
 	}
 	
@@ -129,7 +140,7 @@ public class HarvestRecipe implements IRecipe {
 	 * @param factory The factory instance
 	 */
 	public void onRecipeComplete(BaseFactory factory) {
-		// Do nothing
+		((FarmFactory)factory).clearFarmedCrops();
 	}
 	
 	/**

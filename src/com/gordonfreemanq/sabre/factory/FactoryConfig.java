@@ -35,7 +35,6 @@ public class FactoryConfig {
 	private final SabrePlugin plugin;
 	private HashMap<String, FactoryProperties> factoryProperties;
 	
-	
 	private static FactoryConfig instance;
 	
 	public static FactoryConfig getInstance() {

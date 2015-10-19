@@ -112,8 +112,10 @@ public class SabreConfig {
 	
 	
 	private int farmSurveyPeriod;
-	private int farmSurveySpacing;
 	private int farmProductionTicks;
+	private int farmProximity;
+	private int farmChunkRadius;
+	private int farmSurveySampleSize;
 	
 	
 	/**
@@ -154,9 +156,12 @@ public class SabreConfig {
 		this.pearlJailbreakCostFactor = fc.getInt("prison_pearl.jailbreak_cost_factor", 8);
 		
 		
-		this.farmSurveyPeriod = fc.getInt("farm.survey_period", 60);
-		this.farmSurveySpacing = fc.getInt("farm.survey_tick_spacing", 20);
-		this.farmProductionTicks = fc.getInt("farm.production_ticks", 300);
+		ConfigurationSection sub = fc.getConfigurationSection("farm");
+		this.farmSurveyPeriod = sub.getInt("survey_period", 60);
+		this.farmProductionTicks = sub.getInt("production_ticks", 300);
+		this.farmProximity = sub.getInt("proximity", 500);
+		this.farmChunkRadius = sub.getInt("chunk_radius", 3);
+		this.farmSurveySampleSize = sub.getInt("survey_sample_size", 20);
 		
 		this.reinforcementMaterials.clear();
 		this.lockableItems.clear();
@@ -499,18 +504,34 @@ public class SabreConfig {
 	}
 	
 	/**
-	 * Gets the farm survey tick spacing
-	 * @return The farm survey tick spacing
-	 */
-	public int getFarmSurveyTickSpacing() {
-		return this.farmSurveySpacing;
-	}
-	
-	/**
 	 * Gets the farm production period
 	 * @return The farm production period
 	 */
 	public int getFarmProductionTicks() {
 		return this.farmProductionTicks;
+	}
+	
+	/**
+	 * Gets the farm proximity
+	 * @return The farm proximity
+	 */
+	public int getFarmProximity() {
+		return this.farmProximity;
+	}
+	
+	/**
+	 * Gets the farm survey chunk radius
+	 * @return The farm survey chunk radius
+	 */
+	public int getFarmChunkRadius() {
+		return this.farmChunkRadius;
+	}
+	
+	/**
+	 * Gets the farm survey sample size during a survey
+	 * @return The farm sample size
+	 */
+	public int getFarmSurveySampleSize() {
+		return this.farmSurveySampleSize;
 	}
 }

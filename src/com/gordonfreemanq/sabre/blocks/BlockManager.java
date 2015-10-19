@@ -317,6 +317,13 @@ public class BlockManager {
 	 */
 	public boolean playerCanModifyBlock(SabrePlayer p, Block b) {
 		return this.playerCanBreakBlock(p, getBlockAt(b.getLocation()));
+	}
+	
+	
+	/**
+	 * Loads all the factory blocks
+	 */
+	public void loadAllFactories() {
 		
 	}
 }

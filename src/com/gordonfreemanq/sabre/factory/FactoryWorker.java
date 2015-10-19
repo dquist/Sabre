@@ -49,12 +49,21 @@ public class FactoryWorker implements Runnable {
 			return;
 		}
 		
+		Set<BaseFactory> unloaded = new HashSet<BaseFactory>();
+		
 		// Update all running factories
 		for(BaseFactory f : runningFactories) {
-			if (f.getRunning()) {
-				f.update();
+			if (f.getLocation().getChunk().isLoaded()) {
+				if (f.getRunning()) {
+					f.update();
+				}
+			} else {
+				unloaded.add(f);
 			}
 		}
+		
+		// Remove the unloaded factories
+		runningFactories.removeAll(unloaded);
 	}
 	
 	

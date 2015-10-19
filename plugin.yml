@@ -31,26 +31,26 @@ commands:
     description: Unknown commands
     usage: /<command>
     aliases: [ban, parson, give]
-  fbi:
+  fi:
     description: Get block information
     usage: /<command>
-    aliases:
-  fbf:
+    aliases: [cti]
+  ff:
     description: Build reinforced blocks
     usage: /<command> <group>
-    aliases:
-  fbr:
+    aliases: [ctf]
+  fr:
     description: Reinforces existing blocks
     usage: /<command> <group>
-    aliases:
-  fbo:
+    aliases: [ctr]
+  fo:
     description: Turns off building
     usage: /<command>
-    aliases:
-  fbb:
+    aliases: [cto]
+  fb:
     description: Toggles bypass mode
     usage: /<command>
-    aliases:
+    aliases: [ctb]
   snitch:
   pp:
   speed:
