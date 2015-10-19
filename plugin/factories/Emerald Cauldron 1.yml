@@ -1,0 +1,33 @@
+name: Emerald Cauldron 1
+production_speed: 1
+recipes:
+  Emerald Recipe - 1:
+    fuel_cost: 20
+    inputs:
+      Bushel of Wheat:
+        custom_item: Bushel of Wheat
+        amount: 256
+    outputs:
+      Emerald:
+        material: EMERALD
+        amount: 5
+  Emerald Recipe - 2:
+    fuel_cost: 20
+    inputs:
+      Bushel of Carrots:
+        custom_item: Bushel of Carrots
+        amount: 256
+    outputs:
+      Emerald:
+        material: EMERALD
+        amount: 5
+  Emerald Recipe - 3:
+    fuel_cost: 20
+    inputs:
+      Bushel of Potatos:
+        custom_item: Bushel of Potatos
+        amount: 256
+    outputs:
+      Emerald:
+        material: EMERALD
+        amount: 5
