@@ -10,7 +10,7 @@ import com.gordonfreemanq.sabre.factory.farm.CropType;
 public enum SpecialRecipeType {
 	FARM_WHEAT,
 	FARM_CARROTS,
-	FARM_POTATOS,
+	FARM_POTATOES,
 	HARVEST_CROPS,
 	STRENGTHEN_PRISON_PEARL,
 	CHARGE_MOKSHA_ROD;
@@ -27,7 +27,7 @@ public enum SpecialRecipeType {
 			return new FarmRecipe(name, CropType.WHEAT, productionRate);
 		case FARM_CARROTS:
 			return new FarmRecipe(name, CropType.CARROT, productionRate);
-		case FARM_POTATOS:
+		case FARM_POTATOES:
 			return new FarmRecipe(name, CropType.POTATO, productionRate);
 		case HARVEST_CROPS:
 			return new HarvestRecipe(name, productionRate);

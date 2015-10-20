@@ -24,7 +24,7 @@ public enum CropType {
 		case CARROT:
 			return CustomItems.getInstance().getByName("Bushel of Carrots");
 		case POTATO:
-			return CustomItems.getInstance().getByName("Bushel of Potatos");
+			return CustomItems.getInstance().getByName("Bushel of Potatoes");
 		default:
 			return null;
 		}

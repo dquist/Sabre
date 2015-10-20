@@ -1,5 +1,5 @@
 name: Bushel of Carrots
-material: CARROT
+material: CARROT_ITEM
 amount: 1
 lore:
   - '<c>Harvested crops.'
