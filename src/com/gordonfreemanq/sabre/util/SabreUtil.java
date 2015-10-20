@@ -532,4 +532,68 @@ public class SabreUtil {
 	public static String parse(String str, Object... args) {
 		return String.format(parse(str), args);
 	}
+	
+	
+	
+	/**
+	 * Gets a pseuso-random fertility number for a given chunk
+	 * @return
+	 */
+	public static double getChunkFertility(int cX, int cZ) {
+		Integer x = cX;
+		Integer z = cZ;
+		
+		double hashFactorX = getChunkHashFactor("X: " + x.toString());
+		double hashFactorZ = getChunkHashFactor("Z: " + z.toString()); // make opposite chunks not the same
+		double distFactorX = getChunkDistanceFactor(x);
+		double distFactorZ = getChunkDistanceFactor(z);
+		
+		// Take the average of the 4 factors for the final chunk value
+		double factor = ((hashFactorX + hashFactorX + hashFactorZ + hashFactorZ + distFactorX + distFactorZ) / 6);
+		return factor;
+	}
+	
+	private static double getChunkHashFactor(String str) {
+		
+		int hash = Math.abs(str.hashCode());
+		
+		int mod = hash % 100;
+		if (mod > 98) {
+			return 0.1;
+		} else if (mod > 95) {
+			return 0.2;
+		} else if (mod > 90) {
+			return 0.3;
+		} else if (mod > 80) {
+			return 0.4;
+		} else if (mod > 60) {
+			return 0.6;
+		} else if (mod > 30) {
+			return 1.0;
+		} else if (mod > 5) {
+			return 1.2;
+		} else if (mod > 3) {
+			return 1.5;
+		} else {
+			return 2.0;
+		}
+	}
+	
+	private static double getChunkDistanceFactor(int num) {
+		num = Math.abs(num);
+		
+		if (num < 75) {
+			return 1.5;
+		} else if (num < 150) {
+			return 1.2;
+		} else if (num < 300) {
+			return 1.1;
+		} else if (num < 600) {
+			return 1.0;
+		} else if (num < 800) {
+			return 0.9;
+		} else {
+			return 0.8;
+		}
+	}
 }
