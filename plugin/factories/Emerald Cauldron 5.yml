@@ -1,5 +1,5 @@
-name: Emerald Cauldron 1
-production_speed: 1
+name: Emerald Cauldron 5
+production_speed: 5
 recipes:
   Emerald Recipe - Wheat:
     fuel_cost: 20
@@ -23,9 +23,9 @@ recipes:
         material: GLASS
         amount: 64
     outputs:
-      Emerald:
-        material: EMERALD
-        amount: 10
+      Emerald Block:
+        material: EMERALD_BLOCK
+        amount: 3
   Emerald Recipe - Potato:
     fuel_cost: 20
     inputs:
@@ -48,9 +48,9 @@ recipes:
         material: GLASS
         amount: 64
     outputs:
-      Emerald:
-        material: EMERALD
-        amount: 10
+      Emerald Block:
+        material: EMERALD_BLOCK
+        amount: 3
   Emerald Recipe - Carrot:
     fuel_cost: 20
     inputs:
@@ -73,20 +73,6 @@ recipes:
         material: GLASS
         amount: 64
     outputs:
-      Emerald:
-        material: EMERALD
-        amount: 10
-upgrades:
-  Emerald Cauldron 2 Upgrade:
-    fuel_cost: 10
-    inputs:
       Emerald Block:
         material: EMERALD_BLOCK
-        amount: 256
-      Diamond Block:
-        material: DIAMOND_BLOCK
-        amount: 64
-    outputs:
-      Emerald Cauldron 2:
-        custom_item: Emerald Cauldron 2
-        amount: 1
+        amount: 3
