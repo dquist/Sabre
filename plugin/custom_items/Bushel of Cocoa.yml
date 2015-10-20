@@ -1,0 +1,6 @@
+name: Bushel of Cocoa
+material: INK_SACK
+durability: 3
+amount: 1
+lore:
+  - '<c>Harvested crops.'

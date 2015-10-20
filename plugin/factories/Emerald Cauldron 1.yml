@@ -1,32 +1,68 @@
 name: Emerald Cauldron 1
 production_speed: 1
 recipes:
-  Emerald Recipe - 1:
+  Emerald Recipe - Wheat:
     fuel_cost: 20
     inputs:
       Bushel of Wheat:
         custom_item: Bushel of Wheat
         amount: 256
+      Bushel of Melons:
+        custom_item: Bushel of Melons
+        amount: 128
+      Bushel of Cocoa:
+        custom_item: Bushel of Cocoa
+        amount: 96
+      Bushel of Cactus:
+        custom_item: Bushel of Cactus
+        amount: 64
+      Glass:
+        material: GLASS
+        amount: 64
     outputs:
       Emerald:
         material: EMERALD
         amount: 5
-  Emerald Recipe - 2:
+  Emerald Recipe - Potato:
+    fuel_cost: 20
+    inputs:
+      Bushel of Potatos:
+        custom_item: Bushel of Potatoes
+        amount: 256
+      Bushel of Pumpkins:
+        custom_item: Bushel of Pumpkins
+        amount: 128
+      Bushel of Sugar Cane:
+        custom_item: Bushel of Sugar Cane
+        amount: 96
+      Bushel of Cocoa:
+        custom_item: Bushel of Cocoa
+        amount: 64
+      Glass:
+        material: GLASS
+        amount: 64
+    outputs:
+      Emerald:
+        material: EMERALD
+        amount: 5
+  Emerald Recipe - Carrot:
     fuel_cost: 20
     inputs:
       Bushel of Carrots:
         custom_item: Bushel of Carrots
         amount: 256
-    outputs:
-      Emerald:
-        material: EMERALD
-        amount: 5
-  Emerald Recipe - 3:
-    fuel_cost: 20
-    inputs:
-      Bushel of Potatos:
-        custom_item: Bushel of Potatos
-        amount: 256
+      Bushel of Sugar Cane:
+        custom_item: Bushel of Sugar Cane
+        amount: 128
+      Bushel of Cactus:
+        custom_item: Bushel of Cactus
+        amount: 96
+      Bushel of Melons:
+        custom_item: Bushel of Melons
+        amount: 64
+      Glass:
+        material: GLASS
+        amount: 64
     outputs:
       Emerald:
         material: EMERALD

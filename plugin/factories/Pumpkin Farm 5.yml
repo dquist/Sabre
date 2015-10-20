@@ -1,0 +1,27 @@
+name: Pumpkin Farm 5
+production_speed: 5
+custom:
+  storage_size: 40000
+recipes:
+  Farm Pumpkin:
+    special: FARM_PUMPKINS
+    production_speed: 500
+  Harvest Crops:
+    special: HARVEST_CROPS
+    production_speed: 10
+  Craft Aspect of Agriculture:
+    fuel_cost: 10
+    inputs:
+      Dirt:
+        material: DIRT
+        amount: 2048
+      Cobblestone:
+        material: COBBLESTONE
+        amount: 896
+      Gravel:
+        material: GRAVEL
+        amount: 512
+    outputs:
+      Aspect of Agriculture:
+        custom_item: Aspect of Agriculture
+        amount: 1

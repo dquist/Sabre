@@ -1,5 +1,5 @@
 name: Bushel of Melons
-material: MELON
+material: MELON_BLOCK
 amount: 1
 lore:
   - '<c>Harvested crops.'

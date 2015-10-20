@@ -6,11 +6,26 @@ recipes:
   Farm Wheat:
     special: FARM_WHEAT
     production_speed: 50
+  Farm Potatoes:
+    special: FARM_POTATOES
+    production_speed: 50
   Farm Carrots:
     special: FARM_CARROTS
     production_speed: 50
-  Farm Potatos:
-    special: FARM_POTATOS
+  Farm Cactus:
+    special: FARM_CACTUS
+    production_speed: 50
+  Farm Cocoa:
+    special: FARM_COCOA
+    production_speed: 50
+  Farm Melons:
+    special: FARM_MELONS
+    production_speed: 50
+  Farm Pumpkins:
+    special: FARM_PUMPKINS
+    production_speed: 50
+  Farm Sugar Cane:
+    special: FARM_SUGAR_CANE
     production_speed: 50
   Harvest Crops:
     special: HARVEST_CROPS
@@ -38,19 +53,12 @@ upgrades:
       Aspect of Agriculture:
         custom_item: Aspect of Agriculture
         amount: 32
+      Bushel of Wheat:
+        custom_item: Bushel of Wheat
+        amount: 1024
     outputs:
       Wheat Farm 1:
         custom_item: Wheat Farm 1
-        amount: 1
-  Carrot Farm 1 Upgrade:
-    fuel_cost: 10
-    inputs:
-      Aspect of Agriculture:
-        custom_item: Aspect of Agriculture
-        amount: 32
-    outputs:
-      Carrot Farm 1:
-        custom_item: Carrot Farm 1
         amount: 1
   Potato Farm 1 Upgrade:
     fuel_cost: 10
@@ -58,7 +66,88 @@ upgrades:
       Aspect of Agriculture:
         custom_item: Aspect of Agriculture
         amount: 32
+      Bushel of Potatoes:
+        custom_item: Bushel of Potatoes
+        amount: 1024
     outputs:
       Potato Farm 1:
         custom_item: Potato Farm 1
+        amount: 1
+  Carrot Farm 1 Upgrade:
+    fuel_cost: 10
+    inputs:
+      Aspect of Agriculture:
+        custom_item: Aspect of Agriculture
+        amount: 32
+      Bushel of Carrots:
+        custom_item: Bushel of Carrots
+        amount: 1024
+    outputs:
+      Carrot Farm 1:
+        custom_item: Carrot Farm 1
+        amount: 1
+  Cactus Farm 1 Upgrade:
+    fuel_cost: 10
+    inputs:
+      Aspect of Agriculture:
+        custom_item: Aspect of Agriculture
+        amount: 32
+      Bushel of Cactus:
+        custom_item: Bushel of Cactus
+        amount: 1024
+    outputs:
+      Cactus Farm 1:
+        custom_item: Cactus Farm 1
+        amount: 1
+  Cocoa Farm 1 Upgrade:
+    fuel_cost: 10
+    inputs:
+      Aspect of Agriculture:
+        custom_item: Aspect of Agriculture
+        amount: 32
+      Bushel of Cocoa:
+        custom_item: Bushel of Cocoa
+        amount: 1024
+    outputs:
+      Cocoa Farm 1:
+        custom_item: Cocoa Farm 1
+        amount: 1
+  Melon Farm 1 Upgrade:
+    fuel_cost: 10
+    inputs:
+      Aspect of Agriculture:
+        custom_item: Aspect of Agriculture
+        amount: 32
+      Bushel of Melons:
+        custom_item: Bushel of Melons
+        amount: 1024
+    outputs:
+      Melon Farm 1:
+        custom_item: Melon Farm 1
+        amount: 1
+  Pumpkin Farm 1 Upgrade:
+    fuel_cost: 10
+    inputs:
+      Aspect of Agriculture:
+        custom_item: Aspect of Agriculture
+        amount: 32
+      Bushel of Pumpkins:
+        custom_item: Bushel of Pumpkins
+        amount: 1024
+    outputs:
+      Pumpkin Farm 1:
+        custom_item: Pumpkin Farm 1
+        amount: 1
+  Sugar Cane Farm 1 Upgrade:
+    fuel_cost: 10
+    inputs:
+      Aspect of Agriculture:
+        custom_item: Aspect of Agriculture
+        amount: 32
+      Bushel of Sugar Cane:
+        custom_item: Bushel of Sugar Cane
+        amount: 1024
+    outputs:
+      Sugar Cane Farm 1:
+        custom_item: Sugar Cane Farm 1
         amount: 1
