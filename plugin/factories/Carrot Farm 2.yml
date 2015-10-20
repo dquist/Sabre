@@ -4,7 +4,7 @@ custom:
   storage_size: 3000
 recipes:
   Farm Carrot:
-    special: FARM_CARROT
+    special: FARM_CARROTS
     production_speed: 200
   Harvest Crops:
     special: HARVEST_CROPS

@@ -4,7 +4,7 @@ custom:
   storage_size: 3000
 recipes:
   Farm Potato:
-    special: FARM_POTATO
+    special: FARM_POTATOS
     production_speed: 200
   Harvest Crops:
     special: HARVEST_CROPS
