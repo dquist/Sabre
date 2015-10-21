@@ -532,4 +532,72 @@ public class SabreUtil {
 	public static String parse(String str, Object... args) {
 		return String.format(parse(str), args);
 	}
+	
+	
+	
+	/**
+	 * Gets a pseuso-random fertility number for a given chunk
+	 * @return
+	 */
+	public static double getChunkFertility(int worldHash, int x, int z) {
+	
+		
+		
+		byte hash = 3;
+		hash = (byte)(73 * hash + worldHash);
+		hash = (byte)(hash + x * 379);
+		hash = (byte)(hash + z * 571);
+		hash = (byte)(hash & 0x7F); // make 'unsigned'
+		hash = (byte)((hash * 100) / 128); // scale 0 - 100
+		
+		double hashFactor = getChunkHashFactor(hash);
+		int dist = (int)(x * x + z * z) / 3125000;
+		double distFactor = getChunkDistanceFactor(dist);
+		return (hashFactor + distFactor) / 2;
+	}
+	
+	private static double getChunkHashFactor(byte hash) {
+		
+		if (hash < 2) {
+			return 15;
+		} else if (hash < 5 ) {
+			return 8;
+		} else if (hash < 10) {
+			return 5;
+		} else if (hash < 20) {
+			return 2;
+		} else if (hash < 60) {
+			return 1;
+		} else if (hash < 90) {
+			return 0.2;
+		} else if (hash < 95) {
+			return 0.05;
+		} else {
+			return 0.01;
+		}
+	}
+	
+	private static double getChunkDistanceFactor(int num) {
+		num = Math.abs(num);
+		
+		if (num < 75) {
+			return 1.5;
+		} else if (num < 150) {
+			return 1.3;
+		} else if (num < 300) {
+			return 1.1;
+		} else if (num < 500) {
+			return 1.0;
+		} else if (num < 700) {
+			return 0.9;
+		} else if (num < 800) {
+			return 0.8;
+		} else if (num < 900) {
+			return 0.6;
+		} else if (num < 1000) {
+			return 0.5;
+		} else {
+			return 0.2;
+		}
+	}
 }

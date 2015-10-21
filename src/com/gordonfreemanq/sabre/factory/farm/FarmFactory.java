@@ -6,6 +6,7 @@ import java.util.Map.Entry;
 import java.util.concurrent.TimeUnit;
 
 import org.bukkit.Location;
+import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
@@ -44,7 +45,7 @@ public class FarmFactory extends BaseFactory {
 	private double proximityFactor;
 	
 	// Biome specific efficiency factor
-	private double biomeFactor;
+	private double fertilityFactor;
 	
 	// The amount of farmed goods
 	private HashMap<CropType, Integer> farmedCrops;
@@ -53,6 +54,9 @@ public class FarmFactory extends BaseFactory {
 	private FarmSurveyor surveyor;
 	
 	private Date lastSurvey;
+	
+	// The most crops the factory can hold at a time
+	private int storageSize;
 
 	/**
 	 * Creates a new FarmFactory instance
@@ -65,12 +69,24 @@ public class FarmFactory extends BaseFactory {
 		this.farmProximity = SabrePlugin.getPlugin().getSabreConfig().getFarmProductionTicks();
 		this.surveyPeriodMin = SabrePlugin.getPlugin().getSabreConfig().getFarmSurveyPeriod();
 		this.farmTickCounter = 0;
-		this.layoutFactor = 1.0;
-		this.proximityFactor = 1.0;
-		this.biomeFactor = 1.0;
+		this.layoutFactor = 0.0;
+		this.proximityFactor = 0.0;
+		this.fertilityFactor = 0.0;
 		this.farmedCrops = new HashMap<CropType, Integer>();
 		this.lastSurvey = new Date(0);
-		
+		this.storageSize = 64;
+		readCustomConfig();
+	}
+	
+	
+	/**
+	 * Reads the custom farm config
+	 */
+	private void readCustomConfig() {
+		ConfigurationSection farmConfig = this.properties.getCustomConfig();
+		if (farmConfig != null) {
+			this.storageSize = farmConfig.getInt("storage_size", storageSize);
+		}
 	}
 	
 	
@@ -97,6 +113,11 @@ public class FarmFactory extends BaseFactory {
 				checkSurvey(true);
 			}
 		} else {
+			if (!running && farmIsFull() && (recipe instanceof FarmRecipe)) {
+				sp.msg("<i>The farm is already full.");
+				return;
+			}
+			
 			cyclePower(sp);
 		}
 		
@@ -108,6 +129,7 @@ public class FarmFactory extends BaseFactory {
 	
 	protected void onPowerOn() {
 		checkSurvey(false);
+		saveSettings();
 	}
 	
 	
@@ -137,6 +159,10 @@ public class FarmFactory extends BaseFactory {
 			if (farmTickCounter++ >= farmProductionTicks) {
 				farmTickCounter = 0;
 				runFarmRecipe();
+				
+				if (farmIsFull()) {
+					powerOff();
+				}
 			}
 		} else {
 			super.update();
@@ -157,13 +183,42 @@ public class FarmFactory extends BaseFactory {
 		// Just a quick sanity check on these numbers
 		this.layoutFactor = Math.min(layoutFactor, 1.0);
 		this.proximityFactor = Math.min(proximityFactor, 1.0);
-		this.biomeFactor = Math.min(biomeFactor, 1.0);
+		this.fertilityFactor = Math.min(fertilityFactor, 1.0);
 		
 		CropType cropType = fr.getCrop();
-		int realOutput = (int)(fr.getProductionRate() * layoutFactor * proximityFactor * biomeFactor);
 		int alreadyFarmed = farmedCrops.get(cropType);
-		farmedCrops.put(cropType, alreadyFarmed + realOutput);
+		int realOutput = (int)(fr.getProductionRate() * layoutFactor * proximityFactor * fertilityFactor);
+		int total = alreadyFarmed + realOutput;
+		
+		// Limit the output to the storage size of the factory
+		total = Math.min(this.storageSize, total);
+		farmedCrops.put(cropType, total);
+		
+		// Power the factory off if it's full
+		if (total == storageSize) {
+			powerOff();
+		}
+		
 		saveSettings();
+	}
+	
+	
+	/**
+	 * Checks if the farm is full
+	 * @return true if it is full
+	 */
+	protected boolean farmIsFull() {
+		
+		int totalFarmed = 0;
+		for(Entry<CropType, Integer> e : this.farmedCrops.entrySet()) {
+			totalFarmed += e.getValue();
+		}
+		
+		if (totalFarmed >= this.storageSize) {
+			return true;
+		}
+		
+		return false;
 	}
 	
 	
@@ -176,8 +231,7 @@ public class FarmFactory extends BaseFactory {
 		long diffMin = TimeUnit.MINUTES.convert(timeDiff, TimeUnit.MILLISECONDS);
 		
 		if (force || diffMin >= this.surveyPeriodMin) {
-			calculateLayoutFactor();
-			calculateBiomeFactor();
+			survey();
 			calculateProximityFactor();
 			lastSurvey = now;
 			saveSettings();
@@ -188,21 +242,14 @@ public class FarmFactory extends BaseFactory {
 	/**
 	 * Calculates the farm layout factor
 	 */
-	private void calculateLayoutFactor() {
+	private void survey() {
 		if (surveyor == null) {
 			surveyor = ((FarmRecipe)recipe).getSurveyor();
 		}
 		
-		this.layoutFactor = surveyor.surveyFarm(this.location);
-	}
-	
-	
-	/**
-	 * Calculates the biome factor
-	 */
-	private void calculateBiomeFactor() {
-		this.biomeFactor = 1.0;
-		// TODO
+		surveyor.surveyFarm(this);
+		
+		this.layoutFactor = surveyor.getCoverageFactor();
 	}
 	
 	
@@ -275,11 +322,11 @@ public class FarmFactory extends BaseFactory {
     
     
     /**
-     * Gets the biome factor percent
-     * @return The biome percent
+     * Gets the fertility factor percent
+     * @return The fertility percent
      */
-    public Long getBiomeFactorPercent() {
-    	return Math.round(biomeFactor * 100.0);
+    public Long getFertilityFactorPercent() {
+    	return Math.round(fertilityFactor * 100.0);
     }
     
     
@@ -293,7 +340,20 @@ public class FarmFactory extends BaseFactory {
     	}
     	
     	FarmRecipe fr = (FarmRecipe)recipe;
-    	return (int)(fr.getProductionRate() * layoutFactor * proximityFactor * biomeFactor);
+    	return (int)(fr.getProductionRate() * layoutFactor * proximityFactor * fertilityFactor);
+    }
+    
+    /**
+     * Gets the nominal output rate
+     * @return The nominal output rate
+     */
+    public int getNominalOutput() {
+    	if (!(recipe instanceof FarmRecipe)) {
+    		return 0;
+    	}
+    	
+    	FarmRecipe fr = (FarmRecipe)recipe;
+    	return fr.getProductionRate();
     }
     
 	/**
@@ -306,9 +366,9 @@ public class FarmFactory extends BaseFactory {
 
 		doc = doc.append("last_survey", lastSurvey);
 		
-		doc = doc.append("layout_factor", this.layoutFactor);
-		doc = doc.append("proximity_factor", this.proximityFactor);
-		doc = doc.append("biome_factor", this.biomeFactor);
+		doc = doc.append("layout", this.layoutFactor);
+		doc = doc.append("proximity", this.proximityFactor);
+		doc = doc.append("fertility", this.fertilityFactor);
 		
 		BasicDBList cropList = new BasicDBList();
 		for(Entry<CropType, Integer> e : this.farmedCrops.entrySet()) {
@@ -331,9 +391,9 @@ public class FarmFactory extends BaseFactory {
 
 		this.lastSurvey = o.getDate("last_survey", lastSurvey);
 		
-		this.layoutFactor = o.getDouble("layout_factor", 0);
-		this.proximityFactor = o.getDouble("proximity_factor", 0);
-		this.biomeFactor = o.getDouble("biome_factor", 0);
+		this.layoutFactor = o.getDouble("layout", 0);
+		this.proximityFactor = o.getDouble("proximity", 0);
+		this.fertilityFactor = o.getDouble("biome", 0);
 		
 		if (o.containsField("crops")) {
 			BasicDBList cropObject = (BasicDBList)o.get("crops");
@@ -351,4 +411,25 @@ public class FarmFactory extends BaseFactory {
 		
 		super.loadSettings(o);
 	}
+    
+    
+    /**
+     * Whether the factory should run while unloaded
+     * @return
+     */
+    public boolean runUnloaded() {
+    	return (recipe instanceof FarmRecipe);
+    }
+    
+    
+    /**
+     * Gets the farm recipe if it exists
+     * @return The farm recipe
+     */
+    public FarmRecipe getFarmRecipe() {
+    	if (this.recipe instanceof FarmRecipe) {
+    		return (FarmRecipe)recipe;
+    	}
+    	return null;
+    }
 }

@@ -1,0 +1,92 @@
+name: Emerald Cauldron 3
+production_speed: 3
+recipes:
+  Emerald Recipe - Wheat:
+    fuel_cost: 20
+    inputs:
+      Bushel of Wheat:
+        custom_item: Bushel of Wheat
+        amount: 256
+      Bushel of Melons:
+        custom_item: Bushel of Melons
+        amount: 128
+      Bushel of Cocoa:
+        custom_item: Bushel of Cocoa
+        amount: 128
+      Bushel of Cactus:
+        custom_item: Bushel of Cactus
+        amount: 64
+      Bushel of Pumpkins:
+        custom_item: Bushel of Pumpkins
+        amount: 64
+      Glass:
+        material: GLASS
+        amount: 64
+    outputs:
+      Emerald:
+        material: EMERALD
+        amount: 16
+  Emerald Recipe - Potato:
+    fuel_cost: 20
+    inputs:
+      Bushel of Potatos:
+        custom_item: Bushel of Potatoes
+        amount: 256
+      Bushel of Pumpkins:
+        custom_item: Bushel of Pumpkins
+        amount: 128
+      Bushel of Sugar Cane:
+        custom_item: Bushel of Sugar Cane
+        amount: 128
+      Bushel of Cocoa:
+        custom_item: Bushel of Cocoa
+        amount: 64
+      Bushel of Melons:
+        custom_item: Bushel of Melons
+        amount: 64
+      Glass:
+        material: GLASS
+        amount: 64
+    outputs:
+      Emerald:
+        material: EMERALD
+        amount: 16
+  Emerald Recipe - Carrot:
+    fuel_cost: 20
+    inputs:
+      Bushel of Carrots:
+        custom_item: Bushel of Carrots
+        amount: 256
+      Bushel of Sugar Cane:
+        custom_item: Bushel of Sugar Cane
+        amount: 128
+      Bushel of Cactus:
+        custom_item: Bushel of Cactus
+        amount: 128
+      Bushel of Melons:
+        custom_item: Bushel of Melons
+        amount: 64
+      Bushel of Pumpkins:
+        custom_item: Bushel of Pumpkins
+        amount: 64
+      Glass:
+        material: GLASS
+        amount: 64
+    outputs:
+      Emerald:
+        material: EMERALD
+        amount: 16
+upgrades:
+  Emerald Cauldron 4 Upgrade:
+    fuel_cost: 10
+    inputs:
+      Emerald Block:
+        material: EMERALD_BLOCK
+        amount: 1024
+      Diamond Block:
+        material: DIAMOND_BLOCK
+        amount: 256
+    outputs:
+      Emerald Cauldron 4:
+        custom_item: Emerald Cauldron 4
+        amount: 1

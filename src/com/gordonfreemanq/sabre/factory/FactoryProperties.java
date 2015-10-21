@@ -3,6 +3,8 @@ package com.gordonfreemanq.sabre.factory;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.bukkit.configuration.ConfigurationSection;
+
 import com.gordonfreemanq.sabre.factory.recipe.IRecipe;
 
 
@@ -15,6 +17,23 @@ public class FactoryProperties
 	private final String name;
 	private final List<IRecipe> recipes;
 	private final List<IRecipe> upgrades;
+	private final ConfigurationSection customConfig;
+	
+	/**
+	 * Creates a new FactoryProperties instance
+	 * @param name The factory name
+	 * @param recipes The factory recipes
+	 * @param upgrades The factory upgrades
+	 * @param customConfig The custom configuration section
+	 */
+	public FactoryProperties(String name, List<IRecipe> recipes, List<IRecipe> upgrades, ConfigurationSection customConfig)
+	{
+		this.name = name;
+		this.recipes = recipes;
+		this.upgrades = upgrades;
+		this.customConfig = customConfig;
+	}
+	
 	
 	/**
 	 * Creates a new FactoryProperties instance
@@ -24,9 +43,7 @@ public class FactoryProperties
 	 */
 	public FactoryProperties(String name, List<IRecipe> recipes, List<IRecipe> upgrades)
 	{
-		this.name = name;
-		this.recipes = recipes;
-		this.upgrades = upgrades;
+		this(name, recipes, upgrades, null);
 	}
 	
 	
@@ -57,6 +74,15 @@ public class FactoryProperties
 		return this.upgrades;
 	}
 	
+	
+	/**
+	 * Gets the custom configuration
+	 * @return The custom configuration
+	 */
+	public ConfigurationSection getCustomConfig() {
+		return this.customConfig;
+	}
+	
 	public FactoryProperties clone()
 	{
 		try{
@@ -71,7 +97,7 @@ public class FactoryProperties
 				upgrades.add(r.clone());
 			}
 			
-			FactoryProperties props = new FactoryProperties(name, recipes, upgrades);
+			FactoryProperties props = new FactoryProperties(name, recipes, upgrades, customConfig);
 			return props;
 		}
 		catch (Error e) {

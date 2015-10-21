@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 import java.util.Set;
 import java.util.TreeSet;
 
@@ -19,6 +20,7 @@ import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.BlockState;
 import org.bukkit.block.Furnace;
+import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Arrow;
 import org.bukkit.entity.Boat;
 import org.bukkit.entity.Enderman;
@@ -84,9 +86,11 @@ import com.gordonfreemanq.sabre.blocks.SabreItemStack;
 public class SabreTweaks implements Listener {
 
 	private final SabreConfig config;
+	private Random rand;
 
 	public SabreTweaks(SabreConfig config) {
 		this.config = config;
+		this.rand = new Random(1337);
 		
 		RegisterCustomRecipes();
 	}
@@ -1159,10 +1163,38 @@ public class SabreTweaks implements Listener {
 	
 	
 	/**
+	 * Gets the item stack for lore
+	 * @param m The ore material
+	 * @return The stack to drop
+	 */
+	private ItemStack getOreFortuneStack(Material m) {
+		switch (m)
+		{
+		case GLOWING_REDSTONE_ORE:
+			return new ItemStack(Material.REDSTONE, 5);
+		case GOLD_ORE:
+			return new ItemStack(Material.GOLD_INGOT, 1);
+		case IRON_ORE:
+			return new ItemStack(Material.IRON_INGOT, 1);
+		case DIAMOND_ORE:
+			return new ItemStack(Material.DIAMOND, 1);
+		case LAPIS_ORE:
+			return new ItemStack(Material.INK_SACK, 3, (short)4);
+		case QUARTZ_ORE:
+			return new ItemStack(Material.QUARTZ, 4);
+		case COAL_ORE:
+			return new ItemStack(Material.COAL, 6);
+		case EMERALD_ORE:
+			return new ItemStack(Material.EMERALD, 1);
+		default:
+			return null;
+		}
+	}
+	
+	/**
 	 * Ores always drop the ore, not the mineral item
 	 * 
-	 * @param e
-	 *            The event
+	 * @param e The event
 	 */
 	@EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
 	public void onBlockBreakEvent(BlockBreakEvent e) {
@@ -1196,7 +1228,23 @@ public class SabreTweaks implements Listener {
 		}
 		
 		if (dropItem != Material.AIR) {
+			int fortuneLevel = e.getPlayer().getItemInHand().getEnchantmentLevel(Enchantment.LOOT_BONUS_BLOCKS);
 
+			// Fortune gives odds to drop the mineral as well
+			// F1 = 10%
+			// F2 = 20%
+			// F3 = 30%
+			if (fortuneLevel > 0) {
+				int randInt = rand.nextInt(9) + 1;
+				
+				if (fortuneLevel >= randInt) {
+					ItemStack toDrop = getOreFortuneStack(m);
+					if (toDrop != null) {
+						dropItemAtLocation(e.getBlock(), toDrop);
+					}
+				}
+			}
+			
 			e.setCancelled(true);
 			e.getBlock().setType(Material.AIR);
 			dropItemAtLocation(e.getBlock(), new ItemStack(dropItem, 1));

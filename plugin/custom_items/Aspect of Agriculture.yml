@@ -1,0 +1,6 @@
+name: Aspect of Agriculture
+material: DIRT
+durability: 0
+amount: 1
+lore:
+  - '<c>A concentrated essense of agriculture'

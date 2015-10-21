@@ -13,11 +13,11 @@ build:
     STONE:
       strength: 150
     IRON_INGOT:
-      strength: 1500
+      strength: 750
     DIAMOND:
-      strength: 4500
+      strength: 3000
     DIAMOND_BLOCK:
-      strength: 10000
+      strength: 8000
 snitch:
   overlap_time: 0
   overlap_depth: 0

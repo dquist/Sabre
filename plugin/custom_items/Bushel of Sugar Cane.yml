@@ -1,0 +1,5 @@
+name: Bushel of Sugar Cane
+material: SUGAR_CANE
+amount: 1
+lore:
+  - '<c>Harvested crops.'

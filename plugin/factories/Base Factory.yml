@@ -328,3 +328,19 @@ upgrades:
       Basic Farm:
         custom_item: Basic Farm
         amount: 1
+  Emerald Cauldron 1:
+    fuel_cost: 10
+    inputs:
+      Diamond:
+        material: DIAMOND
+        amount: 128
+      Iron:
+        material: IRON_INGOT
+        amount: 256
+      Glass:
+        material: GLASS
+        amount: 1024
+    outputs:
+      Emerald Cauldron 1:
+        custom_item: Emerald Cauldron 1
+        amount: 1

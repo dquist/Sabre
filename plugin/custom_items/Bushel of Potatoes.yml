@@ -1,0 +1,5 @@
+name: Bushel of Potatoes
+material: POTATO_ITEM
+amount: 1
+lore:
+  - '<c>Harvested crops.'

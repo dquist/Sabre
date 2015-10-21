@@ -14,6 +14,7 @@ import org.bukkit.material.Crops;
 import org.bukkit.material.MaterialData;
 
 import com.gordonfreemanq.sabre.SabrePlugin;
+import com.gordonfreemanq.sabre.util.SabreUtil;
 
 /**
  * Class to calculate a farm's efficiency factor based
@@ -34,10 +35,13 @@ public class FarmSurveyor {
 	private static final double MAX_LIGHT_INTENSITY = 15.0;
 	
 	// How much solid ground must be under the crop
-	private static final int FARM_DEPTH = 5;
+	private static final int MAX_SUBSTRATE_DEPTH = 4;
 
 	// The calculated coverage factor
 	private double coverageFactor;
+	
+	// The fertility factor for the farm chunks
+	private double fertilityFactor;
 	
 	// The farm chunk radius
 	private final int chunkRadius;
@@ -48,34 +52,39 @@ public class FarmSurveyor {
 	private final Random rand;
 	
 	// The number of samples to get for each survey
-	private final int numSamples;
+	private final int maxSamples;
 	
 	// The stored samples
-	private boolean[] samples;
+	private double surveyTotal;
 	
 	// The world the farm is located in
 	protected World farmWorld;
 	
 	// The biome the farm is located in
 	protected Biome farmBiome;
+
+	// The crop type
+	private final CropType cropType;
 	
 	// The farm material
-	protected final Material material;
+	protected final Material plantMaterial;
 	
+	private Location factoryLocation;
+	private int numSamples;
 	private int minY;
 	private int maxY;
 	
 	/**
 	 * Creates a new FarmSurveyor instance
 	 */
-	public FarmSurveyor(Material cropMaterial) {
-		this.material = cropMaterial;
+	public FarmSurveyor(CropType cropType, Material plantMaterial) {
+		this.cropType = cropType;
+		this.plantMaterial = plantMaterial;
 		this.coverageFactor = 0.0;
 		this.chunkRadius = SabrePlugin.getPlugin().getSabreConfig().getFarmChunkRadius();
-		this.numSamples = SabrePlugin.getPlugin().getSabreConfig().getFarmSurveySampleSize();
+		this.maxSamples = SabrePlugin.getPlugin().getSabreConfig().getFarmSurveySampleSize();
 		this.squareLength = (chunkRadius * 2 * 16) + 16;
 		this.rand = new Random();
-		this.samples = new boolean[numSamples];
 	}
 	
 	
@@ -85,26 +94,28 @@ public class FarmSurveyor {
 	 * @param l The location
 	 * @return The efficiency factor
 	 */
-	public double surveyFarm(Location l) {
-		if (!l.getChunk().isLoaded()) {
-			return coverageFactor;
+	public void surveyFarm(FarmFactory f) {
+		factoryLocation = f.getLocation();
+		
+		if (!factoryLocation.getChunk().isLoaded()) {
+			return;
 		}
 		
-		minY = l.getBlockY() - 20;
-		maxY = l.getBlockY() + 20;
+		minY = factoryLocation.getBlockY() - 20;
+		maxY = factoryLocation.getBlockY() + 20;
 		
 		// Get the corners of the farm
-		farmWorld = l.getWorld();
-		farmBiome = l.getBlock().getBiome();
-		Chunk c = l.getChunk();
+		farmWorld = factoryLocation.getWorld();
+		farmBiome = factoryLocation.getBlock().getBiome();
+		Chunk c = factoryLocation.getChunk();
 		int cornerX = (c.getX() - chunkRadius) * 16;
 		int cornerZ = (c.getZ() - chunkRadius) * 16;
 		
-		int curSample = 0;
+		calculateFertility();
+		
+		numSamples = 0;
 		int x = 0;
 		int z = 0;
-		boolean result;
-		int passedSamples = 0;
 		
 		// Attempt to get the amount of farm samples
 		for (int i = 0; i < MAX_SAMPLE_ATTEMPTS; i++) {
@@ -113,22 +124,41 @@ public class FarmSurveyor {
 			
 			// Skip over locations that are not loaded
 			if (farmWorld.isChunkLoaded(x >> 4, z >> 4)) {
-				result = this.sampleLocation(x, z);
-				if (result) {
-					passedSamples++;
-				}
-				samples[curSample++] = result;
+				this.sampleLocation(x, z);
 				
 				// See if have enough good samples
-				if (curSample >= numSamples) {
+				if (numSamples >= maxSamples) {
 					break; // Yep!
 				}
 			}
 		}
 		
 		// Calculate and return the new coverage factor
-		this.coverageFactor = (double)passedSamples / curSample;
-		return coverageFactor;
+		this.coverageFactor = surveyTotal / numSamples;
+	}
+	
+	
+	/**
+	 * Calculates the farm fertility by averaging all the farm chunks
+	 */
+	private void calculateFertility() {
+
+		double fertility = 0;
+		int count = 0;
+		int worldHash = factoryLocation.getWorld().hashCode();
+		
+		Chunk c = factoryLocation.getChunk();
+		int cornerX = c.getX() - chunkRadius;
+		int cornerZ = c.getZ() - chunkRadius;
+		
+		for (int x = 0; x < squareLength; x++) {
+			for (int z = 0; z < squareLength; z++) {
+				fertility = SabreUtil.getChunkFertility(worldHash, cornerX + x, cornerZ + z);
+				count++;
+			}	
+		}
+		
+		this.fertilityFactor = fertility / count;
 	}
 	
 	
@@ -143,20 +173,25 @@ public class FarmSurveyor {
 	 * @param z The sample z
 	 * @return true if the sample passed
 	 */
-	public boolean sampleLocation(int x, int z) {
+	public void sampleLocation(int x, int z) {
 		Block b = findBottomLightBlock(x, z);
 		Material blockType = b.getType();
-		boolean hasLight = blockHasSunlight(b);
-		boolean isCrop = blockType.equals(this.material);
-		boolean hasDepth = false;
-		boolean mature = false;
 		
-		if (hasLight && isCrop) {
-			hasDepth = validateBlockEarth(b, FARM_DEPTH);
-			mature = isCropMature(b);
+		// If water, try a relative
+		if (b.getType().equals(Material.WATER)) {
+			b = b.getRelative(BlockFace.NORTH_WEST);
 		}
 		
-		return hasLight && isCrop && hasDepth && mature;
+		boolean hasLight = blockHasSunlight(b);
+		boolean isCrop = blockType.equals(this.plantMaterial);
+		
+		if (hasLight && isCrop && isCropMature(b)) {
+			double sFactor = sampleSubstrateDepth(b.getRelative(BlockFace.DOWN), MAX_SUBSTRATE_DEPTH);
+			double bFactor = cropType.getBiomeFactor(b.getBiome());
+			surveyTotal += (sFactor * bFactor);
+		}
+		
+		numSamples++;
 	}
 	
 	
@@ -164,8 +199,16 @@ public class FarmSurveyor {
 	 * Gets the coverage factor
 	 * @return The coverage factor
 	 */
-	public double getCoverage() {
+	public double getCoverageFactor() {
 		return this.coverageFactor;
+	}
+	
+	/**
+	 * Gets the fertility factor
+	 * @return The fertility factor
+	 */
+	public double getFertilityFactor() {
+		return this.fertilityFactor;
 	}
 	
 	
@@ -175,15 +218,6 @@ public class FarmSurveyor {
 	 */
 	public void setCoverageFactor(double coverageFactor) {
 		this.coverageFactor = coverageFactor;
-	}
-	
-	
-	/**
-	 * Gets the crop material
-	 * @return The crop material
-	 */
-	public Material getMaterial() {
-		return this.material;
 	}
 	
 	
@@ -223,7 +257,7 @@ public class FarmSurveyor {
 		
 		// Some easy checks
 		if (b.getY() <= maxY && b.getY() >= minY) {
-			if (b.getType() == this.material) {
+			if (b.getType() == this.plantMaterial) {
 				return b;
 			}
 			
@@ -257,16 +291,20 @@ public class FarmSurveyor {
 	 * @param b The block to validate
 	 * @return true if there is enough ground under it
 	 */
-	private boolean validateBlockEarth(Block b, int num) {
+	private double sampleSubstrateDepth(Block b, int num) {
+		
+		
+		Material substrate = this.getSubstrate();
+		double factor = 0.2;
 		
 		for (int i = 0; i < num; i++) {
 			b = b.getRelative(BlockFace.DOWN);
-			if (b.getType() == Material.AIR) {
-				return false;
+			if (b.getType().equals(substrate)) {
+				factor += 0.2;
 			}
 		}
 		
-		return true;
+		return factor;
 	}
 	
 	
@@ -288,6 +326,15 @@ public class FarmSurveyor {
 		
 		
 		return false;
+	}
+	
+	
+	/**
+	 * Gets the substrate material
+	 * @return
+	 */
+	protected Material getSubstrate() {
+		return Material.CLAY;
 	}
 	
 }

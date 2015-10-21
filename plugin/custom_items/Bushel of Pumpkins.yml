@@ -1,0 +1,5 @@
+name: Bushel of Pumpkins
+material: PUMPKIN
+amount: 1
+lore:
+  - '<c>Harvested crops.'

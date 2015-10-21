@@ -595,13 +595,11 @@ public class MongoConnector implements IDataAccess {
 	public Collection<SabreBlock> blockGetChunkRecords(Chunk c) {
 		
 		HashSet<SabreBlock> records = new HashSet<SabreBlock>();
-		SabreBlock b = null;
 		
 		BasicDBObject where = new BasicDBObject();
 		where.append("chunk", formatChunk(c));
 		
 		DBCursor cursor = colBlocks.find(where);
-		
 		
 		while (cursor.hasNext()) { 
 			BasicDBObject o = (BasicDBObject)cursor.next();
@@ -609,41 +607,7 @@ public class MongoConnector implements IDataAccess {
 			//logger.log(Level.INFO, "Loaded block: %s", o.toString());
 
 			try {
-				String chunkStr = o.getString("chunk");
-				int x = o.getInt("x");
-				int y = o.getInt("y");
-				int z = o.getInt("z");
-				String name = o.getString("name", "");
-				String type = o.getString("type", "");
-				
-				Location l = parseBlockLocation(chunkStr, x, y, z);
-				
-				// Create the block instance from the factory
-				b = BlockManager.blockFactory(l, type);
-				b.setDisplayName(name);
-				
-				if (o.containsField("reinforcement")){
-					BasicDBObject rein = (BasicDBObject)o.get("reinforcement");
-					UUID groupID = UUID.fromString(rein.getString("group", ""));
-					Material mat = Material.matchMaterial(rein.getString("material", ""));
-					int strength = rein.getInt("strength", 0);
-					long createdOn = rein.getLong("created_on", 0);
-					int startStrength = config.getReinforcementMaterial(mat, (short)0).strength;
-					boolean isPublic = rein.getBoolean("public", false);
-					boolean isInsecure = rein.getBoolean("insecure", false);
-				
-					Reinforcement r = new Reinforcement(l, groupID, mat, startStrength, createdOn);
-					r.setStrength(strength);
-					r.setPublic(isPublic);
-					r.setInsecure(isInsecure);
-					b.setReinforcement(r);
-				}
-				
-				// Load the setttings specific to this block
-				if (o.containsField("settings")) {
-					b.loadSettings((BasicDBObject)o.get("settings"));
-				}
-
+				SabreBlock b = readBlockRecord(o);
 				records.add(b);
 			} catch(Exception ex) {
 				logger.log(Level.WARNING, "Failed to read block record %s", o.toString());
@@ -651,6 +615,79 @@ public class MongoConnector implements IDataAccess {
 		}
 		
 		return records;
+	}
+	
+	@Override
+	public Collection<SabreBlock> blockGetRunningFactories() {
+		HashSet<SabreBlock> records = new HashSet<SabreBlock>();
+		
+		BasicDBObject where = new BasicDBObject();
+		where = where.append("factory", true)
+				.append("running", true);
+		
+		DBCursor cursor = colBlocks.find(where);
+		
+		while (cursor.hasNext()) { 
+			BasicDBObject o = (BasicDBObject)cursor.next();
+
+			//logger.log(Level.INFO, "Loaded block: %s", o.toString());
+
+			try {
+				SabreBlock b = readBlockRecord(o);
+				records.add(b);
+			} catch(Exception ex) {
+				logger.log(Level.WARNING, "Failed to read block record %s", o.toString());
+			}
+		}
+		
+		return records;
+	}
+	
+	
+	/**
+	 * Reads a block record
+	 * @param o The DB object
+	 * @return The sabre block instance
+	 */
+	private SabreBlock readBlockRecord(BasicDBObject o) {
+		SabreBlock b = null;
+		
+		String chunkStr = o.getString("chunk");
+		int x = o.getInt("x");
+		int y = o.getInt("y");
+		int z = o.getInt("z");
+		String name = o.getString("name", "");
+		String type = o.getString("type", "");
+		
+		Location l = parseBlockLocation(chunkStr, x, y, z);
+		
+		// Create the block instance from the factory
+		b = BlockManager.blockFactory(l, type);
+		b.setDisplayName(name);
+		
+		if (o.containsField("reinforcement")){
+			BasicDBObject rein = (BasicDBObject)o.get("reinforcement");
+			UUID groupID = UUID.fromString(rein.getString("group", ""));
+			Material mat = Material.matchMaterial(rein.getString("material", ""));
+			int strength = rein.getInt("strength", 0);
+			long createdOn = rein.getLong("created_on", 0);
+			int startStrength = config.getReinforcementMaterial(mat, (short)0).strength;
+			boolean isPublic = rein.getBoolean("public", false);
+			boolean isInsecure = rein.getBoolean("insecure", false);
+		
+			Reinforcement r = new Reinforcement(l, groupID, mat, startStrength, createdOn);
+			r.setStrength(strength);
+			r.setPublic(isPublic);
+			r.setInsecure(isInsecure);
+			b.setReinforcement(r);
+		}
+		
+		// Load the settings specific to this block
+		if (o.containsField("settings")) {
+			b.loadSettings((BasicDBObject)o.get("settings"));
+		}
+		
+		return b;
 	}
 
 

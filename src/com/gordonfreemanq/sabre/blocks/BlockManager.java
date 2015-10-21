@@ -19,6 +19,7 @@ import com.gordonfreemanq.sabre.customitems.SecureSign;
 import com.gordonfreemanq.sabre.data.IDataAccess;
 import com.gordonfreemanq.sabre.factory.BaseFactory;
 import com.gordonfreemanq.sabre.factory.FactoryCollection;
+import com.gordonfreemanq.sabre.factory.FactoryWorker;
 import com.gordonfreemanq.sabre.groups.SabreGroup;
 import com.gordonfreemanq.sabre.groups.SabreMember;
 import com.gordonfreemanq.sabre.snitch.Snitch;
@@ -110,6 +111,21 @@ public class BlockManager {
 	public void unloadChunk(Chunk c) {
 		
 		allBlocks.unloadChunk(c);
+	}
+	
+	
+	/**
+	 * Loads all the running factories from the DB
+	 */
+	public void loadRunningFactories() {
+		for(SabreBlock b : db.blockGetRunningFactories()) {
+			if (b instanceof BaseFactory) {
+				BaseFactory bf = (BaseFactory)b;
+				if (bf.runUnloaded()) {
+					FactoryWorker.getInstance().addRunning(bf);
+				}
+			}
+		}
 	}
 
 

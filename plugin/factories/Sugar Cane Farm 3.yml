@@ -1,0 +1,38 @@
+name: Sugar Cane Farm 3
+production_speed: 3
+custom:
+  storage_size: 8000
+recipes:
+  Farm Sugar Cane:
+    special: FARM_SUGAR_CANE
+    production_speed: 300
+  Harvest Crops:
+    special: HARVEST_CROPS
+    production_speed: 10
+  Craft Aspect of Agriculture:
+    fuel_cost: 10
+    inputs:
+      Dirt:
+        material: DIRT
+        amount: 2048
+      Cobblestone:
+        material: COBBLESTONE
+        amount: 896
+      Gravel:
+        material: GRAVEL
+        amount: 512
+    outputs:
+      Aspect of Agriculture:
+        custom_item: Aspect of Agriculture
+        amount: 1
+upgrades:
+  Sugar Cane Farm 4 Upgrade:
+    fuel_cost: 10
+    inputs:
+      Aspect of Agriculture:
+        custom_item: Aspect of Agriculture
+        amount: 192
+    outputs:
+      Sugar Cane Farm 4:
+        custom_item: Sugar Cane Farm 4
+        amount: 1

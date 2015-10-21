@@ -30,6 +30,7 @@ import com.gordonfreemanq.sabre.prisonpearl.PearlWorker;
 import com.gordonfreemanq.sabre.snitch.SnitchListener;
 import com.gordonfreemanq.sabre.snitch.SnitchLogger;
 import com.gordonfreemanq.sabre.util.CombatTagManager;
+import com.gordonfreemanq.sabre.util.SabreUtil;
 
 
 public class SabrePlugin extends AbstractSabrePlugin
@@ -249,6 +250,9 @@ public class SabrePlugin extends AbstractSabrePlugin
 		statsTracker.start();
 		factoryWorker = new FactoryWorker();
 		factoryWorker.start();
+		
+		// Load the running factories
+		blockManager.loadRunningFactories();
 		
 		this.sabreTweaks.registerTimerForPearlCheck();
 		

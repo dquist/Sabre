@@ -49,21 +49,12 @@ public class FactoryWorker implements Runnable {
 			return;
 		}
 		
-		Set<BaseFactory> unloaded = new HashSet<BaseFactory>();
-		
 		// Update all running factories
 		for(BaseFactory f : runningFactories) {
-			if (f.getLocation().getChunk().isLoaded()) {
-				if (f.getRunning()) {
-					f.update();
-				}
-			} else {
-				unloaded.add(f);
+			if (f.getRunning()) {
+				f.update();
 			}
 		}
-		
-		// Remove the unloaded factories
-		runningFactories.removeAll(unloaded);
 	}
 	
 	
@@ -72,6 +63,19 @@ public class FactoryWorker implements Runnable {
 	 * @param f The factory to add
 	 */
 	public void addRunning(BaseFactory f) {
+		Set<BaseFactory> remove = new HashSet<BaseFactory>();
+		
+		// This prevents the same factory from being loaded twice.
+		// This is a possibility because factories in unloaded chunks can
+		// still run. When the chunk is loaded, then the running instance
+		// will be replaced
+		for (BaseFactory fac : this.runningFactories) {
+			if (fac.getLocation().equals(f.getLocation())) {
+				remove.add(fac);
+			}
+		}
+		runningFactories.removeAll(remove);
+		
 		runningFactories.add(f);
 	}
 	
