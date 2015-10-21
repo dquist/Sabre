@@ -55,23 +55,23 @@ public enum CropType {
 		switch(this)
 		{
 		case WHEAT:
-			return new FarmSurveyor(Material.CROPS);
+			return new FarmSurveyor(WHEAT, Material.CROPS);
 		case POTATO:
-			return new FarmSurveyor(Material.POTATO);
+			return new FarmSurveyor(POTATO, Material.POTATO);
 		case CARROT:
-			return new FarmSurveyor(Material.CARROT);
+			return new FarmSurveyor(CARROT, Material.CARROT);
 		case CACTUS:
-			return new FarmSurveyor(Material.CACTUS);
+			return new FarmSurveyor(CACTUS, Material.CACTUS);
 		case COCOA:
-			return new FarmSurveyor(Material.COCOA);
+			return new FarmSurveyor(COCOA, Material.COCOA);
 		case MELON:
-			return new FarmSurveyor(Material.MELON_BLOCK);
+			return new FarmSurveyor(MELON, Material.MELON_BLOCK);
 		case PUMPKIN:
-			return new FarmSurveyor(Material.PUMPKIN);
+			return new FarmSurveyor(PUMPKIN, Material.PUMPKIN);
 		case SUGAR_CANE:
-			return new FarmSurveyor(Material.SUGAR_CANE_BLOCK);
+			return new FarmSurveyor(SUGAR_CANE, Material.SUGAR_CANE_BLOCK);
 		default:
-			return new FarmSurveyor(Material.CROPS);
+			return new FarmSurveyor(WHEAT, Material.CROPS);
 		}
 	}
 	
