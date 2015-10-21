@@ -113,6 +113,11 @@ public class FarmFactory extends BaseFactory {
 				checkSurvey(true);
 			}
 		} else {
+			if (!running && farmIsFull() && (recipe instanceof FarmRecipe)) {
+				sp.msg("<i>The farm is already full.");
+				return;
+			}
+			
 			cyclePower(sp);
 		}
 		
@@ -124,6 +129,7 @@ public class FarmFactory extends BaseFactory {
 	
 	protected void onPowerOn() {
 		checkSurvey(false);
+		saveSettings();
 	}
 	
 	
@@ -153,6 +159,10 @@ public class FarmFactory extends BaseFactory {
 			if (farmTickCounter++ >= farmProductionTicks) {
 				farmTickCounter = 0;
 				runFarmRecipe();
+				
+				if (farmIsFull()) {
+					powerOff();
+				}
 			}
 		} else {
 			super.update();
@@ -190,6 +200,25 @@ public class FarmFactory extends BaseFactory {
 		}
 		
 		saveSettings();
+	}
+	
+	
+	/**
+	 * Checks if the farm is full
+	 * @return true if it is full
+	 */
+	protected boolean farmIsFull() {
+		
+		int totalFarmed = 0;
+		for(Entry<CropType, Integer> e : this.farmedCrops.entrySet()) {
+			totalFarmed += e.getValue();
+		}
+		
+		if (totalFarmed >= this.storageSize) {
+			return true;
+		}
+		
+		return false;
 	}
 	
 	
