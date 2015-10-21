@@ -26,6 +26,7 @@ public class CmdAdminRoot extends SabreCommand {
 		this.addSubCommand(new CmdAdminBypass());
 		this.addSubCommand(new CmdAdminSetSpawn());
 		this.addSubCommand(new CmdAdminMore());
+		this.addSubCommand(new CmdAdminGive());
 	}
 	
 	@Override
