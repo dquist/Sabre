@@ -1,9 +1,5 @@
 package com.gordonfreemanq.sabre.util;
 
-import static org.junit.Assert.*;
-
-import java.util.Random;
-
 import org.junit.Test;
 
 public class SabreUtilTest {

@@ -607,8 +607,6 @@ public class PearlListener implements Listener {
 		prisonMotd(pp);
 		Location spawnLocation = getRespawnLocation(pp, e.getRespawnLocation());
 		e.setRespawnLocation(spawnLocation);
-		
-		e.getPlayer().getInventory().setItem(0, new ItemStack(Material.STONE_PICKAXE, 1));
 	}
 	
 	
