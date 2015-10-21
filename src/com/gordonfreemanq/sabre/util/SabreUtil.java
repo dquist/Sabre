@@ -539,43 +539,41 @@ public class SabreUtil {
 	 * Gets a pseuso-random fertility number for a given chunk
 	 * @return
 	 */
-	public static double getChunkFertility(int cX, int cZ) {
-		Integer x = cX;
-		Integer z = cZ;
+	public static double getChunkFertility(int worldHash, int x, int z) {
+	
 		
-		double hashFactorX = getChunkHashFactor("X: " + x.toString());
-		double hashFactorZ = getChunkHashFactor("Z: " + z.toString()); // make opposite chunks not the same
-		double distFactorX = getChunkDistanceFactor(x);
-		double distFactorZ = getChunkDistanceFactor(z);
 		
-		// Take the average of the 4 factors for the final chunk value
-		double factor = ((hashFactorX + hashFactorX + hashFactorZ + hashFactorZ + distFactorX + distFactorZ) / 6);
-		return factor;
+		byte hash = 3;
+		hash = (byte)(73 * hash + worldHash);
+		hash = (byte)(hash + x * 379);
+		hash = (byte)(hash + z * 571);
+		hash = (byte)(hash & 0x7F); // make 'unsigned'
+		hash = (byte)((hash * 100) / 128); // scale 0 - 100
+		
+		double hashFactor = getChunkHashFactor(hash);
+		int dist = (int)(x * x + z * z) / 3125000;
+		double distFactor = getChunkDistanceFactor(dist);
+		return (hashFactor + distFactor) / 2;
 	}
 	
-	private static double getChunkHashFactor(String str) {
+	private static double getChunkHashFactor(byte hash) {
 		
-		int hash = Math.abs(str.hashCode());
-		
-		int mod = hash % 100;
-		if (mod > 98) {
-			return 0.1;
-		} else if (mod > 95) {
+		if (hash < 2) {
+			return 15;
+		} else if (hash < 5 ) {
+			return 8;
+		} else if (hash < 10) {
+			return 5;
+		} else if (hash < 20) {
+			return 2;
+		} else if (hash < 60) {
+			return 1;
+		} else if (hash < 90) {
 			return 0.2;
-		} else if (mod > 90) {
-			return 0.3;
-		} else if (mod > 80) {
-			return 0.4;
-		} else if (mod > 60) {
-			return 0.6;
-		} else if (mod > 30) {
-			return 1.0;
-		} else if (mod > 5) {
-			return 1.2;
-		} else if (mod > 3) {
-			return 1.5;
+		} else if (hash < 95) {
+			return 0.05;
 		} else {
-			return 2.0;
+			return 0.01;
 		}
 	}
 	
@@ -585,15 +583,21 @@ public class SabreUtil {
 		if (num < 75) {
 			return 1.5;
 		} else if (num < 150) {
-			return 1.2;
+			return 1.3;
 		} else if (num < 300) {
 			return 1.1;
-		} else if (num < 600) {
+		} else if (num < 500) {
 			return 1.0;
-		} else if (num < 800) {
+		} else if (num < 700) {
 			return 0.9;
-		} else {
+		} else if (num < 800) {
 			return 0.8;
+		} else if (num < 900) {
+			return 0.6;
+		} else if (num < 1000) {
+			return 0.5;
+		} else {
+			return 0.2;
 		}
 	}
 }

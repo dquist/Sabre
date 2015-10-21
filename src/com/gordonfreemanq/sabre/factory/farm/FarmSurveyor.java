@@ -35,7 +35,7 @@ public class FarmSurveyor {
 	private static final double MAX_LIGHT_INTENSITY = 15.0;
 	
 	// How much solid ground must be under the crop
-	private static final int MAX_SUBSTRATE_DEPTH = 10;
+	private static final int MAX_SUBSTRATE_DEPTH = 4;
 
 	// The calculated coverage factor
 	private double coverageFactor;
@@ -145,6 +145,7 @@ public class FarmSurveyor {
 
 		double fertility = 0;
 		int count = 0;
+		int worldHash = factoryLocation.getWorld().hashCode();
 		
 		Chunk c = factoryLocation.getChunk();
 		int cornerX = c.getX() - chunkRadius;
@@ -152,7 +153,7 @@ public class FarmSurveyor {
 		
 		for (int x = 0; x < squareLength; x++) {
 			for (int z = 0; z < squareLength; z++) {
-				fertility = SabreUtil.getChunkFertility(cornerX + x, cornerZ + z);
+				fertility = SabreUtil.getChunkFertility(worldHash, cornerX + x, cornerZ + z);
 				count++;
 			}	
 		}
@@ -294,12 +295,12 @@ public class FarmSurveyor {
 		
 		
 		Material substrate = this.getSubstrate();
-		double factor = 0.1;
+		double factor = 0.2;
 		
 		for (int i = 0; i < num; i++) {
 			b = b.getRelative(BlockFace.DOWN);
 			if (b.getType().equals(substrate)) {
-				factor += 0.1;
+				factor += 0.2;
 			}
 		}
 		
