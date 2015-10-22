@@ -128,7 +128,7 @@ public class FarmFactory extends BaseFactory {
 	}
 	
 	protected void onPowerOn() {
-		checkSurvey(false);
+		checkSurvey(true);
 		saveSettings();
 	}
 	
@@ -250,6 +250,7 @@ public class FarmFactory extends BaseFactory {
 		surveyor.surveyFarm(this);
 		
 		this.layoutFactor = surveyor.getCoverageFactor();
+		this.fertilityFactor = surveyor.getFertilityFactor();
 	}
 	
 	

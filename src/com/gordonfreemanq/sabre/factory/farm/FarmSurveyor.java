@@ -114,6 +114,7 @@ public class FarmSurveyor {
 		calculateFertility();
 		
 		numSamples = 0;
+		surveyTotal = 0;
 		int x = 0;
 		int z = 0;
 		
@@ -150,10 +151,11 @@ public class FarmSurveyor {
 		Chunk c = factoryLocation.getChunk();
 		int cornerX = c.getX() - chunkRadius;
 		int cornerZ = c.getZ() - chunkRadius;
+		int chunkLength = (chunkRadius * 2) + 1;
 		
-		for (int x = 0; x < squareLength; x++) {
-			for (int z = 0; z < squareLength; z++) {
-				fertility = SabreUtil.getChunkFertility(worldHash, cornerX + x, cornerZ + z);
+		for (int x = 0; x < chunkLength; x++) {
+			for (int z = 0; z < chunkLength; z++) {
+				fertility += SabreUtil.getChunkFertility(worldHash, cornerX + x, cornerZ + z);
 				count++;
 			}	
 		}
