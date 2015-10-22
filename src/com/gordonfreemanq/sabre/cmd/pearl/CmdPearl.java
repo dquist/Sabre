@@ -33,6 +33,7 @@ public class CmdPearl extends SabreCommand {
 		this.addSubCommand(cmdSummon);
 		this.addSubCommand(cmdMokshaBind);
 		this.addSubCommand(cmdMokshaJailbreak);
+		this.addSubCommand(new CmdPearlSetStrength());
 		
 		instance = this;
 	}

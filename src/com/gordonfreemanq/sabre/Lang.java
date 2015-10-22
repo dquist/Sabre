@@ -149,6 +149,7 @@ public class Lang
 	public static final String pearlMokshaAddStrength = "<i>This rod has no strength.";
 	public static final String pearlJailbreakPass = "<g>You broke <c>%s<g> out of prison!";
 	public static final String pearlJailbreakFail = "<b>Your jailbreak attempt was too weak and failed.";
+	public static final String pearlUpdateStrength = "<i>You updated the pearl strength to <c>%d.";
 	
 	
 	// FACTORY
