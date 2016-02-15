@@ -1,4 +1,4 @@
-package com.gordonfreeman.sabre.warp;
+package com.gordonfreemanq.sabre.warp;
 
 import org.bukkit.Location;
 import com.mongodb.BasicDBObject;

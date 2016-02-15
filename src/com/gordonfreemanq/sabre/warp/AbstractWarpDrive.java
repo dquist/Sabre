@@ -1,4 +1,4 @@
-package com.gordonfreeman.sabre.warp;
+package com.gordonfreemanq.sabre.warp;
 
 import org.bukkit.Location;
 import org.bukkit.event.player.PlayerInteractEvent;
@@ -9,15 +9,12 @@ import com.gordonfreemanq.sabre.blocks.BlockManager;
 import com.gordonfreemanq.sabre.customitems.SpecialBlock;
 import com.mongodb.BasicDBObject;
 
-public class AbstractWarpDrive extends SpecialBlock {
-
-	
-	public static final String blockName = "Warp Drive";
+public abstract class AbstractWarpDrive extends SpecialBlock {
 	
 	private final WarpDriveType driveType;
 	
 	public AbstractWarpDrive(Location location, String typeName, WarpDriveType driveType) {
-		super(location, blockName);
+		super(location, typeName);
 		this.driveType = driveType;
 		
 		this.hasEffectRadius = false;

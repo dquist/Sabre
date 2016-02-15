@@ -41,18 +41,18 @@ recipes:
       Nether Warp Drive:
         custom_item: Nether Warp Drive
         amount: 1
-  Produce Teleportation Pad:
+  Produce Teleport Pad:
     fuel_cost: 10
     inputs:
       Obsidian:
-        item: OBSIDIAN
+        material: OBSIDIAN
         amount: 64
       Diamond:
-        item: DIAMOND
+        material: DIAMOND
         amount: 32
     outputs:
-      Teleportation Pad:
-        custom_item: Teleportation Pad
+      Teleport Pad:
+        custom_item: Teleport Pad
         amount: 1
   Craft Aspect of Domain:
     fuel_cost: 10
