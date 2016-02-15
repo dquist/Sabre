@@ -11,7 +11,6 @@ import com.gordonfreemanq.sabre.Lang;
 import com.gordonfreemanq.sabre.SabrePlayer;
 import com.gordonfreemanq.sabre.blocks.BlockManager;
 import com.gordonfreemanq.sabre.blocks.Reinforcement;
-import com.gordonfreemanq.sabre.blocks.SabreBlock;
 import com.gordonfreemanq.sabre.customitems.SpecialBlock;
 import com.gordonfreemanq.sabre.prisonpearl.PearlManager;
 import com.gordonfreemanq.sabre.util.SabreUtil;
@@ -85,7 +84,6 @@ public class TeleportPad extends SpecialBlock {
 		TeleportPad destPad = (TeleportPad)bm.getBlockAt(dest);		
 		if (destPad == null) {
 			destPad = new TeleportPad(dest, blockName);
-			destPad.saveSettings();
 			bm.addBlock(destPad);
 		}
 		
@@ -97,7 +95,6 @@ public class TeleportPad extends SpecialBlock {
 		
 		// Do the teleport
 		SabreUtil.tryToTeleport(sp.getPlayer(), dest);
-		
 	}
 	
 

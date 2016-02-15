@@ -31,16 +31,29 @@ recipes:
       Outpost Bastion:
         custom_item: Outpost Bastion
         amount: 2
-  Produce Resource Bastion:
+  Produce Nether Warp Drive:
     fuel_cost: 10
     inputs:
       Aspect of Domain:
         custom_item: Aspect of Domain
-        amount: 1
+        amount: 2
     outputs:
-      Resource Bastion:
-        custom_item: Resource Bastion
-        amount: 8
+      Nether Warp Drive:
+        custom_item: Nether Warp Drive
+        amount: 1
+  Produce Teleportation Pad:
+    fuel_cost: 10
+    inputs:
+      Obsidian:
+        item: OBSIDIAN
+        amount: 64
+      Diamond:
+        item: DIAMOND
+        amount: 32
+    outputs:
+      Teleportation Pad:
+        custom_item: Teleportation Pad
+        amount: 1
   Craft Aspect of Domain:
     fuel_cost: 10
     inputs:

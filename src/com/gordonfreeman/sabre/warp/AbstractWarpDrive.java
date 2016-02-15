@@ -58,6 +58,7 @@ public class AbstractWarpDrive extends SpecialBlock {
 		pad.setDriveLocation(this.location);
 		pad.saveSettings();
 		sp.msg(Lang.warpLinked, maxDist);
+		sp.getPlayer().getItemInHand().setItemMeta(null);
 	}
 	
 	
