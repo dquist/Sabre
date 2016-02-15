@@ -157,6 +157,7 @@ public class SabreTweaks implements Listener {
 	 * 
 	 * @param e
 	 */
+	/*
 	@EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
 	public void onMiningEvent(BlockBreakEvent e) {
 		Block b = e.getBlock();
@@ -179,7 +180,7 @@ public class SabreTweaks implements Listener {
 		default:
 			break;
 		}
-	}
+	} */
 
 	static double MAX_DURA = 50;
 
