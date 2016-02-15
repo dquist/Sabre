@@ -46,7 +46,9 @@ public class AbstractWarpDrive extends SpecialBlock {
 		
 		int maxDist = 48;
 		
-		if (Math.abs(location.getBlockX() - pad.getLocation().getBlockX()) > maxDist ||
+		// Pad and drive must be within radius and same world
+		if (location.getWorld() != pad.getLocation().getWorld() ||
+				Math.abs(location.getBlockX() - pad.getLocation().getBlockX()) > maxDist ||
 				Math.abs(location.getBlockZ() - pad.getLocation().getBlockZ()) > maxDist) {
 			sp.msg(Lang.warpTooFar, maxDist);
 			return;

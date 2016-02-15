@@ -1,12 +1,17 @@
 package com.gordonfreeman.sabre.warp;
 
 import org.bukkit.Location;
+import org.bukkit.Material;
+import org.bukkit.block.Block;
+import org.bukkit.block.BlockFace;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 
 import com.gordonfreemanq.sabre.Lang;
 import com.gordonfreemanq.sabre.SabrePlayer;
+import com.gordonfreemanq.sabre.blocks.BlockManager;
 import com.gordonfreemanq.sabre.blocks.Reinforcement;
+import com.gordonfreemanq.sabre.blocks.SabreBlock;
 import com.gordonfreemanq.sabre.customitems.SpecialBlock;
 import com.gordonfreemanq.sabre.prisonpearl.PearlManager;
 import com.gordonfreemanq.sabre.util.SabreUtil;
@@ -65,6 +70,33 @@ public class TeleportPad extends SpecialBlock {
 			return;
 		}
 		
+		BlockManager bm = BlockManager.getInstance();
+		
+		AbstractWarpDrive drive = (AbstractWarpDrive)bm.getBlockAt(driveLocation);
+		if (drive == null) {
+			sp.msg(Lang.warpMissingDrive);
+			return;
+		}
+		
+		// Get the destination location
+		Location dest = drive.getDriveType().getTeleportLocation(sp.getPlayer().getLocation());
+		
+		// Make sure there is a pad on the other end
+		TeleportPad destPad = (TeleportPad)bm.getBlockAt(dest);		
+		if (destPad == null) {
+			destPad = new TeleportPad(dest, blockName);
+			destPad.saveSettings();
+			bm.addBlock(destPad);
+		}
+		
+		// Clear some space 2 blocks above the pad
+		Block b = dest.getBlock().getRelative(BlockFace.UP);
+		b.setType(Material.AIR);
+		b = b.getRelative(BlockFace.UP);
+		b.setType(Material.AIR);
+		
+		// Do the teleport
+		SabreUtil.tryToTeleport(sp.getPlayer(), dest);
 		
 	}
 	
