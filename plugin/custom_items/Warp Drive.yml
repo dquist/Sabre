@@ -1,7 +1,0 @@
-name: Warp Drive
-material: STAINED_GLASS
-durability: 15
-amount: 1
-class: com.gordonfreemanq.sabre.customitems.WarpDrive
-lore:
-  - '<c>A teleportation warp engine.'

@@ -1,4 +1,4 @@
-package com.gordonfreemanq.sabre.customitems;
+package com.gordonfreeman.sabre.warp;
 
 import java.util.ArrayList;
 import java.util.List;

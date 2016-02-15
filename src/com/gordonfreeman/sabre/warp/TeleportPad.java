@@ -1,4 +1,4 @@
-package com.gordonfreemanq.sabre.customitems;
+package com.gordonfreeman.sabre.warp;
 
 import org.bukkit.Location;
 import org.bukkit.event.player.PlayerInteractEvent;
@@ -7,6 +7,8 @@ import org.bukkit.inventory.ItemStack;
 import com.gordonfreemanq.sabre.Lang;
 import com.gordonfreemanq.sabre.SabrePlayer;
 import com.gordonfreemanq.sabre.blocks.Reinforcement;
+import com.gordonfreemanq.sabre.customitems.SpecialBlock;
+import com.gordonfreemanq.sabre.prisonpearl.PearlManager;
 import com.gordonfreemanq.sabre.util.SabreUtil;
 import com.mongodb.BasicDBObject;
 
@@ -44,6 +46,26 @@ public class TeleportPad extends SpecialBlock {
 		ItemStack is = (new TeleportLinker(this)).toItemStack();
 		sp.getPlayer().getInventory().setItemInHand(is);
 		sp.msg(Lang.warpHitDrive);
+	}
+	
+
+	/**
+	 * Teleport the player
+	 * @param p The player interacting
+	 */
+	public void onInteract(PlayerInteractEvent e, SabrePlayer sp) {
+		// Prevent pearled players from teleporting
+		if (PearlManager.getInstance().isImprisoned(sp)) {
+			sp.msg(Lang.pearlCantDoThat);
+			return;
+		}
+		
+		if (driveLocation == null) {
+			sp.msg(Lang.warpMissingDrive);
+			return;
+		}
+		
+		
 	}
 	
 

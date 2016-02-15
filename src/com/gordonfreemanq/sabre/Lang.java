@@ -130,6 +130,7 @@ public class Lang
 	public static final String warpLinked = "<g>Teleport pad linked to warp drive.";
 	public static final String warpNoPadFound = "<b>No teleport pad was found at that location.";
 	public static final String warpTooFar = "<i>Teleport pad must be within %d blocks of the warp drive.";
+	public static final String warpMissingDrive = "<i>Teleport pad is not linked to a warp drive.";
 	
 	
 	// PEARLS
@@ -157,6 +158,7 @@ public class Lang
 	public static final String pearlJailbreakPass = "<g>You broke <c>%s<g> out of prison!";
 	public static final String pearlJailbreakFail = "<b>Your jailbreak attempt was too weak and failed.";
 	public static final String pearlUpdateStrength = "<i>You updated the pearl strength to <c>%d.";
+	public static final String pearlCantDoThat = "<i>You can't do that when imprisoned!";
 	
 	
 	// FACTORY
