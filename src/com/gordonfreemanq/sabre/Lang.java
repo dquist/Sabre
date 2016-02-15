@@ -124,6 +124,13 @@ public class Lang
 	public static final String signNowVisible = "<i>This sign is now <g>visible<i>.";
 	public static final String signNowHidden = "<i>This sign is now <b>hidden<i>.";
 	
+	// WARP
+	public static final String warpNotReinforced = "<i>Teleport pad must be reinforced before linking with warp drive.";
+	public static final String warpHitDrive = "<i>Hit warp drive with teleport linker to link with pad.";
+	public static final String warpLinked = "<g>Teleport pad linked to warp drive.";
+	public static final String warpNoPadFound = "<b>No teleport pad was found at that location.";
+	public static final String warpTooFar = "<i>Teleport pad must be within %d blocks of the warp drive.";
+	
 	
 	// PEARLS
 	public static final String pearlCantHold = "<b>Imprisoned players cannot pick up prison pearls.";
