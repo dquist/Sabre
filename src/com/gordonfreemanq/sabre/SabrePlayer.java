@@ -2,6 +2,7 @@ package com.gordonfreemanq.sabre;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
@@ -36,6 +37,9 @@ public class SabrePlayer implements INamed, IChatChannel {
 	private boolean vanished;
 	private boolean freedOffline;
 	private Location bedLocation;
+	private List<SabrePlayer> ignoredPlayers;
+	private List<SabrePlayer> bcastPlayers;
+	private SabrePlayer broadcastRequestPlayer;
 	
 	
 	/**
@@ -59,6 +63,9 @@ public class SabrePlayer implements INamed, IChatChannel {
 		this.adminBypass = false;
 		this.vanished = false;
 		this.freedOffline = false;
+		this.ignoredPlayers = new LinkedList<SabrePlayer>();
+		this.bcastPlayers = new LinkedList<SabrePlayer>();
+		this.broadcastRequestPlayer = null;
 	}
 	
 	
@@ -445,5 +452,41 @@ public class SabrePlayer implements INamed, IChatChannel {
 	 */
 	public void setBedLocation(Location bedLocation) {
 		this.bedLocation = bedLocation;
+	}
+	
+	
+	/**
+	 * Gets the ignored players
+	 * @return The ignored players
+	 */
+	public List<SabrePlayer> getIgnoredPlayers() {
+		return this.ignoredPlayers;
+	}
+	
+	
+	/**
+	 * Gets the broadcasting players
+	 * @return The broadcast players
+	 */
+	public List<SabrePlayer> getBcastPlayers() {
+		return this.bcastPlayers;
+	}
+	
+	
+	/**
+	 * Gets the player requested to broadcast pearl location
+	 * @return the requested broadcast player
+	 */
+	public SabrePlayer getRequestedBcastPlayer() {
+		return this.broadcastRequestPlayer;
+	}
+	
+	
+	/**
+	 * Sets the requested broadcast player
+	 * @param broadcastRequestPlayer the requested bcast player
+	 */
+	public void setRequestedBcastPlayer(SabrePlayer broadcastRequestPlayer) {
+		this.broadcastRequestPlayer = broadcastRequestPlayer;
 	}
 }

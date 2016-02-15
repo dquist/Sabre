@@ -138,7 +138,7 @@ public class Lang
 	public static final String pearlMotd = "<n>You are trapped in this bleak and endless world \nby a prison pearl.";
 	public static final String pearlMotd2 = "<i>Type \"<c>/pp locate<i>\" to locate your pearl.";
 	public static final String pearlNotImprisoned = "<i>You are not imprisoned.";
-	public static final String pearlPearlIsHeld = "<g>Your pearl is held by <a>%s <n>[%d %d %d %s]";
+	public static final String pearlPearlIsHeld = "<i>Your pearl is held by <a>%s <n>[%d %d %d %s]";
 	public static final String pearlYouBound = "<g>You've bound <c>%s <g>to a prison pearl!";
 	public static final String pearlYouWereBound = "<b>You've been bound to a prison pearl by <c>%s<b>!";
 	public static final String pearlYouWereFreed = "<g>You've been freed!";
@@ -159,6 +159,12 @@ public class Lang
 	public static final String pearlJailbreakFail = "<b>Your jailbreak attempt was too weak and failed.";
 	public static final String pearlUpdateStrength = "<i>You updated the pearl strength to <c>%d.";
 	public static final String pearlCantDoThat = "<i>You can't do that when imprisoned!";
+	public static final String pearlNoPlayer = "<i>There's no online player by that name.";
+	public static final String pearlBcastRequestSent = "<i>Broadcast request sent.";
+	public static final String pearlBcastRequest = "<c>%s <i>has requested to broadcast their pearl location.\nType <c>\\pp confirm <i>to confirm";
+	public static final String pearlNoBcastRequest = "<i>You have no broadcast requests.";
+	public static final String pearlGettingBcasts = "<g>You have now receiving broadcasts from <c>%s.";
+	public static final String pearlBroadcast = "<i>The pearl of <c>%s <i>is held by <a>%s <n>[%d %d %d %s]";
 	
 	
 	// FACTORY
