@@ -596,7 +596,7 @@ public class PearlListener implements Listener {
 	 * Adjust player spawn point if necessary
 	 * @param event
 	 */
-	@EventHandler(priority=EventPriority.LOWEST, ignoreCancelled = true)
+	@EventHandler(priority=EventPriority.HIGHEST, ignoreCancelled = true)
 	public void onPlayerRespawn(PlayerRespawnEvent e) {
 
 		PrisonPearl pp = pearls.getById(e.getPlayer().getUniqueId());
@@ -789,6 +789,15 @@ public class PearlListener implements Listener {
 			Location l = pp.getHolder().getLocation();
 			String name = pp.getHolder().getName();
 			imprisoned.msg(Lang.pearlPearlIsHeld, name, l.getBlockX(), l.getBlockY(), l.getBlockZ(), l.getWorld().getName());	
+			
+			String bcastMsg = SabrePlugin.getPlugin().txt.parse(Lang.pearlBroadcast, imprisoned.getName(), 
+					name, l.getBlockX(), l.getBlockY(), l.getBlockZ(), l.getWorld().getName());
+			
+			for(SabrePlayer p : imprisoned.getBcastPlayers()) {
+				if (p.isOnline()) {
+					p.msg(bcastMsg);
+				}
+			}
 
 		} else if (event.getType() == PrisonPearlEvent.Type.FREED) {
 			
@@ -912,6 +921,7 @@ public class PearlListener implements Listener {
 	 * Heals the stone pick for pearled players
 	 * @param e
 	 */
+	/*
 	@EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
 	public void onMiningEvent(BlockBreakEvent e) {
 		
@@ -928,13 +938,14 @@ public class PearlListener implements Listener {
 		if (pearls.isImprisoned(e.getPlayer()) && is.getDurability() > 10) {
 			is.setDurability((short)0);
 		}
-	}
+	} */
 	
 	
 	/**
 	 * Prevent fall damage for pearled players
 	 * @param e The event args
 	 */
+	/*
 	@EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
     public void onEntityDamageEvent(EntityDamageEvent e) {
         if (!(e.getEntity() instanceof Player)) {
@@ -953,13 +964,15 @@ public class PearlListener implements Listener {
         if (pearls.isImprisoned(p)) {
         	e.setCancelled(true);
         }
-    }
+    } */
 	
 	
+	/*
 	/**
 	 * Double Jump
 	 * @param e The event args
 	 */
+	/*
 	@EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
 	public void onPlayerToggleFlight(PlayerToggleFlightEvent e) {
 		Player p = e.getPlayer();
@@ -971,13 +984,14 @@ public class PearlListener implements Listener {
 		p.setAllowFlight(false);
 		p.setFlying(false);
 		p.setVelocity(p.getVelocity().multiply(3));
-	}
+	} */
 	
 
 	/**
 	 * Double Jump
 	 * @param e The event args
 	 */
+	/*
 	@EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
 	public void onPlayerMove(PlayerMoveEvent e) {
 		Player p = e.getPlayer();
@@ -990,13 +1004,14 @@ public class PearlListener implements Listener {
 				p.setAllowFlight(true);
 			}
 		}
-	}
+	} */
 	
 	
 	/**
 	 * No hunger loss for pearled players
 	 * @param e The event args
 	 */
+	/*
 	@EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
 	public void onHungerChange(FoodLevelChangeEvent e) {
 		if (!(e.getEntity() instanceof Player)) {
@@ -1008,5 +1023,5 @@ public class PearlListener implements Listener {
 		if (pearls.isImprisonedInPrison(p)) {
 			e.setFoodLevel(20);
 		}
-	}
+	} */
 }

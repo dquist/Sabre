@@ -161,7 +161,7 @@ public class Lang
 	public static final String pearlCantDoThat = "<i>You can't do that when imprisoned!";
 	public static final String pearlNoPlayer = "<i>There's no online player by that name.";
 	public static final String pearlBcastRequestSent = "<i>Broadcast request sent.";
-	public static final String pearlBcastRequest = "<c>%s <i>has requested to broadcast their pearl location.\nType <c>\\pp confirm <i>to confirm";
+	public static final String pearlBcastRequest = "<c>%s <i>has requested to broadcast their pearl location.\nType <c>/pp confirm <i>to confirm";
 	public static final String pearlNoBcastRequest = "<i>You have no broadcast requests.";
 	public static final String pearlGettingBcasts = "<g>You have now receiving broadcasts from <c>%s.";
 	public static final String pearlBroadcast = "<i>The pearl of <c>%s <i>is held by <a>%s <n>[%d %d %d %s]";

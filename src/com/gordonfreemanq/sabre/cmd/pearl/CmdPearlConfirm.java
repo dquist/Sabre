@@ -9,14 +9,11 @@ public class CmdPearlConfirm extends SabreCommand {
 	public CmdPearlConfirm()
 	{
 		super();
-		this.aliases.add("broadcast");
-		this.aliases.add("ppb");
-		
-		this.requiredArgs.add("player");
+		this.aliases.add("confirm");
 
 		this.senderMustBePlayer = true;
 
-		this.setHelpShort("Broadcasts your location to another player.");
+		this.setHelpShort("Confirms a pearl broadcast request.");
 	}
 
 	@Override
