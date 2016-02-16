@@ -41,6 +41,16 @@ recipes:
       Nether Warp Drive:
         custom_item: Nether Warp Drive
         amount: 1
+  Produce Direct Warp Drive:
+    fuel_cost: 10
+    inputs:
+      Aspect of Domain:
+        custom_item: Aspect of Domain
+        amount: 10
+    outputs:
+      Direct Warp Drive:
+        custom_item: Direct Warp Drive
+        amount: 1
   Produce Teleport Pad:
     fuel_cost: 10
     inputs:
