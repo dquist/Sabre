@@ -19,6 +19,10 @@ public class SabreConfig {
 	
 	private final FileConfiguration fc;
 	
+	public static String OVER_WORLD_NAME = "world";
+	public static String NETHER_WORLD_NAME = "world_nether";
+	public static String END_WORLD_NAME = "world_the_end";
+	
 	/**
 	 * Creates a new SabreConfig instance
 	 */

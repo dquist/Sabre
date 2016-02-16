@@ -2,17 +2,13 @@ package com.gordonfreemanq.sabre.warp;
 
 import org.bukkit.Location;
 import org.bukkit.Material;
-import org.bukkit.block.Block;
-import org.bukkit.block.BlockFace;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 
 import com.gordonfreemanq.sabre.Lang;
 import com.gordonfreemanq.sabre.SabrePlayer;
 import com.gordonfreemanq.sabre.blocks.BlockManager;
-import com.gordonfreemanq.sabre.blocks.CustomItems;
 import com.gordonfreemanq.sabre.blocks.Reinforcement;
-import com.gordonfreemanq.sabre.blocks.SabreItemStack;
 import com.gordonfreemanq.sabre.customitems.SpecialBlock;
 import com.gordonfreemanq.sabre.prisonpearl.PearlManager;
 import com.gordonfreemanq.sabre.util.SabreUtil;
@@ -25,8 +21,8 @@ public class TeleportPad extends SpecialBlock {
 	// Location of the linked warp drive
 	protected Location driveLocation;
 	
-	// Location of the linked pad
-	protected Location linkedPadLocation;
+	// Location of the destination pad
+	protected Location destPadLocation;
 	
 	public TeleportPad(Location location, String typeName) {
 		super(location, blockName);
@@ -58,12 +54,15 @@ public class TeleportPad extends SpecialBlock {
 	 * Teleport the player
 	 * @param p The player interacting
 	 */
-	@SuppressWarnings("deprecation")
 	public void onInteract(PlayerInteractEvent e, SabrePlayer sp) {
 
-		
-		// Ignore stick interact
-		if (sp.getPlayer().getItemInHand().getType().equals(Material.STICK)) {
+		// Ignore stick or pick interact
+		Material handItemType = sp.getPlayer().getItemInHand().getType();
+		if (handItemType.equals(Material.STICK)
+				|| handItemType.equals(Material.STONE_PICKAXE)
+				|| handItemType.equals(Material.IRON_PICKAXE)
+				|| handItemType.equals(Material.GOLD_PICKAXE)
+				|| handItemType.equals(Material.DIAMOND_PICKAXE)) {
 			return;
 		}
 		
@@ -73,54 +72,18 @@ public class TeleportPad extends SpecialBlock {
 			return;
 		}
 		
-		if (driveLocation == null) {
+		AbstractWarpDrive drive = null;
+		
+		// Verify warp drive exists
+		if (driveLocation != null) {
+			drive = (AbstractWarpDrive)BlockManager.getInstance().getBlockAt(driveLocation);
+		}
+		
+		if (drive != null) {
+			drive.performWarp(sp, this);
+		} else {
 			sp.msg(Lang.warpMissingDrive);
-			return;
 		}
-		
-		BlockManager bm = BlockManager.getInstance();
-		
-		AbstractWarpDrive drive = (AbstractWarpDrive)bm.getBlockAt(driveLocation);
-		if (drive == null) {
-			sp.msg(Lang.warpMissingDrive);
-			return;
-		}
-		
-		// Get the destination location
-		Location destPadLocation = linkedPadLocation;
-		if (destPadLocation == null) {
-			destPadLocation = drive.getDriveType().getTeleportLocation(this.location); // fall back to scaling factor of 8 if no linked pad
-		}
-		
-		// Make sure there is a pad on the other end
-		TeleportPad destPad = (TeleportPad)bm.getBlockAt(destPadLocation);
-		if (destPad == null) {
-			destPad = new TeleportPad(destPadLocation, blockName);
-			bm.addBlock(destPad);
-		}
-		destPad.setLinkedPadLocation(this.location);
-		destPad.setDriveLocation(this.driveLocation);
-		destPad.saveSettings();
-		
-		this.setLinkedPadLocation(destPadLocation);
-		this.saveSettings();
-		
-		Block b = destPadLocation.getBlock();
-		SabreItemStack is = CustomItems.getInstance().getByName(blockName);
-		b.setType(is.getType());
-		b.setData(is.getData().getData());
-		
-		// Clear some space 3 blocks above the pad
-		b = destPadLocation.getBlock().getRelative(BlockFace.UP);
-		b.setType(Material.AIR);
-		b = b.getRelative(BlockFace.UP);
-		b.setType(Material.AIR);
-		b = b.getRelative(BlockFace.UP);
-		b.setType(Material.AIR);
-		
-		// Do the teleport
-		sp.msg(Lang.warping);
-		SabreUtil.tryToTeleport(sp.getPlayer(), destPadLocation.add(0, 1, 0));
 	}
 	
 
@@ -136,8 +99,8 @@ public class TeleportPad extends SpecialBlock {
 			doc = doc.append("drive", SabreUtil.serializeLocation(this.driveLocation));
 		}
 		
-		if (linkedPadLocation != null) {
-			doc = doc.append("pad", SabreUtil.serializeLocation(this.linkedPadLocation));
+		if (destPadLocation != null) {
+			doc = doc.append("pad", SabreUtil.serializeLocation(this.destPadLocation));
 		}
 		
 		return doc;
@@ -153,7 +116,7 @@ public class TeleportPad extends SpecialBlock {
 			this.driveLocation = SabreUtil.deserializeLocation(o.get("drive"));
 		}
 		if (o.containsField("pad")) {
-			this.linkedPadLocation = SabreUtil.deserializeLocation(o.get("pad"));
+			this.destPadLocation = SabreUtil.deserializeLocation(o.get("pad"));
 		}
 	}
 	
@@ -174,18 +137,18 @@ public class TeleportPad extends SpecialBlock {
 	}
 	
 	/**
-	 * Gets the linked pad location
-	 * @return The linked pad location
+	 * Gets the destination pad location
+	 * @return The destination pad location
 	 */
-	public Location getLinkedPadLocation() {
-		return this.linkedPadLocation;
+	public Location getDestPadLocation() {
+		return this.destPadLocation;
 	}
 	
 	/**
-	 * Sets the linked pad location
-	 * @param linkedPadLocation The linked pad location
+	 * Sets the destination pad location
+	 * @param destPadLocation The destination pad location
 	 */
-	public void setLinkedPadLocation(Location linkedPadLocation) {
-		this.linkedPadLocation = linkedPadLocation;
+	public void setDestPadLocation(Location destPadLocation) {
+		this.destPadLocation = destPadLocation;
 	}
 }

@@ -1,21 +1,25 @@
 package com.gordonfreemanq.sabre.warp;
 
 import org.bukkit.Location;
+import org.bukkit.Material;
+import org.bukkit.block.Block;
+import org.bukkit.block.BlockFace;
 import org.bukkit.event.player.PlayerInteractEvent;
 
 import com.gordonfreemanq.sabre.Lang;
 import com.gordonfreemanq.sabre.SabrePlayer;
 import com.gordonfreemanq.sabre.blocks.BlockManager;
 import com.gordonfreemanq.sabre.customitems.SpecialBlock;
+import com.gordonfreemanq.sabre.util.SabreUtil;
 import com.mongodb.BasicDBObject;
 
 public abstract class AbstractWarpDrive extends SpecialBlock {
 	
-	private final WarpDriveType driveType;
+	// Location of the pad
+	protected Location padLocation;
 	
-	public AbstractWarpDrive(Location location, String typeName, WarpDriveType driveType) {
+	public AbstractWarpDrive(Location location, String typeName) {
 		super(location, typeName);
-		this.driveType = driveType;
 		
 		this.hasEffectRadius = false;
 	}
@@ -52,20 +56,32 @@ public abstract class AbstractWarpDrive extends SpecialBlock {
 		}
 		
 		// Good to go, perform the link
-		pad.setDriveLocation(this.location);
+		pad.setDriveLocation(this.location); // Link pad to the drive block
 		pad.saveSettings();
+		this.padLocation = pad.getLocation(); // Link the drive block to the pad
+		this.saveSettings();
 		sp.msg(Lang.warpLinked, maxDist);
 		sp.getPlayer().getItemInHand().setItemMeta(null);
 	}
 	
 	
 	/**
-	 * Gets the warp drive type
-	 * @return The drive type
+	 * Gets the pad location
+	 * @return The pad location
 	 */
-	public WarpDriveType getDriveType() {
-		return this.driveType;
+	public Location getPadLocation() {
+		return this.padLocation;
 	}
+	
+	
+	/**
+	 * Sets the pad location
+	 * @param linkedPadLocation The pad location
+	 */
+	public void setPadLocation(Location padLocation) {
+		this.padLocation = padLocation;
+	}
+	
 
 	/**
 	 * Gets the settings specific to this block
@@ -74,7 +90,9 @@ public abstract class AbstractWarpDrive extends SpecialBlock {
 	@Override
 	public BasicDBObject getSettings() {
 		BasicDBObject doc = new BasicDBObject();
-		doc = doc.append("warp_drive", true);
+		if (padLocation != null) {
+			doc = doc.append("pad", SabreUtil.serializeLocation(this.padLocation));
+		}
 		
 		return doc;
 	}
@@ -85,5 +103,30 @@ public abstract class AbstractWarpDrive extends SpecialBlock {
 	 * @param o The db document
 	 */
 	public void loadSettings(BasicDBObject o) {
+		if (o.containsField("pad")) {
+			this.padLocation = SabreUtil.deserializeLocation(o.get("pad"));
+		}
 	}
+	
+	/**
+	 * Clears some space above the destination pad
+	 * @param destPad the destination pad
+	 */
+	protected void clearSpace(Location destPad) {
+
+		// Clear some space 3 blocks above the pad
+		Block b = destPad.getBlock().getRelative(BlockFace.UP);
+		b.setType(Material.AIR);
+		b = b.getRelative(BlockFace.UP);
+		b.setType(Material.AIR);
+		b = b.getRelative(BlockFace.UP);
+		b.setType(Material.AIR);
+	}
+	
+	/**
+	 * Performs the warp to location
+	 * @param from the source teleport pad
+	 * @return true if warps succeeds
+	 */
+	public abstract boolean performWarp(SabrePlayer sp, TeleportPad sourcePad);
 }
