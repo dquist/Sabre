@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Random;
 import java.util.Set;
+import java.util.TreeMap;
 import java.util.TreeSet;
 
 import org.bukkit.Bukkit;
@@ -81,6 +82,8 @@ import org.bukkit.util.Vector;
 import com.gordonfreemanq.sabre.prisonpearl.PearlManager;
 import com.gordonfreemanq.sabre.util.SabreUtil;
 import com.gordonfreemanq.sabre.blocks.SabreItemStack;
+import com.trc202.CombatTag.CombatTag;
+import com.trc202.CombatTagApi.CombatTagApi;
 
 @SuppressWarnings("deprecation")
 public class SabreTweaks implements Listener {
@@ -88,47 +91,57 @@ public class SabreTweaks implements Listener {
 	private final SabreConfig config;
 	private Random rand;
 
+	private final CombatTagApi combatTagApi;
+
+	private Map<String, PearlTeleportInfo> pearlTeleportInfo = new TreeMap<String, PearlTeleportInfo>();
+	private final static int PEARL_THROTTLE_WINDOW = 10000;  // 10 sec
+	private final static int PEARL_NOTIFICATION_WINDOW = 1000;  // 1 sec
+
 	public SabreTweaks(SabreConfig config) {
 		this.config = config;
 		this.rand = new Random(1337);
-		
+
 		RegisterCustomRecipes();
-	}
-	
-	
-	private void RegisterCustomRecipes() {
 		
+		// Combat Tag API
+		CombatTag ct = (CombatTag)SabrePlugin.getPlugin().getServer().getPluginManager().getPlugin("CombatTag");
+		combatTagApi = new CombatTagApi(ct);
+	}
+
+
+	private void RegisterCustomRecipes() {
+
 		// Recipe: 1 XP bottle creates 9 Emeralds 
 		ShapelessRecipe expToEmeraldRecipe = new ShapelessRecipe(new ItemStack(Material.EMERALD, 1));
 		expToEmeraldRecipe.addIngredient(9, Material.EXP_BOTTLE);
 		Bukkit.addRecipe(expToEmeraldRecipe);
-		
+
 		// Recipe: 9 Emeralds create 1 XP bottle 
 		ShapelessRecipe emeraldToExpRecipe = new ShapelessRecipe(new ItemStack(Material.EXP_BOTTLE, 9));
 		emeraldToExpRecipe.addIngredient(Material.EMERALD);
 		Bukkit.addRecipe(emeraldToExpRecipe);
-		
+
 		// Recipe: 4 logs create 1 plank
 		ShapelessRecipe logsToPlank = new ShapelessRecipe(new ItemStack(Material.WOOD, 1, (short)0));
 		logsToPlank.addIngredient(4, Material.LOG, 0);
 		Bukkit.addRecipe(logsToPlank);
-		
+
 		ShapelessRecipe logsToPlank1 = new ShapelessRecipe(new ItemStack(Material.WOOD, 1, (short)1));
 		logsToPlank1.addIngredient(4, Material.LOG, 1);
 		Bukkit.addRecipe(logsToPlank1);
-		
+
 		ShapelessRecipe logsToPlank2 = new ShapelessRecipe(new ItemStack(Material.WOOD, 1, (short)2));
 		logsToPlank2.addIngredient(4, Material.LOG, 2);
 		Bukkit.addRecipe(logsToPlank2);
-		
+
 		ShapelessRecipe logsToPlank3 = new ShapelessRecipe(new ItemStack(Material.WOOD, 1, (short)3));
 		logsToPlank3.addIngredient(4, Material.LOG, 3);
 		Bukkit.addRecipe(logsToPlank3);
-		
+
 		ShapelessRecipe logsToPlank4 = new ShapelessRecipe(new ItemStack(Material.WOOD, 1, (short)4));
 		logsToPlank4.addIngredient(4, Material.LOG_2, 0);
 		Bukkit.addRecipe(logsToPlank4);
-		
+
 		ShapelessRecipe logsToPlank5 = new ShapelessRecipe(new ItemStack(Material.WOOD, 1, (short)5));
 		logsToPlank5.addIngredient(4, Material.LOG_2, 1);
 		Bukkit.addRecipe(logsToPlank5);
@@ -242,22 +255,22 @@ public class SabreTweaks implements Listener {
 	 */
 	@EventHandler
 	public void craftItem(PrepareItemCraftEvent e) {
-		
+
 		for (ItemStack is : e.getInventory().getContents()) {
 			if (is.hasItemMeta() && is.getItemMeta().hasLore()) {
 				e.getInventory().setResult(new ItemStack(Material.AIR));
-				
-	            for(HumanEntity he : e.getViewers()) {
-	                if(he instanceof Player) {
-	                	PlayerManager.getInstance().getPlayerById(he.getUniqueId()).msg(Lang.noCraftingLore);
-	                }
-	            }
-	            
+
+				for(HumanEntity he : e.getViewers()) {
+					if(he instanceof Player) {
+						PlayerManager.getInstance().getPlayerById(he.getUniqueId()).msg(Lang.noCraftingLore);
+					}
+				}
+
 				return;
 			}
 		}
-		
-		
+
+
 		// Quick way to disable the vanilla wood crafting. Need 4x the wood
 		int logCount = 0;
 		if (e.getRecipe().getResult().getType() == Material.WOOD) {
@@ -266,36 +279,36 @@ public class SabreTweaks implements Listener {
 				if (matrix[i] != null && (matrix[i].getType() == Material.LOG || matrix[i].getType() == Material.LOG_2)) {
 					logCount++;
 				}
-				
+
 				if (logCount > 1) {
 					break;
 				}
 			}
 		}
-		
+
 		// Dont' allow the vanilla craft of 1 log = 4 planks
 		if (logCount == 1) {
 			e.getInventory().setResult(new ItemStack(Material.AIR));
-            for(HumanEntity he : e.getViewers()) {
-                if(he instanceof Player) {			
-                	PlayerManager.getInstance().getPlayerById(he.getUniqueId()).msg(Lang.recipeNeed4Logs);
-                }
-            }
+			for(HumanEntity he : e.getViewers()) {
+				if(he instanceof Player) {			
+					PlayerManager.getInstance().getPlayerById(he.getUniqueId()).msg(Lang.recipeNeed4Logs);
+				}
+			}
 
 			return;
 		}
-		
+
 		ItemStack result = e.getRecipe().getResult();
 
 		for (SabreItemStack is : config.getDisabledRecipes()) {
 			if (is.isSimilar(result)) {
 				e.getInventory().setResult(new ItemStack(Material.AIR));
-				
-	            for(HumanEntity he : e.getViewers()) {
-	                if(he instanceof Player) {
-	                	PlayerManager.getInstance().getPlayerById(he.getUniqueId()).msg(Lang.recipeDisabled);
-	                }
-	            }
+
+				for(HumanEntity he : e.getViewers()) {
+					if(he instanceof Player) {
+						PlayerManager.getInstance().getPlayerById(he.getUniqueId()).msg(Lang.recipeDisabled);
+					}
+				}
 				return;
 			}
 		}
@@ -590,8 +603,8 @@ public class SabreTweaks implements Listener {
 	// Stop Cobble generation from lava+water
 
 	private static final BlockFace[] faces_ = new BlockFace[] {
-			BlockFace.NORTH, BlockFace.SOUTH, BlockFace.EAST, BlockFace.WEST,
-			BlockFace.UP, BlockFace.DOWN };
+		BlockFace.NORTH, BlockFace.SOUTH, BlockFace.EAST, BlockFace.WEST,
+		BlockFace.UP, BlockFace.DOWN };
 
 	private BlockFace WaterAdjacentLava(Block lava_block) {
 		for (BlockFace face : faces_) {
@@ -727,27 +740,29 @@ public class SabreTweaks implements Listener {
 		}
 	}
 
-	// =================================================
-	// Combat Tag players on server join
-
+	
+	/**
+	 * Tags players on server join
+	 * @param e The event
+	 */
 	@EventHandler
-	public void tagOnJoin(PlayerJoinEvent event) {
+	public void tagOnJoin(PlayerJoinEvent e) {
 		// Delay two ticks to tag after secure login has been denied.
 		// This opens a 1 tick window for a cheater to login and grab
 		// server info, which should be detectable and bannable.
-		final Player loginPlayer = event.getPlayer();
+		final Player loginPlayer = e.getPlayer();
 		Bukkit.getScheduler().runTaskLater(SabrePlugin.getPlugin(),
 				new Runnable() {
-					@Override
-					public void run() {
-						if (loginPlayer == null)
-							return;
-						SabrePlugin.getPlugin().getCombatTag()
-								.tagPlayer(loginPlayer);
-						loginPlayer
-								.sendMessage("You have been Combat Tagged on Login");
-					}
-				}, 2L);
+			@Override
+			public void run() {
+				if (loginPlayer == null)
+					return;
+				SabrePlugin.getPlugin().getCombatTag()
+				.tagPlayer(loginPlayer);
+				loginPlayer
+				.sendMessage("You have been Combat Tagged on Login");
+			}
+		}, 2L);
 	}
 
 	// =================================================
@@ -802,9 +817,9 @@ public class SabreTweaks implements Listener {
 		if (!(string.getRelative(BlockFace.NORTH).getType()
 				.equals(Material.STATIONARY_WATER)
 				|| string.getRelative(BlockFace.EAST).getType()
-						.equals(Material.STATIONARY_WATER)
+				.equals(Material.STATIONARY_WATER)
 				|| string.getRelative(BlockFace.WEST).getType()
-						.equals(Material.STATIONARY_WATER) || string
+				.equals(Material.STATIONARY_WATER) || string
 				.getRelative(BlockFace.SOUTH).getType()
 				.equals(Material.STATIONARY_WATER))) {
 			return;
@@ -1028,14 +1043,14 @@ public class SabreTweaks implements Listener {
 		final Location vehicleLoc = vehicle.getLocation();
 		Bukkit.getScheduler().runTaskLater(SabrePlugin.getPlugin(),
 				new Runnable() {
-					@Override
-					public void run() {
-						if (!tryToTeleport(player, vehicleLoc,
-								"exiting vehicle")) {
-							player.setHealth(0.000000D);
-						}
-					}
-				}, 2L);
+			@Override
+			public void run() {
+				if (!tryToTeleport(player, vehicleLoc,
+						"exiting vehicle")) {
+					player.setHealth(0.000000D);
+				}
+			}
+		}, 2L);
 	}
 
 	public void onFixMinecartReenterBug(VehicleDestroyEvent event) {
@@ -1054,14 +1069,14 @@ public class SabreTweaks implements Listener {
 		final Location vehicleLoc = vehicle.getLocation();
 		Bukkit.getScheduler().runTaskLater(SabrePlugin.getPlugin(),
 				new Runnable() {
-					@Override
-					public void run() {
-						if (!tryToTeleport(player, vehicleLoc,
-								"in destroyed vehicle")) {
-							player.setHealth(0.000000D);
-						}
-					}
-				}, 2L);
+			@Override
+			public void run() {
+				if (!tryToTeleport(player, vehicleLoc,
+						"in destroyed vehicle")) {
+					player.setHealth(0.000000D);
+				}
+			}
+		}, 2L);
 	}
 
 	// ================================================
@@ -1086,7 +1101,7 @@ public class SabreTweaks implements Listener {
 		if (event.getItem() == null
 				|| !event.getItem().getType().equals(Material.BANNER)
 				|| (event.getAction() != Action.LEFT_CLICK_AIR && event
-						.getAction() != Action.LEFT_CLICK_BLOCK)) {
+				.getAction() != Action.LEFT_CLICK_BLOCK)) {
 			return;
 		}
 		Player player = event.getPlayer();
@@ -1123,8 +1138,8 @@ public class SabreTweaks implements Listener {
 			e.setCancelled(true);
 		}
 	}
-	
-	
+
+
 	/**
 	 * Checks if a material can mine ores other than iron
 	 * @param m The material
@@ -1140,8 +1155,8 @@ public class SabreTweaks implements Listener {
 			return false;
 		}
 	}
-	
-	
+
+
 	/**
 	 * A better version of dropNaturally so the dropped item is placed
 	 * where you would expect it to be
@@ -1151,7 +1166,7 @@ public class SabreTweaks implements Listener {
 	public static void dropItemAtLocation(Location l, ItemStack is) {
 		l.getWorld().dropItem(l.add(0.5, 0.5, 0.5), is).setVelocity(new Vector(0, 0.05, 0));
 	}
-	
+
 	/**
 	 * A better version of dropNaturally so the dropped item is placed
 	 * where you would expect it to be
@@ -1161,8 +1176,8 @@ public class SabreTweaks implements Listener {
 	public static void dropItemAtLocation(Block b, ItemStack is) {
 		dropItemAtLocation(b.getLocation(), is);
 	}
-	
-	
+
+
 	/**
 	 * Gets the item stack for lore
 	 * @param m The ore material
@@ -1191,7 +1206,7 @@ public class SabreTweaks implements Listener {
 			return null;
 		}
 	}
-	
+
 	/**
 	 * Ores always drop the ore, not the mineral item
 	 * 
@@ -1201,22 +1216,22 @@ public class SabreTweaks implements Listener {
 	public void onBlockBreakEvent(BlockBreakEvent e) {
 		Material m = e.getBlock().getType();
 		Material dropItem = Material.AIR;
-		
+
 		// Ignore if not using a pick
 		if (!isOrePick(e.getPlayer().getItemInHand().getType())) {
 			return;
 		}
-		
+
 		// Ignore players in creative mode
 		if (e.getPlayer().getGameMode() == GameMode.CREATIVE) {
 			return;
 		}
-		
+
 		switch (m) {
 		case GLOWING_REDSTONE_ORE:
 			dropItem = Material.REDSTONE_ORE;
 			break;
-			
+
 		case DIAMOND_ORE:
 		case LAPIS_ORE:
 		case QUARTZ_ORE:
@@ -1227,7 +1242,7 @@ public class SabreTweaks implements Listener {
 		default:
 			break;
 		}
-		
+
 		if (dropItem != Material.AIR) {
 			int fortuneLevel = e.getPlayer().getItemInHand().getEnchantmentLevel(Enchantment.LOOT_BONUS_BLOCKS);
 
@@ -1237,7 +1252,7 @@ public class SabreTweaks implements Listener {
 			// F3 = 30%
 			if (fortuneLevel > 0) {
 				int randInt = rand.nextInt(9) + 1;
-				
+
 				if (fortuneLevel >= randInt) {
 					ItemStack toDrop = getOreFortuneStack(m);
 					if (toDrop != null) {
@@ -1245,24 +1260,24 @@ public class SabreTweaks implements Listener {
 					}
 				}
 			}
-			
+
 			e.setCancelled(true);
 			e.getBlock().setType(Material.AIR);
 			dropItemAtLocation(e.getBlock(), new ItemStack(dropItem, 1));
 		}
 	}
-	
-	
+
+
 	/**
 	 * Blocks certain items from being cooked/smelted in vanilla furnaces
 	 * @param e
 	 */
 	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
 	public void onFurnaceBurn(FurnaceBurnEvent e) {
-		
+
 		Furnace f = (Furnace)e.getBlock().getState();
 		ItemStack smelting = f.getInventory().getSmelting();
-		
+
 		// Loop through the disabled items and cancel the burn if it's found
 		for(SabreItemStack is : config.getDisabledSmelts()) {
 			if (is.isSimilar(smelting)) {
@@ -1273,8 +1288,8 @@ public class SabreTweaks implements Listener {
 			}
 		}
 	}
-	
-	
+
+
 	/**
 	 * Blocks certain items from being cooked/smelted in vanilla furnaces
 	 * @param e
@@ -1282,7 +1297,7 @@ public class SabreTweaks implements Listener {
 	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
 	public void onFurnaceSmelt(FurnaceSmeltEvent e) {
 		ItemStack smelting = e.getSource();
-		
+
 		// Loop through the disabled items and cancel the burn if it's found
 		for(SabreItemStack is : config.getDisabledSmelts()) {
 			if (is.isSimilar(smelting)) {
@@ -1291,5 +1306,117 @@ public class SabreTweaks implements Listener {
 				break;
 			}
 		}
+	}
+
+	/**
+	 * Fixes Teleporting through walls and doors
+	 * ** and **
+	 * Ender Pearl Teleportation disabling
+	 * ** and **
+	 * Ender pearl cooldown timer
+	 */
+	private class PearlTeleportInfo {
+		public long last_teleport;
+		public long last_notification;
+	}
+	
+	
+	/**
+	 * Gets the remaining combat tag seconds for a player
+	 * @param player The player
+	 * @return The number of seconds remaining
+	 */
+    public Integer combatTagRemainingSeconds(Player player) {
+        if (combatTagApi != null && combatTagApi.isInCombat(player.getName())) {
+            long remaining = (combatTagApi.getRemainingTagTime(player.getName()) + 500) / 1000L;
+            if (remaining > 0x7FFFFFFF) {
+                return null;
+            }
+            return (int)remaining;
+        }
+        return null;
+    }
+
+
+	/**
+	 * Throttles how often an ender pearl can be thrown
+	 * @param event
+	 */
+	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
+	public void throttlePearlTeleport(PlayerInteractEvent event) {
+		if (event.getItem() == null || !event.getItem().getType().equals(Material.ENDER_PEARL)) {
+			return;
+		}
+		
+		final Action action = event.getAction();
+		if (action != Action.RIGHT_CLICK_AIR && action != Action.RIGHT_CLICK_BLOCK) {
+			return;
+		}
+		
+		final Block clickedBlock = event.getClickedBlock();
+		BlockState clickedState = null;
+		Material clickedMaterial = null;
+		if (clickedBlock != null) {
+			clickedState = clickedBlock.getState();
+			clickedMaterial = clickedState.getType();
+		}
+		
+		if (clickedState != null && (
+				clickedState instanceof InventoryHolder
+				|| clickedMaterial.equals(Material.ANVIL)
+				|| clickedMaterial.equals(Material.ENCHANTMENT_TABLE)
+				|| clickedMaterial.equals(Material.ENDER_CHEST)
+				|| clickedMaterial.equals(Material.WORKBENCH))) {
+			// Prevent Combat Tag/Pearl cooldown on inventory access
+			return;
+		}
+		
+		final long current_time = System.currentTimeMillis();
+		final Player player = event.getPlayer();
+		final String player_name = player.getName();
+		PearlTeleportInfo teleport_info = pearlTeleportInfo.get(player_name);
+		long time_diff = 0;
+		
+		if (teleport_info == null) {
+			// New pearl thrown outside of throttle window
+			teleport_info = new PearlTeleportInfo();
+			teleport_info.last_teleport = current_time;
+			teleport_info.last_notification =
+					current_time - (PEARL_NOTIFICATION_WINDOW + 100);  // Force notify
+			combatTagApi.tagPlayer(player);
+		} else {
+			time_diff = current_time - teleport_info.last_teleport;
+			if (PEARL_THROTTLE_WINDOW > time_diff) {
+				// Pearl throw throttled
+				event.setCancelled(true);
+			} else {
+				// New pearl thrown outside of throttle window
+				combatTagApi.tagPlayer(player);
+				teleport_info.last_teleport = current_time;
+				teleport_info.last_notification =
+						current_time - (PEARL_NOTIFICATION_WINDOW + 100);  // Force notify
+				time_diff = 0;
+			}
+		}
+		
+		final long notify_diff = current_time - teleport_info.last_notification;
+		if (notify_diff > PEARL_NOTIFICATION_WINDOW) {
+			teleport_info.last_notification = current_time;
+			Integer tagCooldown = combatTagRemainingSeconds(player);
+			
+			if (tagCooldown != null) {
+				player.sendMessage(String.format(
+						"Pearl in %d seconds. Combat Tag in %d seconds.",
+						(PEARL_THROTTLE_WINDOW - time_diff + 500) / 1000,
+						tagCooldown));
+			} else {
+				player.sendMessage(String.format(
+						"Pearl Teleport Cooldown: %d seconds",
+						(PEARL_THROTTLE_WINDOW - time_diff + 500) / 1000));
+			}
+		}
+		
+		pearlTeleportInfo.put(player_name, teleport_info);
+		return;
 	}
 }

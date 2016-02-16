@@ -12,7 +12,6 @@ import net.minecraft.server.v1_8_R1.PlayerInteractManager;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
-import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Server;
@@ -30,13 +29,9 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
-import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.entity.EntityCombustEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
-import org.bukkit.event.entity.EntityDamageEvent;
-import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 import org.bukkit.event.entity.EntityDeathEvent;
-import org.bukkit.event.entity.FoodLevelChangeEvent;
 import org.bukkit.event.entity.ItemDespawnEvent;
 import org.bukkit.event.entity.ItemSpawnEvent;
 import org.bukkit.event.inventory.InventoryAction;
@@ -45,11 +40,9 @@ import org.bukkit.event.inventory.InventoryDragEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerItemHeldEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
-import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.player.PlayerPickupItemEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.event.player.PlayerRespawnEvent;
-import org.bukkit.event.player.PlayerToggleFlightEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.InventoryHolder;
 import org.bukkit.inventory.ItemStack;
@@ -156,15 +149,15 @@ public class PearlListener implements Listener {
 
 	/**
 	 * Handles a combattag NPC despawn event
-	 * @param event
+	 * @param e The event args
 	 */
 	@EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
-	public void onNpcDespawn(NpcDespawnEvent event) {
-		if (event.getReason() != NpcDespawnReason.DESPAWN_TIMEOUT) {
+	public void onNpcDespawn(NpcDespawnEvent e) {
+		if (e.getReason() != NpcDespawnReason.DESPAWN_TIMEOUT) {
 			return;
 		}
-		UUID plruuid = event.getPlayerUUID();
-		NPC npc = event.getNpc();
+		UUID plruuid = e.getPlayerUUID();
+		NPC npc = e.getNpc();
 		Location loc = npc.getBukkitEntity().getLocation();
 
 		handleNpcDespawn(plruuid, loc);
@@ -915,113 +908,4 @@ public class PearlListener implements Listener {
         	e.setCancelled(true);
         }
 	}
-	
-	
-	/**
-	 * Heals the stone pick for pearled players
-	 * @param e
-	 */
-	/*
-	@EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
-	public void onMiningEvent(BlockBreakEvent e) {
-		
-		if (!e.getPlayer().getLocation().getWorld().equals(pearls.getPrisonWorld())) {
-			return;
-		}
-		
-		ItemStack is = e.getPlayer().getItemInHand();
-		
-		if (!is.getType().equals(Material.STONE_PICKAXE)) {
-			return;
-		}
-		
-		if (pearls.isImprisoned(e.getPlayer()) && is.getDurability() > 10) {
-			is.setDurability((short)0);
-		}
-	} */
-	
-	
-	/**
-	 * Prevent fall damage for pearled players
-	 * @param e The event args
-	 */
-	/*
-	@EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
-    public void onEntityDamageEvent(EntityDamageEvent e) {
-        if (!(e.getEntity() instanceof Player)) {
-            return;
-        }
-        
-        if (e.getCause() != DamageCause.FALL) {
-        	return;
-        }
-
-        Player p = (Player) e.getEntity();
-        if (!p.getLocation().getWorld().equals(pearls.getPrisonWorld())) {
-			return;
-		}
-        
-        if (pearls.isImprisoned(p)) {
-        	e.setCancelled(true);
-        }
-    } */
-	
-	
-	/*
-	/**
-	 * Double Jump
-	 * @param e The event args
-	 */
-	/*
-	@EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
-	public void onPlayerToggleFlight(PlayerToggleFlightEvent e) {
-		Player p = e.getPlayer();
-		if (p.getGameMode() == GameMode.CREATIVE) {
-			return;
-		}
-		
-		e.setCancelled(true);
-		p.setAllowFlight(false);
-		p.setFlying(false);
-		p.setVelocity(p.getVelocity().multiply(3));
-	} */
-	
-
-	/**
-	 * Double Jump
-	 * @param e The event args
-	 */
-	/*
-	@EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
-	public void onPlayerMove(PlayerMoveEvent e) {
-		Player p = e.getPlayer();
-		
-		if ((p.getGameMode() != GameMode.CREATIVE)
-				&& p.getLocation().subtract(0, 1, 0).getBlock().getType() != Material.AIR
-				&& (!p.isFlying())) {
-			
-			if (pearls.isImprisonedInPrison(p)) {
-				p.setAllowFlight(true);
-			}
-		}
-	} */
-	
-	
-	/**
-	 * No hunger loss for pearled players
-	 * @param e The event args
-	 */
-	/*
-	@EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
-	public void onHungerChange(FoodLevelChangeEvent e) {
-		if (!(e.getEntity() instanceof Player)) {
-			return;
-		}
-		
-		Player p = (Player)e.getEntity();
-		
-		if (pearls.isImprisonedInPrison(p)) {
-			e.setFoodLevel(20);
-		}
-	} */
 }
