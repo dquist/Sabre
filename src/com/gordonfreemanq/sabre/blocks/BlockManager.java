@@ -24,8 +24,6 @@ import com.gordonfreemanq.sabre.groups.SabreGroup;
 import com.gordonfreemanq.sabre.groups.SabreMember;
 import com.gordonfreemanq.sabre.snitch.Snitch;
 import com.gordonfreemanq.sabre.snitch.SnitchCollection;
-import com.gordonfreemanq.sabre.warp.AbstractWarpDrive;
-import com.gordonfreemanq.sabre.warp.TeleportPad;
 
 public class BlockManager {
 
@@ -34,7 +32,6 @@ public class BlockManager {
 	private final SignCollection secureSigns;
 	private final SnitchCollection snitches;
 	private final FactoryCollection factories;
-	private final WarpCollection warpBlocks;
 	
 	public SignCollection getSigns() {
 		return secureSigns;
@@ -46,10 +43,6 @@ public class BlockManager {
 	
 	public FactoryCollection getFactories() {
 		return factories;
-	}
-	
-	public WarpCollection getWarpBlocks() {
-		return warpBlocks;
 	}
 	
 	private static BlockManager instance;
@@ -71,11 +64,9 @@ public class BlockManager {
 		this.secureSigns = new SignCollection();
 		this.snitches = new SnitchCollection();
 		this.factories = new FactoryCollection();
-		this.warpBlocks = new WarpCollection();
 		allBlocks.addSub(secureSigns);
 		allBlocks.addSub(snitches);
 		allBlocks.addSub(factories);
-		allBlocks.addSub(warpBlocks);
 		
 		instance = this;
 	}
@@ -90,7 +81,6 @@ public class BlockManager {
 		HashMap<Location, SabreBlock> signs = new HashMap<Location, SabreBlock>();
 		HashMap<Location, SabreBlock> snitches = new HashMap<Location, SabreBlock>();
 		HashMap<Location, SabreBlock> factories = new HashMap<Location, SabreBlock>();
-		HashMap<Location, SabreBlock> warpBlocks = new HashMap<Location, SabreBlock>();
 		Location l;
 		
 		for (SabreBlock b : db.blockGetChunkRecords(c)) {
@@ -104,8 +94,6 @@ public class BlockManager {
 					snitches.put(l,  b);
 				} else if (b instanceof BaseFactory) {
 					factories.put(l, b);
-				} else if (b instanceof AbstractWarpDrive || b instanceof TeleportPad) {
-					warpBlocks.put(l, b);
 				}
 			}
 		}
@@ -114,7 +102,6 @@ public class BlockManager {
 		secureSigns.putChunk(c, signs);
 		this.snitches.putChunk(c, snitches);
 		this.factories.putChunk(c, factories);
-		this.warpBlocks.putChunk(c, warpBlocks);
 	}
 	
 	
@@ -137,19 +124,6 @@ public class BlockManager {
 				if (bf.runUnloaded()) {
 					FactoryWorker.getInstance().addRunning(bf);
 				}
-			}
-		}
-	}
-	
-	
-	/**
-	 * Loads all the warp blocks from the DB
-	 */
-	public void loadAllWarpBlocks() {
-		for(SabreBlock b : db.blockGetWarpDrives()) {
-			if (b instanceof AbstractWarpDrive || b instanceof TeleportPad) {
-				AbstractWarpDrive warpDrive = (AbstractWarpDrive)b;
-				warpBlocks.add(warpDrive);
 			}
 		}
 	}
