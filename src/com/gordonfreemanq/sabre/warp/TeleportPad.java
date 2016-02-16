@@ -25,7 +25,7 @@ public class TeleportPad extends SpecialBlock {
 	protected Location destPadLocation;
 	
 	public TeleportPad(Location location, String typeName) {
-		super(location, blockName);
+		super(location, typeName);
 		
 		this.hasEffectRadius = false;
 	}
@@ -38,9 +38,40 @@ public class TeleportPad extends SpecialBlock {
 	public void onStickInteract(PlayerInteractEvent e, SabrePlayer sp) {
 		
 		Reinforcement r = this.getReinforcement();
+		BlockManager bm = BlockManager.getInstance();
 		
 		if (r != null && !r.getGroup().isBuilder(sp)) {
 			sp.msg(Lang.noPermission);
+			return;
+		}
+		
+		// Attempt to link
+		Location l = TeleportLinker.parseLocation(sp, false);
+		if (l != null) {
+			TeleportPad destPad = (TeleportPad)bm.getBlockAt(l);
+			if (destPad == null) {
+				sp.msg(Lang.warpNoPadFound);
+				return;
+			}
+			
+			Location destDriveLocation = destPad.getDriveLocation();
+			AbstractWarpDrive destDrive = null;
+			
+			// Verify warp drive exists
+			if (destDriveLocation != null) {
+				destDrive = (AbstractWarpDrive)bm.getBlockAt(destDriveLocation);
+			}
+			
+			if (destDrive != null && destDrive.canDirectLink()) {
+				this.destPadLocation = l;
+				this.saveSettings();
+				destPad.destPadLocation = this.destPadLocation;
+				destPad.saveSettings();
+				sp.msg(Lang.warpLinkedPadToPad);
+			} else {
+				sp.msg(Lang.warpMissingDrive);
+			}
+			
 			return;
 		}
 		

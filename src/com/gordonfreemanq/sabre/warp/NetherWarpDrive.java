@@ -57,9 +57,9 @@ public class NetherWarpDrive extends AbstractWarpDrive {
 		BlockManager bm = BlockManager.getInstance();
 		TeleportPad destPad = null;
 		
-		// The drive must be linked to the overworld drive
+		// The drive must be linked to the overworld pad
 		if (sourcePadLocation.getWorld().getEnvironment() == Environment.NORMAL) {
-			if (!this.padLocation.equals(sourcePad.getDriveLocation())) {
+			if (!this.padLocation.equals(sourcePadLocation)) {
 				sp.msg(Lang.warpMissingDrive);
 				return false;
 			}
@@ -75,7 +75,8 @@ public class NetherWarpDrive extends AbstractWarpDrive {
 
 		// Only create a new teleport pad when going from Overworld -> Nether
 		if (!destIsValid && sourcePadLocation.getWorld().getEnvironment() == Environment.NORMAL) {
-			destPad = new TeleportPad(destPadLocation, blockName);
+			destPad = new TeleportPad(destPadLocation, "Generated Nether Pad");
+			destPad.setDisplayName(blockName);
 			bm.addBlock(destPad);
 			
 			// Create the physical block

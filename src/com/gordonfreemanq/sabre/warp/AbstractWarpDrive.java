@@ -60,7 +60,7 @@ public abstract class AbstractWarpDrive extends SpecialBlock {
 		pad.saveSettings();
 		this.padLocation = pad.getLocation(); // Link the drive block to the pad
 		this.saveSettings();
-		sp.msg(Lang.warpLinked, maxDist);
+		sp.msg(Lang.warpLinkedPadDrive, maxDist);
 		sp.getPlayer().getItemInHand().setItemMeta(null);
 	}
 	
@@ -129,4 +129,13 @@ public abstract class AbstractWarpDrive extends SpecialBlock {
 	 * @return true if warps succeeds
 	 */
 	public abstract boolean performWarp(SabrePlayer sp, TeleportPad sourcePad);
+	
+	
+	/**
+	 * Whether the drive supports direct linking
+	 * @return
+	 */
+	public boolean canDirectLink() {
+		return false;
+	}
 }
