@@ -73,7 +73,10 @@ public abstract class AbstractWarpDrive extends SpecialBlock {
 	 */
 	@Override
 	public BasicDBObject getSettings() {
-		return null;
+		BasicDBObject doc = new BasicDBObject();
+		doc = doc.append("warp_drive", true);
+		
+		return doc;
 	}
 	
 	

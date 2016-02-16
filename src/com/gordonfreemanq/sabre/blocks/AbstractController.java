@@ -161,10 +161,6 @@ public abstract class AbstractController {
 			return null;
 		}
 		
-		if (lore.size() < 3) {
-			return null;
-		}
-		
 		if (!ChatColor.stripColor(lore.get(0)).equals(name)) {
 			return null;
 		}

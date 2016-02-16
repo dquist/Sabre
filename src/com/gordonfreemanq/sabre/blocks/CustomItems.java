@@ -111,7 +111,11 @@ public class CustomItems {
 	 * @return The item stack, if it exists
 	 */
 	public SabreItemStack getByName(String name) {
-		return customItems.get(name).clone();
+		SabreItemStack stack = customItems.get(name);
+		if (stack != null) {
+			stack = stack.clone();
+		}
+		return stack;
 	}
 	
 	

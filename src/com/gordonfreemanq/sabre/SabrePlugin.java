@@ -253,6 +253,7 @@ public class SabrePlugin extends AbstractSabrePlugin
 		
 		// Load the running factories
 		blockManager.loadRunningFactories();
+		blockManager.loadAllWarpBlocks();
 		
 		this.sabreTweaks.registerTimerForPearlCheck();
 		

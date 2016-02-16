@@ -22,7 +22,13 @@ public class CmdAdminGive extends SabreCommand {
 	@Override
 	public void perform() 
 	{
-		String itemName = this.args.get(0);
+		StringBuilder sb = new StringBuilder();
+		for (int i = 0; i < args.size(); i++) {
+			sb.append(args.get(i));
+			sb.append(" ");
+		}
+		
+		String itemName = sb.toString().trim();
 		
 		SabreItemStack item = CustomItems.getInstance().getByName(itemName);
 		if (item == null) {

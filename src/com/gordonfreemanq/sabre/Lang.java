@@ -125,12 +125,12 @@ public class Lang
 	public static final String signNowHidden = "<i>This sign is now <b>hidden<i>.";
 	
 	// WARP
-	public static final String warpNotReinforced = "<i>Teleport pad must be reinforced before linking with warp drive.";
-	public static final String warpHitDrive = "<i>Hit warp drive with teleport linker to link with pad.";
+	public static final String warpHitDrive = "<g>Created a <c>Teleport Linker<g>. Hit a warp drive block to link them together.";
 	public static final String warpLinked = "<g>Teleport pad linked to warp drive.";
 	public static final String warpNoPadFound = "<b>No teleport pad was found at that location.";
 	public static final String warpTooFar = "<i>Teleport pad must be within %d blocks of the warp drive.";
 	public static final String warpMissingDrive = "<i>Teleport pad is not linked to a warp drive.";
+	public static final String warping = "<i>Teleporting...";
 	
 	
 	// PEARLS

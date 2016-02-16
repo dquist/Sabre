@@ -34,6 +34,11 @@ public enum WarpDriveType {
 				destX = from.getBlockX() >> 3; // divide by 8
 				destZ = from.getBlockZ() >> 3; // divide by 8
 				destY = from.getBlockY();
+			} else {
+				destWorld = Bukkit.getWorld(OVER_WORLD_NAME);
+				destX = from.getBlockX() << 3; // multiply by 8
+				destZ = from.getBlockZ() << 3; // multiply by 8
+				destY = from.getBlockY();
 			}
 			break;
 		}
