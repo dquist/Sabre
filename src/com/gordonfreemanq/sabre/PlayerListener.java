@@ -24,9 +24,12 @@ import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.event.player.PlayerKickEvent;
 import org.bukkit.event.player.PlayerRespawnEvent;
 
+import com.gordonfreemanq.sabre.blocks.BlockManager;
+import com.gordonfreemanq.sabre.blocks.SabreBlock;
 import com.gordonfreemanq.sabre.chat.GlobalChat;
 import com.gordonfreemanq.sabre.chat.IChatChannel;
 import com.gordonfreemanq.sabre.core.ISabreLog;
+import com.gordonfreemanq.sabre.prisonpearl.PearlManager;
 import com.gordonfreemanq.sabre.util.SabreUtil;
 
 public class PlayerListener implements Listener {
@@ -105,7 +108,7 @@ public class PlayerListener implements Listener {
 		onPlayerDisconnect(e.getPlayer());
 	}
 	
-	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
+	@EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
 	public void onPlayerJoin(PlayerJoinEvent e) {
 		Player p = e.getPlayer();
 		
@@ -132,6 +135,7 @@ public class PlayerListener implements Listener {
 			
 			Location spawnLocation = SabreUtil.chooseSpawn(p.getWorld(), 5000);
 			SabreUtil.sendGround(p, spawnLocation);
+			p.setBedSpawnLocation(spawnLocation, true);
 			p.teleport(spawnLocation);
 			p.sendMessage("You wake up in an unfamiliar place.");
 		}
@@ -218,9 +222,8 @@ public class PlayerListener implements Listener {
 	 * Handles the respawn point
 	 * @param e The event args
 	 */
-	@EventHandler(priority=EventPriority.NORMAL, ignoreCancelled = true)
+	@EventHandler(priority=EventPriority.LOWEST, ignoreCancelled = true)
 	public void onPlayerRespawn(PlayerRespawnEvent e) {
-		/*
 		SabrePlayer p = pm.getPlayerById(e.getPlayer().getUniqueId());
 		Location l = p.getBedLocation();
 		boolean useBed = false;
@@ -237,12 +240,9 @@ public class PlayerListener implements Listener {
 			if (useBed) {
 				e.getPlayer().setBedSpawnLocation(l, true);
 			} else {
-				p.msg(Lang.playerBedMissing);
-				Location loc = SabreUtil.fuzzLocation(PearlManager.getInstance().getFreeWorld().getSpawnLocation());
-				e.getPlayer().setBedSpawnLocation(loc, true);
+				e.getPlayer().setBedSpawnLocation(null);
 			}
-			
-		}*/
+		}
 	}
 	
 
@@ -265,7 +265,7 @@ public class PlayerListener implements Listener {
 		
 	}
 	
-	@EventHandler
+	@EventHandler(priority=EventPriority.HIGHEST, ignoreCancelled = true)
 	public void onRandomSpawn(PlayerRespawnEvent event){
 		
 		Player player = event.getPlayer();
