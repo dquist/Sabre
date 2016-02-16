@@ -149,10 +149,6 @@ public class PlayerListener implements Listener {
 		p.setCustomName(sp.getName());
 		p.setPlayerListName(sp.getName());
 		
-		
-		sp.msg("<h>This server is running CivFactions v%s.", SabrePlugin.version);
-		sp.msg("<h>Type \"<p>/f <page><h>\" to see the commands.");
-		
 		pm.printOfflineMessages(sp);
 		pm.clearOfflineMessages(sp);
 		
