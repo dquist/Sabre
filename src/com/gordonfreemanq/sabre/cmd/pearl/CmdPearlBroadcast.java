@@ -10,7 +10,6 @@ public class CmdPearlBroadcast extends SabreCommand {
 	{
 		super();
 		this.aliases.add("broadcast");
-		this.aliases.add("ppb");
 		
 		this.requiredArgs.add("player");
 
