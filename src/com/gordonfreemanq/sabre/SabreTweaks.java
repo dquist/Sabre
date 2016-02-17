@@ -1,7 +1,9 @@
 package com.gordonfreemanq.sabre;
 
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -9,6 +11,12 @@ import java.util.Random;
 import java.util.Set;
 import java.util.TreeMap;
 import java.util.TreeSet;
+import java.util.logging.Level;
+
+import net.minecraft.server.v1_8_R3.EntityTypes;
+import net.minecraft.server.v1_8_R3.Item;
+import net.minecraft.server.v1_8_R3.ItemEnderPearl;
+import net.minecraft.server.v1_8_R3.MinecraftKey;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Chunk;
@@ -21,6 +29,7 @@ import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.BlockState;
 import org.bukkit.block.Furnace;
+import org.bukkit.block.Sign;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Arrow;
 import org.bukkit.entity.Boat;
@@ -45,6 +54,7 @@ import org.bukkit.event.block.BlockPhysicsEvent;
 import org.bukkit.event.block.BlockPistonExtendEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.block.BlockSpreadEvent;
+import org.bukkit.event.block.SignChangeEvent;
 import org.bukkit.event.enchantment.EnchantItemEvent;
 import org.bukkit.event.enchantment.PrepareItemEnchantEvent;
 import org.bukkit.event.entity.CreatureSpawnEvent;
@@ -54,6 +64,7 @@ import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.entity.EntityExplodeEvent;
 import org.bukkit.event.entity.EntityInteractEvent;
 import org.bukkit.event.entity.EntityPortalEvent;
+import org.bukkit.event.entity.FoodLevelChangeEvent;
 import org.bukkit.event.inventory.FurnaceBurnEvent;
 import org.bukkit.event.inventory.FurnaceSmeltEvent;
 import org.bukkit.event.inventory.InventoryOpenEvent;
@@ -61,6 +72,7 @@ import org.bukkit.event.inventory.PrepareItemCraftEvent;
 import org.bukkit.event.player.PlayerBucketEmptyEvent;
 import org.bukkit.event.player.PlayerInteractEntityEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.event.player.PlayerItemConsumeEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
@@ -72,6 +84,7 @@ import org.bukkit.event.world.ChunkUnloadEvent;
 import org.bukkit.event.world.PortalCreateEvent;
 import org.bukkit.event.world.StructureGrowEvent;
 import org.bukkit.inventory.EntityEquipment;
+import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.InventoryHolder;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.ShapelessRecipe;
@@ -81,6 +94,8 @@ import org.bukkit.util.Vector;
 
 import com.gordonfreemanq.sabre.prisonpearl.PearlManager;
 import com.gordonfreemanq.sabre.util.CombatInterface;
+import com.gordonfreemanq.sabre.util.CustomNMSEntityEnderPearl;
+import com.gordonfreemanq.sabre.util.CustomNMSItemEnderPearl;
 import com.gordonfreemanq.sabre.util.SabreUtil;
 import com.gordonfreemanq.sabre.blocks.SabreItemStack;
 
@@ -104,6 +119,8 @@ public class SabreTweaks implements Listener {
 		
 		// Combat Tag API
 		combatTag = SabrePlugin.getPlugin().getCombatTag();
+		
+		hookEnderPearls();
 	}
 
 
@@ -118,31 +135,6 @@ public class SabreTweaks implements Listener {
 		ShapelessRecipe emeraldToExpRecipe = new ShapelessRecipe(new ItemStack(Material.EXP_BOTTLE, 9));
 		emeraldToExpRecipe.addIngredient(Material.EMERALD);
 		Bukkit.addRecipe(emeraldToExpRecipe);
-
-		// Recipe: 4 logs create 1 plank
-		ShapelessRecipe logsToPlank = new ShapelessRecipe(new ItemStack(Material.WOOD, 1, (short)0));
-		logsToPlank.addIngredient(4, Material.LOG, 0);
-		Bukkit.addRecipe(logsToPlank);
-
-		ShapelessRecipe logsToPlank1 = new ShapelessRecipe(new ItemStack(Material.WOOD, 1, (short)1));
-		logsToPlank1.addIngredient(4, Material.LOG, 1);
-		Bukkit.addRecipe(logsToPlank1);
-
-		ShapelessRecipe logsToPlank2 = new ShapelessRecipe(new ItemStack(Material.WOOD, 1, (short)2));
-		logsToPlank2.addIngredient(4, Material.LOG, 2);
-		Bukkit.addRecipe(logsToPlank2);
-
-		ShapelessRecipe logsToPlank3 = new ShapelessRecipe(new ItemStack(Material.WOOD, 1, (short)3));
-		logsToPlank3.addIngredient(4, Material.LOG, 3);
-		Bukkit.addRecipe(logsToPlank3);
-
-		ShapelessRecipe logsToPlank4 = new ShapelessRecipe(new ItemStack(Material.WOOD, 1, (short)4));
-		logsToPlank4.addIngredient(4, Material.LOG_2, 0);
-		Bukkit.addRecipe(logsToPlank4);
-
-		ShapelessRecipe logsToPlank5 = new ShapelessRecipe(new ItemStack(Material.WOOD, 1, (short)5));
-		logsToPlank5.addIngredient(4, Material.LOG_2, 1);
-		Bukkit.addRecipe(logsToPlank5);
 	}
 
 	/**
@@ -753,8 +745,10 @@ public class SabreTweaks implements Listener {
 				new Runnable() {
 			@Override
 			public void run() {
-				if (loginPlayer == null)
+				if (loginPlayer == null || !loginPlayer.isOnline()) {
 					return;
+					
+				}
 				combatTag.tagPlayer(loginPlayer);
 				loginPlayer.sendMessage("You have been Combat Tagged on Login");
 			}
@@ -1397,5 +1391,267 @@ public class SabreTweaks implements Listener {
 		
 		pearlTeleportInfo.put(player_name, teleport_info);
 		return;
+	}
+	
+	
+	// ================================================
+	// Adjust ender pearl gravity
+
+	public final static int pearlId = 368;
+	public final static MinecraftKey pearlKey = new MinecraftKey("ender_pearl");
+
+	@SuppressWarnings({ "rawtypes", "unchecked" })
+	private void hookEnderPearls() {
+		try {
+			// They thought they could stop us by preventing us from registering an
+			// item. We'll show them
+			Field idRegistryField = Item.REGISTRY.getClass().getDeclaredField("a");
+			idRegistryField.setAccessible(true);
+			Object idRegistry = idRegistryField.get(Item.REGISTRY);
+
+			Field idRegistryMapField = idRegistry.getClass().getDeclaredField("a");
+			idRegistryMapField.setAccessible(true);
+			Object idRegistryMap = idRegistryMapField.get(idRegistry);
+
+			Field idRegistryItemsField = idRegistry.getClass().getDeclaredField("b");
+			idRegistryItemsField.setAccessible(true);
+			Object idRegistryItemList = idRegistryItemsField.get(idRegistry);
+
+			// Remove ItemEnderPearl from the ID Registry
+			Item idItem = null;
+			Iterator<Item> itemListIter = ((List<Item>)idRegistryItemList).iterator();
+			while (itemListIter.hasNext()) {
+				idItem = itemListIter.next();
+				if (idItem == null) {
+					continue;
+				}
+				if (!(idItem instanceof ItemEnderPearl)) {
+					continue;
+				}
+				itemListIter.remove();
+				break;
+			}
+			if (idItem != null) {
+				((Map<Item, Integer>)idRegistryMap).remove(idItem);
+			}
+			// Register our custom pearl Item.
+			Item.REGISTRY.a(pearlId, pearlKey, new CustomNMSItemEnderPearl());
+
+			// Setup the custom entity
+			Field fieldStringToClass = EntityTypes.class.getDeclaredField("c");
+			Field fieldClassToString = EntityTypes.class.getDeclaredField("d");
+			fieldStringToClass.setAccessible(true);
+			fieldClassToString.setAccessible(true);
+
+			Field fieldClassToId = EntityTypes.class.getDeclaredField("f");
+			Field fieldStringToId = EntityTypes.class.getDeclaredField("g");
+			fieldClassToId.setAccessible(true);
+			fieldStringToId.setAccessible(true);
+
+			Map mapStringToClass = (Map)fieldStringToClass.get(null);
+			Map mapClassToString = (Map)fieldClassToString.get(null);
+
+			Map mapClassToId = (Map)fieldClassToId.get(null);
+			Map mapStringToId = (Map)fieldStringToId.get(null);
+
+			mapStringToClass.put("ThrownEnderpearl",CustomNMSEntityEnderPearl.class);
+			mapStringToId.put("ThrownEnderpearl", Integer.valueOf(14));
+
+			mapClassToString.put(CustomNMSEntityEnderPearl.class, "ThrownEnderpearl");
+			mapClassToId.put(CustomNMSEntityEnderPearl.class, Integer.valueOf(14));
+		} catch (Exception e) {
+			//Humbug.severe("Exception while overriding MC's ender pearl class");
+			e.printStackTrace();
+		}
+	}
+	
+	
+	// ================================================
+	// Hunger Changes
+
+	// Keep track if the player just ate.
+	private Map<Player, Double> playerLastEat_ = new HashMap<Player, Double>();
+
+	@EventHandler
+	public void setSaturationOnFoodEat(PlayerItemConsumeEvent event) {
+		// Each food sets a different saturation.
+		final Player player = event.getPlayer();
+		ItemStack item = event.getItem();
+		Material mat = item.getType();
+		double multiplier = config.getFoodSaturationMultiplier();
+		if (multiplier <= 0.000001 && multiplier >= -0.000001) {
+			return;
+		}
+		switch(mat) {
+		case APPLE:
+			playerLastEat_.put(player, multiplier*2.4);
+		case BAKED_POTATO:
+			playerLastEat_.put(player, multiplier*7.2);
+		case BREAD:
+			playerLastEat_.put(player, multiplier*6);
+		case CAKE:
+			playerLastEat_.put(player, multiplier*0.4);
+		case CARROT_ITEM:
+			playerLastEat_.put(player, multiplier*4.8);
+		case COOKED_FISH:
+			playerLastEat_.put(player, multiplier*6);
+		case GRILLED_PORK:
+			playerLastEat_.put(player, multiplier*12.8);
+		case COOKIE:
+			playerLastEat_.put(player, multiplier*0.4);
+		case GOLDEN_APPLE:
+			playerLastEat_.put(player, multiplier*9.6);
+		case GOLDEN_CARROT:
+			playerLastEat_.put(player, multiplier*14.4);
+		case MELON:
+			playerLastEat_.put(player, multiplier*1.2);
+		case MUSHROOM_SOUP:
+			playerLastEat_.put(player, multiplier*7.2);
+		case POISONOUS_POTATO:
+			playerLastEat_.put(player, multiplier*1.2);
+		case POTATO:
+			playerLastEat_.put(player, multiplier*0.6);
+		case RAW_FISH:
+			playerLastEat_.put(player, multiplier*1);
+		case PUMPKIN_PIE:
+			playerLastEat_.put(player, multiplier*4.8);
+		case RAW_BEEF:
+			playerLastEat_.put(player,  multiplier*1.8);
+		case RAW_CHICKEN:
+			playerLastEat_.put(player, multiplier*1.2);
+		case PORK:
+			playerLastEat_.put(player,  multiplier*1.8);
+		case ROTTEN_FLESH:
+			playerLastEat_.put(player, multiplier*0.8);
+		case SPIDER_EYE:
+			playerLastEat_.put(player, multiplier*3.2);
+		case COOKED_BEEF:
+			playerLastEat_.put(player, multiplier*12.8);
+		default:
+			playerLastEat_.put(player, multiplier);
+			Bukkit.getServer().getScheduler().runTaskLater(SabrePlugin.getPlugin(), new Runnable() {
+				// In case the player ingested a potion, this removes the
+				// saturation from the list. Unsure if I have every item
+				// listed. There is always the other cases of like food
+				// that shares same id
+				@Override
+				public void run() {
+					playerLastEat_.remove(player);
+				}
+			}, 80);
+		}
+	}
+
+	
+	@EventHandler
+	public void onFoodLevelChange(FoodLevelChangeEvent event) {
+		final Player player = (Player) event.getEntity();
+		final double mod = config.getHungerSlowdown();
+		Double saturation;
+		if (playerLastEat_.containsKey(player)) { // if the player just ate
+			saturation = playerLastEat_.get(player);
+			if (saturation == null) {
+				saturation = ((Float)player.getSaturation()).doubleValue();
+			}
+		} else {
+			saturation = Math.min(
+					player.getSaturation() + mod,
+					20.0D + (mod * 2.0D));
+		}
+		player.setSaturation(saturation.floatValue());
+	}
+	
+	
+	private static int SIGN_LIMIT = 100;
+	
+
+	/**
+	 * Enforce good sign data length
+	 * @param e The event args
+	 */
+	@EventHandler(ignoreCancelled=true)
+	public void onSignFinalize(SignChangeEvent e) {
+		String[] signdata = e.getLines();
+
+		for (int i = 0; i < signdata.length; i++) {
+			if (signdata[i] != null && signdata[i].length() > SIGN_LIMIT) {
+				Player p = e.getPlayer();
+				Location location = e.getBlock().getLocation();
+				SabrePlugin.getPlugin().log(Level.WARNING, String.format(
+						"Player '%s' [%s] attempted to place sign at ([%s] %d, %d, %d) with line %d having length %d > %d. Preventing.", 
+						p.getPlayerListName(), p.getUniqueId(), location.getWorld().getName(), 
+						location.getBlockX(), location.getBlockY(), location.getBlockZ(),
+						i, signdata[i].length(), SIGN_LIMIT));
+
+				e.setLine(i, "");
+			}
+		}
+	}
+
+	private HashMap<String, Set<Long>> signs_scanned_chunks_ = new HashMap<String, Set<Long>>();
+
+	@EventHandler(priority=EventPriority.HIGHEST, ignoreCancelled=false)
+	public void onSignLoads(ChunkLoadEvent event) {
+		Chunk chunk = event.getChunk();
+		String world = chunk.getWorld().getName();
+
+		long chunk_id = ((long)chunk.getX() << 32L) + (long)chunk.getZ();
+		if (signs_scanned_chunks_.containsKey(world)) {
+			if (signs_scanned_chunks_.get(world).contains(chunk_id)) {
+				return;
+			}
+		} else {
+			signs_scanned_chunks_.put(world, new TreeSet<Long>()); 
+		}
+		signs_scanned_chunks_.get(world).add(chunk_id);
+
+		BlockState[] allTiles = chunk.getTileEntities();
+
+		for(BlockState tile: allTiles) {
+			if (tile instanceof Sign) {
+				Sign sign = (Sign) tile;
+				String[] signdata = sign.getLines();
+				for (int i = 0; i < signdata.length; i++) {
+					if (signdata[i] != null && signdata[i].length() > SIGN_LIMIT) {
+						Location location = sign.getLocation();
+						SabrePlugin.getPlugin().log(Level.WARNING, String.format(
+								"Line %d in sign at ([%s] %d, %d, %d) is length %d > %d. Curating.", i,
+								world, location.getBlockX(), location.getBlockY(), location.getBlockZ(),
+								signdata[i].length(), SIGN_LIMIT));
+
+
+						sign.setLine(i, "");
+
+						sign.update(true);
+					}
+				}
+			}
+		}
+	}
+
+	@EventHandler(priority = EventPriority.HIGHEST)
+	public void adminAccessBlockedChest(PlayerInteractEvent e) {
+		if (!e.getPlayer().hasPermission("admin") && !e.getPlayer().isOp()) {
+			return;
+		}
+		if (e.getAction() == Action.RIGHT_CLICK_AIR || e.getAction() == Action.RIGHT_CLICK_BLOCK) {
+			Player p = e.getPlayer();
+			Set <Material> s = new TreeSet<Material>();
+			s.add(Material.AIR);
+			s.add(Material.OBSIDIAN); //probably in a vault
+			List <Block> blocks = p.getLineOfSight(s, 8);
+			for(Block b:blocks) {
+				Material m = b.getType();
+				if(m == Material.CHEST || m == Material.TRAPPED_CHEST) {
+					if(b.getRelative(BlockFace.UP).getType().isOccluding()) {
+						//dont show inventory twice if a normal chest is opened
+						final Inventory che_inv = ((InventoryHolder)b.getState()).getInventory();
+						p.openInventory(che_inv);
+						p.updateInventory();	  
+					}
+					break;
+				}
+			}
+		}
 	}
 }

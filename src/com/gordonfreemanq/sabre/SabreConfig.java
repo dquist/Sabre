@@ -121,6 +121,9 @@ public class SabreConfig {
 	private int farmChunkRadius;
 	private int farmSurveySampleSize;
 	
+	private double foodSaturationMultiplier = 0.0;
+	private double hungerSlowdown = 0.0;
+	
 	
 	/**
 	 * Factory method for creating a new config class
@@ -537,5 +540,21 @@ public class SabreConfig {
 	 */
 	public int getFarmSurveySampleSize() {
 		return this.farmSurveySampleSize;
+	}
+	
+	/**
+	 * Gets the food saturation multiplier
+	 * @return The food saturation multiplier
+	 */
+	public double getFoodSaturationMultiplier() {
+		return this.foodSaturationMultiplier;
+	}
+	
+	/**
+	 * Gets the hunger slowdown factor
+	 * @return The hunger slowdown factor
+	 */
+	public double getHungerSlowdown() {
+		return this.hungerSlowdown;
 	}
 }
