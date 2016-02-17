@@ -29,7 +29,8 @@ import com.gordonfreemanq.sabre.prisonpearl.PearlManager;
 import com.gordonfreemanq.sabre.prisonpearl.PearlWorker;
 import com.gordonfreemanq.sabre.snitch.SnitchListener;
 import com.gordonfreemanq.sabre.snitch.SnitchLogger;
-import com.gordonfreemanq.sabre.util.CombatTagManager;
+import com.gordonfreemanq.sabre.util.CombatInterface;
+import com.gordonfreemanq.sabre.util.CombatTagPlusManager;
 import com.gordonfreemanq.sabre.util.SabreUtil;
 
 
@@ -62,7 +63,7 @@ public class SabrePlugin extends AbstractSabrePlugin
 	private FactoryConfig factoryConfig;
 	private FactoryWorker factoryWorker;
 	private PearlWorker pearlWorker;
-	private CombatTagManager combatTag;
+	private CombatInterface combatTag;
 	
 	/**
 	 * Gets the player manager
@@ -84,7 +85,7 @@ public class SabrePlugin extends AbstractSabrePlugin
 	 * Gets the group manager
 	 * @return The group manager
 	 */
-	public CombatTagManager getCombatTag() {
+	public CombatInterface getCombatTag() {
 		return this.combatTag;
 	}
 	
@@ -221,7 +222,7 @@ public class SabrePlugin extends AbstractSabrePlugin
 		this.factoryListener = new FactoryListener(playerManager, blockManager);
 		this.factoryConfig = new FactoryConfig();
 		this.customItems = new CustomItems();
-		this.combatTag = new CombatTagManager();
+		this.combatTag = new CombatTagPlusManager();
 		
 		// Try to connect to the database and load the data
 		try {

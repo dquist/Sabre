@@ -2,7 +2,6 @@
 <classpath>
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.7"/>
-	<classpathentry kind="lib" path="lib/CombatTag.jar"/>
 	<classpathentry kind="lib" path="lib/mongo-java-driver-2.13.0.jar">
 		<attributes>
 			<attribute name="javadoc_location" value="http://api.mongodb.org/java/current/"/>
@@ -14,12 +13,13 @@
 			<attribute name="javadoc_location" value="https://hub.spigotmc.org/javadocs/bukkit/"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="lib" path="lib/spigot_server.jar"/>
 	<classpathentry kind="lib" path="lib/PacketWrapper.jar">
 		<attributes>
 			<attribute name="javadoc_location" value="http://ci.shadowvolt.com/job/PacketWrapper/javadoc/"/>
 		</attributes>
 	</classpathentry>
 	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/4"/>
+	<classpathentry kind="lib" path="lib/spigot-1.8.8.jar"/>
+	<classpathentry kind="lib" path="lib/CombatTagPlus.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

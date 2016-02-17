@@ -6,9 +6,12 @@ import java.util.Random;
 import java.util.logging.Level;
 import java.util.UUID;
 
-import net.minecraft.server.v1_8_R1.EntityPlayer;
-import net.minecraft.server.v1_8_R1.MinecraftServer;
-import net.minecraft.server.v1_8_R1.PlayerInteractManager;
+import net.minecraft.server.v1_8_R3.EntityPlayer;
+import net.minecraft.server.v1_8_R3.MinecraftServer;
+import net.minecraft.server.v1_8_R3.PlayerInteractManager;
+import net.minelink.ctplus.Npc;
+import net.minelink.ctplus.event.NpcDespawnEvent;
+import net.minelink.ctplus.event.NpcDespawnReason;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -47,21 +50,17 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.InventoryHolder;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
-import org.bukkit.craftbukkit.v1_8_R1.CraftServer;
+import org.bukkit.craftbukkit.v1_8_R3.CraftServer;
 
 import com.gordonfreemanq.sabre.Lang;
 import com.gordonfreemanq.sabre.PlayerManager;
 import com.gordonfreemanq.sabre.SabrePlayer;
 import com.gordonfreemanq.sabre.SabrePlugin;
 import com.gordonfreemanq.sabre.prisonpearl.PrisonPearlEvent.Type;
+import com.gordonfreemanq.sabre.util.CombatInterface;
 import com.gordonfreemanq.sabre.util.SabreUtil;
 import com.gordonfreemanq.sabre.util.TextUtil;
 import com.mojang.authlib.GameProfile;
-import com.topcat.npclib.entity.NPC;
-import com.trc202.CombatTag.CombatTag;
-import com.trc202.CombatTagApi.CombatTagApi;
-import com.trc202.CombatTagEvents.NpcDespawnEvent;
-import com.trc202.CombatTagEvents.NpcDespawnReason;
 
 /**
  * Handles events related to prison pearls
@@ -71,7 +70,7 @@ public class PearlListener implements Listener {
 
 	private final PearlManager pearls;
 	private final PlayerManager pm;
-	private final CombatTagApi combatTagApi;
+	private final CombatInterface combatInterface;
 
 	/**
 	 * Creates a new PearlListener instance
@@ -82,8 +81,7 @@ public class PearlListener implements Listener {
 		this.pearls = pearls;
 		this.pm = pm;
 
-		CombatTag ct = (CombatTag)SabrePlugin.getPlugin().getServer().getPluginManager().getPlugin("CombatTag");
-		combatTagApi = new CombatTagApi(ct);
+		combatInterface = SabrePlugin.getPlugin().getCombatTag();
 	}
 
 
@@ -153,14 +151,13 @@ public class PearlListener implements Listener {
 	 */
 	@EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
 	public void onNpcDespawn(NpcDespawnEvent e) {
-		if (e.getReason() != NpcDespawnReason.DESPAWN_TIMEOUT) {
-			return;
-		}
-		UUID plruuid = e.getPlayerUUID();
-		NPC npc = e.getNpc();
-		Location loc = npc.getBukkitEntity().getLocation();
-
-		handleNpcDespawn(plruuid, loc);
+    	NpcDespawnReason reason = e.getDespawnReason();
+    	Npc npc = e.getNpc();
+    	Player p = npc.getEntity();
+    	Location loc = p.getLocation();
+    	if (reason == NpcDespawnReason.DESPAWN) {
+        	handleNpcDespawn(p.getUniqueId(), loc);
+    	}
 	}
 
 
@@ -218,7 +215,7 @@ public class PearlListener implements Listener {
 	public void onPlayerQuit(PlayerQuitEvent event) {
 		Player imprisoner = event.getPlayer();
 
-		if (combatTagApi.isInCombat(imprisoner)) {
+		if (combatInterface.isTagged(imprisoner.getUniqueId())) {
 			return; // if player is tagged
 		}
 

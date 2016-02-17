@@ -80,10 +80,9 @@ import org.bukkit.potion.PotionEffectType;
 import org.bukkit.util.Vector;
 
 import com.gordonfreemanq.sabre.prisonpearl.PearlManager;
+import com.gordonfreemanq.sabre.util.CombatInterface;
 import com.gordonfreemanq.sabre.util.SabreUtil;
 import com.gordonfreemanq.sabre.blocks.SabreItemStack;
-import com.trc202.CombatTag.CombatTag;
-import com.trc202.CombatTagApi.CombatTagApi;
 
 @SuppressWarnings("deprecation")
 public class SabreTweaks implements Listener {
@@ -91,7 +90,7 @@ public class SabreTweaks implements Listener {
 	private final SabreConfig config;
 	private Random rand;
 
-	private final CombatTagApi combatTagApi;
+	private final CombatInterface combatTag;
 
 	private Map<String, PearlTeleportInfo> pearlTeleportInfo = new TreeMap<String, PearlTeleportInfo>();
 	private final static int PEARL_THROTTLE_WINDOW = 10000;  // 10 sec
@@ -104,8 +103,7 @@ public class SabreTweaks implements Listener {
 		RegisterCustomRecipes();
 		
 		// Combat Tag API
-		CombatTag ct = (CombatTag)SabrePlugin.getPlugin().getServer().getPluginManager().getPlugin("CombatTag");
-		combatTagApi = new CombatTagApi(ct);
+		combatTag = SabrePlugin.getPlugin().getCombatTag();
 	}
 
 
@@ -757,10 +755,8 @@ public class SabreTweaks implements Listener {
 			public void run() {
 				if (loginPlayer == null)
 					return;
-				SabrePlugin.getPlugin().getCombatTag()
-				.tagPlayer(loginPlayer);
-				loginPlayer
-				.sendMessage("You have been Combat Tagged on Login");
+				combatTag.tagPlayer(loginPlayer);
+				loginPlayer.sendMessage("You have been Combat Tagged on Login");
 			}
 		}, 2L);
 	}
@@ -1319,23 +1315,6 @@ public class SabreTweaks implements Listener {
 		public long last_teleport;
 		public long last_notification;
 	}
-	
-	
-	/**
-	 * Gets the remaining combat tag seconds for a player
-	 * @param player The player
-	 * @return The number of seconds remaining
-	 */
-    public Integer combatTagRemainingSeconds(Player player) {
-        if (combatTagApi != null && combatTagApi.isInCombat(player.getName())) {
-            long remaining = (combatTagApi.getRemainingTagTime(player.getName()) + 500) / 1000L;
-            if (remaining > 0x7FFFFFFF) {
-                return null;
-            }
-            return (int)remaining;
-        }
-        return null;
-    }
 
 
 	/**
@@ -1383,7 +1362,7 @@ public class SabreTweaks implements Listener {
 			teleport_info.last_teleport = current_time;
 			teleport_info.last_notification =
 					current_time - (PEARL_NOTIFICATION_WINDOW + 100);  // Force notify
-			combatTagApi.tagPlayer(player);
+			combatTag.tagPlayer(player);
 		} else {
 			time_diff = current_time - teleport_info.last_teleport;
 			if (PEARL_THROTTLE_WINDOW > time_diff) {
@@ -1391,7 +1370,7 @@ public class SabreTweaks implements Listener {
 				event.setCancelled(true);
 			} else {
 				// New pearl thrown outside of throttle window
-				combatTagApi.tagPlayer(player);
+				combatTag.tagPlayer(player);
 				teleport_info.last_teleport = current_time;
 				teleport_info.last_notification =
 						current_time - (PEARL_NOTIFICATION_WINDOW + 100);  // Force notify
@@ -1402,7 +1381,7 @@ public class SabreTweaks implements Listener {
 		final long notify_diff = current_time - teleport_info.last_notification;
 		if (notify_diff > PEARL_NOTIFICATION_WINDOW) {
 			teleport_info.last_notification = current_time;
-			Integer tagCooldown = combatTagRemainingSeconds(player);
+			Integer tagCooldown = combatTag.remainingSeconds(player);
 			
 			if (tagCooldown != null) {
 				player.sendMessage(String.format(
