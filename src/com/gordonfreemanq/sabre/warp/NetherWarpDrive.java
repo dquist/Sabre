@@ -97,6 +97,14 @@ public class NetherWarpDrive extends AbstractWarpDrive {
 			return false;
 		}
 		
+		// If going from Nether -> Overworld, warp drive must be linked to destination
+		if (sourcePadLocation.getWorld().getEnvironment() == Environment.NETHER) {
+			if (!this.padLocation.equals(destPadLocation)) {
+				sp.msg(Lang.warpMissingDrive);
+				return false;
+			}
+		}
+		
 		// Link the two pads together 
 		destPad.setDriveLocation(sourcePad.getDriveLocation());
 		destPad.setDestPadLocation(sourcePadLocation);

@@ -5,6 +5,7 @@ import org.bukkit.Location;
 import com.gordonfreemanq.sabre.Lang;
 import com.gordonfreemanq.sabre.SabrePlayer;
 import com.gordonfreemanq.sabre.blocks.BlockManager;
+import com.gordonfreemanq.sabre.blocks.SabreBlock;
 import com.gordonfreemanq.sabre.util.SabreUtil;
 
 public class DirectWarpDrive extends AbstractWarpDrive {
@@ -54,6 +55,16 @@ public class DirectWarpDrive extends AbstractWarpDrive {
 		if (!destIsValid) {
 			sp.msg(Lang.warpNoPadFound);
 			return false;
+		}
+		
+		Location destWarpDriveLocation = destPad.getDriveLocation();
+		if (destWarpDriveLocation == null) {
+			sp.msg(Lang.warpMissingDestDrive);
+		}
+		
+		SabreBlock destWarpDrive = (SabreBlock)bm.getBlockAt(destWarpDriveLocation);
+		if (!(destWarpDrive instanceof DirectWarpDrive)) {
+			sp.msg(Lang.warpMissingDestDrive);
 		}
 		
 		this.clearSpace(destPadLocation);

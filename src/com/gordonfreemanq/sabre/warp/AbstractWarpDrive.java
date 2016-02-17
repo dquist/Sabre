@@ -57,6 +57,7 @@ public abstract class AbstractWarpDrive extends SpecialBlock {
 		
 		// Good to go, perform the link
 		pad.setDriveLocation(this.location); // Link pad to the drive block
+		pad.setDestPadLocation(null);
 		pad.saveSettings();
 		this.padLocation = pad.getLocation(); // Link the drive block to the pad
 		this.saveSettings();
@@ -116,8 +117,6 @@ public abstract class AbstractWarpDrive extends SpecialBlock {
 
 		// Clear some space 3 blocks above the pad
 		Block b = destPad.getBlock().getRelative(BlockFace.UP);
-		b.setType(Material.AIR);
-		b = b.getRelative(BlockFace.UP);
 		b.setType(Material.AIR);
 		b = b.getRelative(BlockFace.UP);
 		b.setType(Material.AIR);
