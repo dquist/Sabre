@@ -470,7 +470,7 @@ public class PrisonPearl {
 			Player p = sp.getPlayer();
 			
 			// Is the holder online?
-			if (!p.isOnline()) {
+			if (!sp.isOnline()) {
 				feedback.append(String.format("Jailor %s not online", p.getName()));
 				return HolderVerReason.PLAYER_NOT_ONLINE;
 			}

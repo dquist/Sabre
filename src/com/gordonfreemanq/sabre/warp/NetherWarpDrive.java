@@ -63,6 +63,11 @@ public class NetherWarpDrive extends AbstractWarpDrive {
 				sp.msg(Lang.warpMissingDrive);
 				return false;
 			}
+			
+			// Default to scaling of 8
+			if (destPadLocation == null) {
+				destPadLocation = getDefaultNetherLocation(sourcePadLocation);
+			}
 		}
 		
 		// Check if there is a valid pad on the other end
@@ -75,22 +80,15 @@ public class NetherWarpDrive extends AbstractWarpDrive {
 
 		// Only create a new teleport pad when going from Overworld -> Nether
 		if (!destIsValid && sourcePadLocation.getWorld().getEnvironment() == Environment.NORMAL) {
-			destPad = new TeleportPad(destPadLocation, "Generated Nether Pad");
-			destPad.setDisplayName(blockName);
+			destPad = new TeleportPad(destPadLocation, TeleportPad.blockName);
+			destPad.setDisplayName(TeleportPad.blockName);
 			bm.addBlock(destPad);
 			
 			// Create the physical block
 			Block b = destPadLocation.getBlock();
-			SabreItemStack is = CustomItems.getInstance().getByName(blockName);
+			SabreItemStack is = CustomItems.getInstance().getByName(TeleportPad.blockName);
 			b.setType(is.getType());
 			b.setData(is.getData().getData());
-			
-			// Link the two pads together
-			destPad.setDriveLocation(sourcePad.getDriveLocation());
-			destPad.setDestPadLocation(sourcePadLocation);
-			destPad.saveSettings();
-			sourcePad.setDestPadLocation(destPadLocation);
-			sourcePad.saveSettings();
 			destIsValid = true;
 		}
 		
@@ -99,11 +97,18 @@ public class NetherWarpDrive extends AbstractWarpDrive {
 			return false;
 		}
 		
+		// Link the two pads together 
+		destPad.setDriveLocation(sourcePad.getDriveLocation());
+		destPad.setDestPadLocation(sourcePadLocation);
+		destPad.saveSettings();
+		sourcePad.setDestPadLocation(destPadLocation);
+		sourcePad.saveSettings();
+		
 		this.clearSpace(destPadLocation);
 		
 		// Do the teleport
 		sp.msg(Lang.warping);
-		SabreUtil.tryToTeleport(sp.getPlayer(), destPadLocation.add(0, 1, 0));
+		SabreUtil.tryToTeleport(sp.getPlayer(), destPadLocation);
 		
 		return true;
 	}

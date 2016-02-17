@@ -51,6 +51,7 @@ public class TeleportPad extends SpecialBlock {
 			TeleportPad destPad = (TeleportPad)bm.getBlockAt(l);
 			if (destPad == null) {
 				sp.msg(Lang.warpNoPadFound);
+				sp.getPlayer().getItemInHand().setItemMeta(null);
 				return;
 			}
 			
@@ -65,9 +66,10 @@ public class TeleportPad extends SpecialBlock {
 			if (destDrive != null && destDrive.canDirectLink()) {
 				this.destPadLocation = l;
 				this.saveSettings();
-				destPad.destPadLocation = this.destPadLocation;
+				destPad.destPadLocation = this.location;
 				destPad.saveSettings();
 				sp.msg(Lang.warpLinkedPadToPad);
+				sp.getPlayer().getItemInHand().setItemMeta(null);
 			} else {
 				sp.msg(Lang.warpMissingDrive);
 			}

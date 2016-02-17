@@ -40,12 +40,15 @@ public class DirectWarpDrive extends AbstractWarpDrive {
 			return false;
 		}
 		
+		if (destPadLocation == null) {
+			sp.msg(Lang.warpMissingPad);
+			return false;
+		}
+		
 		// Check if there is a valid pad on the other end
-		if (destPadLocation != null) {
-			destPad = (TeleportPad)bm.getBlockAt(destPadLocation);
-			if (destPad != null) {
-				destIsValid = true;
-			}
+		destPad = (TeleportPad)bm.getBlockAt(destPadLocation);
+		if (destPad != null) {
+			destIsValid = true;
 		}
 		
 		if (!destIsValid) {
@@ -57,7 +60,7 @@ public class DirectWarpDrive extends AbstractWarpDrive {
 		
 		// Do the teleport
 		sp.msg(Lang.warping);
-		SabreUtil.tryToTeleport(sp.getPlayer(), destPadLocation.add(0, 1, 0));
+		SabreUtil.tryToTeleport(sp.getPlayer(), destPadLocation);
 		
 		return true;
 	}
