@@ -3,7 +3,7 @@ main: com.gordonfreemanq.sabre.SabrePlugin
 version: 0.0.1
 description: Sabre plugin
 author: GFQ
-depend: [PermissionsEx, CombatTag]
+depend: [PermissionsEx, CombatTagPlus]
 commands:
   faction:
     description: The Faction base command
