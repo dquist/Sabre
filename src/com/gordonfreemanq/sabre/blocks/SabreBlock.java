@@ -20,6 +20,12 @@ public class SabreBlock {
 	protected String typeName = "Block";
 	protected Reinforcement reinforcememnt;
 	
+	// Whether the block should tell it's type when interacted with
+	protected boolean tellBlockName;
+	
+	// Whether a player needs access to see the block name
+	protected boolean requireAccessForName;
+	
 	protected boolean hasEffectRadius;
 
 	/**
@@ -29,6 +35,8 @@ public class SabreBlock {
 	public SabreBlock(Location location, String typeName) {
 		this.location = location;
 		this.hasEffectRadius = false;
+		this.tellBlockName = true;
+		this.requireAccessForName = false;
 		this.name = "";
 		
 		if (typeName != null) {
@@ -66,6 +74,24 @@ public class SabreBlock {
 	 */
 	public boolean affectsLocation(Location l) {
 		return false;
+	}
+	
+	
+	/**
+	 * Whether the block should tell the player it's type name
+	 * @return true if the type name should be displayed
+	 */
+	public boolean getTellBlockName() {
+		return this.tellBlockName;
+	}
+	
+	
+	/**
+	 * Whether access is required to see the block name
+	 * @return true if access is required
+	 */
+	public boolean getRequireAccessForName() {
+		return this.requireAccessForName;
 	}
 	
 	

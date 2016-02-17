@@ -344,8 +344,10 @@ public class BlockListener implements Listener {
 				// Interacting with a special block will notify the player what type of block it is.
 				// Ignore if holding a stick though, since that's the default interaction item, it makes
 				// the chat too noisy when cycling the factory recipes
-				else if (showBlockName) {
-					p.msg(Lang.blockShowType, sb.getDisplayName());
+				else if (showBlockName && sb.getTellBlockName()) {
+					if (!sb.getRequireAccessForName() || sb.canPlayerAccess(p)) {
+						p.msg(Lang.blockShowType, sb.getDisplayName());
+					}
 				}
 			} else if (state.getInfo()) {
 				p.msg(Lang.blockNoReinforcement);

@@ -20,6 +20,7 @@ public class SecureSign extends SpecialBlock {
 		
 		this.hasEffectRadius = false;
 		this.visible = true;
+		this.requireAccessForName = true;
 	}
 	
 	
