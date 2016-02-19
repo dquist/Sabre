@@ -15,8 +15,7 @@ public class CmdBuildReinforce extends SabreCommand {
 	public CmdBuildReinforce()
 	{
 		super();
-		this.aliases.add("reinforce");
-		this.aliases.add("fr");
+		this.aliases.add("bdr");
 		this.aliases.add("ctr");
 		
 		this.requiredArgs.add("group");

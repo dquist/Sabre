@@ -31,23 +31,23 @@ commands:
     description: Unknown commands
     usage: /<command>
     aliases: [ban, parson, give]
-  fi:
+  bdi:
     description: Get block information
     usage: /<command>
     aliases: [cti]
-  ff:
+  bdf:
     description: Build reinforced blocks
     usage: /<command> <group>
     aliases: [ctf]
-  fr:
+  bdr:
     description: Reinforces existing blocks
     usage: /<command> <group>
     aliases: [ctr]
-  fo:
+  bdo:
     description: Turns off building
     usage: /<command>
     aliases: [cto]
-  fb:
+  bdb:
     description: Toggles bypass mode
     usage: /<command>
     aliases: [ctb]

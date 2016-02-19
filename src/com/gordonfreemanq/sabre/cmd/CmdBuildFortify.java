@@ -15,8 +15,7 @@ public class CmdBuildFortify extends SabreCommand {
 	public CmdBuildFortify()
 	{
 		super();
-		this.aliases.add("fortify");
-		this.aliases.add("ff");
+		this.aliases.add("bdf");
 		this.aliases.add("ctf");
 		
 		this.requiredArgs.add("group");

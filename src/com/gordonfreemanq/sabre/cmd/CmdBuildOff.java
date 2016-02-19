@@ -9,8 +9,7 @@ public class CmdBuildOff extends SabreCommand {
 	public CmdBuildOff()
 	{
 		super();
-		this.aliases.add("off");
-		this.aliases.add("fo");
+		this.aliases.add("bdo");
 		this.aliases.add("cto");
 
 		this.setHelpShort("Resets build modes");
