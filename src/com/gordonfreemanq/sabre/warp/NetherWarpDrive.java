@@ -39,7 +39,7 @@ public class NetherWarpDrive extends AbstractWarpDrive {
 		World netherWorld = Bukkit.getWorld(SabreConfig.NETHER_WORLD_NAME);
 		double destX = l.getBlockX() >> 3; // divide by 8
 		double destZ = l.getBlockZ() >> 3; // divide by 8
-		double destY = l.getBlockY();
+		double destY = Math.min(120, l.getBlockY() >> 1); // divide by 2
 		
 		return new Location(netherWorld, destX, destY, destZ);
 	}

@@ -6,7 +6,7 @@ recipes:
     inputs:
       Obsidian:
         material: OBSIDIAN
-        amount: 128
+        amount: 256
       Diamond:
         material: DIAMOND
         amount: 16
@@ -19,7 +19,7 @@ recipes:
     outputs:
       Cuendillar:
         custom_item: Cuendillar
-        amount: 24
+        amount: 384
   Strengthen Prison Pearl:
     special: STRENGTHEN_PRISON_PEARL
   Craft Moksha Rod:
@@ -55,7 +55,7 @@ recipes:
     outputs:
       Aspect of End:
         custom_item: Aspect of End
-        amount: 2
+        amount: 1
 upgrades:
   Dharma Factory 3 Upgrade:
     fuel_cost: 10

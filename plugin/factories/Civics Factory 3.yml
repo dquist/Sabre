@@ -6,7 +6,7 @@ recipes:
     inputs:
       Aspect of Domain:
         custom_item: Aspect of Domain
-        amount: 6
+        amount: 4
     outputs:
       Keep Bastion:
         custom_item: Keep Bastion
@@ -36,7 +36,7 @@ recipes:
     inputs:
       Aspect of Domain:
         custom_item: Aspect of Domain
-        amount: 2
+        amount: 1
     outputs:
       Nether Warp Drive:
         custom_item: Nether Warp Drive
@@ -46,7 +46,7 @@ recipes:
     inputs:
       Aspect of Domain:
         custom_item: Aspect of Domain
-        amount: 10
+        amount: 4
     outputs:
       Direct Warp Drive:
         custom_item: Direct Warp Drive
@@ -56,10 +56,10 @@ recipes:
     inputs:
       Obsidian:
         material: OBSIDIAN
-        amount: 64
+        amount: 32
       Diamond:
         material: DIAMOND
-        amount: 32
+        amount: 1
     outputs:
       Teleport Pad:
         custom_item: Teleport Pad

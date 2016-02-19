@@ -7,9 +7,12 @@ recipes:
       Iron Ingot:
         material: IRON_INGOT
         amount: 64
+      Coal:
+        material: COAL
+        amount: 32
       Diamond:
         material: DIAMOND
-        amount: 32
+        amount: 16
     outputs:
       Steel Ingot:
         custom_item: Steel Ingot

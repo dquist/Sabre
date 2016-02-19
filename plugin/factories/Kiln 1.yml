@@ -28,7 +28,7 @@ recipes:
         material: CLAY
         amount: 128
     outputs:
-      Brick block:
+      Brick Block:
         material: BRICK
         amount: 64
   Create Aspect of Ceramics:

@@ -56,14 +56,14 @@ recipes:
     inputs:
       Obsidian:
         material: OBSIDIAN
-        amount: 128
+        amount: 32
       Diamond:
         material: DIAMOND
-        amount: 64
+        amount: 1
     outputs:
       Teleport Pad:
         custom_item: Teleport Pad
-        amount: 1
+        amount: 32
   Craft Aspect of Domain:
     fuel_cost: 10
     inputs:

@@ -45,9 +45,9 @@ upgrades:
   Stone Smithy 5 Upgrade:
     fuel_cost: 10
     inputs:
-      Stone:
-        material: STONE
-        amount: 256
+      Aspect of Masonry:
+        custom_item: Aspect of Masonry
+        amount: 4
     outputs:
       Stone Smithy 5:
         custom_item: Stone Smithy 5

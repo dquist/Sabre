@@ -36,7 +36,7 @@ recipes:
     outputs:
       Piston:
         material: PISTON_BASE
-        amount: 16
+        amount: 64
   Produce Sticky Pistons:
     fuel_cost: 10
     inputs:
@@ -97,6 +97,9 @@ recipes:
       Plank:
         material: WOOD
         durability: -1
+        amount: 256
+      Diamond:
+        material: DIAMOND
         amount: 64
       Redstone:
         material: REDSTONE
@@ -104,7 +107,7 @@ recipes:
     outputs:
       Piston:
         material: HOPPER
-        amount: 64
+        amount: 20
   Produce Droppers:
     fuel_cost: 10
     inputs:
@@ -114,13 +117,16 @@ recipes:
       Iron:
         material: IRON_INGOT
         amount: 32
+      Diamond:
+        material: DIAMOND
+        amount: 32
       Redstone:
         material: REDSTONE
         amount: 32
     outputs:
       Piston:
         material: DROPPER
-        amount: 64
+        amount: 20
   Produce Dispensers:
     fuel_cost: 10
     inputs:
@@ -143,20 +149,23 @@ recipes:
     outputs:
       Piston:
         material: DISPENSER
-        amount: 64
+        amount: 40
   Produce Snitch:
     fuel_cost: 10
     inputs:
       Jukebox:
         material: JUKEBOX
         amount: 16
+      Iron Ingot:
+        material: IRON_INGOT
+        amount: 32
       Redstone:
         material: REDSTONE
         amount: 16
     outputs:
       Snitch:
         custom_item: Snitch
-        amount: 16
+        amount: 24
   Produce Secure Sign:
     fuel_cost: 10
     inputs:
@@ -166,10 +175,10 @@ recipes:
         amount: 160
       Redstone:
         material: REDSTONE
-        amount: 80
+        amount: 96
       Iron:
         material: IRON_INGOT
-        amount: 10
+        amount: 16
     outputs:
       Secure Sign:
         custom_item: Secure Sign

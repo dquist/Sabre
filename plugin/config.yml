@@ -24,8 +24,8 @@ snitch:
 prison_pearl:
   free_world: world
   prison_world: world_the_end
-  default_strength: 20
-  weaken_interval_min: 360
+  default_strength: 120
+  weaken_interval_min: 60
   weaken_amount: 1
   days_inactive_threshold: 7
 disabled_recipes:

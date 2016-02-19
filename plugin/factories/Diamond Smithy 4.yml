@@ -47,7 +47,7 @@ upgrades:
     inputs:
       Diamond:
         material: DIAMOND_BLOCK
-        amount: 256
+        amount: 512
     outputs:
       Diamond Smithy 5:
         custom_item: Diamond Smithy 5
