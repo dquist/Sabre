@@ -57,7 +57,6 @@ import com.gordonfreemanq.sabre.PlayerManager;
 import com.gordonfreemanq.sabre.SabrePlayer;
 import com.gordonfreemanq.sabre.SabrePlugin;
 import com.gordonfreemanq.sabre.prisonpearl.PrisonPearlEvent.Type;
-import com.gordonfreemanq.sabre.util.CombatInterface;
 import com.gordonfreemanq.sabre.util.SabreUtil;
 import com.gordonfreemanq.sabre.util.TextUtil;
 import com.mojang.authlib.GameProfile;
@@ -70,7 +69,6 @@ public class PearlListener implements Listener {
 
 	private final PearlManager pearls;
 	private final PlayerManager pm;
-	private final CombatInterface combatInterface;
 
 	/**
 	 * Creates a new PearlListener instance
@@ -80,8 +78,6 @@ public class PearlListener implements Listener {
 	public PearlListener(PearlManager pearls, PlayerManager pm) {
 		this.pearls = pearls;
 		this.pm = pm;
-
-		combatInterface = SabrePlugin.getPlugin().getCombatTag();
 	}
 
 
@@ -727,7 +723,7 @@ public class PearlListener implements Listener {
 
 	/**
 	 * Prevent pearling with ender pearls
-	 * @param event
+	 * @param e The event args
 	 */
 	@EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
 	public void onPlayerInteract(PlayerInteractEvent e) {

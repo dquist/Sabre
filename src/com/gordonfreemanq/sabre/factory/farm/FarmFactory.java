@@ -231,10 +231,11 @@ public class FarmFactory extends BaseFactory {
 		long diffMin = TimeUnit.MINUTES.convert(timeDiff, TimeUnit.MILLISECONDS);
 		
 		if (force || diffMin >= this.surveyPeriodMin) {
-			survey();
-			calculateProximityFactor();
-			lastSurvey = now;
-			saveSettings();
+			if (survey()) {
+				calculateProximityFactor();
+				lastSurvey = now;
+				saveSettings();
+			}
 		}
 	}
 	
@@ -242,8 +243,12 @@ public class FarmFactory extends BaseFactory {
 	/**
 	 * Calculates the farm layout factor
 	 */
-	private void survey() {
+	private boolean survey() {
 		if (surveyor == null) {
+			if (!(recipe instanceof FarmRecipe)) {
+				return false;
+			}
+			
 			surveyor = ((FarmRecipe)recipe).getSurveyor();
 		}
 		
@@ -251,6 +256,7 @@ public class FarmFactory extends BaseFactory {
 		
 		this.layoutFactor = surveyor.getCoverageFactor();
 		this.fertilityFactor = surveyor.getFertilityFactor();
+		return true;
 	}
 	
 	

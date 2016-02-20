@@ -643,31 +643,6 @@ public class MongoConnector implements IDataAccess {
 		return records;
 	}
 	
-	@Override
-	public Collection<SabreBlock> blockGetWarpDrives() {
-		HashSet<SabreBlock> records = new HashSet<SabreBlock>();
-		
-		BasicDBObject where = new BasicDBObject();
-		where = where.append("warp_drive", true);
-		
-		DBCursor cursor = colBlocks.find(where);
-		
-		while (cursor.hasNext()) { 
-			BasicDBObject o = (BasicDBObject)cursor.next();
-
-			//logger.log(Level.INFO, "Loaded block: %s", o.toString());
-
-			try {
-				SabreBlock b = readBlockRecord(o);
-				records.add(b);
-			} catch(Exception ex) {
-				logger.log(Level.WARNING, "Failed to read block record %s", o.toString());
-			}
-		}
-		
-		return records;
-	}
-	
 	
 	/**
 	 * Reads a block record

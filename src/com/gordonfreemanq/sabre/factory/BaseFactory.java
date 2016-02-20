@@ -18,6 +18,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.material.Attachable;
 import org.bukkit.material.Lever;
 import org.bukkit.material.MaterialData;
+import org.bukkit.material.DirectionalContainer;
 
 import com.gordonfreemanq.sabre.Lang;
 import com.gordonfreemanq.sabre.SabrePlayer;
@@ -485,32 +486,42 @@ public class BaseFactory extends SpecialBlock {
 	 * Sets the state of the furnace block
 	 * @param state The state of the furnace
 	 */
-	@SuppressWarnings("deprecation")
-	protected void setFurnaceState(boolean state) {		
+	protected void setFurnaceState(boolean state) {
+		Block f = location.getBlock();
+		
 		if (state) {
-			if (location.getBlock().getType().equals(Material.FURNACE)) {
-				Furnace furnace = (Furnace) location.getBlock().getState();
-				byte data = furnace.getData().getData();
-				ItemStack[] oldContents = furnace.getInventory().getContents();
-				furnace.getInventory().clear();
-				location.getBlock().setType(Material.BURNING_FURNACE);
-				furnace = (Furnace) location.getBlock().getState();
-				furnace.setRawData(data);
-				furnace.update();
-				furnace.getInventory().setContents(oldContents);
+			if (f.getType() != Material.FURNACE) {
+				return;
 			}
+			
+			Furnace furnace = (Furnace) f.getState();
+			ItemStack[] oldContents = furnace.getInventory().getContents();
+			BlockFace facing = ((DirectionalContainer)furnace.getData()).getFacing();
+			furnace.getInventory().clear();
+			f.setType(Material.BURNING_FURNACE);
+			furnace = (Furnace) f.getState();
+			MaterialData data = furnace.getData();
+			((DirectionalContainer)data).setFacingDirection(facing);
+			furnace.setData(data);
+			furnace.update();
+			furnace.setBurnTime(Short.MAX_VALUE);
+			furnace.getInventory().setContents(oldContents);
 		} else {
-			if (location.getBlock().getType().equals(Material.BURNING_FURNACE)) {
-				Furnace furnace = (Furnace) location.getBlock().getState();
-				byte data = furnace.getData().getData();
-				ItemStack[] oldContents = furnace.getInventory().getContents();
-				furnace.getInventory().clear();
-				location.getBlock().setType(Material.FURNACE);
-				furnace = (Furnace) location.getBlock().getState();
-				furnace.setRawData(data);
-				furnace.update();
-				furnace.getInventory().setContents(oldContents);
+			if (f.getType() != Material.BURNING_FURNACE) {
+				return;
 			}
+			
+			Furnace furnace = (Furnace) f.getState();
+			ItemStack[] oldContents = furnace.getInventory().getContents();
+			BlockFace facing = ((DirectionalContainer)furnace.getData()).getFacing();
+			furnace.getInventory().clear();
+			f.setType(Material.FURNACE);
+			furnace = (Furnace) f.getState();
+			MaterialData data = furnace.getData();
+			((DirectionalContainer)data).setFacingDirection(facing);
+			furnace.setData(data);
+			furnace.update();
+			furnace.getInventory().setContents(oldContents);
 		}
 	}
 	
