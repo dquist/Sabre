@@ -563,7 +563,9 @@ public class PearlListener implements Listener {
 		Player killer = player.getKiller();
 		if (killer != null) {
 			SabrePlayer imprisoner = pm.getPlayerById(killer.getUniqueId());
-			SabrePlayer imprisoned = pm.getPlayerById(player.getUniqueId());
+			
+			// Need to get by name b/c of combat tag entity
+			SabrePlayer imprisoned = pm.getPlayerByName(e.getEntity().getName());
 
 			int firstpearl = Integer.MAX_VALUE;
 			for (Entry<Integer, ? extends ItemStack> entry : killer.getInventory().all(Material.ENDER_PEARL).entrySet()) {

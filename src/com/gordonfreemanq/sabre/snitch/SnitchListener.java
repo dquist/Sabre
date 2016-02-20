@@ -278,8 +278,10 @@ public class SnitchListener implements Listener {
             return;
         }
         
-		SabrePlayer killed = pm.getPlayerById(e.getEntity().getUniqueId());
-		SabrePlayer killer = pm.getPlayerById(killed.getPlayer().getKiller().getUniqueId());
+        // Need to get by name here since CombatTag entity doesn't keep UUID
+		SabrePlayer killed = pm.getPlayerByName(e.getEntity().getName());
+		String killerName = e.getEntity().getKiller().getName();
+		SabrePlayer killer = pm.getPlayerByName(killerName);
 
 		// Ignore vanished players
 		if (killer.getVanished()) {
@@ -288,7 +290,7 @@ public class SnitchListener implements Listener {
 
         Reinforcement r;
 		
-		Set<Snitch> set = snitches.findSnitches(killed.getPlayer().getLocation());
+		Set<Snitch> set = snitches.findSnitches(e.getEntity().getLocation());
         for (Snitch snitch : set) {
         	r = snitch.getReinforcement();
         	
