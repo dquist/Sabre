@@ -422,7 +422,7 @@ public class SabreUtil {
 
 	// Methods for a save landing :)
 
-	public static void sendGround(Player player, Location location){
+	public static void sendToGround(Player player, Location location){
 
 		location.getChunk().load();
 

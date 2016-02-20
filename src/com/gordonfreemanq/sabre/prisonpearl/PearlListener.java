@@ -608,7 +608,7 @@ public class PearlListener implements Listener {
 		if (p.getFreedOffline()) {
 			
 			Location l = SabreUtil.chooseSpawn(PearlManager.getInstance().getFreeWorld(), 5000);
-			SabreUtil.sendGround(p.getPlayer(), l);
+			SabreUtil.sendToGround(p.getPlayer(), l);
 			SabreUtil.tryToTeleport(e.getPlayer(), l);
 			
 			pm.setFreedOffline(p, false);
