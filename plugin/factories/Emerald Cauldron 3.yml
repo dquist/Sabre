@@ -7,18 +7,12 @@ recipes:
       Bushel of Wheat:
         custom_item: Bushel of Wheat
         amount: 256
-      Bushel of Melons:
-        custom_item: Bushel of Melons
+      Bushel of Potatoes:
+        custom_item: Bushel of Potatoes
         amount: 128
-      Bushel of Cocoa:
-        custom_item: Bushel of Cocoa
+      Bushel of Carrots:
+        custom_item: Bushel of Carrots
         amount: 128
-      Bushel of Cactus:
-        custom_item: Bushel of Cactus
-        amount: 64
-      Bushel of Pumpkins:
-        custom_item: Bushel of Pumpkins
-        amount: 64
       Glass:
         material: GLASS
         amount: 64
@@ -32,18 +26,12 @@ recipes:
       Bushel of Potatos:
         custom_item: Bushel of Potatoes
         amount: 256
-      Bushel of Pumpkins:
-        custom_item: Bushel of Pumpkins
+      Bushel of Wheat:
+        custom_item: Bushel of Wheat
         amount: 128
-      Bushel of Sugar Cane:
-        custom_item: Bushel of Sugar Cane
+      Bushel of Carrots:
+        custom_item: Bushel of Carrots
         amount: 128
-      Bushel of Cocoa:
-        custom_item: Bushel of Cocoa
-        amount: 64
-      Bushel of Melons:
-        custom_item: Bushel of Melons
-        amount: 64
       Glass:
         material: GLASS
         amount: 64
@@ -57,18 +45,12 @@ recipes:
       Bushel of Carrots:
         custom_item: Bushel of Carrots
         amount: 256
-      Bushel of Sugar Cane:
-        custom_item: Bushel of Sugar Cane
+      Bushel of Potatoes:
+        custom_item: Bushel of Potatoes
         amount: 128
-      Bushel of Cactus:
-        custom_item: Bushel of Cactus
+      Bushel of Wheat:
+        custom_item: Bushel of Wheat
         amount: 128
-      Bushel of Melons:
-        custom_item: Bushel of Melons
-        amount: 64
-      Bushel of Pumpkins:
-        custom_item: Bushel of Pumpkins
-        amount: 64
       Glass:
         material: GLASS
         amount: 64
