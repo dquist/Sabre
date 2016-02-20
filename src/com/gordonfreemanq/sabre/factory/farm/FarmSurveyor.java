@@ -321,6 +321,7 @@ public class FarmSurveyor {
 		MaterialData data = state.getData();
 		
 		if (data instanceof Crops) {
+			//Crops crop = (Crops)data;
 			if (b.getData() == 7) {
 				return true;
 			}

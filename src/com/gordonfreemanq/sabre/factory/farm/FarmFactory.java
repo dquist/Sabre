@@ -243,14 +243,12 @@ public class FarmFactory extends BaseFactory {
 	 * Calculates the farm layout factor
 	 */
 	private boolean survey() {
-		if (surveyor == null) {
-			if (!(recipe instanceof FarmRecipe)) {
-				return false;
-			}
-			
-			surveyor = ((FarmRecipe)recipe).getSurveyor();
+		if (!(recipe instanceof FarmRecipe)) {
+			return false;
 		}
 		
+		// Get the surveyor for the current crop and do the survey
+		surveyor = ((FarmRecipe)recipe).getSurveyor();
 		surveyor.surveyFarm(this);
 		
 		this.layoutFactor = surveyor.getCoverageFactor();
