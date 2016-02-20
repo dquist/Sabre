@@ -2,6 +2,7 @@ package com.gordonfreemanq.sabre.factory;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
 
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -278,7 +279,12 @@ public class BaseFactory extends SpecialBlock {
 		
 		this.running = o.getBoolean("running", false);
 		if (this.running) {
-			this.powerOn();
+			try {
+				this.powerOn();
+			} catch(Exception ex) {
+				SabrePlugin.getPlugin().log(Level.WARNING, "Failed to power on factory at %s", this.location.toString());
+				SabrePlugin.getPlugin().log(Level.WARNING, ex.getMessage());
+			}
 		}
 	}
 	

@@ -31,7 +31,6 @@ import com.gordonfreemanq.sabre.snitch.SnitchListener;
 import com.gordonfreemanq.sabre.snitch.SnitchLogger;
 import com.gordonfreemanq.sabre.util.CombatInterface;
 import com.gordonfreemanq.sabre.util.CombatTagPlusManager;
-import com.gordonfreemanq.sabre.util.SabreUtil;
 
 
 public class SabrePlugin extends AbstractSabrePlugin
@@ -237,6 +236,9 @@ public class SabrePlugin extends AbstractSabrePlugin
 		// Add Base Commands
 		this.cmdAutoHelp = new CmdAutoHelp();
 		this.cmdBase = new CmdRoot();
+		
+		factoryWorker = new FactoryWorker();
+		factoryWorker.start();
 
 		playerListener.handleOnlinePlayers();
 		blockListener.handleLoadedChunks();
@@ -249,8 +251,6 @@ public class SabrePlugin extends AbstractSabrePlugin
 		ProtocolLibrary.getProtocolManager().addPacketListener(signHandler);
 		statsTracker = new StatsTracker(playerManager);
 		statsTracker.start();
-		factoryWorker = new FactoryWorker();
-		factoryWorker.start();
 		
 		// Load the running factories
 		blockManager.loadRunningFactories();

@@ -89,7 +89,6 @@ public class FarmFactory extends BaseFactory {
 		}
 	}
 	
-	
 	/**
 	 * Handles hitting the block with a stick
 	 * @param p The player interacting
@@ -117,7 +116,7 @@ public class FarmFactory extends BaseFactory {
 				sp.msg("<i>The farm is already full.");
 				return;
 			}
-			
+
 			cyclePower(sp);
 		}
 		
@@ -261,7 +260,7 @@ public class FarmFactory extends BaseFactory {
 	
 	
 	/**
-	 * Calculates the farm proximity factor
+	 * Calculates the farm proximity factor which scales according to how close other farms are
 	 */
 	private void calculateProximityFactor() {
 		double factor = 1.0;
