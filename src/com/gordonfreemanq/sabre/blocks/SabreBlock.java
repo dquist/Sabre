@@ -27,6 +27,8 @@ public class SabreBlock {
 	protected boolean requireAccessForName;
 	
 	protected boolean hasEffectRadius;
+	
+	protected boolean requireAccesstoInteract;
 
 	/**
 	 * Creates a new BlockRecord instance
@@ -37,6 +39,7 @@ public class SabreBlock {
 		this.hasEffectRadius = false;
 		this.tellBlockName = true;
 		this.requireAccessForName = false;
+		this.requireAccesstoInteract = true;
 		this.name = "";
 		
 		if (typeName != null) {
@@ -93,6 +96,16 @@ public class SabreBlock {
 	public boolean getRequireAccessForName() {
 		return this.requireAccessForName;
 	}
+	
+	
+	/**
+	 * Whether access is required to 
+	 * @return true if access is required
+	 */
+	public boolean getRequireAccesstoInteract() {
+		return this.requireAccesstoInteract;
+	}
+	
 	
 	
 	/**

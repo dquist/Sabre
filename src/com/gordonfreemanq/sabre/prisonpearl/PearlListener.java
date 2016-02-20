@@ -215,7 +215,7 @@ public class PearlListener implements Listener {
 	public void onPlayerQuit(PlayerQuitEvent event) {
 		Player imprisoner = event.getPlayer();
 
-		if (combatInterface.isTagged(imprisoner.getUniqueId())) {
+		if (SabrePlugin.getPlugin().getCombatTag().isTagged(imprisoner.getUniqueId())) {
 			return; // if player is tagged
 		}
 

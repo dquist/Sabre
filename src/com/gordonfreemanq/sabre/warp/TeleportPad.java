@@ -28,6 +28,7 @@ public class TeleportPad extends SpecialBlock {
 		super(location, typeName);
 		
 		this.hasEffectRadius = false;
+		this.requireAccesstoInteract = false;
 	}
 	
 	
@@ -187,5 +188,13 @@ public class TeleportPad extends SpecialBlock {
 	 */
 	public void setDestPadLocation(Location destPadLocation) {
 		this.destPadLocation = destPadLocation;
+	}
+	
+	@Override
+	public boolean getTellBlockName() {
+		if (this.driveLocation == null) {
+			return true;
+		}
+		return false;
 	}
 }

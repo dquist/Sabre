@@ -372,7 +372,7 @@ public class BlockListener implements Listener {
 
 				e.setCancelled(true);
 			} else if (sb != null && sb.isSpecial()) {
-				if (canAccess) {
+				if (canAccess || !sb.getRequireAccesstoInteract()) {
 					sb.onInteract(e, p);
 					
 					if (p.getPlayer().getItemInHand().getType().equals(Material.STICK)) {

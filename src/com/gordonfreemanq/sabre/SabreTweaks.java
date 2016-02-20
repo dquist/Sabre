@@ -94,8 +94,6 @@ import org.bukkit.util.Vector;
 
 import com.gordonfreemanq.sabre.prisonpearl.PearlManager;
 import com.gordonfreemanq.sabre.util.CombatInterface;
-import com.gordonfreemanq.sabre.util.CustomNMSEntityEnderPearl;
-import com.gordonfreemanq.sabre.util.CustomNMSItemEnderPearl;
 import com.gordonfreemanq.sabre.util.SabreUtil;
 import com.gordonfreemanq.sabre.blocks.SabreItemStack;
 
@@ -119,8 +117,6 @@ public class SabreTweaks implements Listener {
 		
 		// Combat Tag API
 		combatTag = SabrePlugin.getPlugin().getCombatTag();
-		
-		hookEnderPearls();
 	}
 
 
@@ -774,7 +770,7 @@ public class SabreTweaks implements Listener {
 					return;
 					
 				}
-				combatTag.tagPlayer(loginPlayer);
+				SabrePlugin.getPlugin().getCombatTag().tagPlayer(loginPlayer);
 				loginPlayer.sendMessage("You have been Combat Tagged on Login");
 			}
 		}, 2L);
@@ -1416,78 +1412,6 @@ public class SabreTweaks implements Listener {
 		
 		pearlTeleportInfo.put(player_name, teleport_info);
 		return;
-	}
-	
-	
-	// ================================================
-	// Adjust ender pearl gravity
-
-	public final static int pearlId = 368;
-	public final static MinecraftKey pearlKey = new MinecraftKey("ender_pearl");
-
-	@SuppressWarnings({ "rawtypes", "unchecked" })
-	private void hookEnderPearls() {
-		try {
-			// They thought they could stop us by preventing us from registering an
-			// item. We'll show them
-			Field idRegistryField = Item.REGISTRY.getClass().getDeclaredField("a");
-			idRegistryField.setAccessible(true);
-			Object idRegistry = idRegistryField.get(Item.REGISTRY);
-
-			Field idRegistryMapField = idRegistry.getClass().getDeclaredField("a");
-			idRegistryMapField.setAccessible(true);
-			Object idRegistryMap = idRegistryMapField.get(idRegistry);
-
-			Field idRegistryItemsField = idRegistry.getClass().getDeclaredField("b");
-			idRegistryItemsField.setAccessible(true);
-			Object idRegistryItemList = idRegistryItemsField.get(idRegistry);
-
-			// Remove ItemEnderPearl from the ID Registry
-			Item idItem = null;
-			Iterator<Item> itemListIter = ((List<Item>)idRegistryItemList).iterator();
-			while (itemListIter.hasNext()) {
-				idItem = itemListIter.next();
-				if (idItem == null) {
-					continue;
-				}
-				if (!(idItem instanceof ItemEnderPearl)) {
-					continue;
-				}
-				itemListIter.remove();
-				break;
-			}
-			if (idItem != null) {
-				((Map<Item, Integer>)idRegistryMap).remove(idItem);
-			}
-			// Register our custom pearl Item.
-			Item.REGISTRY.a(pearlId, pearlKey, new CustomNMSItemEnderPearl());
-
-			// Setup the custom entity
-			Field fieldStringToClass = EntityTypes.class.getDeclaredField("c");
-			Field fieldClassToString = EntityTypes.class.getDeclaredField("d");
-			fieldStringToClass.setAccessible(true);
-			fieldClassToString.setAccessible(true);
-
-			Field fieldClassToId = EntityTypes.class.getDeclaredField("f");
-			Field fieldStringToId = EntityTypes.class.getDeclaredField("g");
-			fieldClassToId.setAccessible(true);
-			fieldStringToId.setAccessible(true);
-
-			Map mapStringToClass = (Map)fieldStringToClass.get(null);
-			Map mapClassToString = (Map)fieldClassToString.get(null);
-
-			Map mapClassToId = (Map)fieldClassToId.get(null);
-			Map mapStringToId = (Map)fieldStringToId.get(null);
-
-			mapStringToClass.put("ThrownEnderpearl",CustomNMSEntityEnderPearl.class);
-			mapStringToId.put("ThrownEnderpearl", Integer.valueOf(14));
-
-			mapClassToString.put(CustomNMSEntityEnderPearl.class, "ThrownEnderpearl");
-			mapClassToId.put(CustomNMSEntityEnderPearl.class, Integer.valueOf(14));
-		} catch (Exception e) {
-			//Humbug.severe("Exception while overriding MC's ender pearl class");
-			e.printStackTrace();
-		}
 	}
 	
 	
