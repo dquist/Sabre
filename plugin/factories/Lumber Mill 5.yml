@@ -83,8 +83,8 @@ recipes:
       Planks:
         material: WOOD
         durability: -1
-        amount: 1024
+        amount: 2048
     outputs:
       Aspect of Framing:
         custom_item: Aspect of Framing
-        amount: 8
+        amount: 1

@@ -1,6 +1,7 @@
 package com.gordonfreemanq.sabre.factory;
 
 import java.util.HashSet;
+import java.util.Set;
 
 import org.bukkit.Bukkit;
 
@@ -62,6 +63,19 @@ public class FactoryWorker implements Runnable {
 	 * @param f The factory to add
 	 */
 	public void addRunning(BaseFactory f) {
+		Set<BaseFactory> remove = new HashSet<BaseFactory>();
+		
+		// This prevents the same factory from being loaded twice.
+		// This is a possibility because factories in unloaded chunks can
+		// still run. When the chunk is loaded, then the running instance
+		// will be replaced
+		for (BaseFactory fac : this.runningFactories) {
+			if (fac.getLocation().equals(f.getLocation())) {
+				remove.add(fac);
+			}
+		}
+		runningFactories.removeAll(remove);
+		
 		runningFactories.add(f);
 	}
 	
@@ -73,5 +87,12 @@ public class FactoryWorker implements Runnable {
 	public void removeRunning(BaseFactory f) {
 		runningFactories.remove(f);
 	}
-
+	
+	/**
+	 * Gets the running factories
+	 * @return The running factories
+	 */
+	public Set<BaseFactory> getRunningFactories() {
+		return runningFactories;
+	}
 }

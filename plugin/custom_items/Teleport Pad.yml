@@ -1,0 +1,7 @@
+name: Teleport Pad
+material: STAINED_GLASS
+durability: 2
+amount: 1
+class: com.gordonfreemanq.sabre.warp.TeleportPad
+lore:
+  - '<c>A teleportation pad.'

@@ -99,14 +99,14 @@ recipes:
     outputs:
       Aspect of Metallurgy:
         custom_item: Aspect of Metallurgy
-        amount: 8
+        amount: 1
 upgrades:
   Ore Smelter 5 Upgrade:
     fuel_cost: 10
     inputs:
       Aspect of Metallurgy:
         custom_item: Aspect of Metallurgy
-        amount: 2048
+        amount: 256
     outputs:
       Ore Smelter 5:
         custom_item: Ore Smelter 5

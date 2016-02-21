@@ -1,0 +1,69 @@
+name: Dharma Factory 2
+production_speed: 2
+recipes:
+  Craft Cuendillar:
+    fuel_cost: 100
+    inputs:
+      Obsidian:
+        material: OBSIDIAN
+        amount: 256
+      Diamond:
+        material: DIAMOND
+        amount: 16
+      Emerald:
+        material: EMERALD
+        amount: 16
+      Plasma:
+        custom_item: Plasma
+        amount: 8
+    outputs:
+      Cuendillar:
+        custom_item: Cuendillar
+        amount: 384
+  Strengthen Prison Pearl:
+    special: STRENGTHEN_PRISON_PEARL
+  Craft Moksha Rod:
+    fuel_cost: 100
+    inputs:
+      Diamond:
+        material: DIAMOND
+        amount: 256
+      Blaze Rod:
+        material: BLAZE_ROD
+        amount: 128
+      Emerald Block:
+        material: EMERALD_BLOCK
+        amount: 32
+    outputs:
+      Moksha Rod:
+        custom_item: Moksha Rod
+        amount: 1
+  Charge Moksha Rod:
+    special: CHARGE_MOKSHA_ROD
+  Craft Aspect of End:
+    fuel_cost: 10
+    inputs:
+      End Stone:
+        material: ENDER_STONE
+        amount: 2048
+      Cuendillar:
+        custom_item: Cuendillar
+        amount: 512
+      Eye of Ender:
+        material: EYE_OF_ENDER
+        amount: 256
+    outputs:
+      Aspect of End:
+        custom_item: Aspect of End
+        amount: 1
+upgrades:
+  Dharma Factory 3 Upgrade:
+    fuel_cost: 10
+    inputs:
+      Aspect of End:
+        custom_item: Aspect of End
+        amount: 16
+    outputs:
+      Dharma Factory 3:
+        custom_item: Dharma Factory 3
+        amount: 1

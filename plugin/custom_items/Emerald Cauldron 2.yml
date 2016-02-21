@@ -1,0 +1,6 @@
+name: Emerald Cauldron 2
+material: FURNACE
+class: com.gordonfreemanq.sabre.factory.BaseFactory
+amount: 1
+lore:
+  - '<c>A slightly more advanced emerald cauldron.'

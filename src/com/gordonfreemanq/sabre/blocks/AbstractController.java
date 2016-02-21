@@ -81,9 +81,8 @@ public abstract class AbstractController {
 	}
 	 
 	
-	
-	private static Pattern worldPattern = Pattern.compile(parse("<a>World: <n>(.+)"));
-	private static Pattern coordPattern = Pattern.compile(parse("<a>Location: <n>(-?\\d+), (-?\\d+), (-?\\d+)"));
+	private static Pattern locationPattern = Pattern.compile(parse("<a>Location: <n>(-?\\d+), (-?\\d+), (-?\\d+), (.+)"));
+	private static String locationStartString = parse("<a>Location:");
 	
 	/**
 	 * Gets the location from a held controller stick
@@ -101,26 +100,33 @@ public abstract class AbstractController {
 				return null;
 			}
 			
-			// The format assumes world on line 1, coorinates on line 2
-			String worldLore = lore.get(1);
-			String coordLore = lore.get(2);
+			String locationLore = null;
 			
-			Matcher match = worldPattern.matcher(worldLore);
+			// Find line that starts with 'Location'
+			for (String s : lore) {
+				if (s.startsWith(locationStartString)) {
+					locationLore = s;
+					break;
+				}
+			}
 			
-			match.find();
-			String worldName = match.group(1);
-			World world = Bukkit.getWorld(worldName);
+			if (locationLore == null) {
+				return null;
+			}
 			
-			match = coordPattern.matcher(coordLore);
+			Matcher match = locationPattern.matcher(locationLore);
+			
 			if (match.find()) {
 				double x = Double.parseDouble(match.group(1));
 				double y = Double.parseDouble(match.group(2));
 				double z = Double.parseDouble(match.group(3));
+				String worldName = match.group(4);
 				
+				World world = Bukkit.getWorld(worldName);
 				return new Location(world, x, y, z);
-			} else {
-				return null;
 			}
+			
+			return null;
 			
 		} catch (Exception ex) {
 			return null;
@@ -152,10 +158,6 @@ public abstract class AbstractController {
 		
 		List<String> lore = im.getLore();
 		if (lore == null) {
-			return null;
-		}
-		
-		if (lore.size() < 3) {
 			return null;
 		}
 		

@@ -3,6 +3,9 @@ package com.gordonfreemanq.sabre.util;
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.UUID;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -13,6 +16,8 @@ import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.BlockState;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.material.Bed;
 import org.bukkit.material.Door;
 import org.bukkit.material.MaterialData;
@@ -21,6 +26,7 @@ import org.bukkit.material.PistonExtensionMaterial;
 import org.bukkit.util.Vector;
 
 import com.gordonfreemanq.sabre.Lang;
+import com.gordonfreemanq.sabre.SabrePlugin;
 import com.mongodb.BasicDBObject;
 
 @SuppressWarnings("deprecation")
@@ -416,7 +422,7 @@ public class SabreUtil {
 
 	// Methods for a save landing :)
 
-	public static void sendGround(Player player, Location location){
+	public static void sendToGround(Player player, Location location){
 
 		location.getChunk().load();
 
@@ -427,5 +433,171 @@ public class SabreUtil {
 			player.sendBlockChange(block.getLocation(), block.getType(), block.getData());
 		}
 
+	}
+
+	private static String uuidStartString = parse("<a>UUID: <n>");
+	private static Pattern uuidPattern = Pattern.compile(parse(uuidStartString + "(.+)"));
+	//private static Pattern keyValuePattern = Pattern.compile(parse(".+: (.+)"));
+	
+	/**
+	 * Finds the UUID value in a lore list in the form of
+	 * UUID: <UUID-value>
+	 * @param lore The lore to search
+	 * @return The UUID if it was found
+	 */
+	public static UUID parseLoreId(List<String> lore) {
+		
+		String value = parseLoreString(lore, uuidStartString, uuidPattern);
+		if (value != null) {
+			return UUID.fromString(value);
+		}
+		
+		return null;
+	}
+	
+	/**
+	 * Parses a lore int
+	 * @param lore The lore to parse
+	 * @param key A key value
+	 * @return The parsed value
+	 */
+	public static int parseLoreInt(List<String> lore, String startString, Pattern pattern) {
+		return Integer.parseInt(parseLoreString(lore, startString, pattern));
+	}
+	
+	
+	/**
+	 * Parses a generic lore value
+	 * @param lore The lore to parse
+	 * @param key A key value
+	 * @return The parsed value
+	 */
+	public static String parseLoreString(List<String> lore, String startString, Pattern pattern) {
+		if (lore == null) {
+			return null;
+		}
+		
+		for (String s : lore) {
+			if (s.startsWith(startString)) {
+				Matcher match = pattern.matcher(s);
+				
+				if (match.find()) {
+					return match.group(1);
+				}				
+			}
+		}
+		
+		return null;
+	}
+	
+	/**
+	 * Checks if the lore contains a specific string 
+	 * @param lore The lore to check
+	 * @param field The string to match
+	 * @return true if it is contained
+	 */
+	public static boolean itemContainsLoreString(ItemStack is, String match) {
+		ItemMeta im = is.getItemMeta();
+		if (im == null) {
+			return false;
+		}
+		
+		return loreContainsString(im.getLore(), match);
+	}
+	
+	/**
+	 * Checks if the lore contains a specific string 
+	 * @param lore The lore to check
+	 * @param field The string to match
+	 * @return true if it is contained
+	 */
+	public static boolean loreContainsString(List<String> lore, String match) {
+		if (lore == null) {
+			return false;
+		}
+		
+		for (String s : lore) {
+			if (s.contains(match)) {
+				return true;
+			}
+		}
+		return false;
+	}
+	
+	
+	protected static String parse(String str) {
+		return SabrePlugin.getPlugin().txt.parse(str);
+	}
+	
+	public static String parse(String str, Object... args) {
+		return String.format(parse(str), args);
+	}
+	
+	
+	
+	/**
+	 * Gets a pseuso-random fertility number for a given chunk
+	 * @return
+	 */
+	public static double getChunkFertility(int worldHash, int x, int z) {
+	
+		
+		
+		byte hash = 3;
+		hash = (byte)(73 * hash + worldHash);
+		hash = (byte)(hash + x * 379);
+		hash = (byte)(hash + z * 571);
+		hash = (byte)(hash & 0x7F); // make 'unsigned'
+		hash = (byte)((hash * 100) / 128); // scale 0 - 100
+		
+		double hashFactor = getChunkHashFactor(hash);
+		int dist = (int)(x * x + z * z) / 3125000;
+		double distFactor = getChunkDistanceFactor(dist);
+		return (hashFactor + distFactor) / 2;
+	}
+	
+	private static double getChunkHashFactor(byte hash) {
+		
+		if (hash < 2) {
+			return 15;
+		} else if (hash < 5 ) {
+			return 8;
+		} else if (hash < 10) {
+			return 5;
+		} else if (hash < 20) {
+			return 2;
+		} else if (hash < 60) {
+			return 1;
+		} else if (hash < 90) {
+			return 0.2;
+		} else if (hash < 95) {
+			return 0.05;
+		} else {
+			return 0.01;
+		}
+	}
+	
+	private static double getChunkDistanceFactor(int num) {
+		num = Math.abs(num);
+		
+		if (num < 75) {
+			return 1.5;
+		} else if (num < 150) {
+			return 1.3;
+		} else if (num < 300) {
+			return 1.1;
+		} else if (num < 500) {
+			return 1.0;
+		} else if (num < 700) {
+			return 0.9;
+		} else if (num < 800) {
+			return 0.8;
+		} else if (num < 900) {
+			return 0.6;
+		} else if (num < 1000) {
+			return 0.5;
+		} else {
+			return 0.2;
+		}
 	}
 }

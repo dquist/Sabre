@@ -9,8 +9,8 @@ public class CmdBuildBypass extends SabreCommand {
 	public CmdBuildBypass()
 	{
 		super();
-		this.aliases.add("bypass");
-		this.aliases.add("sbb");
+		this.aliases.add("bdb");
+		this.aliases.add("ctb");
 		
 		this.optionalArgs.put("on", "false");
 

@@ -99,4 +99,4 @@ recipes:
     outputs:
       Aspect of Metallurgy:
         custom_item: Aspect of Metallurgy
-        amount: 8
+        amount: 1

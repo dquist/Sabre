@@ -1,0 +1,6 @@
+name: Dharma Factory 2
+material: FURNACE
+class: com.gordonfreemanq.sabre.factory.BaseFactory
+amount: 1
+lore:
+  - '<c>A slightly more advanced dharma factory.'

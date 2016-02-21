@@ -6,12 +6,12 @@ recipes:
     inputs:
       Cobblestone:
         material: COBBLESTONE
-        amount: 1024
+        amount: 512
     outputs:
       Stone:
         material: STONE
         durability: 0
-        amount: 512
+        amount: 384
   Refine Granite:
     fuel_cost: 100
     inputs:
@@ -23,7 +23,7 @@ recipes:
       Stone:
         material: STONE
         durability: 2
-        amount: 128
+        amount: 192
   Refine Diorite:
     fuel_cost: 100
     inputs:
@@ -35,7 +35,7 @@ recipes:
       Stone:
         material: STONE
         durability: 4
-        amount: 128
+        amount: 192
   Refine Andesite:
     fuel_cost: 100
     inputs:
@@ -47,7 +47,7 @@ recipes:
       Stone:
         material: STONE
         durability: 6
-        amount: 128
+        amount: 192
   Craft Aspect of Masonry:
     fuel_cost: 10
     inputs:
@@ -58,4 +58,15 @@ recipes:
     outputs:
       Aspect of Masonry:
         custom_item: Aspect of Masonry
-        amount: 8
+        amount: 1
+upgrades:
+  Stone Smelter 3 Upgrade:
+    fuel_cost: 10
+    inputs:
+      Aspect of Masonry:
+        custom_item: Aspect of Masonry
+        amount: 64
+    outputs:
+      Stone Smelter 3:
+        custom_item: Stone Smelter 3
+        amount: 1

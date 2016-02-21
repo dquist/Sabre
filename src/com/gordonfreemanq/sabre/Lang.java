@@ -47,9 +47,9 @@ public class Lang
 	public static String groupPlayerTransferred = "<c>%s <i>transferred <c>%s <i>to you.";
 	public static String groupAutoJoinEnabled = "<i>Set auto-join status to <g>enabled<i>.";
 	public static String groupAutoJoinDisabled = "<i>Set auto-join status to <b>disabled<i>.";
-	public static String groupJoinHelp = "<i>Use '<c>/s join <c>%s<i>' to join.";
-	public static String groupLeaveHelp = "<i>Use '<c>/s leave <c>%s<i>' to leave.";
-	public static String groupTransferHelp = "<i>Use '<c>/s transfer <c>%s<i>' to transfer the group.";
+	public static String groupJoinHelp = "<i>Use '<c>/f join <c>%s<i>' to join.";
+	public static String groupLeaveHelp = "<i>Use '<c>/f leave <c>%s<i>' to leave.";
+	public static String groupTransferHelp = "<i>Use '<c>/f transfer <c>%s<i>' to transfer the group.";
 	
 	
 	// CHAT
@@ -72,10 +72,10 @@ public class Lang
 	public static String blockBypassDisable = "<i>BYPASS mode is now <b>disabled<i>.";
 	public static String blockBuildMode = "<i>Build mode set to <n>%s<i>.";
 	public static String blockBuildModeGroup = "<g>Build mode set to <n>%s <g>for <c>%s<g>.";
-	public static String blockNotMaterial = "<i>%s <b>is not a valid reinforcement material.";
+	public static String blockNotMaterial = "<b>That is not a valid reinforcement material.";
 	public static String blockMaterialDepleted = "<n>%s <i>depleted, left fortification mode.";
 	public static String blockNotReinforceable = "<b>That block cannot be reinforced.";
-	public static String blockShowType = "<i>That is a <n>%s<i>.";
+	public static String blockShowType = "<i>That's a <n>%s<i>.";
 	public static String blockShowInfo = "<b>%s with <n>%s <b>at <n>%s%% <b>health.";
 	public static String blockShowInfoAccess = "<g>%s to <c>%s <g>with <n>%s <g>at <n>%s%% <g>health.";
 	public static String blockShowInfoSpecial = "<n>%s <b>is %s with <n>%s <b>at <n>%s%% <b>health.";
@@ -90,6 +90,7 @@ public class Lang
 	public static String blockNoChange = "<i>No change was made.";
 	public static String blockChanged = "<i>Changed to <n>%s <i>with <n>%s<i>.";
 	public static String blockCantPlace = "<i>You cannot place this block.";
+	public static String blockMaterialHasLore = "<b>You cannot reinforce with lore items.";
 	
 	
 	// ADMIN
@@ -103,6 +104,7 @@ public class Lang
 	public static String adminYourNameIsNow = "<i>Your name has been set to <c>%s<i>.";
 	public static String adminYouBypassed = "<h>You bypassed this block on <c>%s<h>.";
 	public static String adminSetSpawn = "<g>You set the spawn location.";
+	public static String adminInvalidItem = "<c>That item does not exist.";
 	
 	
 	
@@ -122,13 +124,25 @@ public class Lang
 	public static final String signNowVisible = "<i>This sign is now <g>visible<i>.";
 	public static final String signNowHidden = "<i>This sign is now <b>hidden<i>.";
 	
+	// WARP
+	public static final String warpHitDrive = "<g>Created a <c>Teleport Linker<g>. Hit a warp drive or teleport pad to link them together.";
+	public static final String warpLinkedPadDrive = "<g>Teleport pad linked to warp drive.";
+	public static final String warpLinkedPadToPad = "<g>Teleport pads linked.";
+	public static final String warpNoPadFound = "<b>No teleport pad was found at that location.";
+	public static final String warpTooFar = "<i>Teleport pad must be within %d blocks of the warp drive.";
+	public static final String warpMissingDrive = "<i>Teleport pad is not linked to a warp drive.";
+	public static final String warpDirectMissingDrive = "<i>That teleport pad is not linked to a direct warp drive.";
+	public static final String warpMissingPad = "<i>Teleport pad is not linked to another pad.";
+	public static final String warpMissingDestDrive = "<i>Destination teleport pad is not linked to a direct warp drive.";
+	public static final String warping = "<i>Teleporting...";
+	
 	
 	// PEARLS
 	public static final String pearlCantHold = "<b>Imprisoned players cannot pick up prison pearls.";
 	public static final String pearlMotd = "<n>You are trapped in this bleak and endless world \nby a prison pearl.";
 	public static final String pearlMotd2 = "<i>Type \"<c>/pp locate<i>\" to locate your pearl.";
 	public static final String pearlNotImprisoned = "<i>You are not imprisoned.";
-	public static final String pearlPearlIsHeld = "<g>Your pearl is held by <a>%s <n>[%d %d %d %s]";
+	public static final String pearlPearlIsHeld = "<i>Your pearl is held by <a>%s <n>[%d %d %d %s]";
 	public static final String pearlYouBound = "<g>You've bound <c>%s <g>to a prison pearl!";
 	public static final String pearlYouWereBound = "<b>You've been bound to a prison pearl by <c>%s<b>!";
 	public static final String pearlYouWereFreed = "<g>You've been freed!";
@@ -140,6 +154,21 @@ public class Lang
 	public static final String pearlYouReturned = "<g>You returned <c>%s <g>to prison.";
 	public static final String pearlYouKilled = "<g>You killed <c>%s<g>.";
 	public static final String pearlAlreadyPearled = "<c>%s <b>is already held by a prison pearl.";
+	public static final String pearlNotHoldingMoksha = "<b>You are not holding a moksha rod.";
+	public static final String pearlPlayerNotImprisoned = "<i>That player is not imprisoned.";
+	public static final String pearlBoundMoksha = "<g>You bound <c>%s <g>to a moksha rod.";
+	public static final String pearlMokshaNotBound = "<i>This rod is not bound to anyone.";
+	public static final String pearlMokshaAddStrength = "<i>This rod has no strength.";
+	public static final String pearlJailbreakPass = "<g>You broke <c>%s<g> out of prison!";
+	public static final String pearlJailbreakFail = "<b>Your jailbreak attempt was too weak and failed.";
+	public static final String pearlUpdateStrength = "<i>You updated the pearl strength to <c>%d.";
+	public static final String pearlCantDoThat = "<i>You can't do that when imprisoned!";
+	public static final String pearlNoPlayer = "<i>There's no online player by that name.";
+	public static final String pearlBcastRequestSent = "<i>Broadcast request sent.";
+	public static final String pearlBcastRequest = "<c>%s <i>has requested to broadcast their pearl location.\nType <c>/pp confirm <i>to confirm";
+	public static final String pearlNoBcastRequest = "<i>You have no broadcast requests.";
+	public static final String pearlGettingBcasts = "<g>You have now receiving broadcasts from <c>%s.";
+	public static final String pearlBroadcast = "<i>The pearl of <c>%s <i>is held by <a>%s <n>[%d %d %d %s]";
 	
 	
 	// FACTORY
@@ -169,6 +198,9 @@ public class Lang
 	public static String noPermission = "<b>You don't have permission to do that.";
 	public static String mustHoldController = "<i>You must be holding a <c>%s<i>.";
 	public static String unknownWorld = "<b>Unknown world <c>%s<b>.";
+	public static String noCraftingLore = "<i>You cannot craft with lore items.";
+	public static String recipeDisabled = "<i>That crafting recipe is disabled.";
+	public static String recipeNeed4Logs = "<i>You need 4 logs to make a plank.";
 	public static String exceptionGeneral = "<b>An internal error occurred.";
 	public static String exceptionLogin = "An internal server error occurred.";
 	public static String exceptionConsoleDuring = "An exception error occurred during \"%s\"";

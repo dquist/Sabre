@@ -1,24 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
 	<classpathentry kind="src" path="src"/>
-	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.7"/>
-	<classpathentry kind="lib" path="lib/CombatTag.jar"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/jre1.8.0_73"/>
 	<classpathentry kind="lib" path="lib/mongo-java-driver-2.13.0.jar">
 		<attributes>
 			<attribute name="javadoc_location" value="http://api.mongodb.org/java/current/"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="lib" path="lib/ProtocolLib.jar"/>
 	<classpathentry kind="lib" path="lib/bukkit-1.8-R0.1-20150220.163627-184.jar">
 		<attributes>
 			<attribute name="javadoc_location" value="https://hub.spigotmc.org/javadocs/bukkit/"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="lib" path="lib/spigot_server.jar"/>
-	<classpathentry kind="lib" path="lib/PacketWrapper.jar">
-		<attributes>
-			<attribute name="javadoc_location" value="http://ci.shadowvolt.com/job/PacketWrapper/javadoc/"/>
-		</attributes>
-	</classpathentry>
+	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/4"/>
+	<classpathentry kind="lib" path="lib/spigot-1.8.8.jar"/>
+	<classpathentry kind="lib" path="lib/CombatTagPlus.jar"/>
+	<classpathentry kind="lib" path="lib/PacketWrapper.jar"/>
+	<classpathentry kind="lib" path="lib/ProtocolLib.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

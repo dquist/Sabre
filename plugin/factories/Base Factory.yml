@@ -1,5 +1,6 @@
 name: Base Factory
 production_speed: 5
+recipes:
 upgrades:
   Lumber Mill 1 Upgrade:
     fuel_cost: 10
@@ -61,13 +62,13 @@ upgrades:
     inputs:
       Aspect of Masonry:
         custom_item: Aspect of Masonry
-        amount: 8
+        amount: 1
       Aspect of Framing:
         custom_item: Aspect of Framing
-        amount: 8
+        amount: 1
       Aspect of Metallurgy:
         custom_item: Aspect of Metallurgy
-        amount: 8
+        amount: 1
     outputs:
       Foundry 1:
         custom_item: Foundry 1
@@ -77,13 +78,57 @@ upgrades:
     inputs:
       Aspect of Masonry:
         custom_item: Aspect of Masonry
-        amount: 4
+        amount: 1
       Aspect of Framing:
         custom_item: Aspect of Framing
-        amount: 4
+        amount: 1
     outputs:
       Stone Smithy 1:
         custom_item: Stone Smithy 1
+        amount: 1
+  Redstone Factory 1 Upgrade:
+    fuel_cost: 10
+    inputs:
+      Redstone Block:
+        material: REDSTONE_BLOCK
+        amount: 64
+      Stone:
+        material: STONE
+        amount: 576
+      Quartz Block:
+        material: QUARTZ_BLOCK
+        amount: 32
+      Aspect of Framing:
+        custom_item: Aspect of Framing
+        amount: 1
+    outputs:
+      Redstone Factory 1:
+        custom_item: Redstone Factory 1
+        amount: 1
+  Redstone Mechanism Factory 1 Upgrade:
+    fuel_cost: 10
+    inputs:
+      Redstone Block:
+        material: REDSTONE_BLOCK
+        amount: 64
+      Glowstone:
+        material: GLOWSTONE
+        amount: 256
+      Iron Block:
+        material: IRON_BLOCK
+        amount: 64
+      Slime Ball:
+        material: SLIME_BALL
+        amount: 64
+      Aspect of Masonry:
+        custom_item: Aspect of Masonry
+        amount: 1
+      Aspect of Framing:
+        custom_item: Aspect of Framing
+        amount: 1
+    outputs:
+      Redstone Mechanism Factory 1:
+        custom_item: Redstone Mechanism Factory 1
         amount: 1
   Iron Smithy 1 Upgrade:
     fuel_cost: 10
@@ -93,10 +138,10 @@ upgrades:
         amount: 512
       Aspect of Masonry:
         custom_item: Aspect of Masonry
-        amount: 4
+        amount: 1
       Aspect of Framing:
         custom_item: Aspect of Framing
-        amount: 4
+        amount: 1
     outputs:
       Iron Smithy 1:
         custom_item: Iron Smithy 1
@@ -125,10 +170,10 @@ upgrades:
         amount: 64
       Aspect of Masonry:
         custom_item: Aspect of Masonry
-        amount: 4
+        amount: 1
       Aspect of Framing:
         custom_item: Aspect of Framing
-        amount: 4
+        amount: 1
     outputs:
       Diamond Smithy 1:
         custom_item: Diamond Smithy 1
@@ -141,10 +186,10 @@ upgrades:
         amount: 256
       Aspect of Masonry:
         custom_item: Aspect of Masonry
-        amount: 4
+        amount: 1
       Aspect of Framing:
         custom_item: Aspect of Framing
-        amount: 4
+        amount: 1
     outputs:
       Leather Armory 1:
         custom_item: Leather Armory 1
@@ -157,10 +202,10 @@ upgrades:
         amount: 100
       Aspect of Masonry:
         custom_item: Aspect of Masonry
-        amount: 4
+        amount: 1
       Aspect of Framing:
         custom_item: Aspect of Framing
-        amount: 4
+        amount: 1
     outputs:
       Iron Armory 1:
         custom_item: Iron Armory 1
@@ -173,10 +218,10 @@ upgrades:
         amount: 60
       Aspect of Masonry:
         custom_item: Aspect of Masonry
-        amount: 4
+        amount: 1
       Aspect of Framing:
         custom_item: Aspect of Framing
-        amount: 4
+        amount: 1
     outputs:
       Gold Armory 1:
         custom_item: Gold Armory 1
@@ -189,11 +234,113 @@ upgrades:
         amount: 40
       Aspect of Masonry:
         custom_item: Aspect of Masonry
-        amount: 4
+        amount: 1
       Aspect of Framing:
         custom_item: Aspect of Framing
-        amount: 4
+        amount: 1
     outputs:
       Diamond Armory 1:
         custom_item: Diamond Armory 1
+        amount: 1
+  Dharma Factory 1 Upgrade:
+    fuel_cost: 10
+    inputs:
+      End Stone:
+        material: ENDER_STONE
+        amount: 2048
+      Obsidian:
+        material: OBSIDIAN
+        amount: 512
+      Diamond:
+        material: DIAMOND
+        amount: 128
+    outputs:
+      Dharma Factory 1:
+        custom_item: Dharma Factory 1
+        amount: 1
+  Civics Factory 1 Upgrade:
+    fuel_cost: 10
+    inputs:
+      Aspect of Masonry:
+        custom_item: Aspect of Masonry
+        amount: 2
+      Aspect of Framing:
+        custom_item: Aspect of Framing
+        amount: 2
+      Aspect of Metallurgy:
+        custom_item: Aspect of Metallurgy
+        amount: 2
+      Aspect of Casting:
+        custom_item: Aspect of Casting
+        amount: 16
+      Redstone Coil:
+        custom_item: Redstone Coil
+        amount: 8
+      Gearbox:
+        custom_item: Gearbox
+        amount: 8
+    outputs:
+      Civics Factory 1:
+        custom_item: Civics Factory 1
+        amount: 1
+  Kiln 1 Upgrade:
+    fuel_cost: 10
+    inputs:
+      Clay:
+        material: CLAY
+        amount: 1280
+      Aspect of Masonry:
+        custom_item: Aspect of Masonry
+        amount: 1
+      Aspect of Framing:
+        custom_item: Aspect of Framing
+        amount: 1
+    outputs:
+      Kiln 1:
+        custom_item: Kiln 1
+        amount: 1
+  Glass Smelter 1 Upgrade:
+    fuel_cost: 10
+    inputs:
+      Glass:
+        material: GLASS
+        amount: 1536
+      Aspect of Masonry:
+        custom_item: Aspect of Masonry
+        amount: 1
+      Aspect of Framing:
+        custom_item: Aspect of Framing
+        amount: 1
+    outputs:
+      Glass Smelter 1:
+        custom_item: Glass Smelter 1
+        amount: 1
+  Basic Farm:
+    fuel_cost: 10
+    inputs:
+      Dirt:
+        material: DIRT
+        amount: 2048
+      Cobblestone:
+        material: COBBLESTONE
+        amount: 1024
+    outputs:
+      Basic Farm:
+        custom_item: Basic Farm
+        amount: 1
+  Emerald Cauldron 1:
+    fuel_cost: 10
+    inputs:
+      Diamond:
+        material: DIAMOND
+        amount: 128
+      Iron:
+        material: IRON_INGOT
+        amount: 256
+      Glass:
+        material: GLASS
+        amount: 1024
+    outputs:
+      Emerald Cauldron 1:
+        custom_item: Emerald Cauldron 1
         amount: 1

@@ -1,6 +1,6 @@
 package com.gordonfreemanq.sabre.cmd;
 
-import org.bukkit.Material;
+import org.bukkit.inventory.ItemStack;
 
 import com.gordonfreemanq.sabre.Lang;
 import com.gordonfreemanq.sabre.blocks.BuildMode;
@@ -15,8 +15,8 @@ public class CmdBuildReinforce extends SabreCommand {
 	public CmdBuildReinforce()
 	{
 		super();
-		this.aliases.add("reinforce");
-		this.aliases.add("sbr");
+		this.aliases.add("bdr");
+		this.aliases.add("ctr");
 		
 		this.requiredArgs.add("group");
 		this.optionalArgs.put("mode", "public,insecure");
@@ -63,10 +63,16 @@ public class CmdBuildReinforce extends SabreCommand {
 			}
 		}
 		
-		Material m = me.getPlayer().getItemInHand().getType();
-		ReinforcementMaterial rm = config.getReinforcementMaterial(m);
+		ItemStack handItem = me.getPlayer().getItemInHand();
+		
+		ReinforcementMaterial rm = config.getReinforcementMaterial(handItem);
 		if (rm == null) {
-			msg(Lang.blockNotMaterial, m.toString());
+			msg(Lang.blockNotMaterial);
+			return;
+		}
+		
+		if (handItem.hasItemMeta() && (handItem.getItemMeta().hasLore() || handItem.getItemMeta().hasDisplayName())) {
+			msg(Lang.blockMaterialHasLore);
 			return;
 		}
 		

@@ -55,6 +55,7 @@ import com.gordonfreemanq.sabre.PlayerManager;
 import com.gordonfreemanq.sabre.SabreConfig;
 import com.gordonfreemanq.sabre.SabrePlayer;
 import com.gordonfreemanq.sabre.SabrePlugin;
+import com.gordonfreemanq.sabre.SabreTweaks;
 import com.gordonfreemanq.sabre.core.ISabreLog;
 import com.gordonfreemanq.sabre.groups.SabreGroup;
 import com.gordonfreemanq.sabre.groups.SabreMember;
@@ -264,7 +265,10 @@ public class BlockListener implements Listener {
 							// Cancel the break event, set the block to air, and drop the new item, this way
 							// we can override the default block that drops
 							l.getBlock().setType(Material.AIR);
-							l.getWorld().dropItem(l, is);
+							
+							if (sb.getDropsBlock()) {
+								SabreTweaks.dropItemAtLocation(l, is);
+							}
 						}
 					}
 
@@ -309,28 +313,44 @@ public class BlockListener implements Listener {
 			SabreBlock sb = bm.getBlockAt(b.getLocation());
 			if (sb != null) {
 
+				// Show the special block name if player interacts with a stick
+				boolean showBlockName = sb.isSpecial() && p.getPlayer().getItemInHand().getType() != Material.STICK;
+				
 				canAccess = bm.playerCanAccessBlock(p, sb);
 
 				// Disallow container access for those not in the group
-				if (a.equals(Action.RIGHT_CLICK_BLOCK) && config.blockIsLockable(b.getType()) && !canAccess) {
-
-					if (p.getAdminBypass()) {
-						String groupName = sb.getReinforcement().getGroup().getName();
-						p.msg(Lang.adminYouBypassed, groupName);
-					} else {
-						if (!state.getInfo()) {
-							if (sb.isSpecial()) {
-								p.msg(Lang.blockIsLockedSpecial, sb.getTypeName());
-							} else {
-								p.msg(Lang.blockIsLocked, b.getType());
+				if (a.equals(Action.RIGHT_CLICK_BLOCK)) {
+					if (config.blockIsLockable(b.getType()) && !canAccess) {
+						if (p.getAdminBypass()) {
+							String groupName = sb.getReinforcement().getGroup().getName();
+							p.msg(Lang.adminYouBypassed, groupName);
+						} else {
+							if (!state.getInfo()) {
+								if (sb.isSpecial()) {
+									p.msg(Lang.blockIsLockedSpecial, sb.getTypeName());
+								} else {
+									p.msg(Lang.blockIsLocked, b.getType());
+								}
+								
+								// Already showing a message, so don't show another message later
+								showBlockName = false;
 							}
+							
+							e.setCancelled(true);
 						}
-						
-						e.setCancelled(true);
-					}
+					} 
+
 				} 
 				if (state.getInfo()) {
 					showBlockInfo(p, sb);
+				}
+				// Interacting with a special block will notify the player what type of block it is.
+				// Ignore if holding a stick though, since that's the default interaction item, it makes
+				// the chat too noisy when cycling the factory recipes
+				else if (showBlockName && sb.getTellBlockName()) {
+					if (!sb.getRequireAccessForName() || sb.canPlayerAccess(p)) {
+						p.msg(Lang.blockShowType, sb.getDisplayName());
+					}
 				}
 			} else if (state.getInfo()) {
 				p.msg(Lang.blockNoReinforcement);
@@ -355,7 +375,7 @@ public class BlockListener implements Listener {
 
 				e.setCancelled(true);
 			} else if (sb != null && sb.isSpecial()) {
-				if (canAccess) {
+				if (canAccess || !sb.getRequireAccesstoInteract()) {
 					sb.onInteract(e, p);
 					
 					if (p.getPlayer().getItemInHand().getType().equals(Material.STICK)) {
@@ -437,7 +457,7 @@ public class BlockListener implements Listener {
 			if (slotItem == null) {
 				continue;
 			}
-			if (slotItem.getType().equals(rm.material)) {
+			if (slotItem.getType().equals(rm.material) && slotItem.getDurability() == rm.durability) {
 
 				// Prevent named and lore items from being used
 				if (slotItem.hasItemMeta() && (slotItem.getItemMeta().hasLore() || slotItem.getItemMeta().hasDisplayName())) {
@@ -460,6 +480,8 @@ public class BlockListener implements Listener {
 		Reinforcement r = new Reinforcement(l, g.getID(), rm.material, rm.strength, (new Date()).getTime());
 		r.setPublic(state.getPublic());
 		r.setInsecure(state.getInsecure());
+		
+		boolean refundItem = false;
 
 		// Is it already the same as the existing?
 		if (existing != null) {
@@ -471,7 +493,7 @@ public class BlockListener implements Listener {
 				// Tell the player the block was updated
 				String groupStr = p.getBuildState().getBuildGroupString();
 				p.msg(Lang.blockChanged, groupStr, r.getMaterial().toString());
-				return r;
+				refundItem = true;
 			}
 		}
 
@@ -484,6 +506,11 @@ public class BlockListener implements Listener {
 		slotItem.setAmount(slotItem.getAmount() - amount);
 		inv.setItem(slot, slotItem);
 		p.getPlayer().updateInventory();
+		
+		// If the reinforcement changed, give original item back
+		if (refundItem) {
+			refundItemToPlayer(p.getPlayer(), existing.getMaterial(), b.getLocation());
+		}
 
 		return r;
 	}
@@ -584,9 +611,11 @@ public class BlockListener implements Listener {
 				SabreBlock sb = bm.getBlockAt(adjacent.getLocation());
 				if (sb != null) {
 					Reinforcement r = sb.getReinforcement();
-					SabreGroup g = r.getGroup();
-					if (!g.isMember(p)) {
-						return false;
+					if (r != null) {
+						SabreGroup g = r.getGroup();
+						if (!g.isMember(p)) {
+							return false;
+						}
 					}
 				}
 			}
@@ -787,7 +816,7 @@ public class BlockListener implements Listener {
 		for(ItemStack leftover : inv.addItem(
 				is)
 				.values()) {
-			l.getWorld().dropItem(l, leftover);
+			SabreTweaks.dropItemAtLocation(l, leftover);
 		}
 	}
 
@@ -867,7 +896,7 @@ public class BlockListener implements Listener {
 					// Cancel the break event, set the block to air, and drop the new item, this way
 					// we can override the default block that drops
 					l.getBlock().setType(Material.AIR);
-					l.getWorld().dropItem(l, is);
+					SabreTweaks.dropItemAtLocation(l, is);
 					e.setCancelled(true);
 				}
 			}

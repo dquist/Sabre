@@ -1,0 +1,60 @@
+name: Emerald Cauldron 5
+production_speed: 5
+recipes:
+  Emerald Recipe - Wheat:
+    fuel_cost: 20
+    inputs:
+      Bushel of Wheat:
+        custom_item: Bushel of Wheat
+        amount: 256
+      Bushel of Potatoes:
+        custom_item: Bushel of Potatoes
+        amount: 128
+      Bushel of Carrots:
+        custom_item: Bushel of Carrots
+        amount: 128
+      Glass:
+        material: GLASS
+        amount: 64
+    outputs:
+      Emerald Block:
+        material: EMERALD_BLOCK
+        amount: 3
+  Emerald Recipe - Potato:
+    fuel_cost: 20
+    inputs:
+      Bushel of Potatos:
+        custom_item: Bushel of Potatoes
+        amount: 256
+      Bushel of Wheat:
+        custom_item: Bushel of Wheat
+        amount: 128
+      Bushel of Carrots:
+        custom_item: Bushel of Carrots
+        amount: 128
+      Glass:
+        material: GLASS
+        amount: 64
+    outputs:
+      Emerald Block:
+        material: EMERALD_BLOCK
+        amount: 3
+  Emerald Recipe - Carrot:
+    fuel_cost: 20
+    inputs:
+      Bushel of Carrots:
+        custom_item: Bushel of Carrots
+        amount: 256
+      Bushel of Potatoes:
+        custom_item: Bushel of Potatoes
+        amount: 128
+      Bushel of Wheat:
+        custom_item: Bushel of Wheat
+        amount: 128
+      Glass:
+        material: GLASS
+        amount: 64
+    outputs:
+      Emerald Block:
+        material: EMERALD_BLOCK
+        amount: 3

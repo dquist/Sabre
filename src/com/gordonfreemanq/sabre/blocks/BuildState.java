@@ -47,6 +47,10 @@ public class BuildState {
 	 */
 	public void setMode(BuildMode buildMode) {
 		this.buildMode = buildMode;
+		
+		if (buildMode == BuildMode.OFF) {
+			this.material = null;
+		}
 	}
 	
 	

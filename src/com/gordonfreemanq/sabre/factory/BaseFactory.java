@@ -2,6 +2,7 @@ package com.gordonfreemanq.sabre.factory;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
 
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -18,6 +19,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.material.Attachable;
 import org.bukkit.material.Lever;
 import org.bukkit.material.MaterialData;
+import org.bukkit.material.DirectionalContainer;
 
 import com.gordonfreemanq.sabre.Lang;
 import com.gordonfreemanq.sabre.SabrePlayer;
@@ -27,6 +29,7 @@ import com.gordonfreemanq.sabre.blocks.CustomItems;
 import com.gordonfreemanq.sabre.blocks.SabreBlock;
 import com.gordonfreemanq.sabre.blocks.SabreItemStack;
 import com.gordonfreemanq.sabre.customitems.SpecialBlock;
+import com.gordonfreemanq.sabre.factory.recipe.IRecipe;
 import com.gordonfreemanq.sabre.util.SabreUtil;
 import com.mongodb.BasicDBObject;
 
@@ -41,7 +44,7 @@ public class BaseFactory extends SpecialBlock {
 	
 	// Not saved
 	protected final FactoryProperties properties;
-	protected FactoryRecipe recipe;
+	protected IRecipe recipe;
 	protected boolean running;
 	protected int fuelPerBurn;
 	protected int fuelCounter;
@@ -62,7 +65,7 @@ public class BaseFactory extends SpecialBlock {
 		// Get the recipes for this factory
 		this.properties = FactoryConfig.getInstance().getFactoryProperties(this.typeName);
 		
-		List<FactoryRecipe> recipes = properties.getRecipes();
+		List<IRecipe> recipes = properties.getRecipes();
 		
 		// Set the current recipe
 		if (recipeIndex < recipes.size()) {
@@ -75,14 +78,15 @@ public class BaseFactory extends SpecialBlock {
 
 		fuels = new ArrayList<FactoryFuel>();
 		
-		fuels.add(new FactoryFuel(CustomItems.getInstance().getByName("Plasma"), 64));
-		
+		fuels.add(new FactoryFuel(new SabreItemStack(Material.COAL, "Coal", 1, 0), 1));
+		fuels.add(new FactoryFuel(new SabreItemStack(Material.COAL, "Charcoal", 1, 1), 1));
+		fuels.add(new FactoryFuel(new SabreItemStack(Material.BLAZE_ROD, "Blaze Rod", 1), 4));
 		FactoryFuel lavaFuel = new FactoryFuel(new SabreItemStack(Material.LAVA_BUCKET, "Lava Bucket", 1), 16);
 		lavaFuel.addReturnItem(new SabreItemStack(Material.BUCKET, "Bucket", 1));
-		
 		fuels.add(lavaFuel);
-		fuels.add(new FactoryFuel(new SabreItemStack(Material.BLAZE_ROD, "Blaze Rod", 1), 4));
-		fuels.add(new FactoryFuel(new SabreItemStack(Material.COAL, "Charcoal", 1, 1), 1));
+		fuels.add(new FactoryFuel(CustomItems.getInstance().getByName("Plasma"), 64));
+		
+		setFurnaceState(false);
 	}
 	
 	
@@ -143,7 +147,7 @@ public class BaseFactory extends SpecialBlock {
      */
     public Long getPercentComplete() {
     	Double dbl = new Double((double)fuelCounter / recipe.getFuelCost());
-    	return Math.round(dbl * 100.0);
+    	return Math.min(Math.round(dbl * 100.0), 100);
     }
 	
 	
@@ -239,6 +243,9 @@ public class BaseFactory extends SpecialBlock {
 			doc = doc.append("fuel", SabreUtil.serializeLocation(this.fuelLocation));
 		}
 		
+		doc = doc.append("running", this.running);
+		doc = doc.append("factory", true);
+		
 		return doc;
 	}
 	
@@ -262,12 +269,22 @@ public class BaseFactory extends SpecialBlock {
 		}
 		this.recipeIndex = o.getInt("recipe");
 
-		List<FactoryRecipe> recipes = properties.getRecipes();
+		List<IRecipe> recipes = properties.getRecipes();
 		if (recipes.size() > 0) {
 			if (recipeIndex >= recipes.size()) {
 				recipeIndex = 0;
 			}
 			recipe = recipes.get(recipeIndex);
+		}
+		
+		this.running = o.getBoolean("running", false);
+		if (this.running) {
+			try {
+				this.powerOn();
+			} catch(Exception ex) {
+				SabrePlugin.getPlugin().log(Level.WARNING, "Failed to power on factory at %s", this.location.toString());
+				SabrePlugin.getPlugin().log(Level.WARNING, ex.getMessage());
+			}
 		}
 	}
 	
@@ -313,7 +330,6 @@ public class BaseFactory extends SpecialBlock {
 		} else {
 			cyclePower(sp);
 		}
-		
 	}
 	
 	
@@ -322,7 +338,9 @@ public class BaseFactory extends SpecialBlock {
 	 * @param e The event args
 	 */
 	public void onBlockBreaking(SabrePlayer p, BlockBreakEvent e) {
-		// Do nothing
+		if (running) {
+			powerOff();
+		}
 	}
 	
 	
@@ -330,7 +348,7 @@ public class BaseFactory extends SpecialBlock {
 	 * Creates the factory controller
 	 * @param sp The player
 	 */
-	private void createController(SabrePlayer sp) {
+	protected void createController(SabrePlayer sp) {
 		ItemStack is = (new FactoryController(this)).toItemStack();
 		sp.getPlayer().getInventory().setItemInHand(is);
 	}
@@ -341,7 +359,7 @@ public class BaseFactory extends SpecialBlock {
 	 * Cycles the recipe
 	 * @param sp The player
 	 */
-	private void cycleRecipe(SabrePlayer runner) {
+	protected void cycleRecipe(SabrePlayer runner) {
 		
 		this.runner = runner;
 		
@@ -351,7 +369,12 @@ public class BaseFactory extends SpecialBlock {
 			return;
 		}
 		
-		List<FactoryRecipe> recipes;
+		// force upgrade mode for factories with no normal recipes
+		if (properties.getRecipes().size() == 0 && properties.getUpgrades().size() > 0) {
+			upgradeMode = true;
+		}
+		
+		List<IRecipe> recipes;
 		if (upgradeMode) {
 			recipes = properties.getUpgrades();
 		} else {
@@ -411,6 +434,8 @@ public class BaseFactory extends SpecialBlock {
 				return;
 			}
 			
+			recipe.onRecipeStart(this);
+			
 			if (!checkMaterials()) {
 				ItemList<SabreItemStack> needAll = new ItemList<SabreItemStack>();
 				needAll.addAll(recipe.getInputs().getDifference(getInputInventory()));
@@ -426,30 +451,24 @@ public class BaseFactory extends SpecialBlock {
 	}
 	
 	
+	protected void onPowerOn() {
+		// Do nothing
+	}
+	
+	
 	/**
 	 * Turns the factory on
 	 * @param sp The player
 	 */
-	@SuppressWarnings("deprecation")
-	private void powerOn() {
-		
+	protected void powerOn() {
+
 		running = true;
+		onPowerOn();
 		fuelCounter = 0;
 		energyTimer = 0;
 		FactoryWorker.getInstance().addRunning(this);
 		setActivationLever(true);
-		
-		if (location.getBlock().getType().equals(Material.FURNACE)) {
-			Furnace furnace = (Furnace) location.getBlock().getState();
-			byte data = furnace.getData().getData();
-			ItemStack[] oldContents = furnace.getInventory().getContents();
-			furnace.getInventory().clear();
-			location.getBlock().setType(Material.BURNING_FURNACE);
-			furnace = (Furnace) location.getBlock().getState();
-			furnace.setRawData(data);
-			furnace.update();
-			furnace.getInventory().setContents(oldContents);
-		}
+		setFurnaceState(true);
 	}
 	
 	
@@ -457,27 +476,59 @@ public class BaseFactory extends SpecialBlock {
 	 * Turns the factory off
 	 * @param sp The player
 	 */
-	@SuppressWarnings("deprecation")
-	private void powerOff() {
+	protected void powerOff() {
 		running = false;
 		fuelCounter = 0;
 		energyTimer = 0;
 		setActivationLever(false);
 		FactoryWorker.getInstance().removeRunning(this);
+		setFurnaceState(false);
 		
-		if (location.getBlock().getType().equals(Material.BURNING_FURNACE)) {
-			Furnace furnace = (Furnace) location.getBlock().getState();
-			byte data = furnace.getData().getData();
+		this.runner = null;
+	}
+	
+	
+	/**
+	 * Sets the state of the furnace block
+	 * @param state The state of the furnace
+	 */
+	protected void setFurnaceState(boolean state) {
+		Block f = location.getBlock();
+		
+		if (state) {
+			if (f.getType() != Material.FURNACE) {
+				return;
+			}
+			
+			Furnace furnace = (Furnace) f.getState();
 			ItemStack[] oldContents = furnace.getInventory().getContents();
+			BlockFace facing = ((DirectionalContainer)furnace.getData()).getFacing();
 			furnace.getInventory().clear();
-			location.getBlock().setType(Material.FURNACE);
-			furnace = (Furnace) location.getBlock().getState();
-			furnace.setRawData(data);
+			f.setType(Material.BURNING_FURNACE);
+			furnace = (Furnace) f.getState();
+			MaterialData data = furnace.getData();
+			((DirectionalContainer)data).setFacingDirection(facing);
+			furnace.setData(data);
+			furnace.update();
+			furnace.setBurnTime(Short.MAX_VALUE);
+			furnace.getInventory().setContents(oldContents);
+		} else {
+			if (f.getType() != Material.BURNING_FURNACE) {
+				return;
+			}
+			
+			Furnace furnace = (Furnace) f.getState();
+			ItemStack[] oldContents = furnace.getInventory().getContents();
+			BlockFace facing = ((DirectionalContainer)furnace.getData()).getFacing();
+			furnace.getInventory().clear();
+			f.setType(Material.FURNACE);
+			furnace = (Furnace) f.getState();
+			MaterialData data = furnace.getData();
+			((DirectionalContainer)data).setFacingDirection(facing);
+			furnace.setData(data);
 			furnace.update();
 			furnace.getInventory().setContents(oldContents);
 		}
-		
-		this.runner = null;
 	}
 	
 	
@@ -532,7 +583,7 @@ public class BaseFactory extends SpecialBlock {
 	 * Gets the input chest inventory
 	 * @return The input inventory
 	 */
-	private Inventory getInputInventory() {
+	public Inventory getInputInventory() {
 		Chest chest = (Chest)inputLocation.getBlock().getState();
 		return chest.getInventory();
 	}
@@ -542,7 +593,7 @@ public class BaseFactory extends SpecialBlock {
 	 * Gets the output chest inventory
 	 * @return The output inventory
 	 */
-	private Inventory getOutputInventory() {
+	public Inventory getOutputInventory() {
 		Chest chest = (Chest)outputLocation.getBlock().getState();
 		return chest.getInventory();
 	}
@@ -552,7 +603,7 @@ public class BaseFactory extends SpecialBlock {
 	 * Gets the fuel chest inventory
 	 * @return The fuel inventory
 	 */
-	private Inventory getFuelInventory() {
+	public Inventory getFuelInventory() {
 		Chest chest = (Chest)fuelLocation.getBlock().getState();
 		return chest.getInventory();
 	}
@@ -574,6 +625,12 @@ public class BaseFactory extends SpecialBlock {
 	public void update() 
 	{
 		if (!running) {
+			return;
+		}
+		
+		// Power off non-loaded factories
+		if (!this.location.getChunk().isLoaded()) {
+			powerOff();
 			return;
 		}
 		
@@ -625,6 +682,7 @@ public class BaseFactory extends SpecialBlock {
 					performUpgrade();
 				} else {
 					recipe.getOutputs().putIn(getOutputInventory());
+					recipe.onRecipeComplete(this);
 				}
 				
 				if (runner != null) {
@@ -789,4 +847,22 @@ public class BaseFactory extends SpecialBlock {
 		
 		runner.msg(str, args);
 	}
+    
+    
+    /**
+     * Gets the current recipe
+     * @return
+     */
+    public IRecipe getRecipe() {
+    	return this.recipe;
+    }
+    
+    
+    /**
+     * Whether the factory should run while unloaded
+     * @return
+     */
+    public boolean runUnloaded() {
+    	return false;
+    }
 }

@@ -9,8 +9,8 @@ public class CmdBuildInfo extends SabreCommand {
 	public CmdBuildInfo()
 	{
 		super();
-		this.aliases.add("info");
-		this.aliases.add("sbi");
+		this.aliases.add("bdi");
+		this.aliases.add("cti");
 		
 		this.optionalArgs.put("on", "false");
 

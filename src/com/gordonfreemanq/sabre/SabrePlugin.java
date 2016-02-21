@@ -26,14 +26,16 @@ import com.gordonfreemanq.sabre.factory.FactoryWorker;
 import com.gordonfreemanq.sabre.groups.GroupManager;
 import com.gordonfreemanq.sabre.prisonpearl.PearlListener;
 import com.gordonfreemanq.sabre.prisonpearl.PearlManager;
+import com.gordonfreemanq.sabre.prisonpearl.PearlWorker;
 import com.gordonfreemanq.sabre.snitch.SnitchListener;
 import com.gordonfreemanq.sabre.snitch.SnitchLogger;
-import com.gordonfreemanq.sabre.util.CombatTagManager;
+import com.gordonfreemanq.sabre.util.CombatInterface;
+import com.gordonfreemanq.sabre.util.CombatTagPlusManager;
 
 
 public class SabrePlugin extends AbstractSabrePlugin
 {
-	public final static String version = "0.0.1";
+	public final static String version = "0.1.0";
 	
 	private static SabrePlugin instance;
 
@@ -59,7 +61,8 @@ public class SabrePlugin extends AbstractSabrePlugin
 	private CustomItems customItems;
 	private FactoryConfig factoryConfig;
 	private FactoryWorker factoryWorker;
-	private CombatTagManager combatTag;
+	private PearlWorker pearlWorker;
+	private CombatInterface combatTag;
 	
 	/**
 	 * Gets the player manager
@@ -81,7 +84,7 @@ public class SabrePlugin extends AbstractSabrePlugin
 	 * Gets the group manager
 	 * @return The group manager
 	 */
-	public CombatTagManager getCombatTag() {
+	public CombatInterface getCombatTag() {
 		return this.combatTag;
 	}
 	
@@ -159,8 +162,8 @@ public class SabrePlugin extends AbstractSabrePlugin
 	@Override
 	public void saveConfig() {
 		if (config != null) {
-			config.save();
-			super.saveConfig();
+			//config.save();
+			//super.saveConfig();
 		}
 	}
 
@@ -218,7 +221,7 @@ public class SabrePlugin extends AbstractSabrePlugin
 		this.factoryListener = new FactoryListener(playerManager, blockManager);
 		this.factoryConfig = new FactoryConfig();
 		this.customItems = new CustomItems();
-		this.combatTag = new CombatTagManager();
+		this.combatTag = new CombatTagPlusManager();
 		
 		// Try to connect to the database and load the data
 		try {
@@ -233,6 +236,9 @@ public class SabrePlugin extends AbstractSabrePlugin
 		// Add Base Commands
 		this.cmdAutoHelp = new CmdAutoHelp();
 		this.cmdBase = new CmdRoot();
+		
+		factoryWorker = new FactoryWorker();
+		factoryWorker.start();
 
 		playerListener.handleOnlinePlayers();
 		blockListener.handleLoadedChunks();
@@ -245,9 +251,14 @@ public class SabrePlugin extends AbstractSabrePlugin
 		ProtocolLibrary.getProtocolManager().addPacketListener(signHandler);
 		statsTracker = new StatsTracker(playerManager);
 		statsTracker.start();
-		factoryWorker = new FactoryWorker();
-		factoryWorker.start();
-		this.sabreTweaks.registerTimerForPearlCheck();		
+		
+		// Load the running factories
+		blockManager.loadRunningFactories();
+		
+		this.sabreTweaks.registerTimerForPearlCheck();
+		
+		pearlWorker = new PearlWorker(pearlManager, config);
+		pearlWorker.start();
 
 		postEnable();
 		this.loadSuccessful = true;
@@ -273,7 +284,7 @@ public class SabrePlugin extends AbstractSabrePlugin
 	public boolean onCommand(CommandSender sender, Command cmd, String alias, String[] args)
 	{
 		// Roll any other accepted raw commands into subcommands
-		if (!cmd.getLabel().equalsIgnoreCase("sabre")) {
+		if (!cmd.getLabel().equalsIgnoreCase("faction")) {
 			
 			String[] args2 = new String[args.length + 1];
 			args2[0] = cmd.getLabel();
@@ -282,7 +293,7 @@ public class SabrePlugin extends AbstractSabrePlugin
 			}
 			
 			args = args2;
-			cmd.setLabel("s");
+			cmd.setLabel("f");
 		}
 		
 		

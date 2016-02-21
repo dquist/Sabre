@@ -5,6 +5,7 @@ import java.util.logging.Level;
 import org.bukkit.Location;
 
 import com.gordonfreemanq.sabre.Lang;
+import com.gordonfreemanq.sabre.SabrePlayer;
 import com.gordonfreemanq.sabre.SabrePlugin;
 import com.gordonfreemanq.sabre.cmd.SabreCommand;
 import com.gordonfreemanq.sabre.prisonpearl.PearlManager;
@@ -16,6 +17,7 @@ public class CmdPearlLocate extends SabreCommand {
 	{
 		super();
 		this.aliases.add("locate");
+		this.aliases.add("ppl");
 
 		this.senderMustBePlayer = true;
 		this.setHelpShort("Locates your prison pearl");
@@ -23,7 +25,7 @@ public class CmdPearlLocate extends SabreCommand {
 
 	@Override
 	public void perform() 
-	{
+	{		
 		PrisonPearl pp = pearls.getById(me.getID());
 		
 		if (pp == null) {
@@ -36,7 +38,17 @@ public class CmdPearlLocate extends SabreCommand {
 			Location l = pp.getHolder().getLocation();
 			String name = pp.getHolder().getName();
 			
-			msg(Lang.pearlPearlIsHeld, name, l.getBlockX(), l.getBlockY(), l.getBlockZ(), l.getWorld().getName());		
+			msg(Lang.pearlPearlIsHeld, name, l.getBlockX(), l.getBlockY(), l.getBlockZ(), l.getWorld().getName());
+			
+			String bcastMsg = SabrePlugin.getPlugin().txt.parse(Lang.pearlBroadcast, me.getName(), 
+					name, l.getBlockX(), l.getBlockY(), l.getBlockZ(), l.getWorld().getName());
+			
+			for(SabrePlayer p : me.getBcastPlayers()) {
+				if (p.isOnline()) {
+					p.msg(bcastMsg);
+				}
+			}
+			
 		} else {
 			SabrePlugin.getPlugin().log(Level.INFO, "%s is freed because the pearl could not be located.", pp.getLocation());
 			PearlManager.getInstance().freePearl(pp);

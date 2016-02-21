@@ -1,0 +1,5 @@
+name: Bushel of Melons
+material: MELON_BLOCK
+amount: 1
+lore:
+  - '<c>Harvested crops.'

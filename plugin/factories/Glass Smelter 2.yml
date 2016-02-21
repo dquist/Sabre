@@ -1,0 +1,64 @@
+name: Glass Smelter 2
+production_speed: 2
+recipes:
+  Smelt Glass:
+    fuel_cost: 50
+    inputs:
+      Sand:
+        material: SAND
+        amount: 256
+    outputs:
+      Glass:
+        material: GLASS
+        amount: 384
+  Smelt Sandstone:
+    fuel_cost: 50
+    inputs:
+      Sand:
+        material: SAND
+        amount: 512
+    outputs:
+      Sandstone:
+        material: SANDSTONE
+        amount: 192
+  Smelt Glass Panes:
+    fuel_cost: 50
+    inputs:
+      Glass:
+        material: GLASS
+        amount: 128
+    outputs:
+      Glass Pane:
+        material: THIN_GLASS
+        amount: 96
+  Smelt Bottles:
+    fuel_cost: 50
+    inputs:
+      Glass:
+        material: GLASS
+        amount: 128
+    outputs:
+      Glass Pane:
+        material: GLASS_BOTTLE
+        amount: 96
+  Craft Aspect of Silica:
+    fuel_cost: 10
+    inputs:
+      Glass:
+        material: GLASS
+        amount: 2048
+    outputs:
+      Aspect of Silica:
+        custom_item: Aspect of Silica
+        amount: 1
+upgrades:
+  Glass Smelter 3 Upgrade:
+    fuel_cost: 10
+    inputs:
+      Aspect of Silica:
+        custom_item: Aspect of Silica
+        amount: 32
+    outputs:
+      Glass Smelter 3:
+        custom_item: Glass Smelter 3
+        amount: 1

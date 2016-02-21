@@ -117,7 +117,7 @@ public class FactoryListener implements Listener {
 			return;
 		}
 		
-		if (b.getLocation().distance(l) > 16) {
+		if (b.getLocation().distance(l) > 25) {
 			p.msg("<i>Chest must be within 16 blocks of the factory.");
 			return;
 		}

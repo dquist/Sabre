@@ -28,6 +28,7 @@ import org.bukkit.util.Vector;
 import com.gordonfreemanq.sabre.PlayerManager;
 import com.gordonfreemanq.sabre.SabrePlayer;
 import com.gordonfreemanq.sabre.SabrePlugin;
+import com.gordonfreemanq.sabre.blocks.SabreItemStack;
 import com.gordonfreemanq.sabre.cmd.pearl.CmdPearl;
 import com.gordonfreemanq.sabre.util.TextUtil;
 
@@ -50,6 +51,7 @@ public class PrisonPearl {
 	private boolean summoned;
 	private boolean canDamage;
 	private Location returnLocation;
+	private int sealStrength;
 
 	/**
 	 * Creates a new prison pearl instance
@@ -64,6 +66,7 @@ public class PrisonPearl {
 		this.setHolder(holder);
 		this.summoned = false;
 		this.canDamage = false;
+		this.sealStrength = 0;
 	}
 
 
@@ -244,6 +247,28 @@ public class PrisonPearl {
     public void setCanDamage(boolean canDamage) {
     	this.canDamage = canDamage;
     }
+
+    
+    /**
+     * Gets the pearl seal strength
+     * @return The damage status
+     */
+    public int getSealStrength() {
+    	return this.sealStrength;
+    }
+    
+    
+    /**
+     * Sets the pearl seal strength
+     * @param The damage status
+     */
+    public void setSealStrength(int sealStrength) {
+    	if (sealStrength < 0) {
+    		sealStrength = 0;
+    	}
+    	
+    	this.sealStrength = sealStrength;
+    }
     
     
     /**
@@ -269,11 +294,26 @@ public class PrisonPearl {
 	 * Creates an item stack for the pearl
 	 * @return The new item stack
 	 */
-	public ItemStack createItemStack() {
+	public SabreItemStack createItemStack() {
+		List<String> lore = generateLore();
+		SabreItemStack is = new SabreItemStack(Material.ENDER_PEARL, "Prison Pearl", 1);
+		ItemMeta im = is.getItemMeta();
+		im.setDisplayName(this.getName());
+		im.setLore(lore);
+		is.setItemMeta(im);
+		return is;
+	}
+	
+	/**
+	 * Generates the lore for the pearl
+	 * @return The pearl lore
+	 */
+	public List<String> generateLore() {
 		List<String> lore = new ArrayList<String>();
 		lore.add(parse("<l>%s", ITEM_NAME));
 		lore.add(parse("<a>Player: <n>%s", this.getName()));
 		lore.add(parse("<a>UUID: <n>%s", playerId.toString()));
+		lore.add(parse("<a>Strength: <n>%d", this.sealStrength));
 		lore.add(parse("<a>Pearled on: <n>%s", new SimpleDateFormat("yyyy-MM-dd").format(pearledOn)));
 		lore.add(parse(""));
 		lore.add(parse("<l>Commands:"));
@@ -281,14 +321,7 @@ public class PrisonPearl {
 		lore.add(parse(CmdPearl.getInstance().cmdSummon.getUseageTemplate(true)));
 		lore.add(parse(CmdPearl.getInstance().cmdReturn.getUseageTemplate(true)));
 		lore.add(parse(CmdPearl.getInstance().cmdKill.getUseageTemplate(true)));
-		
-
-		ItemStack is = new ItemStack(Material.ENDER_PEARL, 1);
-		ItemMeta im = is.getItemMeta();
-		im.setDisplayName(this.getName());
-		im.setLore(lore);
-		is.setItemMeta(im);
-		return is;
+		return lore;
 	}
 
 	private static Pattern idPattern = Pattern.compile(parse("<a>UUID: <n>(.+)"));
@@ -342,6 +375,11 @@ public class PrisonPearl {
 
 		UUID id = getIDFromItemStack(is);
 		if (id != null && id.equals(this.playerId)) {
+			
+			// re-create the item stack to update the values
+			ItemMeta im = is.getItemMeta();
+			im.setLore(this.generateLore());
+			is.setItemMeta(im);
 			return true;
 		}
 		
@@ -432,8 +470,8 @@ public class PrisonPearl {
 			Player p = sp.getPlayer();
 			
 			// Is the holder online?
-			if (!p.isOnline()) {
-				feedback.append(String.format("Jailor %s not online", p.getName()));
+			if (!sp.isOnline()) {
+				feedback.append(String.format("Jailor %s not online", sp.getName()));
 				return HolderVerReason.PLAYER_NOT_ONLINE;
 			}
 			
@@ -511,5 +549,22 @@ public class PrisonPearl {
 
 	protected static String parse(String str, Object... args) {
 		return String.format(parse(str), args);
+	}
+	
+	
+	/**
+	 * Gets the item stack from an inventory if it exists
+	 * @param inv The inventory to search
+	 * @return The pearl item
+	 */
+	public ItemStack getItemFromInventory(Inventory inv) {
+		
+		for (ItemStack item : inv.all(Material.ENDER_PEARL).values()) {
+			if (this.validateItemStack(item)) {
+				return item;
+			}
+		}
+		
+		return null;
 	}
 }

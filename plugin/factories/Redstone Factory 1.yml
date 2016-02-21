@@ -1,0 +1,98 @@
+name: Redstone Factory 1
+production_speed: 1
+recipes:
+  Produce Redstone Torches:
+    fuel_cost: 10
+    inputs:
+      Redstone:
+        material: REDSTONE
+        amount: 128
+      Stick:
+        material: STICK
+        amount: 128
+    outputs:
+      Redstone Torch:
+        amount: 64
+        material: REDSTONE_TORCH_ON
+  Produce Repeaters:
+    fuel_cost: 10
+    inputs:
+      Redstone:
+        material: REDSTONE
+        amount: 192
+      Stick:
+        material: STICK
+        amount: 128
+      Stone:
+        material: STONE
+        amount: 384
+    outputs:
+      Redstone Repeater:
+        amount: 32
+        material: DIODE
+  Produce Redstone Comparators:
+    fuel_cost: 10
+    inputs:
+      Redstone:
+        material: REDSTONE
+        amount: 192
+      Stick:
+        material: STICK
+        amount: 128
+      Stone:
+        material: STONE
+        amount: 384
+      Quartz:
+        material: QUARTZ
+        amount: 64
+    outputs:
+      Redstone Comparator:
+        amount: 32
+        material: REDSTONE_COMPARATOR
+  Produce Daylight Sensors:
+    fuel_cost: 10
+    inputs:
+      Redstone:
+        material: REDSTONE
+        amount: 32
+      Stick:
+        material: GLASS
+        amount: 96
+      Plank:
+        material: WOOD
+        durability: -1
+        amount: 96
+      Quartz:
+        material: QUARTZ
+        amount: 96
+    outputs:
+      Daylight Detector:
+        amount: 16
+        material: DAYLIGHT_DETECTOR
+  Produce Redstone Coil:
+    fuel_cost: 10
+    inputs:
+      Redstone Block:
+        material: REDSTONE_BLOCK
+        amount: 64
+      Quartz Block:
+        material: QUARTZ_BLOCK
+        amount: 32
+      Glass:
+        material: GLASS
+        amount: 512
+    outputs:
+      Redstone Coil:
+        amount: 1
+        custom_item: Redstone Coil
+upgrades:
+  Redstone Factory 2 Upgrade:
+    fuel_cost: 10
+    inputs:
+      Redstone Coil:
+        custom_item: Redstone Coil
+        amount: 8
+    outputs:
+      Redstone Factory 2:
+        custom_item: Redstone Factory 2
+        amount: 1

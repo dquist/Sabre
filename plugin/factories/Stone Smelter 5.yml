@@ -6,12 +6,12 @@ recipes:
     inputs:
       Cobblestone:
         material: COBBLESTONE
-        amount: 1024
+        amount: 512
     outputs:
       Stone:
         material: STONE
         durability: 0
-        amount: 2048
+        amount: 1024
   Refine Granite:
     fuel_cost: 100
     inputs:
@@ -58,4 +58,4 @@ recipes:
     outputs:
       Aspect of Masonry:
         custom_item: Aspect of Masonry
-        amount: 8
+        amount: 1

@@ -1,0 +1,201 @@
+name: Redstone Mechanism Factory 5
+production_speed: 5
+recipes:
+  Produce Redstone Lamps:
+    fuel_cost: 10
+    inputs:
+      Glowstone:
+        material: GLOWSTONE
+        amount: 64
+      Glass:
+        material: GLASS
+        amount: 64
+      Redstone:
+        material: REDSTONE
+        amount: 32
+    outputs:
+      Redstone Lamp:
+        material: REDSTONE_LAMP_OFF
+        amount: 128
+  Produce Pistons:
+    fuel_cost: 10
+    inputs:
+      Stone:
+        material: STONE
+        amount: 128
+      Plank:
+        material: WOOD
+        durability: -1
+        amount: 96
+      Iron:
+        material: IRON_INGOT
+        amount: 32
+      Redstone:
+        material: REDSTONE
+        amount: 64
+    outputs:
+      Piston:
+        material: PISTON_BASE
+        amount: 64
+  Produce Sticky Pistons:
+    fuel_cost: 10
+    inputs:
+      Stone:
+        material: STONE
+        amount: 64
+      Plank:
+        material: WOOD
+        durability: -1
+        amount: 48
+      Iron:
+        material: IRON_INGOT
+        amount: 16
+      Redstone:
+        material: REDSTONE
+        amount: 16
+      Slimeball:
+        material: SLIME_BALL
+        amount: 16
+    outputs:
+      Piston:
+        material: PISTON_STICKY_BASE
+        amount: 32
+  Produce Jukeboxes:
+    fuel_cost: 10
+    inputs:
+      Plank:
+        material: WOOD
+        durability: -1
+        amount: 48
+      Diamond:
+        material: DIAMOND
+        amount: 32
+    outputs:
+      Piston:
+        amount: 64
+        material: JUKEBOX
+  Produce Noteblocks:
+    fuel_cost: 10
+    inputs:
+      Plank:
+        material: WOOD
+        durability: -1
+        amount: 48
+      Redstone:
+        material: REDSTONE
+        amount: 32
+    outputs:
+      Piston:
+        material: NOTE_BLOCK
+        amount: 64
+  Produce Hoppers:
+    fuel_cost: 10
+    inputs:
+      Iron:
+        amount: 160
+        material: IRON_INGOT
+      Plank:
+        material: WOOD
+        durability: -1
+        amount: 256
+      Diamond:
+        material: DIAMOND
+        amount: 64
+      Redstone:
+        material: REDSTONE
+        amount: 32
+    outputs:
+      Piston:
+        material: HOPPER
+        amount: 20
+  Produce Droppers:
+    fuel_cost: 10
+    inputs:
+      Stone:
+        material: STONE
+        amount: 128
+      Iron:
+        material: IRON_INGOT
+        amount: 32
+      Diamond:
+        material: DIAMOND
+        amount: 32
+      Redstone:
+        material: REDSTONE
+        amount: 32
+    outputs:
+      Piston:
+        material: DROPPER
+        amount: 20
+  Produce Dispensers:
+    fuel_cost: 10
+    inputs:
+      Stone:
+        material: STONE
+        amount: 128
+      String:
+        material: STRING
+        amount: 64
+      Plank:
+        material: WOOD
+        durability: -1
+        amount: 64
+      Iron:
+        material: IRON_INGOT
+        amount: 32
+      Redstone:
+        material: REDSTONE
+        amount: 32
+    outputs:
+      Piston:
+        material: DISPENSER
+        amount: 40
+  Produce Snitch:
+    fuel_cost: 10
+    inputs:
+      Jukebox:
+        material: JUKEBOX
+        amount: 16
+      Iron Ingot:
+        material: IRON_INGOT
+        amount: 32
+      Redstone:
+        material: REDSTONE
+        amount: 16
+    outputs:
+      Snitch:
+        custom_item: Snitch
+        amount: 24
+  Produce Secure Sign:
+    fuel_cost: 10
+    inputs:
+      Planks:
+        material: WOOD
+        durability: -1
+        amount: 160
+      Redstone:
+        material: REDSTONE
+        amount: 96
+      Iron:
+        material: IRON_INGOT
+        amount: 16
+    outputs:
+      Secure Sign:
+        custom_item: Secure Sign
+        amount: 12
+  Produce Gearbox:
+    fuel_cost: 10
+    inputs:
+      Glowstone:
+        material: GLOWSTONE
+        amount: 256
+      Redstone Block:
+        material: REDSTONE_BLOCK
+        amount: 32
+      Iron Block:
+        material: IRON_BLOCK
+        amount: 8
+    outputs:
+      Gearbox:
+        custom_item: Gearbox
+        amount: 1

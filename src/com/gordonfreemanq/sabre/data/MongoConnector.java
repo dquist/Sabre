@@ -595,13 +595,11 @@ public class MongoConnector implements IDataAccess {
 	public Collection<SabreBlock> blockGetChunkRecords(Chunk c) {
 		
 		HashSet<SabreBlock> records = new HashSet<SabreBlock>();
-		SabreBlock b = null;
 		
 		BasicDBObject where = new BasicDBObject();
 		where.append("chunk", formatChunk(c));
 		
 		DBCursor cursor = colBlocks.find(where);
-		
 		
 		while (cursor.hasNext()) { 
 			BasicDBObject o = (BasicDBObject)cursor.next();
@@ -609,41 +607,7 @@ public class MongoConnector implements IDataAccess {
 			//logger.log(Level.INFO, "Loaded block: %s", o.toString());
 
 			try {
-				String chunkStr = o.getString("chunk");
-				int x = o.getInt("x");
-				int y = o.getInt("y");
-				int z = o.getInt("z");
-				String name = o.getString("name", "");
-				String type = o.getString("type", "");
-				
-				Location l = parseBlockLocation(chunkStr, x, y, z);
-				
-				// Create the block instance from the factory
-				b = BlockManager.blockFactory(l, type);
-				b.setDisplayName(name);
-				
-				if (o.containsField("reinforcement")){
-					BasicDBObject rein = (BasicDBObject)o.get("reinforcement");
-					UUID groupID = UUID.fromString(rein.getString("group", ""));
-					Material mat = Material.matchMaterial(rein.getString("material", ""));
-					int strength = rein.getInt("strength", 0);
-					long createdOn = rein.getLong("created_on", 0);
-					int startStrength = config.getReinforcementMaterial(mat).strength;
-					boolean isPublic = rein.getBoolean("public", false);
-					boolean isInsecure = rein.getBoolean("insecure", false);
-				
-					Reinforcement r = new Reinforcement(l, groupID, mat, startStrength, createdOn);
-					r.setStrength(strength);
-					r.setPublic(isPublic);
-					r.setInsecure(isInsecure);
-					b.setReinforcement(r);
-				}
-				
-				// Load the setttings specific to this block
-				if (o.containsField("settings")) {
-					b.loadSettings((BasicDBObject)o.get("settings"));
-				}
-
+				SabreBlock b = readBlockRecord(o);
 				records.add(b);
 			} catch(Exception ex) {
 				logger.log(Level.WARNING, "Failed to read block record %s", o.toString());
@@ -651,6 +615,79 @@ public class MongoConnector implements IDataAccess {
 		}
 		
 		return records;
+	}
+	
+	@Override
+	public Collection<SabreBlock> blockGetRunningFactories() {
+		HashSet<SabreBlock> records = new HashSet<SabreBlock>();
+		
+		BasicDBObject where = new BasicDBObject();
+		where = where.append("factory", true)
+				.append("running", true);
+		
+		DBCursor cursor = colBlocks.find(where);
+		
+		while (cursor.hasNext()) { 
+			BasicDBObject o = (BasicDBObject)cursor.next();
+
+			//logger.log(Level.INFO, "Loaded block: %s", o.toString());
+
+			try {
+				SabreBlock b = readBlockRecord(o);
+				records.add(b);
+			} catch(Exception ex) {
+				logger.log(Level.WARNING, "Failed to read block record %s", o.toString());
+			}
+		}
+		
+		return records;
+	}
+	
+	
+	/**
+	 * Reads a block record
+	 * @param o The DB object
+	 * @return The sabre block instance
+	 */
+	private SabreBlock readBlockRecord(BasicDBObject o) {
+		SabreBlock b = null;
+		
+		String chunkStr = o.getString("chunk");
+		int x = o.getInt("x");
+		int y = o.getInt("y");
+		int z = o.getInt("z");
+		String name = o.getString("name", "");
+		String type = o.getString("type", "");
+		
+		Location l = parseBlockLocation(chunkStr, x, y, z);
+		
+		// Create the block instance from the factory
+		b = BlockManager.blockFactory(l, type);
+		b.setDisplayName(name);
+		
+		if (o.containsField("reinforcement")){
+			BasicDBObject rein = (BasicDBObject)o.get("reinforcement");
+			UUID groupID = UUID.fromString(rein.getString("group", ""));
+			Material mat = Material.matchMaterial(rein.getString("material", ""));
+			int strength = rein.getInt("strength", 0);
+			long createdOn = rein.getLong("created_on", 0);
+			int startStrength = config.getReinforcementMaterial(mat, (short)0).strength;
+			boolean isPublic = rein.getBoolean("public", false);
+			boolean isInsecure = rein.getBoolean("insecure", false);
+		
+			Reinforcement r = new Reinforcement(l, groupID, mat, startStrength, createdOn);
+			r.setStrength(strength);
+			r.setPublic(isPublic);
+			r.setInsecure(isInsecure);
+			b.setReinforcement(r);
+		}
+		
+		// Load the settings specific to this block
+		if (o.containsField("settings")) {
+			b.loadSettings((BasicDBObject)o.get("settings"));
+		}
+		
+		return b;
 	}
 
 
@@ -891,6 +928,7 @@ public class MongoConnector implements IDataAccess {
 				Location l = new Location(Bukkit.getWorld(worldName), x, y, z);
 				boolean summoned = o.getBoolean("summoned");
 				boolean canDamage = o.getBoolean("can_damage");
+				int sealStrength = o.getInt("seal_strength", 0);
 				Location returnLocation = null;
 				
 				if (o.containsField("return_location")) {
@@ -910,6 +948,7 @@ public class MongoConnector implements IDataAccess {
 				p.setSummoned(summoned);
 				p.setCanDamage(canDamage);
 				p.setReturnLocation(returnLocation);
+				p.setSealStrength(sealStrength);
 				
 				records.add(p);
 				
@@ -938,7 +977,8 @@ public class MongoConnector implements IDataAccess {
 		.append("y", l.getBlockY())
 		.append("z", l.getBlockZ())
 		.append("summoned", pp.getSummoned())
-		.append("can_damage", pp.getCanDamage());
+		.append("can_damage", pp.getCanDamage())
+		.append("seal_strength", pp.getSealStrength());
 
 		colPearls.insert(doc);
 	}
@@ -960,7 +1000,8 @@ public class MongoConnector implements IDataAccess {
 		.append("y", l.getBlockY())
 		.append("z", l.getBlockZ())
 		.append("summoned", pp.getSummoned())
-		.append("can_damage", pp.getCanDamage()));
+		.append("can_damage", pp.getCanDamage())
+		.append("seal_strength", pp.getSealStrength()));
 		
 		BasicDBObject where = new BasicDBObject()
 		.append("_id", pp.getPlayerID().toString());
@@ -1000,6 +1041,22 @@ public class MongoConnector implements IDataAccess {
 		
 		BasicDBObject doc = new BasicDBObject("$set", new BasicDBObject()
 		.append("return_location", SabreUtil.serializeLocation(l)));
+		
+		BasicDBObject where = new BasicDBObject()
+		.append("_id", pp.getPlayerID().toString());
+
+		colPearls.update(where, doc);
+	}
+	
+	
+	/**
+	 * Updates the strength of a prison pearl
+	 * @param pp The pearl to update
+	 */
+	@Override
+	public void pearlUpdateSealStrength(PrisonPearl pp) {		
+		BasicDBObject doc = new BasicDBObject("$set", new BasicDBObject()
+		.append("seal_strength", pp.getSealStrength()));
 		
 		BasicDBObject where = new BasicDBObject()
 		.append("_id", pp.getPlayerID().toString());

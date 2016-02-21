@@ -1,13 +1,13 @@
 name: Sabre
 main: com.gordonfreemanq.sabre.SabrePlugin
-version: 0.0.1
+version: 0.1.0
 description: Sabre plugin
 author: GFQ
-depend: [PermissionsEx, CombatTag]
+depend: [PermissionsEx, CombatTagPlus, ProtocolLib, PacketWrapper]
 commands:
-  sabre:
+  faction:
     description: The Faction base command
-    aliases: [s]
+    aliases: [f]
   msg:
     description: Sends a player a message.
     usage: /<command> <player> <message>
@@ -31,26 +31,26 @@ commands:
     description: Unknown commands
     usage: /<command>
     aliases: [ban, parson, give]
-  sbi:
+  bdi:
     description: Get block information
     usage: /<command>
-    aliases:
-  sbf:
+    aliases: [cti]
+  bdf:
     description: Build reinforced blocks
     usage: /<command> <group>
-    aliases:
-  sbr:
+    aliases: [ctf]
+  bdr:
     description: Reinforces existing blocks
     usage: /<command> <group>
-    aliases:
-  sbo:
+    aliases: [ctr]
+  bdo:
     description: Turns off building
     usage: /<command>
-    aliases:
-  sbb:
+    aliases: [cto]
+  bdb:
     description: Toggles bypass mode
     usage: /<command>
-    aliases:
+    aliases: [ctb]
   snitch:
   pp:
   speed:

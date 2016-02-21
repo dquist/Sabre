@@ -1,0 +1,5 @@
+name: Bushel of Wheat
+material: WHEAT
+amount: 1
+lore:
+  - '<c>Harvested crops.'

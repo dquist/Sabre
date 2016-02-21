@@ -1,11 +1,9 @@
 package com.gordonfreemanq.sabre;
 
 import java.util.Date;
-import java.util.List;
 import java.util.logging.Level;
 
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -26,6 +24,8 @@ import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.event.player.PlayerKickEvent;
 import org.bukkit.event.player.PlayerRespawnEvent;
 
+import com.gordonfreemanq.sabre.blocks.BlockManager;
+import com.gordonfreemanq.sabre.blocks.SabreBlock;
 import com.gordonfreemanq.sabre.chat.GlobalChat;
 import com.gordonfreemanq.sabre.chat.IChatChannel;
 import com.gordonfreemanq.sabre.core.ISabreLog;
@@ -107,7 +107,7 @@ public class PlayerListener implements Listener {
 		onPlayerDisconnect(e.getPlayer());
 	}
 	
-	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
+	@EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
 	public void onPlayerJoin(PlayerJoinEvent e) {
 		Player p = e.getPlayer();
 		
@@ -133,7 +133,8 @@ public class PlayerListener implements Listener {
 			sp = pm.createNewPlayer(p);
 			
 			Location spawnLocation = SabreUtil.chooseSpawn(p.getWorld(), 5000);
-			SabreUtil.sendGround(p, spawnLocation);
+			SabreUtil.sendToGround(p, spawnLocation);
+			p.setBedSpawnLocation(spawnLocation, true);
 			p.teleport(spawnLocation);
 			p.sendMessage("You wake up in an unfamiliar place.");
 		}
@@ -141,16 +142,12 @@ public class PlayerListener implements Listener {
 		
 		// Update the player model
 		sp.setPlayer(p);
-		sp.setLastLogin(new Date());
+		pm.setLastLogin(sp, new Date());
 		
 		// This ensures the player name always stays the same
 		p.setDisplayName(sp.getName());
 		p.setCustomName(sp.getName());
 		p.setPlayerListName(sp.getName());
-		
-		
-		sp.msg("<h>This server is running Sabre v%s.", SabrePlugin.version);
-		sp.msg("<h>Type \"<p>/s help<h>\" for more info.");
 		
 		pm.printOfflineMessages(sp);
 		pm.clearOfflineMessages(sp);
@@ -217,34 +214,40 @@ public class PlayerListener implements Listener {
 	 
 	 
 	/**
-	 * Handles the respawn point
+	 * Handles the respawn point.
+	 * If the player's saved bed location exists and the player has access,
+	 * respawn at bed location.
+	 * Otherwise perform a random-spawn.
 	 * @param e The event args
 	 */
-	@EventHandler(priority=EventPriority.NORMAL, ignoreCancelled = true)
+	@EventHandler(priority=EventPriority.LOWEST, ignoreCancelled = true)
 	public void onPlayerRespawn(PlayerRespawnEvent e) {
-		/*
 		SabrePlayer p = pm.getPlayerById(e.getPlayer().getUniqueId());
 		Location l = p.getBedLocation();
 		boolean useBed = false;
 		
 		if (l != null) {
-			
 			if (l.getBlock().getType() == Material.BED_BLOCK) {
 				SabreBlock b = BlockManager.getInstance().getBlockAt(SabreUtil.getRealBlock(l.getBlock()).getLocation());
-				if (b == null || b.canPlayerAccess(p)) {
+				if (b.canPlayerAccess(p) || b == null) {
 					useBed = true;
 				}
 			}
+		}
+		
+		if (useBed) {
+			e.getPlayer().setBedSpawnLocation(l, true);
+		} else {
+			e.getPlayer().setBedSpawnLocation(null);
 			
-			if (useBed) {
-				e.getPlayer().setBedSpawnLocation(l, true);
-			} else {
-				p.msg(Lang.playerBedMissing);
-				Location loc = SabreUtil.fuzzLocation(PearlManager.getInstance().getFreeWorld().getSpawnLocation());
-				e.getPlayer().setBedSpawnLocation(loc, true);
-			}
+			World world = Bukkit.getWorld(SabreConfig.OVER_WORLD_NAME);
+			Location spawnLocation = SabreUtil.chooseSpawn(world, 10000);
 			
-		}*/
+			SabreUtil.sendToGround(p.getPlayer(), spawnLocation);
+			
+			e.setRespawnLocation(spawnLocation);
+			p.msg("You wake up in an unfamiliar place.");
+		}
 	}
 	
 
@@ -264,25 +267,5 @@ public class PlayerListener implements Listener {
 			e.getPlayer().setBedSpawnLocation(l, true);
 			e.setCancelled(true);
 		}
-		
-	}
-	
-	@EventHandler
-	public void onRandomSpawn(PlayerRespawnEvent event){
-		
-		Player player = event.getPlayer();
-		
-		World world = event.getRespawnLocation().getWorld();
-				
-		if (event.isBedSpawn()) {
-			return; 
-		}
-		
-		Location spawnLocation = SabreUtil.chooseSpawn(world, 5000);
-		
-		SabreUtil.sendGround(player, spawnLocation);
-		
-		event.setRespawnLocation(spawnLocation);
-		player.sendMessage("You wake up in an unfamiliar place.");
 	}
 }

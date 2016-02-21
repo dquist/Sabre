@@ -16,7 +16,7 @@ public class CmdChatServer extends SabreCommand {
 		
 		this.setHelpShort("Messages the server");
 
-		senderMustBePlayer = false;
+		senderMustBePlayer = true;
 		errorOnToManyArgs = false;
 		this.permission = Permission.ADMIN.node;
 		this.visibility = CommandVisibility.SECRET;

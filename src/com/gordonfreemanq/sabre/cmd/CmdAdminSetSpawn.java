@@ -23,7 +23,7 @@ public class CmdAdminSetSpawn extends SabreCommand {
 	{
 		Location l = me.getPlayer().getLocation();
 		World w = me.getPlayer().getWorld();
-		w.setSpawnLocation(l.getBlockX(), l.getBlockX(), l.getBlockX());
+		w.setSpawnLocation(l.getBlockX(), l.getBlockY(), l.getBlockZ());
 		me.msg(Lang.adminSetSpawn);
 	}
 }

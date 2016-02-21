@@ -89,7 +89,12 @@ public class BlockCollection {
 	 * @return The block if it exists
 	 */
 	public SabreBlock get(Location l) {
-		return getChunkMap(l.getChunk()).get(l);
+		HashMap<Location,SabreBlock> map = getChunkMap(l.getChunk());
+		if (map == null) {
+			return null;
+		}
+		
+		return map.get(l);
 	}
 	
 	

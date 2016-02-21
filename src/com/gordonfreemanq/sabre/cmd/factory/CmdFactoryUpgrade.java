@@ -16,7 +16,7 @@ public class CmdFactoryUpgrade extends SabreCommand {
 		super();
 		this.aliases.add("upgrade");
 
-		this.setHelpShort("Upgrades a factory");
+		this.setHelpShort("Shows/hides the upgrade recipes");
 		
 		this.senderMustBePlayer = true;
 	}

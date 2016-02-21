@@ -227,7 +227,7 @@ public class ItemList<E extends SabreItemStack> extends ArrayList<E> {
 	 * @param itemStack The item stack to compare
 	 * @return The number of items available
 	 */
-	private int amountAvailable(Inventory inventory, SabreItemStack itemStack)
+	public static int amountAvailable(Inventory inventory, SabreItemStack itemStack)
 	{
 		int totalMaterial = 0;
 		for(ItemStack currentItemStack : inventory.all(itemStack.getType()).values())

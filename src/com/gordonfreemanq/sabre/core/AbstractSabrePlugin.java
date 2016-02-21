@@ -5,9 +5,9 @@ import java.util.logging.Level;
 
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
-import org.bukkit.craftbukkit.libs.com.google.gson.Gson;
-import org.bukkit.craftbukkit.libs.com.google.gson.GsonBuilder;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.gordonfreemanq.sabre.util.PermUtil;
 import com.gordonfreemanq.sabre.util.TextUtil;
 
@@ -82,7 +82,7 @@ public abstract class AbstractSabrePlugin extends JavaPlugin implements ISabreLo
 
 	public GsonBuilder getGsonBuilder()
 	{
-		return new GsonBuilder()
+		return new com.google.gson.GsonBuilder()
 		.setPrettyPrinting()
 		.disableHtmlEscaping()
 		.serializeNulls()

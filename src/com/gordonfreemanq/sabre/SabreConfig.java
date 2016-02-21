@@ -8,6 +8,7 @@ import java.util.Set;
 import org.bukkit.Material;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.inventory.ItemStack;
 
 import com.gordonfreemanq.sabre.blocks.ReinforcementMaterial;
 import com.gordonfreemanq.sabre.blocks.SabreItemStack;
@@ -17,6 +18,10 @@ public class SabreConfig {
 	public static int CONFIG_VERSION = 1;
 	
 	private final FileConfiguration fc;
+	
+	public static String OVER_WORLD_NAME = "world";
+	public static String NETHER_WORLD_NAME = "world_nether";
+	public static String END_WORLD_NAME = "world_the_end";
 	
 	/**
 	 * Creates a new SabreConfig instance
@@ -34,6 +39,7 @@ public class SabreConfig {
 		this.reinforcementMaterials = new ArrayList<ReinforcementMaterial>();
 		this.disabledRecipes = new ArrayList<SabreItemStack>();
 		this.disabledItemDrops = new HashSet<Material>();
+		this.noSmelts = new HashSet<SabreItemStack>();
 		this.prisonWorld = "world_the_end";
 		this.freeWorld = "world";
 	}
@@ -89,6 +95,7 @@ public class SabreConfig {
 	private List<ReinforcementMaterial> reinforcementMaterials;
 	private List<SabreItemStack> disabledRecipes;
 	private Set<Material> disabledItemDrops;
+	private Set<SabreItemStack> noSmelts;
 	
 	
 	
@@ -98,9 +105,24 @@ public class SabreConfig {
 	public int snitchOverlapSearch;
 	
 	
-	public String freeWorld;
+	private String freeWorld;
+	private String prisonWorld;
+	private int pearlDefaultStrength;
+	private int pearlWeakenInterval;
+	private int pearlWeakenAmount;
+	private int pearlDaysInactiveThreshold;
+	private int pearlJailbreakCostFactor;
 	
-	public String prisonWorld;
+	
+	
+	private int farmSurveyPeriod;
+	private int farmProductionTicks;
+	private int farmProximity;
+	private int farmChunkRadius;
+	private int farmSurveySampleSize;
+	
+	private double foodSaturationMultiplier = 0.0;
+	private double hungerSlowdown = 0.0;
 	
 	
 	/**
@@ -111,7 +133,7 @@ public class SabreConfig {
 	public static SabreConfig load(FileConfiguration fc) {
 		SabreConfig config = new SabreConfig(fc);
 		config.read();
-		config.save();
+		//config.save();
 		return config;
 	}
 	
@@ -131,8 +153,22 @@ public class SabreConfig {
 		this.ChatRadius = fc.getInt("chat.global_radius", this.ChatRadius);
 		this.snitchEntryOverlap = fc.getInt("snitch.overlap_time", this.snitchEntryOverlap);
 		this.snitchOverlapSearch = fc.getInt("snitch.overlap_depth", this.snitchOverlapSearch);
+		
 		this.prisonWorld = fc.getString("prison_pearl.prison_world", this.prisonWorld);
 		this.freeWorld = fc.getString("prison_pearl.free_world", this.freeWorld);
+		this.pearlDefaultStrength = fc.getInt("prison_pearl.default_strength", 120);
+		this.pearlWeakenInterval = fc.getInt("prison_pearl.weaken_interval_min", 60);
+		this.pearlWeakenAmount = fc.getInt("prison_pearl.weaken_amount", 1);
+		this.pearlDaysInactiveThreshold = fc.getInt("prison_pearl.days_inactive_threshold", 7);
+		this.pearlJailbreakCostFactor = fc.getInt("prison_pearl.jailbreak_cost_factor", 8);
+		
+		
+		ConfigurationSection sub = fc.getConfigurationSection("farm");
+		this.farmSurveyPeriod = sub.getInt("survey_period", 60);
+		this.farmProductionTicks = sub.getInt("production_ticks", 300);
+		this.farmProximity = sub.getInt("proximity", 500);
+		this.farmChunkRadius = sub.getInt("chunk_radius", 3);
+		this.farmSurveySampleSize = sub.getInt("survey_sample_size", 20);
 		
 		this.reinforcementMaterials.clear();
 		this.lockableItems.clear();
@@ -186,6 +222,26 @@ public class SabreConfig {
 				
 				if (m != null) {
 					this.disabledItemDrops.add(m);
+				}
+			}
+		}
+		
+		
+		this.noSmelts.clear();
+		if (fc.contains("no_smelt")) {
+			Set<String> rKeys = fc.getConfigurationSection("no_smelt").getKeys(false);
+			for (String s : rKeys) {
+				String materialKey = String.format("no_smelt.%s.material", s);
+				String duraKey = String.format("no_smelt.%s.durability", s);
+				
+				Material m = Material.getMaterial(fc.getString(materialKey));
+				int durability = 0;
+				if (fc.contains(duraKey)) {
+					durability = fc.getInt(duraKey);
+				}
+				
+				if (m != null) {
+					this.noSmelts.add(new SabreItemStack(m, m.name(), 1));
 				}
 			}
 		}
@@ -310,14 +366,23 @@ public class SabreConfig {
 	 * @param m The material to check
 	 * @return The reinforcement material instance
 	 */
-	public ReinforcementMaterial getReinforcementMaterial(Material m) {		
+	public ReinforcementMaterial getReinforcementMaterial(Material m, short durability) {		
 		for (ReinforcementMaterial r : reinforcementMaterials) {
-			if (r.material.equals(m)) {
+			if (r.material.equals(m) && r.durability == durability) {
 				return r;
 			}
 		}
 		
 		return null;
+	}
+	
+	/**
+	 * Gets a reinforcement material by material if it exists
+	 * @param m The material to check
+	 * @return The reinforcement material instance
+	 */
+	public ReinforcementMaterial getReinforcementMaterial(ItemStack is) {		
+		return getReinforcementMaterial(is.getType(), is.getDurability());		
 	}
 	
 	/**
@@ -336,6 +401,14 @@ public class SabreConfig {
 		return this.disabledItemDrops;
 	}
 	
+	
+	/**
+	 * Gets the items that are prevented from being smelted in a furnace
+	 * @return The disabled smelt items
+	 */
+	public Set<SabreItemStack> getDisabledSmelts() {
+		return this.noSmelts;
+	}
 	
 	
 	
@@ -368,5 +441,120 @@ public class SabreConfig {
 		}
 		
 		return false;
+	}
+	
+	/**
+	 * Gets the free world name
+	 * @return The free world name
+	 */
+	public String getFreeWorldName() {
+		return this.freeWorld;
+	}
+	
+	/**
+	 * Gets the prison world name
+	 * @return The prison world name
+	 */
+	public String getPrisonWorldName() {
+		return this.prisonWorld;
+	}
+	
+	/**
+	 * Gets how strong a pearl is when a player is captured
+	 * @return The pearl default strength
+	 */
+	public int getPearlDefaultStrength() {
+		return this.pearlDefaultStrength;
+	}
+	
+	/**
+	 * Gets how often the pearl weaken task runs, in minutes
+	 * @return The pearl weaken interval
+	 */
+	public int getPearlWeakenInterval() {
+		return this.pearlWeakenInterval;
+	}
+	
+	/**
+	 * Gets how much to weaken the pearls by
+	 * @return The pearl weaken amount
+	 */
+	public int getPearlWeakenAmount() {
+		return this.pearlWeakenAmount;
+	}
+	
+	/**
+	 * Gets how many days a player has to be inactive before the pearl
+	 * stops weakening
+	 * @return The inactive threshold
+	 */
+	public int getPearlDaysInactiveThreshold() {
+		return this.pearlDaysInactiveThreshold;
+	}
+	
+	/**
+	 * Gets how much more expensive jailbreaking is than pearling
+	 * @return The cost factor
+	 */
+	public int getJailbreakCostFactor() {
+		return this.pearlJailbreakCostFactor;
+	}
+	
+	
+	
+	/**
+	 * Gets the farm survey period
+	 * @return The farm survey period
+	 */
+	public int getFarmSurveyPeriod() {
+		return this.farmSurveyPeriod;
+	}
+	
+	/**
+	 * Gets the farm production period
+	 * @return The farm production period
+	 */
+	public int getFarmProductionTicks() {
+		return this.farmProductionTicks;
+	}
+	
+	/**
+	 * Gets the farm proximity
+	 * @return The farm proximity
+	 */
+	public int getFarmProximity() {
+		return this.farmProximity;
+	}
+	
+	/**
+	 * Gets the farm survey chunk radius
+	 * @return The farm survey chunk radius
+	 */
+	public int getFarmChunkRadius() {
+		return this.farmChunkRadius;
+	}
+	
+	/**
+	 * Gets the farm survey sample size during a survey
+	 * @return The farm sample size
+	 */
+	public int getFarmSurveySampleSize() {
+		return this.farmSurveySampleSize;
+	}
+	
+	/**
+	 * Gets the food saturation multiplier
+	 * @return The food saturation multiplier
+	 */
+	public double getFoodSaturationMultiplier() {
+		return this.foodSaturationMultiplier;
+	}
+	
+	/**
+	 * Gets the hunger slowdown factor
+	 * @return The hunger slowdown factor
+	 */
+	public double getHungerSlowdown() {
+		return this.hungerSlowdown;
 	}
 }

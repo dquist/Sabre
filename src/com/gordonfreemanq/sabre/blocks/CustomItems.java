@@ -11,6 +11,7 @@ import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 
 import com.gordonfreemanq.sabre.SabrePlugin;
+import com.gordonfreemanq.sabre.customitems.MokshaRod;
 
 /**
  * Holds the custom item types
@@ -49,7 +50,7 @@ public class CustomItems {
 	    
 		this.customItems = new HashMap<String, SabreItemStack>();
 		
-		
+		customItems.put(MokshaRod.itemName, new MokshaRod());
 
 	    File[] files = folder.listFiles();
 	    
@@ -98,7 +99,7 @@ public class CustomItems {
 		    	customItems.put(itemName, item);
 			    
 	    	} catch (Exception ex) {
-	    		plugin.log(Level.SEVERE, "Failed to read factory config file %s", f.getName());
+	    		plugin.log(Level.SEVERE, "Failed to read item config file %s", f.getName());
 	    	}
 	    }
 	}
@@ -110,7 +111,11 @@ public class CustomItems {
 	 * @return The item stack, if it exists
 	 */
 	public SabreItemStack getByName(String name) {
-		return customItems.get(name).clone();
+		SabreItemStack stack = customItems.get(name);
+		if (stack != null) {
+			stack = stack.clone();
+		}
+		return stack;
 	}
 	
 	

@@ -2,20 +2,23 @@ name: Foundry 5
 production_speed: 5
 recipes:
   Cast Steel Ingot:
-    fuel_cost: 100
+    fuel_cost: 60
     inputs:
       Iron Ingot:
         material: IRON_INGOT
         amount: 64
+      Coal:
+        material: COAL
+        amount: 32
       Diamond:
         material: DIAMOND
-        amount: 32
+        amount: 16
     outputs:
       Steel Ingot:
         custom_item: Steel Ingot
         amount: 128
   Cast Steel Door:
-    fuel_cost: 100
+    fuel_cost: 40
     inputs:
       Steel Ingot:
         custom_item: Steel Ingot
@@ -25,7 +28,7 @@ recipes:
         custom_item: Steel Door
         amount: 2
   Cast Steel Plate:
-    fuel_cost: 100
+    fuel_cost: 40
     inputs:
       Steel Ingot:
         custom_item: Steel Ingot
@@ -43,4 +46,4 @@ recipes:
     outputs:
       Aspect of Casting:
         custom_item: Aspect of Casting
-        amount: 8
+        amount: 1

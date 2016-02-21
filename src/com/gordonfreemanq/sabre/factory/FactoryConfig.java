@@ -21,6 +21,9 @@ import org.bukkit.potion.PotionEffectType;
 import com.gordonfreemanq.sabre.SabrePlugin;
 import com.gordonfreemanq.sabre.blocks.CustomItems;
 import com.gordonfreemanq.sabre.blocks.SabreItemStack;
+import com.gordonfreemanq.sabre.factory.recipe.ProductionRecipe;
+import com.gordonfreemanq.sabre.factory.recipe.IRecipe;
+import com.gordonfreemanq.sabre.factory.recipe.SpecialRecipeType;
 
 /**
  * Reads all the factory recipes from disk
@@ -31,7 +34,6 @@ public class FactoryConfig {
 	private File folder = null;
 	private final SabrePlugin plugin;
 	private HashMap<String, FactoryProperties> factoryProperties;
-	
 	
 	private static FactoryConfig instance;
 	
@@ -71,18 +73,26 @@ public class FactoryConfig {
 	    	
 	    	// Load the recipes for the file
 	    	try {
-	    		ArrayList<FactoryRecipe> recipes = new ArrayList<FactoryRecipe>();
-	    		ArrayList<FactoryRecipe> upgrades = new ArrayList<FactoryRecipe>();
+	    		ArrayList<IRecipe> recipes = new ArrayList<IRecipe>();
+	    		ArrayList<IRecipe> upgrades = new ArrayList<IRecipe>();
 	    		
 		    	FileConfiguration config = YamlConfiguration.loadConfiguration(f);
 		    	String factoryName = config.getString("name");
 			    loadRecipes(config, recipes, upgrades);
-			    factoryProperties.put(factoryName, new FactoryProperties(factoryName, recipes, upgrades));
+			    
+			    ConfigurationSection customConfig = null;
+			    if (config.contains("custom")) {
+			    	customConfig = config.getConfigurationSection("custom");
+			    }
+			    
+			    FactoryProperties fp = new FactoryProperties(factoryName, recipes, upgrades, customConfig);
+			    
+			    factoryProperties.put(factoryName, fp);
 			    
 	    	} catch (Exception ex) {
 	    		plugin.log(Level.SEVERE, "Failed to read factory config file %s", f.getName());
 	    	}
-	    }	    
+	    }
 
 	}
 	
@@ -93,7 +103,7 @@ public class FactoryConfig {
 	 * @return The factory properties
 	 */
 	public FactoryProperties getFactoryProperties(String name) {
-		return factoryProperties.get(name);
+		return factoryProperties.get(name).clone();
 	}
 	
 	
@@ -104,7 +114,7 @@ public class FactoryConfig {
 	 * @param recipes the list of production recipes
 	 * @param upgrades the list of upgrade recipes
 	 */
-	private void loadRecipes(FileConfiguration config, List<FactoryRecipe> recipes, List<FactoryRecipe> upgrades) {
+	private void loadRecipes(FileConfiguration config, List<IRecipe> recipes, List<IRecipe> upgrades) {
 		
 
 		int defaultSpeed = config.getInt("production_speed", 1);
@@ -129,17 +139,26 @@ public class FactoryConfig {
 	 * @param section The section to read
 	 * @param defaultSpeed The default run speed
 	 */
-	private void readRecipeSection(List<FactoryRecipe> recipes, ConfigurationSection section, int defaultSpeed) {
-		Iterator<String> recipeTitles = section.getKeys(false).iterator();
-		while (recipeTitles.hasNext())
+	private void readRecipeSection(List<IRecipe> recipes, ConfigurationSection section, int defaultSpeed) {
+		for (String recipeName : section.getKeys(false))
 		{
-			// Section header in recipe file, also serves as unique identifier for the recipe
-			String recipeName = recipeTitles.next();
 			ConfigurationSection configSection = section.getConfigurationSection(recipeName);
 			
 			// Production time of the recipe
 			int productionSpeed = configSection.getInt("production_speed", defaultSpeed);
 			int fuelCost = configSection.getInt("fuel_cost", 2);
+			
+			// Is it a special recipe, then look up the class type and create a new instance
+			if (configSection.contains("special")) {
+				SpecialRecipeType specialType = SpecialRecipeType.valueOf(configSection.getString("special"));
+				if (specialType != null) {
+					IRecipe recipe = specialType.createRecipe(recipeName, productionSpeed, fuelCost);
+					if (recipe != null) {
+						recipes.add(recipe);
+					}
+					continue;
+				}
+			}
 			
 			// Inputs of the recipe, empty of there are no inputs
 			ItemList<SabreItemStack> inputs = getItems(configSection.getConfigurationSection("inputs"));
@@ -150,7 +169,7 @@ public class FactoryConfig {
 			// Enchantments of the recipe, empty of there are no inputs
 			List<ProbabilisticEnchantment> enchants = getEnchantments(configSection.getConfigurationSection("enchantments"));
 			
-			FactoryRecipe recipe = new FactoryRecipe(recipeName, productionSpeed, fuelCost, inputs, outputs, enchants);
+			ProductionRecipe recipe = new ProductionRecipe(recipeName, productionSpeed, fuelCost, inputs, outputs, enchants);
 			recipes.add(recipe);
 		}
 	}

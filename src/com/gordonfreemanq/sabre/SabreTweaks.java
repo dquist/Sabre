@@ -5,11 +5,15 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 import java.util.Set;
+import java.util.TreeMap;
 import java.util.TreeSet;
+import java.util.logging.Level;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Chunk;
+import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
@@ -17,6 +21,9 @@ import org.bukkit.block.Biome;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.BlockState;
+import org.bukkit.block.Furnace;
+import org.bukkit.block.Sign;
+import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Arrow;
 import org.bukkit.entity.Boat;
 import org.bukkit.entity.Enderman;
@@ -40,6 +47,7 @@ import org.bukkit.event.block.BlockPhysicsEvent;
 import org.bukkit.event.block.BlockPistonExtendEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.block.BlockSpreadEvent;
+import org.bukkit.event.block.SignChangeEvent;
 import org.bukkit.event.enchantment.EnchantItemEvent;
 import org.bukkit.event.enchantment.PrepareItemEnchantEvent;
 import org.bukkit.event.entity.CreatureSpawnEvent;
@@ -49,11 +57,15 @@ import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.entity.EntityExplodeEvent;
 import org.bukkit.event.entity.EntityInteractEvent;
 import org.bukkit.event.entity.EntityPortalEvent;
+import org.bukkit.event.entity.FoodLevelChangeEvent;
+import org.bukkit.event.inventory.FurnaceBurnEvent;
+import org.bukkit.event.inventory.FurnaceSmeltEvent;
 import org.bukkit.event.inventory.InventoryOpenEvent;
 import org.bukkit.event.inventory.PrepareItemCraftEvent;
 import org.bukkit.event.player.PlayerBucketEmptyEvent;
 import org.bukkit.event.player.PlayerInteractEntityEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.event.player.PlayerItemConsumeEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
@@ -65,13 +77,16 @@ import org.bukkit.event.world.ChunkUnloadEvent;
 import org.bukkit.event.world.PortalCreateEvent;
 import org.bukkit.event.world.StructureGrowEvent;
 import org.bukkit.inventory.EntityEquipment;
+import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.InventoryHolder;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.ShapelessRecipe;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.util.Vector;
 
 import com.gordonfreemanq.sabre.prisonpearl.PearlManager;
+import com.gordonfreemanq.sabre.util.CombatInterface;
 import com.gordonfreemanq.sabre.util.SabreUtil;
 import com.gordonfreemanq.sabre.blocks.SabreItemStack;
 
@@ -79,52 +94,78 @@ import com.gordonfreemanq.sabre.blocks.SabreItemStack;
 public class SabreTweaks implements Listener {
 
 	private final SabreConfig config;
+	private Random rand;
+
+	private final CombatInterface combatTag;
+
+	private Map<String, PearlTeleportInfo> pearlTeleportInfo = new TreeMap<String, PearlTeleportInfo>();
+	private final static int PEARL_THROTTLE_WINDOW = 10000;  // 10 sec
+	private final static int PEARL_NOTIFICATION_WINDOW = 1000;  // 1 sec
 
 	public SabreTweaks(SabreConfig config) {
 		this.config = config;
+		this.rand = new Random(1337);
+
+		RegisterCustomRecipes();
+		
+		// Combat Tag API
+		combatTag = SabrePlugin.getPlugin().getCombatTag();
+	}
+
+
+	private void RegisterCustomRecipes() {
+
+		// Recipe: 1 XP bottle creates 9 Emeralds 
+		ShapelessRecipe expToEmeraldRecipe = new ShapelessRecipe(new ItemStack(Material.EMERALD, 1));
+		expToEmeraldRecipe.addIngredient(9, Material.EXP_BOTTLE);
+		Bukkit.addRecipe(expToEmeraldRecipe);
+
+		// Recipe: 9 Emeralds create 1 XP bottle 
+		ShapelessRecipe emeraldToExpRecipe = new ShapelessRecipe(new ItemStack(Material.EXP_BOTTLE, 9));
+		emeraldToExpRecipe.addIngredient(Material.EMERALD);
+		Bukkit.addRecipe(emeraldToExpRecipe);
+
+		// Recipe: 4 logs create 1 plank
+		ShapelessRecipe logsToPlank = new ShapelessRecipe(new ItemStack(Material.WOOD, 1, (short)0));
+		logsToPlank.addIngredient(4, Material.LOG, 0);
+		Bukkit.addRecipe(logsToPlank);
+
+		ShapelessRecipe logsToPlank1 = new ShapelessRecipe(new ItemStack(Material.WOOD, 1, (short)1));
+		logsToPlank1.addIngredient(4, Material.LOG, 1);
+		Bukkit.addRecipe(logsToPlank1);
+
+		ShapelessRecipe logsToPlank2 = new ShapelessRecipe(new ItemStack(Material.WOOD, 1, (short)2));
+		logsToPlank2.addIngredient(4, Material.LOG, 2);
+		Bukkit.addRecipe(logsToPlank2);
+
+		ShapelessRecipe logsToPlank3 = new ShapelessRecipe(new ItemStack(Material.WOOD, 1, (short)3));
+		logsToPlank3.addIngredient(4, Material.LOG, 3);
+		Bukkit.addRecipe(logsToPlank3);
+
+		ShapelessRecipe logsToPlank4 = new ShapelessRecipe(new ItemStack(Material.WOOD, 1, (short)4));
+		logsToPlank4.addIngredient(4, Material.LOG_2, 0);
+		Bukkit.addRecipe(logsToPlank4);
+
+		ShapelessRecipe logsToPlank5 = new ShapelessRecipe(new ItemStack(Material.WOOD, 1, (short)5));
+		logsToPlank5.addIngredient(4, Material.LOG_2, 1);
+		Bukkit.addRecipe(logsToPlank5);
 	}
 
 	/**
-	 * Prevent placing blocks directly under you
+	 * CobbleStone and dirt act like sand/gravel
 	 * 
 	 * @param e
 	 */
 	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
 	public void onBlockPlaceEvent(BlockPlaceEvent e) {
-
-		Player p = e.getPlayer();
-		Entity ent = (Entity) p;
-
-		if (!ent.isOnGround()) {
-			e.setCancelled(true);
-			return;
-		}
-
-		Location under = p.getLocation().getBlock().getLocation()
-				.subtract(0, 1, 0);
-
-		if (under.getBlock().getType() == Material.AIR) {
-			e.setCancelled(true);
-			return;
-		}
-
 		Block b = e.getBlock();
-
-		if (under.getBlock() == b) {
-			e.setCancelled(true);
-			return;
-		}
-
-		if (b.getLocation().subtract(0, 1, 0).getBlock().getType() != Material.AIR) {
-			return;
-		}
-
 		Material m = b.getType();
 
-		if (m.equals(Material.COBBLESTONE) || m.equals(Material.DIRT)) {
-			e.getBlock().getWorld()
-					.spawnFallingBlock(b.getLocation(), m, b.getData());
-			b.setType(Material.AIR);
+		if (b.getRelative(BlockFace.DOWN).getType() == Material.AIR) {
+			if (m.equals(Material.COBBLESTONE) || m.equals(Material.DIRT)) {
+				b.setType(Material.AIR);
+				e.getBlock().getWorld().spawnFallingBlock(b.getLocation(), m, b.getData());
+			}
 		}
 	}
 
@@ -133,6 +174,7 @@ public class SabreTweaks implements Listener {
 	 * 
 	 * @param e
 	 */
+	/*
 	@EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
 	public void onMiningEvent(BlockBreakEvent e) {
 		Block b = e.getBlock();
@@ -155,7 +197,7 @@ public class SabreTweaks implements Listener {
 		default:
 			break;
 		}
-	}
+	} */
 
 	static double MAX_DURA = 50;
 
@@ -210,18 +252,68 @@ public class SabreTweaks implements Listener {
 	}
 
 	/**
-	 * Disable crafting disabled recipes
+	 * Disable crafting for lore items and disabled recipes
 	 * 
 	 * @param e
 	 *            The PrepareItemCraftEvent
 	 */
 	@EventHandler
 	public void craftItem(PrepareItemCraftEvent e) {
+
+		for (ItemStack is : e.getInventory().getContents()) {
+			if (is.hasItemMeta() && is.getItemMeta().hasLore()) {
+				e.getInventory().setResult(new ItemStack(Material.AIR));
+
+				for(HumanEntity he : e.getViewers()) {
+					if(he instanceof Player) {
+						PlayerManager.getInstance().getPlayerById(he.getUniqueId()).msg(Lang.noCraftingLore);
+					}
+				}
+
+				return;
+			}
+		}
+
+
+		// Quick way to disable the vanilla wood crafting. Need 4x the wood
+		int logCount = 0;
+		if (e.getRecipe().getResult().getType() == Material.WOOD) {
+			ItemStack[] matrix = e.getInventory().getMatrix();
+			for (int i = 0; i < matrix.length; i++) {
+				if (matrix[i] != null && (matrix[i].getType() == Material.LOG || matrix[i].getType() == Material.LOG_2)) {
+					logCount++;
+				}
+
+				if (logCount > 1) {
+					break;
+				}
+			}
+		}
+
+		// Dont' allow the vanilla craft of 1 log = 4 planks
+		if (logCount == 1) {
+			e.getInventory().setResult(new ItemStack(Material.AIR));
+			for(HumanEntity he : e.getViewers()) {
+				if(he instanceof Player) {			
+					PlayerManager.getInstance().getPlayerById(he.getUniqueId()).msg(Lang.recipeNeed4Logs);
+				}
+			}
+
+			return;
+		}
+
 		ItemStack result = e.getRecipe().getResult();
 
 		for (SabreItemStack is : config.getDisabledRecipes()) {
 			if (is.isSimilar(result)) {
 				e.getInventory().setResult(new ItemStack(Material.AIR));
+
+				for(HumanEntity he : e.getViewers()) {
+					if(he instanceof Player) {
+						PlayerManager.getInstance().getPlayerById(he.getUniqueId()).msg(Lang.recipeDisabled);
+					}
+				}
+				return;
 			}
 		}
 	}
@@ -515,8 +607,8 @@ public class SabreTweaks implements Listener {
 	// Stop Cobble generation from lava+water
 
 	private static final BlockFace[] faces_ = new BlockFace[] {
-			BlockFace.NORTH, BlockFace.SOUTH, BlockFace.EAST, BlockFace.WEST,
-			BlockFace.UP, BlockFace.DOWN };
+		BlockFace.NORTH, BlockFace.SOUTH, BlockFace.EAST, BlockFace.WEST,
+		BlockFace.UP, BlockFace.DOWN };
 
 	private BlockFace WaterAdjacentLava(Block lava_block) {
 		for (BlockFace face : faces_) {
@@ -652,27 +744,29 @@ public class SabreTweaks implements Listener {
 		}
 	}
 
-	// =================================================
-	// Combat Tag players on server join
-
+	
+	/**
+	 * Tags players on server join
+	 * @param e The event
+	 */
 	@EventHandler
-	public void tagOnJoin(PlayerJoinEvent event) {
+	public void tagOnJoin(PlayerJoinEvent e) {
 		// Delay two ticks to tag after secure login has been denied.
 		// This opens a 1 tick window for a cheater to login and grab
 		// server info, which should be detectable and bannable.
-		final Player loginPlayer = event.getPlayer();
+		final Player loginPlayer = e.getPlayer();
 		Bukkit.getScheduler().runTaskLater(SabrePlugin.getPlugin(),
 				new Runnable() {
-					@Override
-					public void run() {
-						if (loginPlayer == null)
-							return;
-						SabrePlugin.getPlugin().getCombatTag()
-								.tagPlayer(loginPlayer);
-						loginPlayer
-								.sendMessage("You have been Combat Tagged on Login");
-					}
-				}, 2L);
+			@Override
+			public void run() {
+				if (loginPlayer == null || !loginPlayer.isOnline()) {
+					return;
+					
+				}
+				SabrePlugin.getPlugin().getCombatTag().tagPlayer(loginPlayer);
+				loginPlayer.sendMessage("You have been Combat Tagged on Login");
+			}
+		}, 2L);
 	}
 
 	// =================================================
@@ -727,9 +821,9 @@ public class SabreTweaks implements Listener {
 		if (!(string.getRelative(BlockFace.NORTH).getType()
 				.equals(Material.STATIONARY_WATER)
 				|| string.getRelative(BlockFace.EAST).getType()
-						.equals(Material.STATIONARY_WATER)
+				.equals(Material.STATIONARY_WATER)
 				|| string.getRelative(BlockFace.WEST).getType()
-						.equals(Material.STATIONARY_WATER) || string
+				.equals(Material.STATIONARY_WATER) || string
 				.getRelative(BlockFace.SOUTH).getType()
 				.equals(Material.STATIONARY_WATER))) {
 			return;
@@ -953,14 +1047,14 @@ public class SabreTweaks implements Listener {
 		final Location vehicleLoc = vehicle.getLocation();
 		Bukkit.getScheduler().runTaskLater(SabrePlugin.getPlugin(),
 				new Runnable() {
-					@Override
-					public void run() {
-						if (!tryToTeleport(player, vehicleLoc,
-								"exiting vehicle")) {
-							player.setHealth(0.000000D);
-						}
-					}
-				}, 2L);
+			@Override
+			public void run() {
+				if (!tryToTeleport(player, vehicleLoc,
+						"exiting vehicle")) {
+					player.setHealth(0.000000D);
+				}
+			}
+		}, 2L);
 	}
 
 	public void onFixMinecartReenterBug(VehicleDestroyEvent event) {
@@ -979,14 +1073,14 @@ public class SabreTweaks implements Listener {
 		final Location vehicleLoc = vehicle.getLocation();
 		Bukkit.getScheduler().runTaskLater(SabrePlugin.getPlugin(),
 				new Runnable() {
-					@Override
-					public void run() {
-						if (!tryToTeleport(player, vehicleLoc,
-								"in destroyed vehicle")) {
-							player.setHealth(0.000000D);
-						}
-					}
-				}, 2L);
+			@Override
+			public void run() {
+				if (!tryToTeleport(player, vehicleLoc,
+						"in destroyed vehicle")) {
+					player.setHealth(0.000000D);
+				}
+			}
+		}, 2L);
 	}
 
 	// ================================================
@@ -1011,7 +1105,7 @@ public class SabreTweaks implements Listener {
 		if (event.getItem() == null
 				|| !event.getItem().getType().equals(Material.BANNER)
 				|| (event.getAction() != Action.LEFT_CLICK_AIR && event
-						.getAction() != Action.LEFT_CLICK_BLOCK)) {
+				.getAction() != Action.LEFT_CLICK_BLOCK)) {
 			return;
 		}
 		Player player = event.getPlayer();
@@ -1038,13 +1132,468 @@ public class SabreTweaks implements Listener {
 			event.setCancelled(true);
 		}
 	}
+
+	// there is a bug in minecraft 1.8, which allows fire and vines to spread
+	// into unloaded chunks
+	// where they can replace any existing block
+	@EventHandler(priority = EventPriority.LOWEST)
+	public void fixSpreadInUnloadedChunks(BlockSpreadEvent e) {
+		if (!e.getBlock().getChunk().isLoaded()) {
+			e.setCancelled(true);
+		}
+	}
+
+
+	/**
+	 * Checks if a material can mine ores other than iron
+	 * @param m The material
+	 * @return true if it's a pick type
+	 */
+	public static boolean isOrePick(Material m) {
+		switch (m) {
+		case IRON_PICKAXE:
+		case GOLD_PICKAXE:
+		case DIAMOND_PICKAXE:
+			return true;
+		default:
+			return false;
+		}
+	}
+
+
+	/**
+	 * A better version of dropNaturally so the dropped item is placed
+	 * where you would expect it to be
+	 * @param l The location
+	 * @param is The item to drop
+	 */
+	public static void dropItemAtLocation(Location l, ItemStack is) {
+		l.getWorld().dropItem(l.add(0.5, 0.5, 0.5), is).setVelocity(new Vector(0, 0.05, 0));
+	}
+
+	/**
+	 * A better version of dropNaturally so the dropped item is placed
+	 * where you would expect it to be
+	 * @param b The block to drop it at
+	 * @param is The item to drop
+	 */
+	public static void dropItemAtLocation(Block b, ItemStack is) {
+		dropItemAtLocation(b.getLocation(), is);
+	}
+
+
+	/**
+	 * Gets the item stack for lore
+	 * @param m The ore material
+	 * @return The stack to drop
+	 */
+	private ItemStack getOreFortuneStack(Material m) {
+		switch (m)
+		{
+		case GLOWING_REDSTONE_ORE:
+			return new ItemStack(Material.REDSTONE, 5);
+		case GOLD_ORE:
+			return new ItemStack(Material.GOLD_INGOT, 1);
+		case IRON_ORE:
+			return new ItemStack(Material.IRON_INGOT, 1);
+		case DIAMOND_ORE:
+			return new ItemStack(Material.DIAMOND, 1);
+		case LAPIS_ORE:
+			return new ItemStack(Material.INK_SACK, 3, (short)4);
+		case QUARTZ_ORE:
+			return new ItemStack(Material.QUARTZ, 4);
+		case COAL_ORE:
+			return new ItemStack(Material.COAL, 6);
+		case EMERALD_ORE:
+			return new ItemStack(Material.EMERALD, 1);
+		default:
+			return null;
+		}
+	}
+
+	/**
+	 * Ores always drop the ore, not the mineral item
+	 * 
+	 * @param e The event
+	 */
+	@EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
+	public void onBlockBreakEvent(BlockBreakEvent e) {
+		Material m = e.getBlock().getType();
+		Material dropItem = Material.AIR;
+
+		// Ignore if not using a pick
+		if (!isOrePick(e.getPlayer().getItemInHand().getType())) {
+			return;
+		}
+
+		// Ignore players in creative mode
+		if (e.getPlayer().getGameMode() == GameMode.CREATIVE) {
+			return;
+		}
+
+		switch (m) {
+		case GLOWING_REDSTONE_ORE:
+			dropItem = Material.REDSTONE_ORE;
+			break;
+
+		case DIAMOND_ORE:
+		case LAPIS_ORE:
+		case QUARTZ_ORE:
+		case COAL_ORE:
+		case EMERALD_ORE:
+			dropItem = m;
+			break;
+		default:
+			break;
+		}
+
+		if (dropItem != Material.AIR) {
+			int fortuneLevel = e.getPlayer().getItemInHand().getEnchantmentLevel(Enchantment.LOOT_BONUS_BLOCKS);
+
+			// Fortune gives odds to drop the mineral as well
+			// F1 = 10%
+			// F2 = 20%
+			// F3 = 30%
+			if (fortuneLevel > 0) {
+				int randInt = rand.nextInt(9) + 1;
+
+				if (fortuneLevel >= randInt) {
+					ItemStack toDrop = getOreFortuneStack(m);
+					if (toDrop != null) {
+						dropItemAtLocation(e.getBlock(), toDrop);
+					}
+				}
+			}
+
+			e.setCancelled(true);
+			e.getBlock().setType(Material.AIR);
+			dropItemAtLocation(e.getBlock(), new ItemStack(dropItem, 1));
+		}
+	}
+
+
+	/**
+	 * Blocks certain items from being cooked/smelted in vanilla furnaces
+	 * @param e
+	 */
+	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
+	public void onFurnaceBurn(FurnaceBurnEvent e) {
+
+		Furnace f = (Furnace)e.getBlock().getState();
+		ItemStack smelting = f.getInventory().getSmelting();
+
+		// Loop through the disabled items and cancel the burn if it's found
+		for(SabreItemStack is : config.getDisabledSmelts()) {
+			if (is.isSimilar(smelting)) {
+
+				e.setBurning(false);
+				e.setCancelled(true);
+				break;
+			}
+		}
+	}
+
+
+	/**
+	 * Blocks certain items from being cooked/smelted in vanilla furnaces
+	 * @param e
+	 */
+	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
+	public void onFurnaceSmelt(FurnaceSmeltEvent e) {
+		ItemStack smelting = e.getSource();
+
+		// Loop through the disabled items and cancel the burn if it's found
+		for(SabreItemStack is : config.getDisabledSmelts()) {
+			if (is.isSimilar(smelting)) {
+				e.setResult(new ItemStack(Material.COAL, 1, (short)1));
+				//e.setCancelled(true);
+				break;
+			}
+		}
+	}
+
+	/**
+	 * Fixes Teleporting through walls and doors
+	 * ** and **
+	 * Ender Pearl Teleportation disabling
+	 * ** and **
+	 * Ender pearl cooldown timer
+	 */
+	private class PearlTeleportInfo {
+		public long last_teleport;
+		public long last_notification;
+	}
+
+
+	/**
+	 * Throttles how often an ender pearl can be thrown
+	 * @param event
+	 */
+	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
+	public void throttlePearlTeleport(PlayerInteractEvent event) {
+		if (event.getItem() == null || !event.getItem().getType().equals(Material.ENDER_PEARL)) {
+			return;
+		}
+		
+		final Action action = event.getAction();
+		if (action != Action.RIGHT_CLICK_AIR && action != Action.RIGHT_CLICK_BLOCK) {
+			return;
+		}
+		
+		final Block clickedBlock = event.getClickedBlock();
+		BlockState clickedState = null;
+		Material clickedMaterial = null;
+		if (clickedBlock != null) {
+			clickedState = clickedBlock.getState();
+			clickedMaterial = clickedState.getType();
+		}
+		
+		if (clickedState != null && (
+				clickedState instanceof InventoryHolder
+				|| clickedMaterial.equals(Material.ANVIL)
+				|| clickedMaterial.equals(Material.ENCHANTMENT_TABLE)
+				|| clickedMaterial.equals(Material.ENDER_CHEST)
+				|| clickedMaterial.equals(Material.WORKBENCH))) {
+			// Prevent Combat Tag/Pearl cooldown on inventory access
+			return;
+		}
+		
+		final long current_time = System.currentTimeMillis();
+		final Player player = event.getPlayer();
+		final String player_name = player.getName();
+		PearlTeleportInfo teleport_info = pearlTeleportInfo.get(player_name);
+		long time_diff = 0;
+		
+		if (teleport_info == null) {
+			// New pearl thrown outside of throttle window
+			teleport_info = new PearlTeleportInfo();
+			teleport_info.last_teleport = current_time;
+			teleport_info.last_notification =
+					current_time - (PEARL_NOTIFICATION_WINDOW + 100);  // Force notify
+			combatTag.tagPlayer(player);
+		} else {
+			time_diff = current_time - teleport_info.last_teleport;
+			if (PEARL_THROTTLE_WINDOW > time_diff) {
+				// Pearl throw throttled
+				event.setCancelled(true);
+			} else {
+				// New pearl thrown outside of throttle window
+				combatTag.tagPlayer(player);
+				teleport_info.last_teleport = current_time;
+				teleport_info.last_notification =
+						current_time - (PEARL_NOTIFICATION_WINDOW + 100);  // Force notify
+				time_diff = 0;
+			}
+		}
+		
+		final long notify_diff = current_time - teleport_info.last_notification;
+		if (notify_diff > PEARL_NOTIFICATION_WINDOW) {
+			teleport_info.last_notification = current_time;
+			Integer tagCooldown = combatTag.remainingSeconds(player);
+			
+			if (tagCooldown != null) {
+				player.sendMessage(String.format(
+						"Pearl in %d seconds. Combat Tag in %d seconds.",
+						(PEARL_THROTTLE_WINDOW - time_diff + 500) / 1000,
+						tagCooldown));
+			} else {
+				player.sendMessage(String.format(
+						"Pearl Teleport Cooldown: %d seconds",
+						(PEARL_THROTTLE_WINDOW - time_diff + 500) / 1000));
+			}
+		}
+		
+		pearlTeleportInfo.put(player_name, teleport_info);
+		return;
+	}
 	
-	  //there is a bug in minecraft 1.8, which allows fire and vines to spread into unloaded chunks
-	  //where they can replace any existing block
-	  @EventHandler(priority = EventPriority.LOWEST)
-	  public void fixSpreadInUnloadedChunks(BlockSpreadEvent e) {
-		  if (!e.getBlock().getChunk().isLoaded()) {
-			  e.setCancelled(true);
-		  }
-	  }
+	
+	// ================================================
+	// Hunger Changes
+
+	// Keep track if the player just ate.
+	private Map<Player, Double> playerLastEat_ = new HashMap<Player, Double>();
+
+	@EventHandler
+	public void setSaturationOnFoodEat(PlayerItemConsumeEvent event) {
+		// Each food sets a different saturation.
+		final Player player = event.getPlayer();
+		ItemStack item = event.getItem();
+		Material mat = item.getType();
+		double multiplier = config.getFoodSaturationMultiplier();
+		if (multiplier <= 0.000001 && multiplier >= -0.000001) {
+			return;
+		}
+		switch(mat) {
+		case APPLE:
+			playerLastEat_.put(player, multiplier*2.4);
+		case BAKED_POTATO:
+			playerLastEat_.put(player, multiplier*7.2);
+		case BREAD:
+			playerLastEat_.put(player, multiplier*6);
+		case CAKE:
+			playerLastEat_.put(player, multiplier*0.4);
+		case CARROT_ITEM:
+			playerLastEat_.put(player, multiplier*4.8);
+		case COOKED_FISH:
+			playerLastEat_.put(player, multiplier*6);
+		case GRILLED_PORK:
+			playerLastEat_.put(player, multiplier*12.8);
+		case COOKIE:
+			playerLastEat_.put(player, multiplier*0.4);
+		case GOLDEN_APPLE:
+			playerLastEat_.put(player, multiplier*9.6);
+		case GOLDEN_CARROT:
+			playerLastEat_.put(player, multiplier*14.4);
+		case MELON:
+			playerLastEat_.put(player, multiplier*1.2);
+		case MUSHROOM_SOUP:
+			playerLastEat_.put(player, multiplier*7.2);
+		case POISONOUS_POTATO:
+			playerLastEat_.put(player, multiplier*1.2);
+		case POTATO:
+			playerLastEat_.put(player, multiplier*0.6);
+		case RAW_FISH:
+			playerLastEat_.put(player, multiplier*1);
+		case PUMPKIN_PIE:
+			playerLastEat_.put(player, multiplier*4.8);
+		case RAW_BEEF:
+			playerLastEat_.put(player,  multiplier*1.8);
+		case RAW_CHICKEN:
+			playerLastEat_.put(player, multiplier*1.2);
+		case PORK:
+			playerLastEat_.put(player,  multiplier*1.8);
+		case ROTTEN_FLESH:
+			playerLastEat_.put(player, multiplier*0.8);
+		case SPIDER_EYE:
+			playerLastEat_.put(player, multiplier*3.2);
+		case COOKED_BEEF:
+			playerLastEat_.put(player, multiplier*12.8);
+		default:
+			playerLastEat_.put(player, multiplier);
+			Bukkit.getServer().getScheduler().runTaskLater(SabrePlugin.getPlugin(), new Runnable() {
+				// In case the player ingested a potion, this removes the
+				// saturation from the list. Unsure if I have every item
+				// listed. There is always the other cases of like food
+				// that shares same id
+				@Override
+				public void run() {
+					playerLastEat_.remove(player);
+				}
+			}, 80);
+		}
+	}
+
+	
+	@EventHandler
+	public void onFoodLevelChange(FoodLevelChangeEvent event) {
+		final Player player = (Player) event.getEntity();
+		final double mod = config.getHungerSlowdown();
+		Double saturation;
+		if (playerLastEat_.containsKey(player)) { // if the player just ate
+			saturation = playerLastEat_.get(player);
+			if (saturation == null) {
+				saturation = ((Float)player.getSaturation()).doubleValue();
+			}
+		} else {
+			saturation = Math.min(
+					player.getSaturation() + mod,
+					20.0D + (mod * 2.0D));
+		}
+		player.setSaturation(saturation.floatValue());
+	}
+	
+	
+	private static int SIGN_LIMIT = 100;
+	
+
+	/**
+	 * Enforce good sign data length
+	 * @param e The event args
+	 */
+	@EventHandler(ignoreCancelled=true)
+	public void onSignFinalize(SignChangeEvent e) {
+		String[] signdata = e.getLines();
+
+		for (int i = 0; i < signdata.length; i++) {
+			if (signdata[i] != null && signdata[i].length() > SIGN_LIMIT) {
+				Player p = e.getPlayer();
+				Location location = e.getBlock().getLocation();
+				SabrePlugin.getPlugin().log(Level.WARNING, String.format(
+						"Player '%s' [%s] attempted to place sign at ([%s] %d, %d, %d) with line %d having length %d > %d. Preventing.", 
+						p.getPlayerListName(), p.getUniqueId(), location.getWorld().getName(), 
+						location.getBlockX(), location.getBlockY(), location.getBlockZ(),
+						i, signdata[i].length(), SIGN_LIMIT));
+
+				e.setLine(i, "");
+			}
+		}
+	}
+
+	private HashMap<String, Set<Long>> signs_scanned_chunks_ = new HashMap<String, Set<Long>>();
+
+	@EventHandler(priority=EventPriority.HIGHEST, ignoreCancelled=false)
+	public void onSignLoads(ChunkLoadEvent event) {
+		Chunk chunk = event.getChunk();
+		String world = chunk.getWorld().getName();
+
+		long chunk_id = ((long)chunk.getX() << 32L) + (long)chunk.getZ();
+		if (signs_scanned_chunks_.containsKey(world)) {
+			if (signs_scanned_chunks_.get(world).contains(chunk_id)) {
+				return;
+			}
+		} else {
+			signs_scanned_chunks_.put(world, new TreeSet<Long>()); 
+		}
+		signs_scanned_chunks_.get(world).add(chunk_id);
+
+		BlockState[] allTiles = chunk.getTileEntities();
+
+		for(BlockState tile: allTiles) {
+			if (tile instanceof Sign) {
+				Sign sign = (Sign) tile;
+				String[] signdata = sign.getLines();
+				for (int i = 0; i < signdata.length; i++) {
+					if (signdata[i] != null && signdata[i].length() > SIGN_LIMIT) {
+						Location location = sign.getLocation();
+						SabrePlugin.getPlugin().log(Level.WARNING, String.format(
+								"Line %d in sign at ([%s] %d, %d, %d) is length %d > %d. Curating.", i,
+								world, location.getBlockX(), location.getBlockY(), location.getBlockZ(),
+								signdata[i].length(), SIGN_LIMIT));
+
+
+						sign.setLine(i, "");
+
+						sign.update(true);
+					}
+				}
+			}
+		}
+	}
+
+	@EventHandler(priority = EventPriority.HIGHEST)
+	public void adminAccessBlockedChest(PlayerInteractEvent e) {
+		if (!e.getPlayer().hasPermission("admin") && !e.getPlayer().isOp()) {
+			return;
+		}
+		if (e.getAction() == Action.RIGHT_CLICK_AIR || e.getAction() == Action.RIGHT_CLICK_BLOCK) {
+			Player p = e.getPlayer();
+			Set <Material> s = new TreeSet<Material>();
+			s.add(Material.AIR);
+			s.add(Material.OBSIDIAN); //probably in a vault
+			List <Block> blocks = p.getLineOfSight(s, 8);
+			for(Block b:blocks) {
+				Material m = b.getType();
+				if(m == Material.CHEST || m == Material.TRAPPED_CHEST) {
+					if(b.getRelative(BlockFace.UP).getType().isOccluding()) {
+						//dont show inventory twice if a normal chest is opened
+						final Inventory che_inv = ((InventoryHolder)b.getState()).getInventory();
+						p.openInventory(che_inv);
+						p.updateInventory();	  
+					}
+					break;
+				}
+			}
+		}
+	}
 }

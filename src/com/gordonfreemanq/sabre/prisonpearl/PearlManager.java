@@ -1,7 +1,9 @@
 package com.gordonfreemanq.sabre.prisonpearl;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map.Entry;
 import java.util.logging.Level;
 import java.util.UUID;
@@ -139,6 +141,7 @@ public class PearlManager {
 		
 		
 		PrisonPearl pp = new PrisonPearl(imprisoned, imprisoner);
+		pp.setSealStrength(config.getPearlDefaultStrength());
 		pp.markMove();
 		
 
@@ -196,6 +199,7 @@ public class PearlManager {
 	/**
 	 * Updates a pearl summoned status
 	 * @param pearl The pearl to update
+	 * @param summoned Whether the player is summoned
 	 */
 	public void setPearlSummoned(PrisonPearl pp, boolean summoned) {
 		pp.setSummoned(summoned);
@@ -206,10 +210,49 @@ public class PearlManager {
 	/**
 	 * Updates a pearl return location
 	 * @param pearl The pearl to update
+	 * @param returnLocation The pearl return location
 	 */
 	public void setReturnLocation(PrisonPearl pp, Location returnLocation) {
 		pp.setReturnLocation(returnLocation);
 		db.pearlUpdateReturnLocation(pp);
+	}
+	
+	
+	/**
+	 * Updates a pearl seal strength
+	 * @param pearl The pearl to update
+	 * @param sealStrength The new strength
+	 */
+	public void setSealStrength(PrisonPearl pp, int sealStrength) {
+    	if (sealStrength < 0) {
+    		sealStrength = 0;
+    	}
+    	
+    	if (sealStrength > 0) {
+    		pp.setSealStrength(sealStrength);
+    		db.pearlUpdateSealStrength(pp);
+    	} else {
+    		this.freePearl(pp);
+    	}
+	}
+	
+	
+	/**
+	 * Weakens a pearl seal strength
+	 * @param pearl The pearl to update
+	 * @param weakenAmount The amount to decrease the strength by
+	 */
+	public void decreaseSealStrength(PrisonPearl pp, int amount) {
+		this.setSealStrength(pp, pp.getSealStrength() - amount);
+	}
+	
+	/**
+	 * Increases a pearl seal strength
+	 * @param pearl The pearl to update
+	 * @param weakenAmount The amount to increase the strength by
+	 */
+	public void increaseSealStrength(PrisonPearl pp, int amount) {
+		this.setSealStrength(pp, pp.getSealStrength() + amount);
 	}
 	
 	
@@ -292,7 +335,7 @@ public class PearlManager {
 	 * @return The free world
 	 */
 	public World getFreeWorld() {
-		return Bukkit.getWorld(config.freeWorld);
+		return Bukkit.getWorld(config.getFreeWorldName());
 	}
 	
 	
@@ -301,7 +344,7 @@ public class PearlManager {
 	 * @return The prison world
 	 */
 	public World getPrisonWorld() {
-		return Bukkit.getWorld(config.prisonWorld);
+		return Bukkit.getWorld(config.getPrisonWorldName());
 	}
 	
 	
@@ -377,5 +420,47 @@ public class PearlManager {
 		SummonEvent event = new SummonEvent(pp, type, loc);
 		Bukkit.getPluginManager().callEvent(event);
 		return !event.isCancelled();
+	}
+    
+
+	/**
+	 * Gets a list of pearls located in an inventory
+	 * @param inv The inventory to search
+	 * @return The list of contained pearls
+	 */
+	public List<PrisonPearl> getInventoryPrisonPearls(Inventory inv) {
+		List<PrisonPearl> pearls = new ArrayList<PrisonPearl>();
+		
+		for (ItemStack is : inv.all(Material.ENDER_PEARL).values()) {
+			if (is.hasItemMeta() && is.getItemMeta().hasLore()) {
+				UUID id = PrisonPearl.getIDFromItemStack(is);
+				if (id != null) {
+					PrisonPearl pp = this.getById(id);
+					if (pp != null) {
+						pearls.add(pp);
+					}
+				}
+			}
+		}
+		
+		return pearls;
+	}
+	
+	
+	/**
+	 * Gets the prison pearl stacks located in an inventory
+	 * @param inv The inventory to search
+	 * @return The list of contained pearls
+	 */
+	public List<ItemStack> getInventoryPearlStacks(Inventory inv) {
+		List<ItemStack> pearls = new ArrayList<ItemStack>();
+		
+		for (ItemStack is : inv.all(Material.ENDER_PEARL).values()) {
+			if (is.hasItemMeta() && is.getItemMeta().hasLore()) {
+				pearls.add(is);
+			}
+		}
+		
+		return pearls;
 	}
 }

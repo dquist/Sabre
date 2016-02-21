@@ -1,0 +1,7 @@
+name: Nether Warp Drive
+material: STAINED_GLASS
+durability: 15
+amount: 1
+class: com.gordonfreemanq.sabre.warp.NetherWarpDrive
+lore:
+  - '<c>A nether teleportation engine.'

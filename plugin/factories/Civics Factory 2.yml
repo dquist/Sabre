@@ -1,0 +1,102 @@
+name: Civics Factory 2
+production_speed: 2
+recipes:
+  Produce Keep Bastion:
+    fuel_cost: 10
+    inputs:
+      Aspect of Domain:
+        custom_item: Aspect of Domain
+        amount: 6
+    outputs:
+      Keep Bastion:
+        custom_item: Keep Bastion
+        amount: 1
+  Produce Town Bastions:
+    fuel_cost: 10
+    inputs:
+      Aspect of Domain:
+        custom_item: Aspect of Domain
+        amount: 1
+    outputs:
+      Town Bastion:
+        custom_item: Town Bastion
+        amount: 6
+  Produce Outpost Bastion:
+    fuel_cost: 10
+    inputs:
+      Aspect of Domain:
+        custom_item: Aspect of Domain
+        amount: 1
+    outputs:
+      Outpost Bastion:
+        custom_item: Outpost Bastion
+        amount: 1
+  Produce Nether Warp Drive:
+    fuel_cost: 10
+    inputs:
+      Aspect of Domain:
+        custom_item: Aspect of Domain
+        amount: 2
+    outputs:
+      Nether Warp Drive:
+        custom_item: Nether Warp Drive
+        amount: 1
+  Produce Direct Warp Drive:
+    fuel_cost: 10
+    inputs:
+      Aspect of Domain:
+        custom_item: Aspect of Domain
+        amount: 8
+    outputs:
+      Direct Warp Drive:
+        custom_item: Direct Warp Drive
+        amount: 1
+  Produce Teleport Pad:
+    fuel_cost: 10
+    inputs:
+      Obsidian:
+        material: OBSIDIAN
+        amount: 32
+      Diamond:
+        material: DIAMOND
+        amount: 1
+    outputs:
+      Teleport Pad:
+        custom_item: Teleport Pad
+        amount: 1
+  Craft Aspect of Domain:
+    fuel_cost: 10
+    inputs:
+      Aspect of Masonry:
+        custom_item: Aspect of Masonry
+        amount: 4
+      Aspect of Framing:
+        custom_item: Aspect of Framing
+        amount: 4
+      Aspect of Metallurgy:
+        custom_item: Aspect of Metallurgy
+        amount: 2
+      Aspect of Casting:
+        custom_item: Aspect of Casting
+        amount: 2
+      Redstone Coil:
+        custom_item: Redstone Coil
+        amount: 1
+      Gearbox:
+        custom_item: Gearbox
+        amount: 1
+    outputs:
+      Aspect of Domain:
+        custom_item: Aspect of Domain
+        amount: 1
+upgrades:
+  Civics Factory 3 Upgrade:
+    fuel_cost: 10
+    inputs:
+      Aspect of Domain:
+        custom_item: Aspect of Domain
+        amount: 32
+    outputs:
+      Civics Factory 3:
+        custom_item: Civics Factory 3
+        amount: 1
