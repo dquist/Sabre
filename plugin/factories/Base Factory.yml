@@ -73,6 +73,22 @@ upgrades:
       Foundry 1:
         custom_item: Foundry 1
         amount: 1
+  Rail Factory 1 Upgrade:
+    fuel_cost: 10
+    inputs:
+      Aspect of Masonry:
+        custom_item: Aspect of Masonry
+        amount: 1
+      Aspect of Framing:
+        custom_item: Aspect of Framing
+        amount: 1
+      Aspect of Casting:
+        custom_item: Aspect of Casting
+        amount: 1
+    outputs:
+      Rail Factory 1:
+        custom_item: Rail Factory 1
+        amount: 1
   Redstone Factory 1 Upgrade:
     fuel_cost: 10
     inputs:
