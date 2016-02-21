@@ -241,7 +241,7 @@ public class PlayerListener implements Listener {
 			e.getPlayer().setBedSpawnLocation(null);
 			
 			World world = Bukkit.getWorld(SabreConfig.OVER_WORLD_NAME);
-			Location spawnLocation = SabreUtil.chooseSpawn(world, 5000);
+			Location spawnLocation = SabreUtil.chooseSpawn(world, 10000);
 			
 			SabreUtil.sendToGround(p.getPlayer(), spawnLocation);
 			

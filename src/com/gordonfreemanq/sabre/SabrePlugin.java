@@ -35,7 +35,7 @@ import com.gordonfreemanq.sabre.util.CombatTagPlusManager;
 
 public class SabrePlugin extends AbstractSabrePlugin
 {
-	public final static String version = "0.0.1";
+	public final static String version = "0.1.0";
 	
 	private static SabrePlugin instance;
 
