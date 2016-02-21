@@ -37,16 +37,6 @@ disabled_recipes:
     material: LEATHER_LEGGINGS
   Leather Boots:
     material: LEATHER_BOOTS
-  Stone Sword:
-    material: STONE_SWORD
-  Stone Shovel:
-    material: STONE_SPADE
-  Stone Pickaxe:
-    material: STONE_PICKAXE
-  Stone Axe:
-    material: STONE_AXE
-  Stone Hoe:
-    material: STONE_HOE
   Iron Sword:
     material: IRON_SWORD
   Iron Shovel:

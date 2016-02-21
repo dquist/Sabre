@@ -200,7 +200,7 @@ public class Lang
 	public static String unknownWorld = "<b>Unknown world <c>%s<b>.";
 	public static String noCraftingLore = "<i>You cannot craft with lore items.";
 	public static String recipeDisabled = "<i>That crafting recipe is disabled.";
-	public static String recipeNeed4Logs = "<i>You need 4 logs to make a plank.";
+	public static String recipeNeed2Logs = "<i>You need 2 logs to make a plank.";
 	public static String exceptionGeneral = "<b>An internal error occurred.";
 	public static String exceptionLogin = "An internal server error occurred.";
 	public static String exceptionConsoleDuring = "An exception error occurred during \"%s\"";
