@@ -2,6 +2,7 @@ package com.gordonfreemanq.sabre.warp;
 
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 
@@ -24,10 +25,13 @@ public class TeleportPad extends SpecialBlock {
 	// Location of the destination pad
 	protected Location destPadLocation;
 	
+	protected boolean netherGenerated;
+	
 	public TeleportPad(Location location, String typeName) {
 		super(location, typeName);
 		
 		this.hasEffectRadius = false;
+		this.netherGenerated = false;
 		this.requireAccesstoInteract = false;
 	}
 	
@@ -93,6 +97,10 @@ public class TeleportPad extends SpecialBlock {
 	 * @param p The player interacting
 	 */
 	public void onInteract(PlayerInteractEvent e, SabrePlayer sp) {
+		
+		if (e.getAction().equals(Action.RIGHT_CLICK_BLOCK)) {
+			return;
+		}
 
 		// Ignore stick or pick interact
 		Material handItemType = sp.getPlayer().getItemInHand().getType();
@@ -141,6 +149,10 @@ public class TeleportPad extends SpecialBlock {
 			doc = doc.append("pad", SabreUtil.serializeLocation(this.destPadLocation));
 		}
 		
+		if (netherGenerated) {
+			doc = doc.append("generated", true);
+		}
+		
 		return doc;
 	}
 	
@@ -153,8 +165,13 @@ public class TeleportPad extends SpecialBlock {
 		if (o.containsField("drive")) {
 			this.driveLocation = SabreUtil.deserializeLocation(o.get("drive"));
 		}
+		
 		if (o.containsField("pad")) {
 			this.destPadLocation = SabreUtil.deserializeLocation(o.get("pad"));
+		}
+		
+		if (o.containsField("generated")) {
+			this.netherGenerated = o.getBoolean("generated", false);
 		}
 	}
 	
@@ -196,5 +213,33 @@ public class TeleportPad extends SpecialBlock {
 			return true;
 		}
 		return false;
+	}
+	
+
+	@Override
+	public boolean getDropsBlock() {
+		// Nether generated teleport pads should not drop their block
+		if (this.netherGenerated) {
+			return false;
+		}
+		return true;
+	}
+	
+	
+	/**
+	 * Gets whether the block was generated in the nether
+	 * @return true if it was generated
+	 */
+	public boolean getNetherGenerated() {
+		return this.netherGenerated;
+	}
+	
+	
+	/**
+	 * Sets whether the pad was nether generated
+	 * @param netherGenerated whether it was nether generated
+	 */
+	public void setNetherGenerated(boolean netherGenerated) {
+		this.netherGenerated = netherGenerated;
 	}
 }

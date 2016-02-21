@@ -70,12 +70,18 @@ public class NetherWarpDrive extends AbstractWarpDrive {
 			}
 		}
 		
+		SabreItemStack is = CustomItems.getInstance().getByName(TeleportPad.blockName);
+		
 		// Check if there is a valid pad on the other end
 		if (destPadLocation != null) {
 			destPad = (TeleportPad)bm.getBlockAt(destPadLocation);
-			if (destPad != null) {
+			if (destPad != null && destPadLocation.getBlock().getType() == is.getType()) {
 				destIsValid = true;
 			}
+		}
+		
+		if (!destIsValid) {
+			destPadLocation = getDefaultNetherLocation(sourcePadLocation);
 		}
 
 		// Only create a new teleport pad when going from Overworld -> Nether
@@ -86,7 +92,6 @@ public class NetherWarpDrive extends AbstractWarpDrive {
 			
 			// Create the physical block
 			Block b = destPadLocation.getBlock();
-			SabreItemStack is = CustomItems.getInstance().getByName(TeleportPad.blockName);
 			b.setType(is.getType());
 			b.setData(is.getData().getData());
 			destIsValid = true;
@@ -108,6 +113,7 @@ public class NetherWarpDrive extends AbstractWarpDrive {
 		// Link the two pads together 
 		destPad.setDriveLocation(sourcePad.getDriveLocation());
 		destPad.setDestPadLocation(sourcePadLocation);
+		destPad.setNetherGenerated(true);
 		destPad.saveSettings();
 		sourcePad.setDestPadLocation(destPadLocation);
 		sourcePad.saveSettings();
@@ -116,7 +122,9 @@ public class NetherWarpDrive extends AbstractWarpDrive {
 		
 		// Do the teleport
 		sp.msg(Lang.warping);
-		SabreUtil.tryToTeleport(sp.getPlayer(), destPadLocation);
+		Location warpLocation = destPadLocation;
+		warpLocation.add(0, 1, 0);
+		SabreUtil.tryToTeleport(sp.getPlayer(), warpLocation);
 		
 		return true;
 	}

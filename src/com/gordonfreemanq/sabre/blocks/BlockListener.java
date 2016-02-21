@@ -265,7 +265,10 @@ public class BlockListener implements Listener {
 							// Cancel the break event, set the block to air, and drop the new item, this way
 							// we can override the default block that drops
 							l.getBlock().setType(Material.AIR);
-							SabreTweaks.dropItemAtLocation(l, is);
+							
+							if (sb.getDropsBlock()) {
+								SabreTweaks.dropItemAtLocation(l, is);
+							}
 						}
 					}
 

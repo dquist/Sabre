@@ -29,6 +29,8 @@ public class SabreBlock {
 	protected boolean hasEffectRadius;
 	
 	protected boolean requireAccesstoInteract;
+	
+	protected boolean dropsBlock;
 
 	/**
 	 * Creates a new BlockRecord instance
@@ -40,6 +42,7 @@ public class SabreBlock {
 		this.tellBlockName = true;
 		this.requireAccessForName = false;
 		this.requireAccesstoInteract = true;
+		this.dropsBlock = true;
 		this.name = "";
 		
 		if (typeName != null) {
@@ -106,6 +109,14 @@ public class SabreBlock {
 		return this.requireAccesstoInteract;
 	}
 	
+	
+	/**
+	 * Gets whether the broken block should drop or not
+	 * @return true if it should drop
+	 */
+	public boolean getDropsBlock() {
+		return this.dropsBlock;
+	}
 	
 	
 	/**
