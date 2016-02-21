@@ -26,6 +26,7 @@ class DamageLog {
 		return player;
 	}
 	
+	@SuppressWarnings("deprecation")
 	public Player getPlayer() {
 		return Bukkit.getPlayerExact(player);
 	}
@@ -52,6 +53,7 @@ class DamageLog {
 		this.expirestick = expirestick;
 	}
 	
+	@SuppressWarnings("deprecation")
 	public List<Player> getDamagers(int min) {
 		List<Player> players = new ArrayList<Player>();
 		

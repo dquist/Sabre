@@ -1,9 +1,7 @@
 package com.gordonfreemanq.sabre;
 
-import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -12,11 +10,6 @@ import java.util.Set;
 import java.util.TreeMap;
 import java.util.TreeSet;
 import java.util.logging.Level;
-
-import net.minecraft.server.v1_8_R3.EntityTypes;
-import net.minecraft.server.v1_8_R3.Item;
-import net.minecraft.server.v1_8_R3.ItemEnderPearl;
-import net.minecraft.server.v1_8_R3.MinecraftKey;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Chunk;

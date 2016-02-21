@@ -233,20 +233,20 @@ public class PlayerListener implements Listener {
 					useBed = true;
 				}
 			}
+		}
+		
+		if (useBed) {
+			e.getPlayer().setBedSpawnLocation(l, true);
+		} else {
+			e.getPlayer().setBedSpawnLocation(null);
 			
-			if (useBed) {
-				e.getPlayer().setBedSpawnLocation(l, true);
-			} else {
-				e.getPlayer().setBedSpawnLocation(null);
-				
-				World world = Bukkit.getWorld(SabreConfig.OVER_WORLD_NAME);
-				Location spawnLocation = SabreUtil.chooseSpawn(world, 5000);
-				
-				SabreUtil.sendToGround(p.getPlayer(), spawnLocation);
-				
-				e.setRespawnLocation(spawnLocation);
-				p.msg("You wake up in an unfamiliar place.");
-			}
+			World world = Bukkit.getWorld(SabreConfig.OVER_WORLD_NAME);
+			Location spawnLocation = SabreUtil.chooseSpawn(world, 5000);
+			
+			SabreUtil.sendToGround(p.getPlayer(), spawnLocation);
+			
+			e.setRespawnLocation(spawnLocation);
+			p.msg("You wake up in an unfamiliar place.");
 		}
 	}
 	
