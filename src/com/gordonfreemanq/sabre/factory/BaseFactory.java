@@ -429,17 +429,17 @@ public class BaseFactory extends SpecialBlock {
 				return;
 			}
 			
-			if (!checkFuel()) {
-				msg(Lang.factoryMissingFuel);
-				return;
-			}
-			
 			recipe.onRecipeStart(this);
 			
 			if (!checkMaterials()) {
 				ItemList<SabreItemStack> needAll = new ItemList<SabreItemStack>();
 				needAll.addAll(recipe.getInputs().getDifference(getInputInventory()));
 				msg(Lang.factoryNeedFollowing, needAll.toString());
+				return;
+			}
+			
+			if (!checkFuel()) {
+				msg(Lang.factoryMissingFuel);
 				return;
 			}
 			

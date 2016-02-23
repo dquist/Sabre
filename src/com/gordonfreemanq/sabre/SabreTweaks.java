@@ -17,6 +17,7 @@ import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
+import org.bukkit.World.Environment;
 import org.bukkit.block.Biome;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
@@ -57,12 +58,14 @@ import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.entity.EntityExplodeEvent;
 import org.bukkit.event.entity.EntityInteractEvent;
 import org.bukkit.event.entity.EntityPortalEvent;
+import org.bukkit.event.entity.ExpBottleEvent;
 import org.bukkit.event.entity.FoodLevelChangeEvent;
 import org.bukkit.event.inventory.FurnaceBurnEvent;
 import org.bukkit.event.inventory.FurnaceSmeltEvent;
 import org.bukkit.event.inventory.InventoryOpenEvent;
 import org.bukkit.event.inventory.PrepareItemCraftEvent;
 import org.bukkit.event.player.PlayerBucketEmptyEvent;
+import org.bukkit.event.player.PlayerExpChangeEvent;
 import org.bukkit.event.player.PlayerInteractEntityEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerItemConsumeEvent;
@@ -151,6 +154,7 @@ public class SabreTweaks implements Listener {
 		Bukkit.addRecipe(logsToPlank5);
 	}
 
+	
 	/**
 	 * CobbleStone and dirt act like sand/gravel
 	 * 
@@ -168,6 +172,25 @@ public class SabreTweaks implements Listener {
 			}
 		}
 	}
+	
+	
+	/**
+	 * Disable bed bombs in nether and end
+	 * @param event
+	 */
+	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
+	public void onPlayerEnterBed(BlockPlaceEvent event) {
+		Block b = event.getBlock();
+		if (!(b.getType() == Material.BED || b.getType() == Material.BED_BLOCK)) {
+			return;
+		}
+		
+		Environment env = b.getLocation().getWorld().getEnvironment();
+		if (env == Environment.NETHER || env == Environment.THE_END) {
+			event.setCancelled(true);
+		}
+	}
+	  
 
 	/**
 	 * Deal extra tool durability based on Y level
@@ -251,6 +274,7 @@ public class SabreTweaks implements Listener {
 		}
 	}
 
+	
 	/**
 	 * Disable crafting for lore items and disabled recipes
 	 * 
@@ -318,11 +342,10 @@ public class SabreTweaks implements Listener {
 		}
 	}
 
+	
 	/**
 	 * Disable villager trading
-	 * 
-	 * @param e
-	 *            The event
+	 * @param e The event args
 	 */
 	@EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
 	public void onPlayerInteractEntity(PlayerInteractEntityEvent e) {
@@ -334,12 +357,11 @@ public class SabreTweaks implements Listener {
 			e.setCancelled(true);
 		}
 	}
+	
 
 	/**
 	 * Disable ender chest
-	 * 
-	 * @param e
-	 *            The event
+	 * @param e The event args
 	 */
 	@EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
 	public void onEnderChestUse(PlayerInteractEvent e) {
@@ -352,11 +374,10 @@ public class SabreTweaks implements Listener {
 		}
 	}
 
+	
 	/**
-	 * Unlimited Cauldron water
-	 * 
-	 * @param e
-	 *            The event
+	 * Unlimited cauldron water
+	 * @param e The event args
 	 */
 	@EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
 	public void onCauldronInteract(PlayerInteractEvent e) {
@@ -807,17 +828,21 @@ public class SabreTweaks implements Listener {
 		}
 	}
 
-	// Generates obsidian like it did in 1.7.
-	// Note that this does not change anything in versions where obsidian
-	// generation exists.
-	public void generateObsidian(BlockFromToEvent event) {
-		if (!event.getBlock().getType().equals(Material.STATIONARY_LAVA)) {
+	
+	/**
+	 * Generates obsidian like it did in 1.7.
+	 * Note that this does not change anything in versions where obsidian
+	 * generation exists.
+	 * @param e The event args
+	 */
+	public void generateObsidian(BlockFromToEvent e) {
+		if (!e.getBlock().getType().equals(Material.STATIONARY_LAVA)) {
 			return;
 		}
-		if (!event.getToBlock().getType().equals(Material.TRIPWIRE)) {
+		if (!e.getToBlock().getType().equals(Material.TRIPWIRE)) {
 			return;
 		}
-		Block string = event.getToBlock();
+		Block string = e.getToBlock();
 		if (!(string.getRelative(BlockFace.NORTH).getType()
 				.equals(Material.STATIONARY_WATER)
 				|| string.getRelative(BlockFace.EAST).getType()
@@ -830,14 +855,38 @@ public class SabreTweaks implements Listener {
 		}
 		string.setType(Material.OBSIDIAN);
 	}
+	
 
+	/**
+	 * Changes the yield from an XP bottle
+	 * @param e
+	 */
+	@EventHandler(priority=EventPriority.HIGHEST)
+	public void onExpBottleEvent(ExpBottleEvent e) {
+		final int bottle_xp = config.getXpBottleValue();
+		((Player) e.getEntity().getShooter()).giveExp(bottle_xp);
+	      e.setExperience(0);
+	}
+
+
+	/**
+	 * Disables all XP gain except when manually changed via code.
+	 * @param e The event args
+	 */
+	@EventHandler(priority=EventPriority.LOWEST)
+	public void onPlayerExpChangeEvent(PlayerExpChangeEvent e) {
+		e.setAmount(0);
+	}
+
+	
 	// ================================================
 	// Find the end portals
-
+	/*
 	public static final int ender_portal_id_ = Material.ENDER_PORTAL.getId();
 	public static final int ender_portal_frame_id_ = Material.ENDER_PORTAL_FRAME
 			.getId();
 	private Set<Long> end_portal_scanned_chunks_ = new TreeSet<Long>();
+
 
 	@EventHandler
 	public void onFindEndPortals(ChunkLoadEvent event) {
@@ -871,8 +920,7 @@ public class SabreTweaks implements Listener {
 					int block_type = world.getBlockTypeIdAt(x, y, z);
 					if (block_type == ender_portal_id_
 							|| block_type == ender_portal_frame_id_) {
-						// info(String.format("End portal found at %d,%d", x,
-						// z));
+						SabrePlugin.getPlugin().log(Level.INFO, String.format("End portal found at %d,%d", x, z));
 						return;
 					}
 				}
@@ -886,7 +934,7 @@ public class SabreTweaks implements Listener {
 				}
 			}
 		}
-	}
+	} */
 
 	// ================================================
 	// Prevent inventory access while in a vehicle, unless it's the Player's
