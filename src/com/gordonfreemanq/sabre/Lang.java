@@ -56,7 +56,8 @@ public class Lang
 	public static String chatPlayerNowOffline = "<i>You were chatting with <c>%s <i>who is now offline.";
 	public static String chatMovedGlobal = "<i>Moved to global chat.";
 	public static String chatMovedServerBcast = "<h>Moved to server broadcast chat.";
-	public static String chatMovedGroup = "<i>Moved to <c>%s <i>group chat.";
+	public static String chatMovedGroup = "<i>Moved to <c>%s <i>group chat.\n";
+	public static String chatMovedGroupHelp = "<i>Use '<c>/f c' <i>to return to global chat.";
 	public static String chatNoOneHears = "<silver>No one hears you.";
 	public static String chatChattingWith = "<lp>You are now chatting with <c>%s<lp>.";
 	public static String chatNoReply = "<lp>You have no one to reply to.";
