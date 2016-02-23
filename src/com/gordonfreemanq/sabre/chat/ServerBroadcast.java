@@ -17,7 +17,7 @@ public class ServerBroadcast implements IChatChannel {
 	public void chat(SabrePlayer sender, String msg) {
 		String senderName = sender.getName();
 		
-		String formatted = SabrePlugin.getPlugin().txt.parse("<gold>[Server] <lime>%s: <w>%s", senderName, msg);
+		String formatted = SabrePlugin.getPlugin().txt.parse("<gold>## %s: <w>%s", senderName, msg);
 		
 		for (SabrePlayer p : pm.getOnlinePlayers()) {
 			p.getPlayer().sendMessage(formatted);
@@ -33,5 +33,14 @@ public class ServerBroadcast implements IChatChannel {
 		for (SabrePlayer p : pm.getOnlinePlayers()) {
 			p.getPlayer().sendMessage(formatted);
 		}
+	}
+	
+	public String chat(String senderName, String msg) {		
+		String formatted = SabrePlugin.getPlugin().txt.parse("<gold>## %s: <w>%s", senderName, msg);
+		
+		for (SabrePlayer p : pm.getOnlinePlayers()) {
+			p.getPlayer().sendMessage(formatted);
+		}
+		return formatted;
 	}
 }
