@@ -32,6 +32,7 @@ public class CmdRoot extends SabreCommand {
 		this.addSubCommand(new CmdChatMsg());
 		this.addSubCommand(new CmdChatReply());
 		this.addSubCommand(new CmdChatServer());
+		this.addSubCommand(new CmdChatSay());
 		this.addSubCommand(new CmdGroupCreate());
 		this.addSubCommand(new CmdGroupInvite());
 		this.addSubCommand(new CmdGroupJoin());
@@ -57,6 +58,8 @@ public class CmdRoot extends SabreCommand {
 		this.addSubCommand(new CmdTest());
 		this.addSubCommand(new CmdTeleport());
 		this.addSubCommand(new CmdTeleportHere());
+		this.addSubCommand(new CmdAdminFly());
+		this.addSubCommand(new CmdAdminVanish());
 		
 		this.addSubCommand(cmdSnitch);
 	}

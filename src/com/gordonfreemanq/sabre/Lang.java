@@ -56,7 +56,8 @@ public class Lang
 	public static String chatPlayerNowOffline = "<i>You were chatting with <c>%s <i>who is now offline.";
 	public static String chatMovedGlobal = "<i>Moved to global chat.";
 	public static String chatMovedServerBcast = "<h>Moved to server broadcast chat.";
-	public static String chatMovedGroup = "<i>Moved to <c>%s <i>group chat.";
+	public static String chatMovedGroup = "<i>Moved to <c>%s <i>group chat.\n";
+	public static String chatMovedGroupHelp = "<i>Use '<c>/f c' <i>to return to global chat.";
 	public static String chatNoOneHears = "<silver>No one hears you.";
 	public static String chatChattingWith = "<lp>You are now chatting with <c>%s<lp>.";
 	public static String chatNoReply = "<lp>You have no one to reply to.";
@@ -105,6 +106,8 @@ public class Lang
 	public static String adminYouBypassed = "<h>You bypassed this block on <c>%s<h>.";
 	public static String adminSetSpawn = "<g>You set the spawn location.";
 	public static String adminInvalidItem = "<c>That item does not exist.";
+	public static String adminVanished = "<teal>You have vanished. Poof.";
+	public static String adminUnvanished = "<teal>You have become visible.";
 	
 	
 	
@@ -200,7 +203,7 @@ public class Lang
 	public static String unknownWorld = "<b>Unknown world <c>%s<b>.";
 	public static String noCraftingLore = "<i>You cannot craft with lore items.";
 	public static String recipeDisabled = "<i>That crafting recipe is disabled.";
-	public static String recipeNeed4Logs = "<i>You need 4 logs to make a plank.";
+	public static String recipeNeed2Logs = "<i>You need 2 logs to make a plank.";
 	public static String exceptionGeneral = "<b>An internal error occurred.";
 	public static String exceptionLogin = "An internal server error occurred.";
 	public static String exceptionConsoleDuring = "An exception error occurred during \"%s\"";

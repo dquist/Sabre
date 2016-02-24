@@ -1,0 +1,100 @@
+name: Rail Factory 2
+production_speed: 2
+recipes:
+  Produce Rails:
+    fuel_cost: 25
+    inputs:
+      Iron Ingot:
+        material: IRON_INGOT
+        amount: 128
+      Stick:
+        material: STICK
+        amount: 128
+    outputs:
+      Rails:
+        material: RAILS
+        amount: 384
+  Produce Powered Rails:
+    fuel_cost: 25
+    inputs:
+      Iron Ingot:
+        material: IRON_INGOT
+        amount: 32
+      Stick:
+        material: STICK
+        amount: 32
+      Gold Ingot:
+        material: GOLD_INGOT
+        amount: 16
+    outputs:
+      Powered Rails:
+        material: POWERED_RAIL
+        amount: 96
+  Produce Detector Rails:
+    fuel_cost: 25
+    inputs:
+      Iron Ingot:
+        material: IRON_INGOT
+        amount: 16
+      Stick:
+        material: STICK
+        amount: 16
+      Gold Ingot:
+        material: GOLD_INGOT
+        amount: 8
+      Redstone:
+        material: REDSTONE
+        amount: 8
+    outputs:
+      Detector Rails:
+        material: DETECTOR_RAIL
+        amount: 48
+  Produce Activator Rails:
+    fuel_cost: 25
+    inputs:
+      Iron Ingot:
+        material: IRON_INGOT
+        amount: 16
+      Stick:
+        material: STICK
+        amount: 16
+      Gold Ingot:
+        material: GOLD_INGOT
+        amount: 8
+      Redstone:
+        material: REDSTONE
+        amount: 8
+      Quartz:
+        material: QUARTZ
+        amount: 8
+    outputs:
+      Activator Rails:
+        material: ACTIVATOR_RAIL
+        amount: 48
+  Produce Minecarts:
+    fuel_cost: 25
+    inputs:
+      Iron Ingot:
+        material: IRON_INGOT
+        amount: 64
+    outputs:
+      Minecart:
+        material: MINECART
+        amount: 24
+upgrades:
+  Rail Factory 3 Upgrade:
+    fuel_cost: 10
+    inputs:
+      Aspect of Masonry:
+        custom_item: Aspect of Masonry
+        amount: 4
+      Aspect of Framing:
+        custom_item: Aspect of Framing
+        amount: 4
+      Aspect of Casting:
+        custom_item: Aspect of Casting
+        amount: 4
+    outputs:
+      Rail Factory 3:
+        custom_item: Rail Factory 3
+        amount: 1

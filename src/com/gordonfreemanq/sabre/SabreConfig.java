@@ -42,6 +42,7 @@ public class SabreConfig {
 		this.noSmelts = new HashSet<SabreItemStack>();
 		this.prisonWorld = "world_the_end";
 		this.freeWorld = "world";
+		
 	}
 	
 	/**
@@ -123,6 +124,7 @@ public class SabreConfig {
 	
 	private double foodSaturationMultiplier = 0.0;
 	private double hungerSlowdown = 0.0;
+	private int xpBottle = 10;
 	
 	
 	/**
@@ -556,5 +558,13 @@ public class SabreConfig {
 	 */
 	public double getHungerSlowdown() {
 		return this.hungerSlowdown;
+	}
+	
+	/**
+	 * Gets the amount of xp in in an xp bottle
+	 * @return The amount of xp
+	 */
+	public int getXpBottleValue() {
+		return this.xpBottle;
 	}
 }

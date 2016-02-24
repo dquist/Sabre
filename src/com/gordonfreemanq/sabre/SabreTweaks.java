@@ -17,6 +17,7 @@ import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
+import org.bukkit.World.Environment;
 import org.bukkit.block.Biome;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
@@ -57,18 +58,21 @@ import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.entity.EntityExplodeEvent;
 import org.bukkit.event.entity.EntityInteractEvent;
 import org.bukkit.event.entity.EntityPortalEvent;
+import org.bukkit.event.entity.ExpBottleEvent;
 import org.bukkit.event.entity.FoodLevelChangeEvent;
 import org.bukkit.event.inventory.FurnaceBurnEvent;
 import org.bukkit.event.inventory.FurnaceSmeltEvent;
 import org.bukkit.event.inventory.InventoryOpenEvent;
 import org.bukkit.event.inventory.PrepareItemCraftEvent;
 import org.bukkit.event.player.PlayerBucketEmptyEvent;
+import org.bukkit.event.player.PlayerExpChangeEvent;
 import org.bukkit.event.player.PlayerInteractEntityEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerItemConsumeEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
+import org.bukkit.event.vehicle.VehicleBlockCollisionEvent;
 import org.bukkit.event.vehicle.VehicleDestroyEvent;
 import org.bukkit.event.vehicle.VehicleExitEvent;
 import org.bukkit.event.vehicle.VehicleMoveEvent;
@@ -81,6 +85,8 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.InventoryHolder;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.ShapelessRecipe;
+import org.bukkit.metadata.FixedMetadataValue;
+import org.bukkit.metadata.MetadataValue;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.util.Vector;
@@ -101,6 +107,9 @@ public class SabreTweaks implements Listener {
 	private Map<String, PearlTeleportInfo> pearlTeleportInfo = new TreeMap<String, PearlTeleportInfo>();
 	private final static int PEARL_THROTTLE_WINDOW = 10000;  // 10 sec
 	private final static int PEARL_NOTIFICATION_WINDOW = 1000;  // 1 sec
+	
+    private static final String CACTUS_HIT_TAG = "hitCactus";
+    private static MetadataValue CACTUS_HIT;
 
 	public SabreTweaks(SabreConfig config) {
 		this.config = config;
@@ -110,6 +119,8 @@ public class SabreTweaks implements Listener {
 		
 		// Combat Tag API
 		combatTag = SabrePlugin.getPlugin().getCombatTag();
+		
+	    CACTUS_HIT = new FixedMetadataValue(SabrePlugin.getPlugin(), true);
 	}
 
 
@@ -127,30 +138,31 @@ public class SabreTweaks implements Listener {
 
 		// Recipe: 4 logs create 1 plank
 		ShapelessRecipe logsToPlank = new ShapelessRecipe(new ItemStack(Material.WOOD, 1, (short)0));
-		logsToPlank.addIngredient(4, Material.LOG, 0);
+		logsToPlank.addIngredient(2, Material.LOG, 0);
 		Bukkit.addRecipe(logsToPlank);
 
 		ShapelessRecipe logsToPlank1 = new ShapelessRecipe(new ItemStack(Material.WOOD, 1, (short)1));
-		logsToPlank1.addIngredient(4, Material.LOG, 1);
+		logsToPlank1.addIngredient(2, Material.LOG, 1);
 		Bukkit.addRecipe(logsToPlank1);
 
 		ShapelessRecipe logsToPlank2 = new ShapelessRecipe(new ItemStack(Material.WOOD, 1, (short)2));
-		logsToPlank2.addIngredient(4, Material.LOG, 2);
+		logsToPlank2.addIngredient(2, Material.LOG, 2);
 		Bukkit.addRecipe(logsToPlank2);
 
 		ShapelessRecipe logsToPlank3 = new ShapelessRecipe(new ItemStack(Material.WOOD, 1, (short)3));
-		logsToPlank3.addIngredient(4, Material.LOG, 3);
+		logsToPlank3.addIngredient(2, Material.LOG, 3);
 		Bukkit.addRecipe(logsToPlank3);
 
 		ShapelessRecipe logsToPlank4 = new ShapelessRecipe(new ItemStack(Material.WOOD, 1, (short)4));
-		logsToPlank4.addIngredient(4, Material.LOG_2, 0);
+		logsToPlank4.addIngredient(2, Material.LOG_2, 0);
 		Bukkit.addRecipe(logsToPlank4);
 
 		ShapelessRecipe logsToPlank5 = new ShapelessRecipe(new ItemStack(Material.WOOD, 1, (short)5));
-		logsToPlank5.addIngredient(4, Material.LOG_2, 1);
+		logsToPlank5.addIngredient(2, Material.LOG_2, 1);
 		Bukkit.addRecipe(logsToPlank5);
 	}
 
+	
 	/**
 	 * CobbleStone and dirt act like sand/gravel
 	 * 
@@ -168,6 +180,25 @@ public class SabreTweaks implements Listener {
 			}
 		}
 	}
+	
+	
+	/**
+	 * Disable bed bombs in nether and end
+	 * @param event
+	 */
+	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
+	public void onPlayerEnterBed(BlockPlaceEvent event) {
+		Block b = event.getBlock();
+		if (!(b.getType() == Material.BED || b.getType() == Material.BED_BLOCK)) {
+			return;
+		}
+		
+		Environment env = b.getLocation().getWorld().getEnvironment();
+		if (env == Environment.NETHER || env == Environment.THE_END) {
+			event.setCancelled(true);
+		}
+	}
+	  
 
 	/**
 	 * Deal extra tool durability based on Y level
@@ -251,6 +282,7 @@ public class SabreTweaks implements Listener {
 		}
 	}
 
+	
 	/**
 	 * Disable crafting for lore items and disabled recipes
 	 * 
@@ -264,6 +296,7 @@ public class SabreTweaks implements Listener {
 			if (is.hasItemMeta() && is.getItemMeta().hasLore()) {
 				e.getInventory().setResult(new ItemStack(Material.AIR));
 
+				// Prevent crafting with lore items
 				for(HumanEntity he : e.getViewers()) {
 					if(he instanceof Player) {
 						PlayerManager.getInstance().getPlayerById(he.getUniqueId()).msg(Lang.noCraftingLore);
@@ -274,8 +307,7 @@ public class SabreTweaks implements Listener {
 			}
 		}
 
-
-		// Quick way to disable the vanilla wood crafting. Need 4x the wood
+		// Quick way to disable the vanilla wood crafting. Need 2x the wood
 		int logCount = 0;
 		if (e.getRecipe().getResult().getType() == Material.WOOD) {
 			ItemStack[] matrix = e.getInventory().getMatrix();
@@ -290,12 +322,12 @@ public class SabreTweaks implements Listener {
 			}
 		}
 
-		// Dont' allow the vanilla craft of 1 log = 4 planks
+		// Don'' allow the vanilla craft of 1 log = 4 planks
 		if (logCount == 1) {
 			e.getInventory().setResult(new ItemStack(Material.AIR));
 			for(HumanEntity he : e.getViewers()) {
 				if(he instanceof Player) {			
-					PlayerManager.getInstance().getPlayerById(he.getUniqueId()).msg(Lang.recipeNeed4Logs);
+					PlayerManager.getInstance().getPlayerById(he.getUniqueId()).msg(Lang.recipeNeed2Logs);
 				}
 			}
 
@@ -318,11 +350,10 @@ public class SabreTweaks implements Listener {
 		}
 	}
 
+	
 	/**
 	 * Disable villager trading
-	 * 
-	 * @param e
-	 *            The event
+	 * @param e The event args
 	 */
 	@EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
 	public void onPlayerInteractEntity(PlayerInteractEntityEvent e) {
@@ -334,12 +365,11 @@ public class SabreTweaks implements Listener {
 			e.setCancelled(true);
 		}
 	}
+	
 
 	/**
 	 * Disable ender chest
-	 * 
-	 * @param e
-	 *            The event
+	 * @param e The event args
 	 */
 	@EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
 	public void onEnderChestUse(PlayerInteractEvent e) {
@@ -352,11 +382,10 @@ public class SabreTweaks implements Listener {
 		}
 	}
 
+	
 	/**
-	 * Unlimited Cauldron water
-	 * 
-	 * @param e
-	 *            The event
+	 * Unlimited cauldron water
+	 * @param e The event args
 	 */
 	@EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
 	public void onCauldronInteract(PlayerInteractEvent e) {
@@ -807,17 +836,21 @@ public class SabreTweaks implements Listener {
 		}
 	}
 
-	// Generates obsidian like it did in 1.7.
-	// Note that this does not change anything in versions where obsidian
-	// generation exists.
-	public void generateObsidian(BlockFromToEvent event) {
-		if (!event.getBlock().getType().equals(Material.STATIONARY_LAVA)) {
+	
+	/**
+	 * Generates obsidian like it did in 1.7.
+	 * Note that this does not change anything in versions where obsidian
+	 * generation exists.
+	 * @param e The event args
+	 */
+	public void generateObsidian(BlockFromToEvent e) {
+		if (!e.getBlock().getType().equals(Material.STATIONARY_LAVA)) {
 			return;
 		}
-		if (!event.getToBlock().getType().equals(Material.TRIPWIRE)) {
+		if (!e.getToBlock().getType().equals(Material.TRIPWIRE)) {
 			return;
 		}
-		Block string = event.getToBlock();
+		Block string = e.getToBlock();
 		if (!(string.getRelative(BlockFace.NORTH).getType()
 				.equals(Material.STATIONARY_WATER)
 				|| string.getRelative(BlockFace.EAST).getType()
@@ -830,14 +863,38 @@ public class SabreTweaks implements Listener {
 		}
 		string.setType(Material.OBSIDIAN);
 	}
+	
 
+	/**
+	 * Changes the yield from an XP bottle
+	 * @param e
+	 */
+	@EventHandler(priority=EventPriority.HIGHEST)
+	public void onExpBottleEvent(ExpBottleEvent e) {
+		final int bottle_xp = config.getXpBottleValue();
+		((Player) e.getEntity().getShooter()).giveExp(bottle_xp);
+	      e.setExperience(0);
+	}
+
+
+	/**
+	 * Disables all XP gain except when manually changed via code.
+	 * @param e The event args
+	 */
+	@EventHandler(priority=EventPriority.LOWEST)
+	public void onPlayerExpChangeEvent(PlayerExpChangeEvent e) {
+		e.setAmount(0);
+	}
+
+	
 	// ================================================
 	// Find the end portals
-
+	/*
 	public static final int ender_portal_id_ = Material.ENDER_PORTAL.getId();
 	public static final int ender_portal_frame_id_ = Material.ENDER_PORTAL_FRAME
 			.getId();
 	private Set<Long> end_portal_scanned_chunks_ = new TreeSet<Long>();
+
 
 	@EventHandler
 	public void onFindEndPortals(ChunkLoadEvent event) {
@@ -871,8 +928,7 @@ public class SabreTweaks implements Listener {
 					int block_type = world.getBlockTypeIdAt(x, y, z);
 					if (block_type == ender_portal_id_
 							|| block_type == ender_portal_frame_id_) {
-						// info(String.format("End portal found at %d,%d", x,
-						// z));
+						SabrePlugin.getPlugin().log(Level.INFO, String.format("End portal found at %d,%d", x, z));
 						return;
 					}
 				}
@@ -886,7 +942,7 @@ public class SabreTweaks implements Listener {
 				}
 			}
 		}
-	}
+	} */
 
 	// ================================================
 	// Prevent inventory access while in a vehicle, unless it's the Player's
@@ -1596,4 +1652,46 @@ public class SabreTweaks implements Listener {
 			}
 		}
 	}
+	
+	
+    /**
+     * Checks for boats that collide with cacti. This is needed as CraftBukkit does not
+     * appear to pass cactus damage source/events to VehicleDestroyEvent.
+     * @param e The event args
+     */
+	@EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
+    public void onVehicleCollide(VehicleBlockCollisionEvent e)
+    {
+        if (e.getVehicle().getType() == EntityType.BOAT && e.getBlock().getType() == Material.CACTUS) {
+            e.getVehicle().setMetadata(CACTUS_HIT_TAG, CACTUS_HIT);
+        }
+    }
+	
+	
+    /**
+     * Prevents boats from breaking easily
+     * @param e The event args
+     */
+    @EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
+    public void onVehicleDestroyed(VehicleDestroyEvent e)
+    {
+        if ( e.getVehicle().getType() != EntityType.BOAT || e.isCancelled() )
+            return;
+
+        // Do not cancel fire damage
+        if (e.getVehicle().getFireTicks() != -1)
+            return;
+
+        // If damage is from cactus, don't stop it. This allows boat collection systems
+        // to work as intended. Relies on metadata set in onVehicleCollide
+        if ( e.getVehicle().hasMetadata(CACTUS_HIT_TAG) ) {
+            return;
+        }
+
+        // If attacked by a player or entity, don't stop it
+        if (e.getAttacker() != null)
+            return;
+
+        e.setCancelled(true);
+    }
 }

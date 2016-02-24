@@ -1,6 +1,7 @@
 package com.gordonfreemanq.sabre.data;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Date;
 import java.util.HashSet;
@@ -38,6 +39,8 @@ import com.mongodb.DBCollection;
 import com.mongodb.DBCursor;
 import com.mongodb.DBObject;
 import com.mongodb.MongoClient;
+import com.mongodb.MongoCredential;
+import com.mongodb.ServerAddress;
 import com.mongodb.WriteConcern;
 
 public class MongoConnector implements IDataAccess {
@@ -83,7 +86,12 @@ public class MongoConnector implements IDataAccess {
 	 */
 	@Override
 	public void connect() throws Exception {
-		mongoClient = new MongoClient(config.DbAddress, config.DbPort);
+		if (config.DbUser.isEmpty()) {
+			mongoClient = new MongoClient(new ServerAddress(config.DbAddress, config.DbPort));
+		} else {
+			MongoCredential credential = MongoCredential.createCredential(config.DbUser, config.DbName, config.DbPassword.toCharArray());
+			mongoClient = new MongoClient(new ServerAddress(config.DbAddress, config.DbPort), Arrays.asList(credential));
+		}
 
 		// All writes return immediately
 		mongoClient.setWriteConcern(WriteConcern.UNACKNOWLEDGED);

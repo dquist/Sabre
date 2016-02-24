@@ -231,7 +231,7 @@ public class FarmFactory extends BaseFactory {
 		
 		if (force || diffMin >= this.surveyPeriodMin) {
 			if (survey()) {
-				calculateProximityFactor();
+				//calculateProximityFactor();
 				lastSurvey = now;
 				saveSettings();
 			}

@@ -45,5 +45,6 @@ public class CmdChat extends SabreCommand {
 		
 		me.setChatChannel(g);
 		msg(Lang.chatMovedGroup, groupName);
+		msg(Lang.chatMovedGroupHelp, groupName);
 	}
 }
