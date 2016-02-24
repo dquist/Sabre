@@ -106,6 +106,8 @@ public class Lang
 	public static String adminYouBypassed = "<h>You bypassed this block on <c>%s<h>.";
 	public static String adminSetSpawn = "<g>You set the spawn location.";
 	public static String adminInvalidItem = "<c>That item does not exist.";
+	public static String adminVanished = "<teal>You have vanished. Poof.";
+	public static String adminUnvanished = "<teal>You have become visible.";
 	
 	
 	

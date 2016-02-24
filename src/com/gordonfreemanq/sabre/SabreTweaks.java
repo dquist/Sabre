@@ -72,6 +72,7 @@ import org.bukkit.event.player.PlayerItemConsumeEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
+import org.bukkit.event.vehicle.VehicleBlockCollisionEvent;
 import org.bukkit.event.vehicle.VehicleDestroyEvent;
 import org.bukkit.event.vehicle.VehicleExitEvent;
 import org.bukkit.event.vehicle.VehicleMoveEvent;
@@ -84,6 +85,8 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.InventoryHolder;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.ShapelessRecipe;
+import org.bukkit.metadata.FixedMetadataValue;
+import org.bukkit.metadata.MetadataValue;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.util.Vector;
@@ -104,6 +107,9 @@ public class SabreTweaks implements Listener {
 	private Map<String, PearlTeleportInfo> pearlTeleportInfo = new TreeMap<String, PearlTeleportInfo>();
 	private final static int PEARL_THROTTLE_WINDOW = 10000;  // 10 sec
 	private final static int PEARL_NOTIFICATION_WINDOW = 1000;  // 1 sec
+	
+    private static final String CACTUS_HIT_TAG = "hitCactus";
+    private static MetadataValue CACTUS_HIT;
 
 	public SabreTweaks(SabreConfig config) {
 		this.config = config;
@@ -113,6 +119,8 @@ public class SabreTweaks implements Listener {
 		
 		// Combat Tag API
 		combatTag = SabrePlugin.getPlugin().getCombatTag();
+		
+	    CACTUS_HIT = new FixedMetadataValue(SabrePlugin.getPlugin(), true);
 	}
 
 
@@ -1644,4 +1652,46 @@ public class SabreTweaks implements Listener {
 			}
 		}
 	}
+	
+	
+    /**
+     * Checks for boats that collide with cacti. This is needed as CraftBukkit does not
+     * appear to pass cactus damage source/events to VehicleDestroyEvent.
+     * @param e The event args
+     */
+	@EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
+    public void onVehicleCollide(VehicleBlockCollisionEvent e)
+    {
+        if (e.getVehicle().getType() == EntityType.BOAT && e.getBlock().getType() == Material.CACTUS) {
+            e.getVehicle().setMetadata(CACTUS_HIT_TAG, CACTUS_HIT);
+        }
+    }
+	
+	
+    /**
+     * Prevents boats from breaking easily
+     * @param e The event args
+     */
+    @EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
+    public void onVehicleDestroyed(VehicleDestroyEvent e)
+    {
+        if ( e.getVehicle().getType() != EntityType.BOAT || e.isCancelled() )
+            return;
+
+        // Do not cancel fire damage
+        if (e.getVehicle().getFireTicks() != -1)
+            return;
+
+        // If damage is from cactus, don't stop it. This allows boat collection systems
+        // to work as intended. Relies on metadata set in onVehicleCollide
+        if ( e.getVehicle().hasMetadata(CACTUS_HIT_TAG) ) {
+            return;
+        }
+
+        // If attacked by a player or entity, don't stop it
+        if (e.getAttacker() != null)
+            return;
+
+        e.setCancelled(true);
+    }
 }

@@ -1,9 +1,9 @@
 name: Sabre
 main: com.gordonfreemanq.sabre.SabrePlugin
-version: 0.1.0
+version: 0.1.1
 description: Sabre plugin
 author: GFQ
-depend: [PermissionsEx, CombatTagPlus, ProtocolLib, PacketWrapper]
+depend: [PermissionsEx, CombatTagPlus, ProtocolLib, PacketWrapper, VanishNoPacket]
 commands:
   faction:
     description: The Faction base command
@@ -58,5 +58,6 @@ commands:
   tphere:
   factory:
   say:
-   
+  vanish:
+  fly:
    

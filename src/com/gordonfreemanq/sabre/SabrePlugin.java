@@ -31,11 +31,12 @@ import com.gordonfreemanq.sabre.snitch.SnitchListener;
 import com.gordonfreemanq.sabre.snitch.SnitchLogger;
 import com.gordonfreemanq.sabre.util.CombatInterface;
 import com.gordonfreemanq.sabre.util.CombatTagPlusManager;
+import com.gordonfreemanq.sabre.util.VanishApi;
 
 
 public class SabrePlugin extends AbstractSabrePlugin
 {
-	public final static String version = "0.1.0";
+	public final static String version = "0.1.1";
 	
 	private static SabrePlugin instance;
 
@@ -63,6 +64,7 @@ public class SabrePlugin extends AbstractSabrePlugin
 	private FactoryWorker factoryWorker;
 	private PearlWorker pearlWorker;
 	private CombatInterface combatTag;
+	private VanishApi vanishApi;
 	
 	/**
 	 * Gets the player manager
@@ -86,6 +88,14 @@ public class SabrePlugin extends AbstractSabrePlugin
 	 */
 	public CombatInterface getCombatTag() {
 		return this.combatTag;
+	}
+	
+	/**
+	 * Gets the vanish API
+	 * @return The vanish API
+	 */
+	public VanishApi getVanishApi() {
+		return this.vanishApi;
 	}
 	
 	/**
@@ -263,6 +273,7 @@ public class SabrePlugin extends AbstractSabrePlugin
 		postEnable();
 		this.loadSuccessful = true;
 		this.playerListener.setPluginLoaded(true);
+		this.vanishApi = new VanishApi();
 	}
 
 

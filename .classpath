@@ -17,5 +17,6 @@
 	<classpathentry kind="lib" path="lib/CombatTagPlus.jar"/>
 	<classpathentry kind="lib" path="lib/PacketWrapper.jar"/>
 	<classpathentry kind="lib" path="lib/ProtocolLib.jar"/>
+	<classpathentry kind="lib" path="lib/VanishNoPacket.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
