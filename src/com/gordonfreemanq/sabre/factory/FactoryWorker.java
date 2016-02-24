@@ -22,12 +22,15 @@ public class FactoryWorker implements Runnable {
 		return instance;
 	}
 	
+	private Set<BaseFactory> pendingRemove;
+	
 	/**
 	 * Creates a new FactoryWorker instance
 	 */
 	public FactoryWorker() {
 		runningFactories = new HashSet<BaseFactory>();
 		enabled = false;
+		this.pendingRemove = new HashSet<BaseFactory>();
 		
 		instance = this;
 	}
@@ -63,7 +66,6 @@ public class FactoryWorker implements Runnable {
 	 * @param f The factory to add
 	 */
 	public void addRunning(BaseFactory f) {
-		Set<BaseFactory> remove = new HashSet<BaseFactory>();
 		
 		// This prevents the same factory from being loaded twice.
 		// This is a possibility because factories in unloaded chunks can
@@ -71,10 +73,10 @@ public class FactoryWorker implements Runnable {
 		// will be replaced
 		for (BaseFactory fac : this.runningFactories) {
 			if (fac.getLocation().equals(f.getLocation())) {
-				remove.add(fac);
+				pendingRemove.add(fac);
 			}
 		}
-		runningFactories.removeAll(remove);
+		runningFactories.removeAll(pendingRemove);
 		
 		runningFactories.add(f);
 	}
@@ -85,7 +87,7 @@ public class FactoryWorker implements Runnable {
 	 * @param f The factory to remove
 	 */
 	public void removeRunning(BaseFactory f) {
-		runningFactories.remove(f);
+		pendingRemove.add(f);
 	}
 	
 	/**
