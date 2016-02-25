@@ -63,6 +63,7 @@ public class FarmController extends AbstractController {
 			lore.add(parse("    <a>Fertility: <n>%s%%", farm.getFertilityFactorPercent().toString()));
 			lore.add(parse("    <a>Layout: <n>%s%%", farm.getLayoutFactorPercent().toString()));
 			lore.add(parse("    <a>Output rate: <lime>%d/%d", farm.getRealOutput(), farm.getNominalOutput()));
+			lore.add(parse("    <a>Ready to Harvest: <n>%d", farm.getFarmedCrops().get(fr.getCrop())));
 		}
 		
 		lore.add(parse(""));

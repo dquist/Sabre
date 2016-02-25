@@ -92,6 +92,7 @@ public class Lang
 	public static String blockChanged = "<i>Changed to <n>%s <i>with <n>%s<i>.";
 	public static String blockCantPlace = "<i>You cannot place this block.";
 	public static String blockMaterialHasLore = "<b>You cannot reinforce with lore items.";
+	public static String blockNoAccess = "<i>You don't have access to do that.";
 	
 	
 	// ADMIN
@@ -188,6 +189,7 @@ public class Lang
 	public static final String factoryError = "<b>Recipe <a>%s <b>had an internal error.";
 	public static final String factoryRecipeOutOfFuel = "<b>Recipe <a>%s <b>ran out of fuel!";
 	public static final String factoryCantDoWhileRunning = "<b>You can't do that while the factory is running.";
+	public static final String factoryUpdateController = "<i>Updated controller.";
 	
 	
 	// MISC

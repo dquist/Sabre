@@ -57,6 +57,8 @@ import com.gordonfreemanq.sabre.SabrePlayer;
 import com.gordonfreemanq.sabre.SabrePlugin;
 import com.gordonfreemanq.sabre.SabreTweaks;
 import com.gordonfreemanq.sabre.core.ISabreLog;
+import com.gordonfreemanq.sabre.factory.BaseFactory;
+import com.gordonfreemanq.sabre.factory.FactoryController;
 import com.gordonfreemanq.sabre.groups.SabreGroup;
 import com.gordonfreemanq.sabre.groups.SabreMember;
 import com.gordonfreemanq.sabre.util.SabreUtil;
@@ -382,7 +384,22 @@ public class BlockListener implements Listener {
 						sb.onStickInteract(e, p);
 					}
 				}
+			} else if (a.equals(Action.RIGHT_CLICK_BLOCK) && p.getPlayer().getItemInHand().getType().equals(Material.STICK)) {
 				
+				// If the player is holding a controller stick, attempt to update the info
+				Location l = FactoryController.parseLocation(p, false);
+				
+				if (l != null) {
+					BaseFactory factory = (BaseFactory)bm.getFactories().get(l);
+					if (factory != null) {
+						if (factory.canPlayerAccess(p)) {
+							factory.createController(p);
+							p.msg(Lang.factoryUpdateController);
+						} else {
+							p.msg(Lang.blockNoAccess);
+						}
+					}
+				}
 			}
 
 		} catch (Exception ex) {
