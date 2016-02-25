@@ -243,6 +243,7 @@ public class Snitch extends SpecialBlock implements QTBox, Comparable {
 			return;
 		}
 		ItemStack is = (new SnitchController(this)).toItemStack();
+		is.setAmount(sp.getPlayer().getItemInHand().getAmount());
 		sp.getPlayer().getInventory().setItemInHand(is);
 		sp.msg("<i>Created a snitch controller.");
 	}

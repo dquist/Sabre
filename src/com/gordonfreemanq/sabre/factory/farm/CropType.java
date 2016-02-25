@@ -133,13 +133,13 @@ public enum CropType {
 		case PRAIRIE:
 			return 1.0;
 		case TEMPERATE:
-			return 0.6;
+			return 0.8;
 		case JUNGLE:
-			return 0.4;
+			return 0.7;
 		case COLD:
 			return 0.4;
 		case ARID:
-			return 0.6;
+			return 0.7;
 		default:
 			return 0;
 		}
@@ -148,15 +148,15 @@ public enum CropType {
 	private double getPotatoBiomeFactor(BiomeClimate climate) {
 		switch (climate) {
 		case PRAIRIE:
-			return 0.5;
+			return 0.8;
 		case TEMPERATE:
 			return 1.0;
 		case JUNGLE:
-			return 0.3;
+			return 0.4;
 		case COLD:
 			return 0.6;
 		case ARID:
-			return 0.4;
+			return 0.7;
 		default:
 			return 0;
 		}

@@ -140,7 +140,7 @@ public class FactoryListener implements Listener {
 		
 		if (factory.getFuelLocation() == null) {
 			factory.setFuelLocation(b.getLocation());
-			p.msg("<g>You set the factory fuel soruce.");
+			p.msg("<g>You set the factory fuel source.");
 		}
 		
 		ItemStack is = (new FactoryController(factory)).toItemStack();
