@@ -33,7 +33,7 @@ upgrades:
       Charcoal:
         material: COAL
         durability: 1
-        amount: 768
+        amount: 256
     outputs:
       Fuel Refinery 1:
         custom_item: Fuel Refinery 1
@@ -43,16 +43,16 @@ upgrades:
     inputs:
       Diamond Ore:
         material: DIAMOND_ORE
-        amount: 32
+        amount: 16
       Iron Ore:
         material: IRON_ORE
-        amount: 128
+        amount: 48
       Gold Ore:
         material: GOLD_ORE
-        amount: 16
+        amount: 32
       Coal Ore:
         material: COAL_ORE
-        amount: 256
+        amount: 64
     outputs:
       Ore Smelter 1:
         custom_item: Ore Smelter 1
@@ -136,9 +136,9 @@ upgrades:
   Iron Smithy 1 Upgrade:
     fuel_cost: 10
     inputs:
-      Iron Block:
-        material: IRON_BLOCK
-        amount: 512
+      Iron Ore:
+        material: IRON_ORE
+        amount: 64
       Aspect of Masonry:
         custom_item: Aspect of Masonry
         amount: 1
@@ -152,9 +152,9 @@ upgrades:
   Gold Smithy 1 Upgrade:
     fuel_cost: 10
     inputs:
-      Gold Block:
-        material: GOLD_BLOCK
-        amount: 128
+      Gold Ore:
+        material: GOLD_ORE
+        amount: 64
       Aspect of Masonry:
         custom_item: Aspect of Masonry
         amount: 4
@@ -168,9 +168,9 @@ upgrades:
   Diamond Smithy 1 Upgrade:
     fuel_cost: 10
     inputs:
-      Diamond Block:
-        material: DIAMOND_BLOCK
-        amount: 64
+      Diamond Ore:
+        material: DIAMOND_ORE
+        amount: 128
       Aspect of Masonry:
         custom_item: Aspect of Masonry
         amount: 1
@@ -186,7 +186,7 @@ upgrades:
     inputs:
       Leather:
         material: LEATHER
-        amount: 256
+        amount: 64
       Aspect of Masonry:
         custom_item: Aspect of Masonry
         amount: 1
@@ -200,9 +200,9 @@ upgrades:
   Iron Armory 1 Upgrade:
     fuel_cost: 10
     inputs:
-      Iron:
-        material: IRON_BLOCK
-        amount: 100
+      Iron Ingot:
+        material: IRON_INGOT
+        amount: 256
       Aspect of Masonry:
         custom_item: Aspect of Masonry
         amount: 1
@@ -216,9 +216,9 @@ upgrades:
   Gold Armory 1 Upgrade:
     fuel_cost: 10
     inputs:
-      Gold:
-        material: GOLD_BLOCK
-        amount: 60
+      Gold Ingot:
+        material: GOLD_INGOT
+        amount: 128
       Aspect of Masonry:
         custom_item: Aspect of Masonry
         amount: 1
@@ -232,9 +232,9 @@ upgrades:
   Diamond Armory 1 Upgrade:
     fuel_cost: 10
     inputs:
-      Diamond Block:
-        material: DIAMOND_BLOCK
-        amount: 40
+      Diamond:
+        material: DIAMOND
+        amount: 256
       Aspect of Masonry:
         custom_item: Aspect of Masonry
         amount: 1

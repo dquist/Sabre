@@ -57,7 +57,7 @@ upgrades:
     inputs:
       Iron:
         material: IRON_BLOCK
-        amount: 2048
+        amount: 640
     outputs:
       Iron Armory 5:
         custom_item: Iron Armory 5

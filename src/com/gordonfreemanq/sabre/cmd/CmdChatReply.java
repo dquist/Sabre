@@ -41,7 +41,6 @@ public class CmdChatReply extends SabreCommand {
 			sb.append(" ");
 		}
 		
-		me.setChatChannel(p);
 		p.chat(me, sb.toString().trim());
 	}
 }

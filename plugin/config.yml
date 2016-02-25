@@ -100,10 +100,6 @@ disabled_recipes:
   Andesite:
     material: STONE
     durability: 6
-  Enchanting Table:
-    material: ENCHANTMENT_TABLE
-  Anvil:
-    material: ANVIL
   Redstone Torch:
     material: REDSTONE_TORCH_ON
   Repeater:

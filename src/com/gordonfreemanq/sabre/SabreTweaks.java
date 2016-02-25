@@ -1207,6 +1207,7 @@ public class SabreTweaks implements Listener {
 	 */
 	public static boolean isOrePick(Material m) {
 		switch (m) {
+		case STONE_PICKAXE:
 		case IRON_PICKAXE:
 		case GOLD_PICKAXE:
 		case DIAMOND_PICKAXE:
