@@ -517,12 +517,12 @@ public class BlockListener implements Listener {
 		// If you're pulling the reinforcement from the same slot, you need to manually take away 2
 		if (inv.getItemInHand().equals(slotItem) && blockPlace) {
 			amount = 2;
-		}
 
-		// Make sure there are enough materials, otherwise cancel
-		if (amount > slotItem.getAmount()) {
-			p.msg(Lang.blockMaterialDepleted, rm.material.toString());
-			return null;
+			// Make sure there are enough materials, otherwise cancel
+			if (amount > slotItem.getAmount()) {
+				p.msg(Lang.blockMaterialDepleted, rm.material.toString());
+				return null;
+			}
 		}
 
 		// Update the inventory
