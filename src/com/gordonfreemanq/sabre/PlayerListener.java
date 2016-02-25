@@ -229,7 +229,7 @@ public class PlayerListener implements Listener {
 		if (l != null) {
 			if (l.getBlock().getType() == Material.BED_BLOCK) {
 				SabreBlock b = BlockManager.getInstance().getBlockAt(SabreUtil.getRealBlock(l.getBlock()).getLocation());
-				if (b.canPlayerAccess(p) || b == null) {
+				if (b != null && b.canPlayerAccess(p)) {
 					useBed = true;
 				}
 			}

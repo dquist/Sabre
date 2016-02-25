@@ -22,7 +22,7 @@ upgrades:
     inputs:
       Cobblestone:
         material: COBBLESTONE
-        amount: 3072
+        amount: 1536
     outputs:
       Stone Smelter 1:
         custom_item: Stone Smelter 1
@@ -41,15 +41,9 @@ upgrades:
   Ore Smelter 1 Upgrade:
     fuel_cost: 10
     inputs:
-      Diamond Ore:
-        material: DIAMOND_ORE
-        amount: 16
       Iron Ore:
         material: IRON_ORE
         amount: 48
-      Gold Ore:
-        material: GOLD_ORE
-        amount: 32
       Coal Ore:
         material: COAL_ORE
         amount: 64
@@ -136,8 +130,8 @@ upgrades:
   Iron Smithy 1 Upgrade:
     fuel_cost: 10
     inputs:
-      Iron Ore:
-        material: IRON_ORE
+      Iron Ingot:
+        material: IRON_INGOT
         amount: 64
       Aspect of Masonry:
         custom_item: Aspect of Masonry
@@ -152,8 +146,8 @@ upgrades:
   Gold Smithy 1 Upgrade:
     fuel_cost: 10
     inputs:
-      Gold Ore:
-        material: GOLD_ORE
+      Gold Ingot:
+        material: GOLD_INGOT
         amount: 64
       Aspect of Masonry:
         custom_item: Aspect of Masonry
@@ -168,8 +162,8 @@ upgrades:
   Diamond Smithy 1 Upgrade:
     fuel_cost: 10
     inputs:
-      Diamond Ore:
-        material: DIAMOND_ORE
+      Diamond Ingot:
+        material: DIAMOND
         amount: 128
       Aspect of Masonry:
         custom_item: Aspect of Masonry
