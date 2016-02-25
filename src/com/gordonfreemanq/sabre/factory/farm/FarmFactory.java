@@ -231,7 +231,7 @@ public class FarmFactory extends BaseFactory {
 		
 		if (force || diffMin >= this.surveyPeriodMin) {
 			if (survey()) {
-				//calculateProximityFactor();
+				calculateProximityFactor();
 				lastSurvey = now;
 				saveSettings();
 			}
@@ -262,7 +262,12 @@ public class FarmFactory extends BaseFactory {
 	 */
 	private void calculateProximityFactor() {
 		double factor = 1.0;
+		this.proximityFactor = factor;
+		return;
 		
+		// Temp disable
+		
+		/*
 		for (BaseFactory f : FactoryWorker.getInstance().getRunningFactories()) {
 			if (!(f instanceof FarmFactory)) {
 				continue;
@@ -286,7 +291,7 @@ public class FarmFactory extends BaseFactory {
 			}
 		}
 		
-		this.proximityFactor = factor;
+		this.proximityFactor = factor; */
 	}
 	
 	
