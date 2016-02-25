@@ -502,6 +502,12 @@ public class BlockListener implements Listener {
 			amount = 2;
 		}
 
+		// Make sure there are enough materials, otherwise cancel
+		if (amount > slotItem.getAmount()) {
+			p.msg(Lang.blockMaterialDepleted, rm.material.toString());
+			return null;
+		}
+
 		// Update the inventory
 		slotItem.setAmount(slotItem.getAmount() - amount);
 		inv.setItem(slot, slotItem);
