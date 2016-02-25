@@ -1,5 +1,7 @@
 package com.gordonfreemanq.sabre.chat;
 
+import java.util.logging.Level;
+
 import com.gordonfreemanq.sabre.Lang;
 import com.gordonfreemanq.sabre.PlayerManager;
 import com.gordonfreemanq.sabre.SabreConfig;
@@ -51,6 +53,7 @@ public class GlobalChat implements IChatChannel {
 		String senderName = sender.getName();
 		boolean found = false;
 		String formatted = SabrePlugin.getPlugin().txt.parse("<w>%s: %s", senderName, msg);
+		SabrePlugin.getPlugin().log(Level.INFO, formatted);
 		
 		for (SabrePlayer p : pm.getOnlinePlayers()) {
 			if (p.getDistanceFrom(sender) <= globalChatRadius && p.getPlayer().getWorld().equals(sender.getPlayer().getWorld())) {
