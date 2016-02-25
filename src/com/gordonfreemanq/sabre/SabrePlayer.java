@@ -6,6 +6,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
+import java.util.logging.Level;
 
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
@@ -321,6 +322,7 @@ public class SabrePlayer implements INamed, IChatChannel {
 			this.msg("<lp>From %s: %s", sender.getName(), msg);
 			this.setLastMessaged(sender);
 			sender.setLastMessaged(this);
+			SabrePlugin.getPlugin().log(Level.INFO, "%s -> %s: %s", sender.getName(), this.getName(), msg);
 		} else {
 			sender.msg(Lang.chatPlayerNowOffline, this.getName());
 			sender.msg(Lang.chatMovedGlobal, this.getName());
@@ -336,6 +338,7 @@ public class SabrePlayer implements INamed, IChatChannel {
 			this.msg("<lp><it>%s %s", sender.getName(), msg);
 			this.setLastMessaged(sender);
 			sender.setLastMessaged(this);
+			SabrePlugin.getPlugin().log(Level.INFO, "%s -> %s: %s", sender.getName(), this.getName(), msg);
 		} else {
 			sender.msg(Lang.chatPlayerNowOffline, this.getName());
 			sender.msg(Lang.chatMovedGlobal, this.getName());

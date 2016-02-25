@@ -3,6 +3,7 @@ package com.gordonfreemanq.sabre.groups;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.UUID;
+import java.util.logging.Level;
 
 import com.gordonfreemanq.sabre.SabrePlayer;
 import com.gordonfreemanq.sabre.SabrePlugin;
@@ -288,11 +289,15 @@ public class SabreGroup implements INamed, IChatChannel {
 
 	@Override
 	public void chat(SabrePlayer sender, String msg) {
-		this.msgAll("<c>[%s] <reset><gold>%s:<w> %s", this.getName(), sender.getName(), msg);
+		String formatStr = SabrePlugin.getPlugin().txt.parse("<c>[%s] <reset><gold>%s:<w> %s", this.getName(), sender.getName(), msg);
+		this.msgAll(formatStr);
+		SabrePlugin.getPlugin().log(Level.INFO, formatStr);
 	}
 	
 	@Override
 	public void chatMe(SabrePlayer sender, String msg) {
-		this.msgAll("<c>[%s] <gold><it>%s %s", this.getName(), sender.getName(), msg);
+		String formatStr = SabrePlugin.getPlugin().txt.parse("<c>[%s] <gold><it>%s %s", this.getName(), sender.getName(), msg);
+		this.msgAll(formatStr);
+		SabrePlugin.getPlugin().log(Level.INFO, formatStr);
 	}
 }
