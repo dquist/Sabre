@@ -222,15 +222,16 @@ public class BlockListener implements Listener {
 					if (m != null) {
 						if (m.canBuild() && p.getBuildState().getBypass()) {
 							allowBreak = true;
-						} else if (p.getAdminBypass()) {
-							allowBreak = true;
-							String groupName = r.getGroup().getName();
-							p.msg(Lang.adminYouBypassed, groupName);
 						}
 
 						if (allowBreak) {
 							refund = true;
 						}
+					} else if (p.getAdminBypass()) {
+						allowBreak = true;
+						refund = true;
+						String groupName = r.getGroup().getName();
+						p.msg(Lang.adminYouBypassed, groupName);
 					}
 
 					if (!allowBreak) {
@@ -272,6 +273,9 @@ public class BlockListener implements Listener {
 								SabreTweaks.dropItemAtLocation(l, is);
 							}
 						}
+					} else {
+						// Allow the block to break naturally
+						e.setCancelled(false);
 					}
 
 					if (refund) {

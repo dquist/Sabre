@@ -87,6 +87,7 @@ public class BaseFactory extends SpecialBlock {
 		fuels.add(new FactoryFuel(CustomItems.getInstance().getByName("Plasma"), 64));
 		
 		setFurnaceState(false);
+		energyTimer = 0;
 	}
 	
 	
@@ -467,7 +468,6 @@ public class BaseFactory extends SpecialBlock {
 		running = true;
 		onPowerOn();
 		fuelCounter = 0;
-		energyTimer = 0;
 		FactoryWorker.getInstance().addRunning(this);
 		setActivationLever(true);
 		setFurnaceState(true);
@@ -481,7 +481,6 @@ public class BaseFactory extends SpecialBlock {
 	protected void powerOff() {
 		running = false;
 		fuelCounter = 0;
-		energyTimer = 0;
 		setActivationLever(false);
 		FactoryWorker.getInstance().removeRunning(this);
 		setFurnaceState(false);
