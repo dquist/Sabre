@@ -3,6 +3,7 @@ package com.gordonfreemanq.sabre.factory.farm;
 import java.util.Random;
 
 import org.bukkit.Chunk;
+import org.bukkit.CropState;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
@@ -317,16 +318,13 @@ public class FarmSurveyor {
 	 */
 	@SuppressWarnings("deprecation")
 	private boolean isCropMature(Block b) {
-		BlockState state = b.getState();
-		MaterialData data = state.getData();
+		Material m = b.getType();
 		
-		if (data instanceof Crops) {
-			//Crops crop = (Crops)data;
+		if (m == Material.CROPS || m == Material.POTATO || m == Material.CARROT) {
 			if (b.getData() == 7) {
 				return true;
 			}
 		}
-		
 		
 		return false;
 	}

@@ -153,5 +153,5 @@ farm:
   survey_period: 10
   production_ticks: 300
   proximity: 500
-  chunk_radius: 2
+  chunk_radius: 1
   survey_sample_size: 20
