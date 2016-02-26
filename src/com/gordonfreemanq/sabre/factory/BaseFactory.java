@@ -348,7 +348,7 @@ public class BaseFactory extends SpecialBlock {
 	 * Creates the factory controller
 	 * @param sp The player
 	 */
-	protected void createController(SabrePlayer sp) {
+	public void createController(SabrePlayer sp) {
 		int amount = sp.getPlayer().getItemInHand().getAmount();
 		ItemStack is = (new FactoryController(this)).toItemStack();
 		is.setAmount(amount);

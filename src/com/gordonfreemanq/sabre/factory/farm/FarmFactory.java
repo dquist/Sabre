@@ -137,7 +137,7 @@ public class FarmFactory extends BaseFactory {
 	 * @param sp The player
 	 */
 	@Override
-	protected void createController(SabrePlayer sp) {
+	public void createController(SabrePlayer sp) {
 		ItemStack is = (new FarmController(this)).toItemStack();
 		sp.getPlayer().getInventory().setItemInHand(is);
 	}
