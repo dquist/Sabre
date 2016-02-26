@@ -28,6 +28,7 @@ public class CmdTeleport extends SabreCommand {
 
 		this.permission = Permission.ADMIN.node;
 		this.visibility = CommandVisibility.SECRET;
+		this.senderMustBePlayer = true;
 	}
 
 	@Override

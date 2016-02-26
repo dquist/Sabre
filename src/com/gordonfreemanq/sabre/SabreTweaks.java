@@ -149,7 +149,7 @@ public class SabreTweaks implements Listener {
 		Material m = b.getType();
 		Material under = b.getRelative(BlockFace.DOWN).getType();
 		
-		if (under == Material.AIR || under == Material.WATER || under == Material.LAVA) {
+		if (under == Material.AIR || under == Material.STATIONARY_WATER ||under == Material.WATER || under == Material.LAVA|| under == Material.STATIONARY_LAVA) {
 			if (m.equals(Material.COBBLESTONE) || m.equals(Material.DIRT)) {
 				b.setType(Material.AIR);
 				e.getBlock().getWorld().spawnFallingBlock(b.getLocation(), m, b.getData());

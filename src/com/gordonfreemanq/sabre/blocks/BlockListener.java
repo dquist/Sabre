@@ -468,7 +468,11 @@ public class BlockListener implements Listener {
 		ItemStack slotItem = null;
 		int slot = 0;
 
-
+		// Dupe catch
+		if (inv.getItemInHand().getAmount() <= 0) {
+			inv.setItemInHand(null);
+		}
+		
 		for (slot = 0; slot < invSize; slot++) {
 			slotItem = inv.getItem(slot);
 			if (slotItem == null) {
@@ -520,7 +524,9 @@ public class BlockListener implements Listener {
 
 			// Make sure there are enough materials, otherwise cancel
 			if (amount > slotItem.getAmount()) {
+				state.setMode(BuildMode.OFF);
 				p.msg(Lang.blockMaterialDepleted, rm.material.toString());
+				p.msg(Lang.blockBuildMode, BuildMode.OFF.toString());
 				return null;
 			}
 		}

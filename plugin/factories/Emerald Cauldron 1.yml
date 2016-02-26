@@ -1,6 +1,19 @@
 name: Emerald Cauldron 1
 production_speed: 1
 recipes:
+  Limited Wheat Recipe:
+    fuel_cost: 20
+    inputs:
+      Bushel of Wheat:
+        custom_item: Bushel of Wheat
+        amount: 512
+      Glass:
+        material: GLASS
+        amount: 64
+    outputs:
+      Emerald:
+        material: EMERALD
+        amount: 5
   Emerald Recipe - Wheat:
     fuel_cost: 20
     inputs:
