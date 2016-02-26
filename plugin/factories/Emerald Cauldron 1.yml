@@ -13,7 +13,33 @@ recipes:
     outputs:
       Emerald:
         material: EMERALD
-        amount: 5
+        amount: 6
+  Limited Potato Recipe:
+    fuel_cost: 20
+    inputs:
+      Bushel of Wheat:
+        custom_item: Bushel of Potatoes
+        amount: 512
+      Glass:
+        material: GLASS
+        amount: 64
+    outputs:
+      Emerald:
+        material: EMERALD
+        amount: 6
+  Limited Carrot Recipe:
+    fuel_cost: 20
+    inputs:
+      Bushel of Wheat:
+        custom_item: Bushel of Carrots
+        amount: 512
+      Glass:
+        material: GLASS
+        amount: 64
+    outputs:
+      Emerald:
+        material: EMERALD
+        amount: 6
   Emerald Recipe - Wheat:
     fuel_cost: 20
     inputs:

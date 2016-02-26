@@ -47,7 +47,7 @@ upgrades:
     inputs:
       Iron:
         material: IRON_BLOCK
-        amount: 128
+        amount: 32
     outputs:
       Iron Smithy 2:
         custom_item: Iron Smithy 2

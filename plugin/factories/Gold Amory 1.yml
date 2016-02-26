@@ -57,7 +57,7 @@ upgrades:
     inputs:
       Gold:
         material: GOLD_BLOCK
-        amount: 128
+        amount: 64
     outputs:
       Gold Armory 2:
         custom_item: Gold Armory 2

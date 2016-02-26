@@ -57,7 +57,7 @@ upgrades:
     inputs:
       Diamond:
         material: DIAMOND_BLOCK
-        amount: 256
+        amount: 64
     outputs:
       Diamond Armory 2:
         custom_item: Diamond Armory 2
