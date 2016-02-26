@@ -52,8 +52,10 @@ public class FactoryWorker implements Runnable {
 			return;
 		}
 		
+		HashSet<BaseFactory> runs = new HashSet<BaseFactory>(runningFactories);
+		
 		// Update all running factories
-		for(BaseFactory f : runningFactories) {
+		for(BaseFactory f : runs) {
 			if (f.getRunning()) {
 				f.update();
 			}
