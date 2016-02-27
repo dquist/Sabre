@@ -204,12 +204,11 @@ public class BlockListener implements Listener {
 		try {
 			
 			Block b = e.getBlock();
-			Location l = b.getLocation();
 			SabrePlayer p = pm.getPlayerById(e.getPlayer().getUniqueId());
 
 			// If it can't find a record, check to see if there's a record for any
 			// attached block for a chest, door etc.
-			SabreBlock sb = bm.getBlockAt(l);
+			SabreBlock sb = bm.getBlockAt(b.getLocation());
 			if (sb == null) {
 				Block realBlock = SabreUtil.getRealBlock(e.getBlock());
 				if (b.equals(realBlock)) {
@@ -219,7 +218,7 @@ public class BlockListener implements Listener {
 			}
 			
 			// Find the record for this block location
-			sb = bm.getBlockAt(l);
+			sb = bm.getBlockAt(b.getLocation());
 			if (sb == null) {
 				return;
 			}
@@ -283,10 +282,10 @@ public class BlockListener implements Listener {
 					if (is != null) {
 						// Cancel the break event, set the block to air, and drop the new item, this way
 						// we can override the default block that drops
-						l.getBlock().setType(Material.AIR);
+						b.getLocation().getBlock().setType(Material.AIR);
 						
 						if (sb.getDropsBlock()) {
-							SabreTweaks.dropItemAtLocation(l, is);
+							SabreTweaks.dropItemAtLocation(b.getLocation(), is);
 						}
 					}
 				} else {
@@ -295,7 +294,7 @@ public class BlockListener implements Listener {
 				}
 
 				if (refund) {
-					this.refundItemToPlayer(p.getPlayer(), r.getMaterial(), l);
+					this.refundItemToPlayer(p.getPlayer(), r.getMaterial(), b.getLocation());
 				}
 			}
 		} catch (Exception ex) {
@@ -325,13 +324,23 @@ public class BlockListener implements Listener {
 			BuildState state = p.getBuildState();
 			boolean canAccess = false;
 
+			// Find the record for this block location
+			// If it can't find a record, check to see if there's a record for any
+			// attached block for a chest, door etc.
+			SabreBlock sb = bm.getBlockAt(b.getLocation());
+			if (sb == null) {
+				Block realBlock = SabreUtil.getRealBlock(b);
+				if (!b.equals(realBlock)) {
+					b = realBlock;
+				}
+				sb = bm.getBlockAt(b.getLocation());
+			}
+
 			// Ignore anything except left/right clicks
 			if (!a.equals(Action.RIGHT_CLICK_BLOCK) && !a.equals(Action.LEFT_CLICK_BLOCK)) {
 				return;
 			}
 
-			// Find the record for this block location
-			SabreBlock sb = bm.getBlockAt(b.getLocation());
 			if (sb != null) {
 
 				// Show the special block name if player interacts with a stick

@@ -262,17 +262,21 @@ public class SabreGroup implements INamed, IChatChannel {
 		owner.setRank(Rank.ADMIN);
 		member.setRank(Rank.OWNER);
 	}
+	
+	
+	public void msgAll(String str) {
+		for (SabreMember m : members) {
+			SabrePlayer p = m.getPlayer();
+			if (p.isOnline()) {
+				p.getPlayer().sendMessage(str);
+			}
+		}
+	}
 
 
 	public void msgAll(String str, Object... args) {
 		String formatStr = SabrePlugin.getPlugin().txt.parse(str, args);
-
-		for (SabreMember m : members) {
-			SabrePlayer p = m.getPlayer();
-			if (p.isOnline()) {
-				p.getPlayer().sendMessage(formatStr);
-			}
-		}
+		msgAll(formatStr);
 	}
 
 	public void msgAllBut(SabrePlayer player, String str, Object... args) {
