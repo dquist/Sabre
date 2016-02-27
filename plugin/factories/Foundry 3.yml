@@ -6,17 +6,17 @@ recipes:
     inputs:
       Iron Ingot:
         material: IRON_INGOT
-        amount: 64
+        amount: 32
       Coal:
         material: COAL
-        amount: 32
+        amount: 16
       Diamond:
         material: DIAMOND
-        amount: 16
+        amount: 2
     outputs:
       Steel Ingot:
         custom_item: Steel Ingot
-        amount: 64
+        amount: 48
   Cast Steel Door:
     fuel_cost: 40
     inputs:
@@ -42,7 +42,7 @@ recipes:
     inputs:
       Steel Ingot:
         custom_item: Steel Ingot
-        amount: 512
+        amount: 32
     outputs:
       Aspect of Casting:
         custom_item: Aspect of Casting
@@ -53,7 +53,7 @@ upgrades:
     inputs:
       Aspect of Casting:
         custom_item: Aspect of Casting
-        amount: 32
+        amount: 24
     outputs:
       Foundry 4:
         custom_item: Foundry 4

@@ -26,11 +26,11 @@ recipes:
     inputs:
       Glass:
         material: GLASS
-        amount: 128
+        amount: 64
     outputs:
       Glass Pane:
         material: THIN_GLASS
-        amount: 192
+        amount: 288
   Smelt Bottles:
     fuel_cost: 50
     inputs:
@@ -40,13 +40,13 @@ recipes:
     outputs:
       Glass Pane:
         material: GLASS_BOTTLE
-        amount: 192
+        amount: 224
   Craft Aspect of Silica:
     fuel_cost: 10
     inputs:
       Glass:
         material: GLASS
-        amount: 2048
+        amount: 512
     outputs:
       Aspect of Silica:
         custom_item: Aspect of Silica
@@ -57,7 +57,7 @@ upgrades:
     inputs:
       Aspect of Silica:
         custom_item: Aspect of Silica
-        amount: 64
+        amount: 32
     outputs:
       Glass Smelter 5:
         custom_item: Glass Smelter 5

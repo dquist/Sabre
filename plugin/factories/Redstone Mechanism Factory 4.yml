@@ -188,13 +188,13 @@ recipes:
     inputs:
       Glowstone:
         material: GLOWSTONE
-        amount: 256
+        amount: 64
       Redstone Block:
         material: REDSTONE_BLOCK
-        amount: 32
+        amount: 16
       Iron Block:
         material: IRON_BLOCK
-        amount: 8
+        amount: 4
     outputs:
       Gearbox:
         custom_item: Gearbox
@@ -205,7 +205,7 @@ upgrades:
     inputs:
       Gearbox:
         custom_item: Gearbox
-        amount: 128
+        amount: 32
     outputs:
       Redstone Mechanism Factory 4:
         custom_item: Redstone Mechanism Factory 4

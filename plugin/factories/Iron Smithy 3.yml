@@ -46,8 +46,8 @@ upgrades:
     fuel_cost: 10
     inputs:
       Iron:
-        material: IRON_BLOCK
-        amount: 128
+        material: IRON_INGOT
+        amount: 256
     outputs:
       Iron Smithy 4:
         custom_item: Iron Smithy 4

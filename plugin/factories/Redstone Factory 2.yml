@@ -74,13 +74,13 @@ recipes:
     inputs:
       Redstone Block:
         material: REDSTONE_BLOCK
-        amount: 64
+        amount: 8
       Quartz Block:
         material: QUARTZ_BLOCK
-        amount: 32
+        amount: 16
       Glass:
         material: GLASS
-        amount: 512
+        amount: 64
     outputs:
       Redstone Coil:
         amount: 1

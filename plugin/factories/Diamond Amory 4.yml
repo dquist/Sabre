@@ -56,8 +56,8 @@ upgrades:
     fuel_cost: 10
     inputs:
       Diamond:
-        material: DIAMOND_BLOCK
-        amount: 512
+        material: DIAMOND
+        amount: 640
     outputs:
       Diamond Armory 5:
         custom_item: Diamond Armory 5

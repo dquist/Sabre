@@ -6,16 +6,13 @@ recipes:
     inputs:
       Obsidian:
         material: OBSIDIAN
-        amount: 256
+        amount: 64
       Diamond:
         material: DIAMOND
-        amount: 16
+        amount: 2
       Emerald:
         material: EMERALD
-        amount: 16
-      Plasma:
-        custom_item: Plasma
-        amount: 8
+        amount: 1
     outputs:
       Cuendillar:
         custom_item: Cuendillar
@@ -45,13 +42,13 @@ recipes:
     inputs:
       End Stone:
         material: ENDER_STONE
-        amount: 2048
+        amount: 512
       Cuendillar:
         custom_item: Cuendillar
         amount: 512
       Eye of Ender:
         material: EYE_OF_ENDER
-        amount: 256
+        amount: 32
     outputs:
       Aspect of End:
         custom_item: Aspect of End

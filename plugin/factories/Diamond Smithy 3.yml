@@ -46,8 +46,8 @@ upgrades:
     fuel_cost: 10
     inputs:
       Diamond:
-        material: DIAMOND_BLOCK
-        amount: 384
+        material: DIAMOND
+        amount: 256
     outputs:
       Diamond Smithy 4:
         custom_item: Diamond Smithy 4

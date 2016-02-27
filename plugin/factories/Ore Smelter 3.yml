@@ -10,7 +10,7 @@ recipes:
     outputs:
       Diamond:
         material: DIAMOND
-        amount: 24
+        amount: 32
   Smelt Iron Ore:
     fuel_cost: 10
     inputs:
@@ -20,7 +20,7 @@ recipes:
     outputs:
       Iron Ingot:
         material: IRON_INGOT
-        amount: 96
+        amount: 128
   Smelt Gold Ore:
     fuel_cost: 10
     inputs:
@@ -30,7 +30,7 @@ recipes:
     outputs:
       Gold:
         material: GOLD_INGOT
-        amount: 48
+        amount: 64
   Smelt Coal Ore:
     fuel_cost: 10
     inputs:
@@ -40,7 +40,7 @@ recipes:
     outputs:
       Coal:
         material: COAL
-        amount: 192
+        amount: 256
   Smelt Lapis Ore:
     fuel_cost: 10
     inputs:
@@ -51,7 +51,7 @@ recipes:
       Lapis:
         material: INK_SACK
         durability: 4
-        amount: 48
+        amount: 64
   Smelt Redstone Ore:
     fuel_cost: 10
     inputs:
@@ -61,7 +61,7 @@ recipes:
     outputs:
       Redstone:
         material: REDSTONE
-        amount: 96
+        amount: 128
   Smelt Nether Quartz Ore:
     fuel_cost: 10
     inputs:
@@ -71,31 +71,31 @@ recipes:
     outputs:
       Quartz:
         material: QUARTZ
-        amount: 384
+        amount: 512
   Craft Aspect of Metallurgy:
     fuel_cost: 10
     inputs:
       Diamond Block:
         material: DIAMOND_BLOCK
-        amount: 16
+        amount: 2
       Iron Block:
         material: IRON_BLOCK
-        amount: 64
+        amount: 4
       Gold Block:
         material: GOLD_BLOCK
-        amount: 32
+        amount: 4
       Coal Block:
         material: COAL_BLOCK
-        amount: 256
+        amount: 4
       Lapis Block:
         material: LAPIS_BLOCK
-        amount: 32
+        amount: 1
       Redstone Block:
         material: REDSTONE_BLOCK
-        amount: 64
+        amount: 1
       Quartz Block:
         material: QUARTZ_BLOCK
-        amount: 128
+        amount: 8
     outputs:
       Aspect of Metallurgy:
         custom_item: Aspect of Metallurgy
@@ -106,7 +106,7 @@ upgrades:
     inputs:
       Aspect of Metallurgy:
         custom_item: Aspect of Metallurgy
-        amount: 64
+        amount: 32
     outputs:
       Ore Smelter 4:
         custom_item: Ore Smelter 4

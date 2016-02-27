@@ -72,7 +72,7 @@ public class DirectWarpDrive extends AbstractWarpDrive {
 		// Do the teleport
 		sp.msg(Lang.warping);
 		Location warpLocation = destPadLocation;
-		warpLocation.add(0, 1, 0);
+		//warpLocation.add(0, 1, 0);
 		SabreUtil.tryToTeleport(sp.getPlayer(), warpLocation);
 		
 		return true;

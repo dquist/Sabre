@@ -2,7 +2,7 @@ name: Fuel Refinery 2
 production_speed: 2
 recipes:
   Smelt Logs:
-    fuel_cost: 60
+    fuel_cost: 32
     inputs:
       Logs:
         material: LOG
@@ -35,15 +35,9 @@ upgrades:
   Fuel Refinery 2 Upgrade:
     fuel_cost: 10
     inputs:
-      Aspect of Masonry:
-        custom_item: Aspect of Masonry
-        amount: 1
-      Aspect of Framing:
-        custom_item: Aspect of Framing
-        amount: 1
       Plasma:
         custom_item: Plasma
-        amount: 128
+        amount: 64
     outputs:
       Fuel Refinery 2:
         custom_item: Fuel Refinery 2

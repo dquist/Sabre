@@ -56,8 +56,8 @@ upgrades:
     fuel_cost: 10
     inputs:
       Iron:
-        material: IRON_BLOCK
-        amount: 256
+        material: IRON_INGOT
+        amount: 512
     outputs:
       Iron Armory 4:
         custom_item: Iron Armory 4

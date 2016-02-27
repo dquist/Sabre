@@ -54,7 +54,7 @@ recipes:
       Stone:
         material: STONE
         durability: 0
-        amount: 3072
+        amount: 512
     outputs:
       Aspect of Masonry:
         custom_item: Aspect of Masonry

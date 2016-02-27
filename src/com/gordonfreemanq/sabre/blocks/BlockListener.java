@@ -141,7 +141,7 @@ public class BlockListener implements Listener {
 				if (r == null) {
 					e.setCancelled(true);
 				} else {
-
+					SabrePlugin.getPlugin().log(Level.INFO, "Created new reinforcement record at %s", e.getBlock().getLocation());
 					// Create a new block instance if it wasn't created already
 					if (b == null) {
 						b = new SabreBlock(e.getBlock().getLocation());
@@ -202,85 +202,100 @@ public class BlockListener implements Listener {
 	@EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
 	public void onBlockBreakEvent(BlockBreakEvent e) {
 		try {
-			Block b = SabreUtil.getRealBlock(e.getBlock());
+			
+			Block b = e.getBlock();
 			Location l = b.getLocation();
 			SabrePlayer p = pm.getPlayerById(e.getPlayer().getUniqueId());
 
-			// Find the record for this block location
+			// If it can't find a record, check to see if there's a record for any
+			// attached block for a chest, door etc.
 			SabreBlock sb = bm.getBlockAt(l);
-			if (sb != null) {
+			if (sb == null) {
+				Block realBlock = SabreUtil.getRealBlock(e.getBlock());
+				if (b.equals(realBlock)) {
+					return;
+				}
+				b = realBlock;
+			}
+			
+			// Find the record for this block location
+			sb = bm.getBlockAt(l);
+			if (sb == null) {
+				return;
+			}
 
-				// Default to cancel, we'll manually drop any blocks
-				e.setCancelled(true);
-				boolean allowBreak = false;
-				boolean refund = false;
+			// At this point we have a block record
+			
+			// Default to cancel, we'll manually drop any blocks
+			e.setCancelled(true);
+			boolean allowBreak = false;
+			boolean refund = false;
 
-				Reinforcement r = sb.getReinforcement();
-				if (r != null) {
-					SabreGroup g = r.getGroup();
-					SabreMember m = g.getMember(p);
-					if (m != null) {
-						if (m.canBuild() && p.getBuildState().getBypass()) {
-							allowBreak = true;
-						}
-
-						if (allowBreak) {
-							refund = true;
-						}
-					} else if (p.getAdminBypass()) {
+			Reinforcement r = sb.getReinforcement();
+			if (r != null) {
+				SabreGroup g = r.getGroup();
+				SabreMember m = g.getMember(p);
+				if (m != null) {
+					if (m.canBuild() && p.getBuildState().getBypass()) {
 						allowBreak = true;
+					}
+
+					if (allowBreak) {
 						refund = true;
-						String groupName = r.getGroup().getName();
-						p.msg(Lang.adminYouBypassed, groupName);
 					}
-
-					if (!allowBreak) {
-						int strength = r.getStrength();
-
-						if (strength > 1) {
-							// Decrement the durability
-							r.setStrength(strength - 1);
-							bm.updateReinforcementStrength(sb);
-						} else {
-							// Block is worn down, let it break
-							allowBreak = true;
-						}
-					}
-
-				} else {
+				} else if (p.getAdminBypass()) {
 					allowBreak = true;
+					refund = true;
+					String groupName = r.getGroup().getName();
+					p.msg(Lang.adminYouBypassed, groupName);
 				}
 
-				if (allowBreak) {
+				if (!allowBreak) {
+					int strength = r.getStrength();
 
-					// Remove the block record
-					bm.removeBlock(sb);
-					
-					// Perform any logic for when the block breaks
-					sb.onBlockBroken(p, e);
-
-					// If it's a special block, override default block drop behavior
-					if (sb.isSpecial()) {
-						// Create a new item stack for this block type
-						ItemStack is = sb.createItemStack(b.getType(), 1);
-
-						if (is != null) {
-							// Cancel the break event, set the block to air, and drop the new item, this way
-							// we can override the default block that drops
-							l.getBlock().setType(Material.AIR);
-							
-							if (sb.getDropsBlock()) {
-								SabreTweaks.dropItemAtLocation(l, is);
-							}
-						}
+					if (strength > 1) {
+						// Decrement the durability
+						r.setStrength(strength - 1);
+						bm.updateReinforcementStrength(sb);
 					} else {
-						// Allow the block to break naturally
-						e.setCancelled(false);
+						// Block is worn down, let it break
+						allowBreak = true;
 					}
+				}
 
-					if (refund) {
-						this.refundItemToPlayer(p.getPlayer(), r.getMaterial(), l);
+			} else {
+				allowBreak = true;
+			}
+
+			if (allowBreak) {
+
+				// Remove the block record
+				bm.removeBlock(sb);
+				
+				// Perform any logic for when the block breaks
+				sb.onBlockBroken(p, e);
+
+				// If it's a special block, override default block drop behavior
+				if (sb.isSpecial()) {
+					// Create a new item stack for this block type
+					ItemStack is = sb.createItemStack(b.getType(), 1);
+
+					if (is != null) {
+						// Cancel the break event, set the block to air, and drop the new item, this way
+						// we can override the default block that drops
+						l.getBlock().setType(Material.AIR);
+						
+						if (sb.getDropsBlock()) {
+							SabreTweaks.dropItemAtLocation(l, is);
+						}
 					}
+				} else {
+					// Allow the block to break naturally
+					e.setCancelled(false);
+				}
+
+				if (refund) {
+					this.refundItemToPlayer(p.getPlayer(), r.getMaterial(), l);
 				}
 			}
 		} catch (Exception ex) {

@@ -56,8 +56,8 @@ upgrades:
     fuel_cost: 10
     inputs:
       Gold:
-        material: GOLD_BLOCK
-        amount: 64
+        material: GOLD_INGOT
+        amount: 256
     outputs:
       Gold Armory 2:
         custom_item: Gold Armory 2

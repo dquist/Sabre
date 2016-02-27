@@ -88,10 +88,10 @@ upgrades:
     inputs:
       Redstone Block:
         material: REDSTONE_BLOCK
-        amount: 64
+        amount: 16
       Stone:
         material: STONE
-        amount: 576
+        amount: 256
       Quartz Block:
         material: QUARTZ_BLOCK
         amount: 32
@@ -107,16 +107,16 @@ upgrades:
     inputs:
       Redstone Block:
         material: REDSTONE_BLOCK
-        amount: 64
+        amount: 32
       Glowstone:
         material: GLOWSTONE
-        amount: 256
+        amount: 128
       Iron Block:
         material: IRON_BLOCK
-        amount: 64
+        amount: 16
       Slime Ball:
         material: SLIME_BALL
-        amount: 64
+        amount: 32
       Aspect of Masonry:
         custom_item: Aspect of Masonry
         amount: 1
@@ -152,7 +152,7 @@ upgrades:
     inputs:
       Diamond Ingot:
         material: DIAMOND
-        amount: 128
+        amount: 64
     outputs:
       Diamond Smithy 1:
         custom_item: Diamond Smithy 1
@@ -172,7 +172,7 @@ upgrades:
     inputs:
       Iron Ingot:
         material: IRON_INGOT
-        amount: 256
+        amount: 128
     outputs:
       Iron Armory 1:
         custom_item: Iron Armory 1
@@ -192,7 +192,7 @@ upgrades:
     inputs:
       Diamond:
         material: DIAMOND
-        amount: 256
+        amount: 128
     outputs:
       Diamond Armory 1:
         custom_item: Diamond Armory 1
@@ -244,12 +244,6 @@ upgrades:
       Clay:
         material: CLAY
         amount: 1280
-      Aspect of Masonry:
-        custom_item: Aspect of Masonry
-        amount: 1
-      Aspect of Framing:
-        custom_item: Aspect of Framing
-        amount: 1
     outputs:
       Kiln 1:
         custom_item: Kiln 1
@@ -260,12 +254,6 @@ upgrades:
       Glass:
         material: GLASS
         amount: 1536
-      Aspect of Masonry:
-        custom_item: Aspect of Masonry
-        amount: 1
-      Aspect of Framing:
-        custom_item: Aspect of Framing
-        amount: 1
     outputs:
       Glass Smelter 1:
         custom_item: Glass Smelter 1

@@ -47,7 +47,7 @@ upgrades:
     inputs:
       Leather:
         material: LEATHER
-        amount: 512
+        amount: 256
     outputs:
       Leather Armory 3:
         custom_item: Leather Armory 3

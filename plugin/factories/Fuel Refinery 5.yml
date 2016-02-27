@@ -2,7 +2,7 @@ name: Fuel Refinery 5
 production_speed: 5
 recipes:
   Smelt Logs:
-    fuel_cost: 60
+    fuel_cost: 32
     inputs:
       Logs:
         material: LOG

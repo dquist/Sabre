@@ -46,8 +46,8 @@ upgrades:
     fuel_cost: 10
     inputs:
       Gold:
-        material: GOLD_BLOCK
-        amount: 384
+        material: GOLD_INGOT
+        amount: 256
     outputs:
       Gold Smithy 4:
         custom_item: Gold Smithy 4

@@ -1,5 +1,7 @@
 package com.gordonfreemanq.sabre.warp;
 
+import java.util.logging.Level;
+
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
@@ -9,6 +11,7 @@ import org.bukkit.block.Block;
 import com.gordonfreemanq.sabre.Lang;
 import com.gordonfreemanq.sabre.SabreConfig;
 import com.gordonfreemanq.sabre.SabrePlayer;
+import com.gordonfreemanq.sabre.SabrePlugin;
 import com.gordonfreemanq.sabre.blocks.BlockManager;
 import com.gordonfreemanq.sabre.blocks.CustomItems;
 import com.gordonfreemanq.sabre.blocks.SabreItemStack;
@@ -86,15 +89,24 @@ public class NetherWarpDrive extends AbstractWarpDrive {
 
 		// Only create a new teleport pad when going from Overworld -> Nether
 		if (!destIsValid && sourcePadLocation.getWorld().getEnvironment() == Environment.NORMAL) {
-			destPad = new TeleportPad(destPadLocation, TeleportPad.blockName);
-			destPad.setDisplayName(TeleportPad.blockName);
-			bm.addBlock(destPad);
+			destPadLocation.getChunk().load();
 			
 			// Create the physical block
 			Block b = destPadLocation.getBlock();
 			b.setType(is.getType());
 			b.setData(is.getData().getData());
 			destIsValid = true;
+			
+			destPad = (TeleportPad)BlockManager.createBlockFromItem(is, destPadLocation);
+			bm.addBlock(destPad);
+
+			// Link the two pads together 
+			destPad.setDriveLocation(sourcePad.getDriveLocation());
+			destPad.setDestPadLocation(sourcePadLocation);
+			destPad.setNetherGenerated(true);
+			destPad.saveSettings();
+			sourcePad.setDestPadLocation(destPadLocation);
+			sourcePad.saveSettings();
 		}
 		
 		if (!destIsValid) {
@@ -110,20 +122,12 @@ public class NetherWarpDrive extends AbstractWarpDrive {
 			}
 		}
 		
-		// Link the two pads together 
-		destPad.setDriveLocation(sourcePad.getDriveLocation());
-		destPad.setDestPadLocation(sourcePadLocation);
-		destPad.setNetherGenerated(true);
-		destPad.saveSettings();
-		sourcePad.setDestPadLocation(destPadLocation);
-		sourcePad.saveSettings();
-		
 		this.clearSpace(destPadLocation);
 		
 		// Do the teleport
 		sp.msg(Lang.warping);
 		Location warpLocation = destPadLocation;
-		warpLocation.add(0, 1, 0);
+		//warpLocation.add(0, 1, 0);
 		SabreUtil.tryToTeleport(sp.getPlayer(), warpLocation);
 		
 		return true;

@@ -124,10 +124,6 @@ disabled_recipes:
     material: DROPPER
   Dispenser:
     material: DISPENSER
-  Glass Pane:
-    material: THIN_GLASS
-  Glass Pane:
-    material: GLASS_BOTTLE
 no_smelt:
   Coal Ore:
     material: COAL_ORE
