@@ -60,6 +60,7 @@ public class CmdRoot extends SabreCommand {
 		this.addSubCommand(new CmdTeleportHere());
 		this.addSubCommand(new CmdAdminFly());
 		this.addSubCommand(new CmdAdminVanish());
+		this.addSubCommand(new CmdAdminGamemode());
 		
 		this.addSubCommand(cmdSnitch);
 	}

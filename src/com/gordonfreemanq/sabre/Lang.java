@@ -109,6 +109,10 @@ public class Lang
 	public static String adminInvalidItem = "<c>That item does not exist.";
 	public static String adminVanished = "<teal>You have vanished. Poof.";
 	public static String adminUnvanished = "<teal>You have become visible.";
+	public static String adminFlyOn = "<i>You are now flying.";
+	public static String adminFlyOff = "<i>You stopped flying.";
+	public static String adminInvalidMode = "<b>Invalid game mode.";
+	public static String adminUpdatedMode = "<g>Updated game mode to <c>%s<g>.";
 	
 	
 	

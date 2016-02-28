@@ -60,4 +60,6 @@ commands:
   say:
   vanish:
   fly:
+  gamemode:
+  gm:
    
