@@ -141,7 +141,6 @@ public class BlockListener implements Listener {
 				if (r == null) {
 					e.setCancelled(true);
 				} else {
-					SabrePlugin.getPlugin().log(Level.INFO, "Created new reinforcement record at %s", e.getBlock().getLocation());
 					// Create a new block instance if it wasn't created already
 					if (b == null) {
 						b = new SabreBlock(e.getBlock().getLocation());
@@ -411,6 +410,7 @@ public class BlockListener implements Listener {
 					if (p.getPlayer().getItemInHand().getType().equals(Material.STICK)) {
 						sb.onStickInteract(e, p);
 					}
+					e.setCancelled(true);
 				}
 			} else if (a.equals(Action.RIGHT_CLICK_BLOCK) && p.getPlayer().getItemInHand().getType().equals(Material.STICK)) {
 				
@@ -429,6 +429,15 @@ public class BlockListener implements Listener {
 					}
 				}
 			}
+			
+			ItemStack is = p.getPlayer().getItemInHand();
+			if (is.hasItemMeta() && is.getItemMeta().hasLore()) {
+				SabreItemStack sis = CustomItems.getInstance().getByName(is.getItemMeta().getDisplayName());
+				if (sis != null) {
+					sis.onPlayerInteract(p, e);
+				}
+			}
+			
 
 		} catch (Exception ex) {
 			e.getPlayer().sendMessage(SabrePlugin.getPlugin().txt.parse(Lang.exceptionGeneral));

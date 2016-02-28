@@ -177,7 +177,9 @@ public class Lang
 	
 	// FACTORY
 	public static final String factoryMustHoldFurnace = "<b>You must be holding a single furnace to do this.";
+	public static final String factoryMustHoldStick = "<b>You must be holding a single stick to do this.";
 	public static final String factoryCreatedBaseFactory = "<g>You created a factory base.";
+	public static final String factoryCreatedProspector = "<g>You created a farm prospector.";
 	public static final String factoryNotFound = "<b>No factory was found.";
 	public static final String factoryNoRecipe = "<b>No recipe is selected.";
 	public static final String factoryMissingChests = "<b>Factory is missing chests. <i>Use <c>/factory configure";
@@ -190,6 +192,7 @@ public class Lang
 	public static final String factoryRecipeOutOfFuel = "<b>Recipe <a>%s <b>ran out of fuel!";
 	public static final String factoryCantDoWhileRunning = "<b>You can't do that while the factory is running.";
 	public static final String factoryUpdateController = "<i>Updated controller.";
+	public static final String factoryFertility = "<i>Chunk fertility is <c>%d%%";
 	
 	
 	// MISC

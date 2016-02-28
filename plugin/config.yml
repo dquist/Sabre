@@ -146,7 +146,7 @@ no_smelt:
   Clay Brick:
     material: CLAY_BRICK
 farm:
-  survey_period: 10
+  survey_period: 5
   production_ticks: 300
   proximity: 500
   chunk_radius: 1

@@ -534,6 +534,18 @@ public class SabreUtil {
 	}
 	
 	
+	/**
+	 * Gets a pseuso-random fertility number for a given chunk
+	 * @return
+	 */
+	public static double getChunkFertility(Location l) {
+	
+		int worldHash = l.getWorld().hashCode();
+		int x = l.getChunk().getX();
+		int z = l.getChunk().getZ();
+		return getChunkFertility(worldHash, x, z);
+	}
+	
 	
 	/**
 	 * Gets a pseuso-random fertility number for a given chunk
@@ -541,8 +553,6 @@ public class SabreUtil {
 	 */
 	public static double getChunkFertility(int worldHash, int x, int z) {
 	
-		
-		
 		byte hash = 3;
 		hash = (byte)(73 * hash + worldHash);
 		hash = (byte)(hash + x * 379);

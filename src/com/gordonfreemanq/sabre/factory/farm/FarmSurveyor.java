@@ -3,16 +3,12 @@ package com.gordonfreemanq.sabre.factory.farm;
 import java.util.Random;
 
 import org.bukkit.Chunk;
-import org.bukkit.CropState;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.block.Biome;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
-import org.bukkit.block.BlockState;
-import org.bukkit.material.Crops;
-import org.bukkit.material.MaterialData;
 
 import com.gordonfreemanq.sabre.SabrePlugin;
 import com.gordonfreemanq.sabre.util.SabreUtil;

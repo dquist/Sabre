@@ -9,7 +9,7 @@ recipes:
         amount: 128
       Stick:
         material: STICK
-        amount: 128
+        amount: 16
     outputs:
       Rails:
         material: RAILS

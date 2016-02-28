@@ -57,6 +57,9 @@ public class FarmFactory extends BaseFactory {
 	
 	// The most crops the factory can hold at a time
 	private int storageSize;
+	
+	// The location of the nearest farm that affects proximity factor
+	protected Location proximityLimitLocation;
 
 	/**
 	 * Creates a new FarmFactory instance
@@ -66,7 +69,7 @@ public class FarmFactory extends BaseFactory {
 	public FarmFactory(Location location, String typeName) {
 		super(location, typeName);
 		this.farmProductionTicks = SabrePlugin.getPlugin().getSabreConfig().getFarmProductionTicks();
-		this.farmProximity = SabrePlugin.getPlugin().getSabreConfig().getFarmProductionTicks();
+		this.farmProximity = SabrePlugin.getPlugin().getSabreConfig().getFarmProximity();
 		this.surveyPeriodMin = SabrePlugin.getPlugin().getSabreConfig().getFarmSurveyPeriod();
 		this.farmTickCounter = 0;
 		this.layoutFactor = 0.0;
@@ -114,10 +117,10 @@ public class FarmFactory extends BaseFactory {
 		} else {
 			if (!running && farmIsFull() && (recipe instanceof FarmRecipe)) {
 				sp.msg("<i>The farm is already full.");
-				return;
+			} else {
+				cyclePower(sp);
 			}
 
-			cyclePower(sp);
 		}
 		
 		// Create a controller
@@ -126,8 +129,14 @@ public class FarmFactory extends BaseFactory {
 		}
 	}
 	
+	@Override
 	protected void onPowerOn() {
 		checkSurvey(true);
+		saveSettings();
+	}
+	
+	@Override
+	protected void onPowerOff() {
 		saveSettings();
 	}
 	
@@ -262,36 +271,39 @@ public class FarmFactory extends BaseFactory {
 	 */
 	private void calculateProximityFactor() {
 		double factor = 1.0;
-		this.proximityFactor = factor;
-		return;
-		
-		// Temp disable
-		
-		/*
+		proximityLimitLocation = null;
+
 		for (BaseFactory f : FactoryWorker.getInstance().getRunningFactories()) {
 			if (!(f instanceof FarmFactory)) {
 				continue;
 			}
+			
+			FarmFactory farm = (FarmFactory)f;
 			
 			if (f.getLocation().equals(this.location)) {
 				continue;
 			}
 			
 			double dist = f.getLocation().distance(this.location);
+			//SabrePlugin.getPlugin().log(Level.INFO, "Proximity: other farm at %s", f.getLocation().toString());
 			
 			// The proximity factor will drop proportionally to each farm that is within
 			// the exclusion zone
-			if (dist < farmProximity) {
-				factor = Math.max(0, factor - ((farmProximity - dist) / farmProximity));
+			if (dist < farmProximity && farm.layoutFactor >= 0.05) {
+				double tempFactor = Math.max(0, factor - ((farmProximity - dist) / farmProximity));
+				if (tempFactor < factor) {
+					factor = tempFactor;
+					proximityLimitLocation = f.getLocation();
+				}
 			}
 			
 			// No need to go below zero
-			if (factor == 0) {
+			if (factor <= 0) {
 				break;
 			}
 		}
 		
-		this.proximityFactor = factor; */
+		this.proximityFactor = factor;
 	}
 	
 	

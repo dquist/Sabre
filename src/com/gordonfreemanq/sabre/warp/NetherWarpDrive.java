@@ -1,7 +1,5 @@
 package com.gordonfreemanq.sabre.warp;
 
-import java.util.logging.Level;
-
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
@@ -11,7 +9,6 @@ import org.bukkit.block.Block;
 import com.gordonfreemanq.sabre.Lang;
 import com.gordonfreemanq.sabre.SabreConfig;
 import com.gordonfreemanq.sabre.SabrePlayer;
-import com.gordonfreemanq.sabre.SabrePlugin;
 import com.gordonfreemanq.sabre.blocks.BlockManager;
 import com.gordonfreemanq.sabre.blocks.CustomItems;
 import com.gordonfreemanq.sabre.blocks.SabreItemStack;

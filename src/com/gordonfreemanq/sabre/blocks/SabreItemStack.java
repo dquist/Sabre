@@ -11,6 +11,7 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
+import com.gordonfreemanq.sabre.SabrePlayer;
 import com.gordonfreemanq.sabre.SabrePlugin;
 
 public class SabreItemStack extends ItemStack {
@@ -190,7 +191,7 @@ public class SabreItemStack extends ItemStack {
 	}
 	
 	
-	public void onPlayerInteract(PlayerInteractEvent e) {
+	public void onPlayerInteract(SabrePlayer sp, PlayerInteractEvent e) {
 		// Do nothing
 	}
 }

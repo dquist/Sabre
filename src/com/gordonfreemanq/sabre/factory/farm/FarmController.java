@@ -58,12 +58,17 @@ public class FarmController extends AbstractController {
 		
 		if (recipe instanceof FarmRecipe) {
 			FarmRecipe fr = (FarmRecipe)recipe;
-			lore.add(parse("<a>Farm Properties: <n>%s", fr.getCrop().toString()));
+			lore.add(parse("<a>Farm Properties: <n>%s - %d ready to harvest", fr.getCrop().toString(), farm.getFarmedCrops().get(fr.getCrop())));
 			lore.add(parse("    <a>Proximity: <n>%s%%", farm.getProximityFactorPercent().toString()));
+			
+			if (farm.proximityLimitLocation != null) {
+				Location l = farm.proximityLimitLocation;
+				lore.add(parse("      <b><it>Output limited by nearby farm: (%d, %d)", l.getBlockX(), l.getBlockZ()));
+			}
+			
 			lore.add(parse("    <a>Fertility: <n>%s%%", farm.getFertilityFactorPercent().toString()));
 			lore.add(parse("    <a>Layout: <n>%s%%", farm.getLayoutFactorPercent().toString()));
 			lore.add(parse("    <a>Output rate: <lime>%d/%d", farm.getRealOutput(), farm.getNominalOutput()));
-			lore.add(parse("    <a>Ready to Harvest: <n>%d", farm.getFarmedCrops().get(fr.getCrop())));
 		}
 		
 		lore.add(parse(""));

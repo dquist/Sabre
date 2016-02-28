@@ -9,11 +9,11 @@ recipes:
         amount: 128
       Stick:
         material: STICK
-        amount: 128
+        amount: 16
     outputs:
       Rails:
         material: RAILS
-        amount: 384
+        amount: 448
   Produce Powered Rails:
     fuel_cost: 25
     inputs:

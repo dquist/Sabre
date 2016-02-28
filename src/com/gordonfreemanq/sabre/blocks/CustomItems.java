@@ -11,6 +11,7 @@ import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 
 import com.gordonfreemanq.sabre.SabrePlugin;
+import com.gordonfreemanq.sabre.customitems.FarmProspector;
 import com.gordonfreemanq.sabre.customitems.MokshaRod;
 
 /**
@@ -51,6 +52,7 @@ public class CustomItems {
 		this.customItems = new HashMap<String, SabreItemStack>();
 		
 		customItems.put(MokshaRod.itemName, new MokshaRod());
+		customItems.put(FarmProspector.itemName, new FarmProspector());
 
 	    File[] files = folder.listFiles();
 	    

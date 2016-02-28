@@ -1,9 +1,11 @@
 package com.gordonfreemanq.sabre.factory;
 
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
 
 import org.bukkit.Bukkit;
+import org.bukkit.Location;
 
 import com.gordonfreemanq.sabre.SabrePlugin;
 
@@ -13,7 +15,7 @@ import com.gordonfreemanq.sabre.SabrePlugin;
  */
 public class FactoryWorker implements Runnable {
 
-	private final HashSet<BaseFactory> runningFactories;
+	private final HashMap<Location, BaseFactory> runningFactories;
 	private boolean enabled;
 	
 	private static FactoryWorker instance;
@@ -28,7 +30,7 @@ public class FactoryWorker implements Runnable {
 	 * Creates a new FactoryWorker instance
 	 */
 	public FactoryWorker() {
-		runningFactories = new HashSet<BaseFactory>();
+		runningFactories = new HashMap<Location, BaseFactory>();
 		enabled = false;
 		this.pendingRemove = new HashSet<BaseFactory>();
 		
@@ -52,13 +54,18 @@ public class FactoryWorker implements Runnable {
 			return;
 		}
 		
-		HashSet<BaseFactory> runs = new HashSet<BaseFactory>(runningFactories);
-		
 		// Update all running factories
-		for(BaseFactory f : runs) {
+		//SabrePlugin.getPlugin().log(Level.INFO, "Running Factories: %d", runningFactories.size());
+		for(BaseFactory f : runningFactories.values()) {
 			if (f.getRunning()) {
 				f.update();
 			}
+		}
+		
+		// Remove old ones
+		if (pendingRemove.size() > 0) {
+			runningFactories.values().removeAll(pendingRemove);
+			pendingRemove.clear();
 		}
 	}
 	
@@ -68,19 +75,14 @@ public class FactoryWorker implements Runnable {
 	 * @param f The factory to add
 	 */
 	public void addRunning(BaseFactory f) {
-		
-		// This prevents the same factory from being loaded twice.
-		// This is a possibility because factories in unloaded chunks can
-		// still run. When the chunk is loaded, then the running instance
-		// will be replaced
-		for (BaseFactory fac : this.runningFactories) {
-			if (fac.getLocation().equals(f.getLocation())) {
-				pendingRemove.add(fac);
+		// Make sure the same factory isn't running twice
+		for(BaseFactory run : new HashSet<BaseFactory>(runningFactories.values())) {
+			if (run.getLocation().equals(f.getLocation())) {
+				runningFactories.remove(f.getLocation());
 			}
 		}
-		runningFactories.removeAll(pendingRemove);
 		
-		runningFactories.add(f);
+		runningFactories.put(f.getLocation(), f);
 	}
 	
 	
@@ -97,6 +99,6 @@ public class FactoryWorker implements Runnable {
 	 * @return The running factories
 	 */
 	public Set<BaseFactory> getRunningFactories() {
-		return runningFactories;
+		return new HashSet<BaseFactory>(runningFactories.values());
 	}
 }

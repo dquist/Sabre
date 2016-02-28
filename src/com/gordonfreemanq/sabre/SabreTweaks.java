@@ -270,6 +270,10 @@ public class SabreTweaks implements Listener {
 
 		for (ItemStack is : e.getInventory().getContents()) {
 			if (is.hasItemMeta() && is.getItemMeta().hasLore()) {
+				if(is.getItemMeta().getDisplayName().contains("Controller")) {
+					continue; // who cares about sticks
+				}
+				
 				e.getInventory().setResult(new ItemStack(Material.AIR));
 
 				// Prevent crafting with lore items
@@ -1261,12 +1265,15 @@ public class SabreTweaks implements Listener {
 			// F2 = 20%
 			// F3 = 30%
 			if (fortuneLevel > 0) {
-				int randInt = rand.nextInt(9) + 1;
+				int randInt = rand.nextInt(25) + 1;
 
 				if (fortuneLevel >= randInt) {
 					ItemStack toDrop = getOreFortuneStack(m);
 					if (toDrop != null) {
 						dropItemAtLocation(e.getBlock(), toDrop);
+						e.getBlock().setType(Material.AIR);
+						e.setCancelled(true);
+						return;
 					}
 				}
 			}

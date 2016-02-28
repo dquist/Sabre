@@ -1,6 +1,6 @@
 name: Sabre
 main: com.gordonfreemanq.sabre.SabrePlugin
-version: 0.1.6
+version: 0.1.7
 description: Sabre plugin
 author: GFQ
 depend: [PermissionsEx, CombatTagPlus, ProtocolLib, PacketWrapper, VanishNoPacket]
@@ -11,7 +11,7 @@ commands:
   msg:
     description: Sends a player a message.
     usage: /<command> <player> <message>
-    aliases: [message, tell, m, pm]
+    aliases: [message, tell, m, pm, w]
   reply:
     description: Reply to the last player who was messaged
     usage: /<command> <message>
@@ -51,7 +51,7 @@ commands:
     description: Toggles bypass mode
     usage: /<command>
     aliases: [ctb]
-  snitch:
+  sn:
   pp:
   speed:
   tp:

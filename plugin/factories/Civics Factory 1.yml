@@ -1,36 +1,6 @@
 name: Civics Factory 1
 production_speed: 1
 recipes:
-  Produce Keep Bastion:
-    fuel_cost: 10
-    inputs:
-      Aspect of Domain:
-        custom_item: Aspect of Domain
-        amount: 8
-    outputs:
-      Keep Bastion:
-        custom_item: Keep Bastion
-        amount: 1
-  Produce Town Bastions:
-    fuel_cost: 10
-    inputs:
-      Aspect of Domain:
-        custom_item: Aspect of Domain
-        amount: 1
-    outputs:
-      Town Bastion:
-        custom_item: Town Bastion
-        amount: 4
-  Produce Outpost Bastion:
-    fuel_cost: 10
-    inputs:
-      Aspect of Domain:
-        custom_item: Aspect of Domain
-        amount: 2
-    outputs:
-      Outpost Bastion:
-        custom_item: Outpost Bastion
-        amount: 1
   Produce Nether Warp Drive:
     fuel_cost: 10
     inputs:

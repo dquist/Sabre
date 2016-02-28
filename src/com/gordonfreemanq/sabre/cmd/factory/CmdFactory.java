@@ -25,6 +25,7 @@ public class CmdFactory extends SabreCommand {
 		this.addSubCommand(cmdCreate);
 		this.addSubCommand(cmdConfigure);
 		this.addSubCommand(cmdUpgrade);
+		this.addSubCommand(new CmdFactoryProspect());
 		
 		instance = this;
 	}

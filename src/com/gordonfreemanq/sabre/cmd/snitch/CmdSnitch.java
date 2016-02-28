@@ -22,7 +22,7 @@ public class CmdSnitch  extends SabreCommand {
 	{
 		super();
 		
-		this.aliases.add("snitch");
+		this.aliases.add("sn");
 		
 		this.setHelpShort("The Snitch base command");
 		this.optionalArgs.put("page", "1");

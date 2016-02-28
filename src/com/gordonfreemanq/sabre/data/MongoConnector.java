@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.UUID;
 import java.util.logging.Level;
@@ -602,7 +603,7 @@ public class MongoConnector implements IDataAccess {
 	@Override
 	public Collection<SabreBlock> blockGetChunkRecords(Chunk c) {
 		
-		HashSet<SabreBlock> records = new HashSet<SabreBlock>();
+		HashMap<Location, SabreBlock> records = new HashMap<Location, SabreBlock>();
 		
 		BasicDBObject where = new BasicDBObject();
 		where.append("chunk", formatChunk(c));
@@ -616,18 +617,18 @@ public class MongoConnector implements IDataAccess {
 
 			try {
 				SabreBlock b = readBlockRecord(o);
-				records.add(b);
+				records.put(b.getLocation(), b);
 			} catch(Exception ex) {
 				logger.log(Level.WARNING, "Failed to read block record %s", o.toString());
 			}
 		}
 		
-		return records;
+		return records.values();
 	}
 	
 	@Override
 	public Collection<SabreBlock> blockGetRunningFactories() {
-		HashSet<SabreBlock> records = new HashSet<SabreBlock>();
+		HashMap<Location, SabreBlock> records = new HashMap<Location, SabreBlock>();
 		
 		BasicDBObject where = new BasicDBObject();
 		where = where.append("factory", true)
@@ -642,13 +643,13 @@ public class MongoConnector implements IDataAccess {
 
 			try {
 				SabreBlock b = readBlockRecord(o);
-				records.add(b);
+				records.put(b.getLocation(), b);
 			} catch(Exception ex) {
 				logger.log(Level.WARNING, "Failed to read block record %s", o.toString());
 			}
 		}
 		
-		return records;
+		return records.values();
 	}
 	
 	

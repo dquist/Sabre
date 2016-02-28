@@ -459,6 +459,11 @@ public class BaseFactory extends SpecialBlock {
 	}
 	
 	
+	protected void onPowerOff() {
+		// Do nothing
+	}
+	
+	
 	/**
 	 * Turns the factory on
 	 * @param sp The player
@@ -484,6 +489,7 @@ public class BaseFactory extends SpecialBlock {
 		setActivationLever(false);
 		FactoryWorker.getInstance().removeRunning(this);
 		setFurnaceState(false);
+		onPowerOff();
 		
 		this.runner = null;
 	}
