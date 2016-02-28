@@ -76,9 +76,9 @@ public class FactoryWorker implements Runnable {
 	 */
 	public void addRunning(BaseFactory f) {
 		// Make sure the same factory isn't running twice
-		for(BaseFactory run : new HashSet<BaseFactory>(runningFactories.values())) {
+		for(BaseFactory run : runningFactories.values()) {
 			if (run.getLocation().equals(f.getLocation())) {
-				runningFactories.remove(f.getLocation());
+				pendingRemove.add(f);
 			}
 		}
 		
