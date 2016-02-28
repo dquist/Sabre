@@ -45,7 +45,7 @@ public abstract class AbstractWarpDrive extends SpecialBlock {
 			return;
 		}
 		
-		int maxDist = 48;
+		int maxDist = 32;
 		
 		// Pad and drive must be within radius and same world
 		if (location.getWorld() != pad.getLocation().getWorld() ||

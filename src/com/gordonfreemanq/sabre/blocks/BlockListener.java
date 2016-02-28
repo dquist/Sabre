@@ -410,7 +410,6 @@ public class BlockListener implements Listener {
 					if (p.getPlayer().getItemInHand().getType().equals(Material.STICK)) {
 						sb.onStickInteract(e, p);
 					}
-					e.setCancelled(true);
 				}
 			} else if (a.equals(Action.RIGHT_CLICK_BLOCK) && p.getPlayer().getItemInHand().getType().equals(Material.STICK)) {
 				

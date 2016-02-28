@@ -1,6 +1,6 @@
 name: Sabre
 main: com.gordonfreemanq.sabre.SabrePlugin
-version: 0.1.7
+version: 0.1.8
 description: Sabre plugin
 author: GFQ
 depend: [PermissionsEx, CombatTagPlus, ProtocolLib, PacketWrapper, VanishNoPacket]
