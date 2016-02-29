@@ -680,11 +680,12 @@ public class MongoConnector implements IDataAccess {
 			Material mat = Material.matchMaterial(rein.getString("material", ""));
 			int strength = rein.getInt("strength", 0);
 			long createdOn = rein.getLong("created_on", 0);
-			int startStrength = config.getReinforcementMaterial(mat, (short)0).strength;
+			int startStrength = config.getReinforcementStrength(mat, (short)0);
 			boolean isPublic = rein.getBoolean("public", false);
 			boolean isInsecure = rein.getBoolean("insecure", false);
+			boolean isAdmin = rein.getBoolean("admin", false);
 		
-			Reinforcement r = new Reinforcement(l, groupID, mat, startStrength, createdOn);
+			Reinforcement r = new Reinforcement(l, groupID, mat, startStrength, createdOn, isAdmin);
 			r.setStrength(strength);
 			r.setPublic(isPublic);
 			r.setInsecure(isInsecure);
@@ -764,6 +765,10 @@ public class MongoConnector implements IDataAccess {
 		
 		if (r.getInsecure()) {
 			rRecord.append("insecure", true);
+		}
+		
+		if (r.isAdmin()) {
+			rRecord.append("admin", true);
 		}
 
 		BasicDBObject doc = new BasicDBObject()

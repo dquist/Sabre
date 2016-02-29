@@ -42,6 +42,10 @@ public class TeleportPad extends SpecialBlock {
 	@Override
 	public void onStickInteract(PlayerInteractEvent e, SabrePlayer sp) {
 		
+		if (e.getAction().equals(Action.LEFT_CLICK_BLOCK)) {
+			return;
+		}
+		
 		Reinforcement r = this.getReinforcement();
 		BlockManager bm = BlockManager.getInstance();
 		
@@ -104,8 +108,7 @@ public class TeleportPad extends SpecialBlock {
 
 		// Ignore stick or pick interact
 		Material handItemType = sp.getPlayer().getItemInHand().getType();
-		if (handItemType.equals(Material.STICK)
-				|| handItemType.equals(Material.STONE_PICKAXE)
+		if (	   handItemType.equals(Material.STONE_PICKAXE)
 				|| handItemType.equals(Material.IRON_PICKAXE)
 				|| handItemType.equals(Material.GOLD_PICKAXE)
 				|| handItemType.equals(Material.DIAMOND_PICKAXE)) {

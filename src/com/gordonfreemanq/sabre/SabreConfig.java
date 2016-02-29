@@ -12,6 +12,7 @@ import org.bukkit.inventory.ItemStack;
 
 import com.gordonfreemanq.sabre.blocks.ReinforcementMaterial;
 import com.gordonfreemanq.sabre.blocks.SabreItemStack;
+import com.gordonfreemanq.sabre.core.Permission;
 
 public class SabreConfig {
 	
@@ -176,6 +177,7 @@ public class SabreConfig {
 		this.lockableItems.clear();
 		this.nonReinforceable.clear();
 		
+		this.reinforcementMaterials.add(new ReinforcementMaterial(Material.BEDROCK,  0, 1, true));
 		if (fc.contains("build.reinforcements")) {
 			Set<String> rKeys = fc.getConfigurationSection("build.reinforcements").getKeys(false);
 			for (String s : rKeys) {
@@ -368,10 +370,12 @@ public class SabreConfig {
 	 * @param m The material to check
 	 * @return The reinforcement material instance
 	 */
-	public ReinforcementMaterial getReinforcementMaterial(Material m, short durability) {		
+	public ReinforcementMaterial getReinforcementMaterial(SabrePlayer sp, Material m, short durability) {		
 		for (ReinforcementMaterial r : reinforcementMaterials) {
 			if (r.material.equals(m) && r.durability == durability) {
-				return r;
+				if (!r.admin || sp.getPlayer().hasPermission(Permission.ADMIN.node)) {
+					return r;
+				}
 			}
 		}
 		
@@ -383,8 +387,23 @@ public class SabreConfig {
 	 * @param m The material to check
 	 * @return The reinforcement material instance
 	 */
-	public ReinforcementMaterial getReinforcementMaterial(ItemStack is) {		
-		return getReinforcementMaterial(is.getType(), is.getDurability());		
+	public ReinforcementMaterial getReinforcementMaterial(SabrePlayer sp, ItemStack is) {		
+		return getReinforcementMaterial(sp, is.getType(), is.getDurability());		
+	}
+	
+	/**
+	 * Gets a reinforcement material strength
+	 * @param m The material to check
+	 * @return The reinforcement material strength
+	 */
+	public int getReinforcementStrength(Material m, short durability) {		
+		for (ReinforcementMaterial r : reinforcementMaterials) {
+			if (r.material.equals(m) && r.durability == durability) {
+				return r.strength;
+			}
+		}
+		
+		return 0;
 	}
 	
 	/**

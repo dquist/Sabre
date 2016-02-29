@@ -65,7 +65,7 @@ public class CmdBuildReinforce extends SabreCommand {
 		
 		ItemStack handItem = me.getPlayer().getItemInHand();
 		
-		ReinforcementMaterial rm = config.getReinforcementMaterial(handItem);
+		ReinforcementMaterial rm = config.getReinforcementMaterial(me, handItem);
 		if (rm == null) {
 			msg(Lang.blockNotMaterial);
 			return;

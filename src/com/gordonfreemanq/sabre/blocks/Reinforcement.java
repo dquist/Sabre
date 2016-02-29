@@ -21,6 +21,7 @@ public class Reinforcement {
 	private long creationTime;
 	private boolean isPublic;
 	private boolean isInsecure;
+	private boolean admin;
 	
 	private SabreGroup group;
 	
@@ -31,7 +32,7 @@ public class Reinforcement {
 	 * @param durability The starting durability
 	 * @param creationTime The time it was created
 	 */
-	public Reinforcement(Location location, UUID groupID, Material material, int startStrength, long creationTime) {
+	public Reinforcement(Location location, UUID groupID, Material material, int startStrength, long creationTime, boolean admin) {
 		this.location = location;
 		this.groupID = groupID;
 		this.material = material;
@@ -40,6 +41,7 @@ public class Reinforcement {
 		this.creationTime = creationTime;
 		this.isPublic = false;
 		this.isInsecure = false;
+		this.admin = true;
 	}
 	
 	
@@ -202,6 +204,15 @@ public class Reinforcement {
      */
     public void setInsecure(boolean isInsecure) {
     	this.isInsecure = isInsecure;
+    }
+    
+    
+    /**
+     * Gets whether the record is admin block
+     * @return true if it is admin
+     */
+    public boolean isAdmin() {
+    	return this.admin;
     }
     
     

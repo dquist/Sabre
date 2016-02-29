@@ -21,3 +21,4 @@ minecraft
 metadata
 plugin
 bukkit
+admin

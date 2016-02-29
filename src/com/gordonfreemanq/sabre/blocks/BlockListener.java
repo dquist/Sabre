@@ -57,6 +57,7 @@ import com.gordonfreemanq.sabre.SabrePlayer;
 import com.gordonfreemanq.sabre.SabrePlugin;
 import com.gordonfreemanq.sabre.SabreTweaks;
 import com.gordonfreemanq.sabre.core.ISabreLog;
+import com.gordonfreemanq.sabre.core.Permission;
 import com.gordonfreemanq.sabre.factory.BaseFactory;
 import com.gordonfreemanq.sabre.factory.FactoryController;
 import com.gordonfreemanq.sabre.groups.SabreGroup;
@@ -251,13 +252,16 @@ public class BlockListener implements Listener {
 				if (!allowBreak) {
 					int strength = r.getStrength();
 
-					if (strength > 1) {
-						// Decrement the durability
-						r.setStrength(strength - 1);
-						bm.updateReinforcementStrength(sb);
-					} else {
-						// Block is worn down, let it break
-						allowBreak = true;
+					// Must have admin bypass to break admin blocks
+					if (!r.isAdmin() || (p.getPlayer().hasPermission(Permission.ADMIN.node) && p.getAdminBypass())) {
+						if (strength > 1) {
+							// Decrement the durability
+							r.setStrength(strength - 1);
+							bm.updateReinforcementStrength(sb);
+						} else {
+							// Block is worn down, let it break
+							allowBreak = true;
+						}
 					}
 				}
 
@@ -534,7 +538,7 @@ public class BlockListener implements Listener {
 		}
 
 		// Create the new instance so we can test
-		Reinforcement r = new Reinforcement(l, g.getID(), rm.material, rm.strength, (new Date()).getTime());
+		Reinforcement r = new Reinforcement(l, g.getID(), rm.material, rm.strength, (new Date()).getTime(), rm.admin);
 		r.setPublic(state.getPublic());
 		r.setInsecure(state.getInsecure());
 		
