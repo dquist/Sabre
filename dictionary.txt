@@ -23,3 +23,4 @@ plugin
 bukkit
 admin
 admins
+enchantments

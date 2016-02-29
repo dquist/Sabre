@@ -25,6 +25,7 @@ import org.bukkit.block.BlockState;
 import org.bukkit.block.Furnace;
 import org.bukkit.block.Sign;
 import org.bukkit.enchantments.Enchantment;
+import org.bukkit.entity.Ageable;
 import org.bukkit.entity.Arrow;
 import org.bukkit.entity.Boat;
 import org.bukkit.entity.Enderman;
@@ -1650,5 +1651,63 @@ public class SabreTweaks implements Listener {
             return;
 
         e.setCancelled(true);
+    }
+
+
+    /**
+     * Arthropod Egg
+     * @param e The event args
+     */
+    @EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
+    public void onEntityDeath( EntityDeathEvent e ) {
+    	Player targetPlayer = e.getEntity().getKiller();
+    	if (targetPlayer == null) {
+    		return;
+    	}
+
+    	Short currentEntityID = e.getEntity().getType().getTypeId();
+    	if (config.getEggEntityIDList().contains( currentEntityID) == false) {
+    		return;
+    	}
+
+    	// Check for a baby animal
+    	if( e.getEntity() instanceof Ageable )
+    	{
+    		Ageable ageableEntity = (Ageable) e.getEntity();
+    		if( ageableEntity.isAdult() == false ) {
+    			return;  // NOPE.
+    		}
+    	}
+
+    	// Check the player's currently equipped weapon
+    	ItemStack handstack = targetPlayer.getItemInHand();
+    	// Get the map of enchantments on that item
+    	Map<Enchantment,Integer> itemEnchants = handstack.getEnchantments();
+    	if(itemEnchants.isEmpty()) {
+    		return;
+    	}
+
+    	// Check if one enchantment is BaneOfArthropods
+    	if(itemEnchants.get( org.bukkit.enchantments.Enchantment.DAMAGE_ARTHROPODS) == null) {
+    		return;
+    	}
+
+    	double randomNum = Math.random();
+    	double eggArthropodPercentage = config.getEggArthropodPercentage();
+    	double eggLootingPercentage = config.getEggLootingPercentage();
+    	double levelOfArthropod = handstack.getEnchantmentLevel(org.bukkit.enchantments.Enchantment.DAMAGE_ARTHROPODS);
+    	double levelOfLooting = handstack.getEnchantmentLevel(org.bukkit.enchantments.Enchantment.LOOT_BONUS_MOBS);
+
+    	double targetPercentage = (eggArthropodPercentage * levelOfArthropod) + (eggLootingPercentage * levelOfLooting);
+
+    	// Check if egg should be spawned
+    	if( randomNum < targetPercentage )
+    	{
+    		// Figure out the right item type to drop.
+    		ItemStack item = new ItemStack(383, 1, e.getEntity().getType().getTypeId());
+			e.getDrops().clear();
+			e.setDroppedExp(0);
+    		e.getDrops().add( item );
+    	}		
     }
 }

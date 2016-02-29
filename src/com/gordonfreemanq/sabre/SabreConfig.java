@@ -1,6 +1,7 @@
 package com.gordonfreemanq.sabre;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -127,6 +128,9 @@ public class SabreConfig {
 	private double hungerSlowdown = 0.0;
 	private int xpBottle = 10;
 	private int respawnRadius = 5000;
+	private double eggArthropodPercentage = 0.03;
+	private double eggLootingPercentage = 0.02;
+	private List<Short> eggEntityIDList;
 	
 	
 	/**
@@ -266,6 +270,8 @@ public class SabreConfig {
 		} else {
 			setDefaultReinforceables();
 		}
+		
+		eggEntityIDList = Arrays.asList(new Short[] {65, 90, 91, 92, 93, 94, 95, 96, 98, 101, 120});
 	}
 	
 	
@@ -594,5 +600,29 @@ public class SabreConfig {
 	 */
 	public int getRespawnRadius() {
 		return this.respawnRadius;
+	}
+	
+	/**
+	 * Gets the arthropod percentage
+	 * @return The arthropod percentage
+	 */
+	public double getEggArthropodPercentage() {
+		return this.eggArthropodPercentage;
+	}
+	
+	/**
+	 * Gets the arthropod percentage
+	 * @return The arthropod percentage
+	 */
+	public double getEggLootingPercentage() {
+		return this.eggLootingPercentage;
+	}
+	
+	/**
+	 * Gets the arthropod entity list
+	 * @return The arthropod entity list
+	 */
+	public List<Short> getEggEntityIDList() {
+		return this.eggEntityIDList;
 	}
 }
