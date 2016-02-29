@@ -82,7 +82,7 @@ public class SnitchListener implements Listener {
         		if  (!snitch.canPlayerAccess(sp)) {
         			snitchL = snitch.getLocation();
         			if (snitch.getNotify()) {
-                		r.getGroup().msgAll(Lang.snitchLoggedIn, playerName, snitch.getSnitchName(), 
+                		r.getGroup().msgAllSnitch(Lang.snitchLoggedIn, playerName, snitch.getSnitchName(), 
                 				snitchL.getBlockX(), snitchL.getBlockY(), snitchL.getBlockZ(), snitchL.getWorld().getName());
         			}
             		snitchLogger.logLogin(snitch, sp, l);
@@ -125,7 +125,7 @@ public class SnitchListener implements Listener {
         		if  (!snitch.canPlayerAccess(sp)) {
         			snitchL = snitch.getLocation();
         			if (snitch.getNotify()) {
-        				r.getGroup().msgAll(Lang.snitchLoggedOut, playerName, snitch.getSnitchName(), 
+        				r.getGroup().msgAllSnitch(Lang.snitchLoggedOut, playerName, snitch.getSnitchName(), 
             				snitchL.getBlockX(), snitchL.getBlockY(), snitchL.getBlockZ(), snitchL.getWorld().getName());
         			}
             		snitchLogger.logLogout(snitch, sp, l);
@@ -204,7 +204,7 @@ public class SnitchListener implements Listener {
         		if  (!snitch.canPlayerAccess(sp)) {
         			snitchL = snitch.getLocation();
         			if (snitch.getNotify()) {
-	            		r.getGroup().msgAll(Lang.snitchEntry, playerName, snitch.getSnitchName(), 
+	            		r.getGroup().msgAllSnitch(Lang.snitchEntry, playerName, snitch.getSnitchName(), 
 	            				snitchL.getBlockX(), snitchL.getBlockY(), snitchL.getBlockZ(), snitchL.getWorld().getName());
         			}
             		snitchLogger.logEntry(snitch, sp, l);

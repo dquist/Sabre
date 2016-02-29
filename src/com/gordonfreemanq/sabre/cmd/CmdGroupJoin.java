@@ -50,7 +50,7 @@ public class CmdGroupJoin extends SabreCommand {
 		
 		if (!g.isInvited(me)) {
 			msg(Lang.groupNotInvited, groupName);
-			g.msgAll(Lang.groupTriedJoin, me.getName(), g.getName());
+			g.msgAll(Lang.groupTriedJoin, false, me.getName(), g.getName());
 			return;
 		}
 

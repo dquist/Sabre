@@ -165,7 +165,7 @@ public enum CropType {
 	private double getCarrotBiomeFactor(BiomeClimate climate) {
 		switch (climate) {
 		case PRAIRIE:
-			return 0.8;
+			return 1.0;
 		case TEMPERATE:
 			return 0.6;
 		case JUNGLE:

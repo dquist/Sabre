@@ -47,6 +47,6 @@ public class CmdGroupLeave extends SabreCommand {
 		
 		gm.removePlayer(g, me);
 		msg(Lang.groupYouLeft, groupName);
-		g.msgAll(Lang.groupPlayerLeft, me.getName(), g.getName());
+		g.msgAll(Lang.groupPlayerLeft, false, me.getName(), g.getName());
 	}
 }

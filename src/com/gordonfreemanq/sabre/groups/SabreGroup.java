@@ -19,8 +19,15 @@ public class SabreGroup implements INamed, IChatChannel {
 	private final UUID id;
 	private String name;
 	private final HashSet<SabreMember> members;
+	
+	// Players who have been invited to the group
 	private final HashSet<UUID> invited;
+	
+	// Players who have muted chat from this group - non-persistent 
+	private final HashSet<SabrePlayer> mutedFromChat;
 
+	// Players who have muted snitch reports from this group - non-persistent 
+	private final HashSet<SabrePlayer> mutedFromSnitch;
 
 	/**
 	 * Constructor
@@ -33,6 +40,8 @@ public class SabreGroup implements INamed, IChatChannel {
 		this.members = new HashSet<SabreMember>();
 
 		this.invited = new HashSet<UUID>();
+		this.mutedFromChat = new HashSet<SabrePlayer>();
+		this.mutedFromSnitch = new HashSet<SabrePlayer>();
 	}
 
 
@@ -263,20 +272,27 @@ public class SabreGroup implements INamed, IChatChannel {
 		member.setRank(Rank.OWNER);
 	}
 	
-	
-	public void msgAll(String str) {
+	/**
+	 * Messages all the members in the group
+	 * @param str The message
+	 * @param isChat true if it is a chat message
+	 */
+	public void msgAll(String str, boolean isChat) {
 		for (SabreMember m : members) {
 			SabrePlayer p = m.getPlayer();
 			if (p.isOnline()) {
+				if (isChat && mutedFromChat.contains(p)) {
+					continue; // ignore muted players if chat
+				}
 				p.getPlayer().sendMessage(str);
 			}
 		}
 	}
 
 
-	public void msgAll(String str, Object... args) {
+	public void msgAll(String str, boolean isChat, Object... args) {
 		String formatStr = SabrePlugin.getPlugin().txt.parse(str, args);
-		msgAll(formatStr);
+		msgAll(formatStr, isChat);
 	}
 
 	public void msgAllBut(SabrePlayer player, String str, Object... args) {
@@ -294,14 +310,77 @@ public class SabreGroup implements INamed, IChatChannel {
 	@Override
 	public void chat(SabrePlayer sender, String msg) {
 		String formatStr = SabrePlugin.getPlugin().txt.parse("<c>[%s] <reset><gold>%s:<w> %s", this.getName(), sender.getName(), msg);
-		this.msgAll(formatStr);
+		this.msgAll(formatStr, true);
 		SabrePlugin.getPlugin().log(Level.INFO, formatStr);
 	}
 	
 	@Override
 	public void chatMe(SabrePlayer sender, String msg) {
 		String formatStr = SabrePlugin.getPlugin().txt.parse("<c>[%s] <gold><it>%s %s", this.getName(), sender.getName(), msg);
-		this.msgAll(formatStr);
+		this.msgAll(formatStr, true);
 		SabrePlugin.getPlugin().log(Level.INFO, formatStr);
+	}
+	
+	
+	/**
+	 * Messages a snitch report
+	 * @param str The snitch message
+	 * @param args
+	 */
+	public void msgAllSnitch(String str, Object... args) {
+		String formatStr = SabrePlugin.getPlugin().txt.parse(str, args);
+		
+		for (SabreMember m : members) {
+			SabrePlayer p = m.getPlayer();
+			if (p.isOnline() && !mutedFromSnitch.contains(p)) {
+				p.getPlayer().sendMessage(formatStr);
+			}
+		}
+	}
+	
+	
+	/**
+	 * Mutes the group chat for a player
+	 * @param sp The player that is muting the group
+	 */
+	public void setChatMutedBy(SabrePlayer sp, boolean muted) {
+		if (muted && !mutedFromChat.contains(sp)) {
+			mutedFromChat.add(sp);
+		} else {
+			mutedFromChat.remove(sp);
+		}
+	}
+	
+	
+	/**
+	 * Gets whether the group chat is muted by a player
+	 * @param sp The player to check
+	 * @return true if the group is muted by the player
+	 */
+	public boolean isChatMutedBy(SabrePlayer sp) {
+		return this.mutedFromChat.contains(sp);
+	}
+	
+	
+	/**
+	 * Mutes the group chat for a player
+	 * @param sp The player that is muting the group
+	 */
+	public void setSnitchMutedBy(SabrePlayer sp, boolean muted) {
+		if (muted && !mutedFromSnitch.contains(sp)) {
+			mutedFromSnitch.add(sp);
+		} else {
+			mutedFromSnitch.remove(sp);
+		}
+	}
+	
+	
+	/**
+	 * Gets whether the group snitches are muted by a player
+	 * @param sp The player to check
+	 * @return true if the group snitches are muted by the player
+	 */
+	public boolean isSnitchMutedBy(SabrePlayer sp) {
+		return this.mutedFromSnitch.contains(sp);
 	}
 }

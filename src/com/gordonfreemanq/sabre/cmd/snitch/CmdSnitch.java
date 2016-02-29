@@ -11,6 +11,7 @@ public class CmdSnitch  extends SabreCommand {
 	public final SabreCommand cmdRefresh = new CmdSnitchRefresh();
 	public final SabreCommand cmdRename = new CmdSnitchRename();
 	public final SabreCommand cmdReport = new CmdSnitchReport();
+	public final SabreCommand cmdMute = new CmdSnitchMute();
 	
 	
 	private static CmdSnitch instance;
@@ -33,6 +34,7 @@ public class CmdSnitch  extends SabreCommand {
 		this.addSubCommand(cmdRefresh);
 		this.addSubCommand(cmdRename);
 		this.addSubCommand(cmdReport);
+		this.addSubCommand(cmdMute);
 		
 		instance = this;
 	}

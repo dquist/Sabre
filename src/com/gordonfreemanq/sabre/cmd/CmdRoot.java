@@ -38,6 +38,7 @@ public class CmdRoot extends SabreCommand {
 		this.addSubCommand(new CmdGroupJoin());
 		this.addSubCommand(new CmdGroupKick());
 		this.addSubCommand(new CmdGroupLeave());
+		this.addSubCommand(new CmdGroupMute());
 		this.addSubCommand(new CmdGroupTransfer());
 		this.addSubCommand(new CmdGroupRank());
 		this.addSubCommand(new CmdGroupRename());

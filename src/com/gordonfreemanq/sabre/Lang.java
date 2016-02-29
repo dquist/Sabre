@@ -3,116 +3,118 @@ package com.gordonfreemanq.sabre;
 public class Lang 
 {	
 	// PLAYER
-	public static String playerSetBed = "<g>You set your bed location.";
-	public static String playerSetBedFreeWorld = "<b>You can only set your bed in the overworld.";
-	public static String playerBedMissing = "<b>Your bed was missing or obstructed.";
+	public static final String playerSetBed = "<g>You set your bed location.";
+	public static final String playerSetBedFreeWorld = "<b>You can only set your bed in the overworld.";
+	public static final String playerBedMissing = "<b>Your bed was missing or obstructed.";
 	
 	
 	// GROUPS
-	public static String groupCreated = "<g>You created the group <c>%s<g>.";
-	public static String groupAlreadyExists = "<b>The group <c>%s <b>already exists.";
-	public static String groupAlreadyOwn = "<b>You already own <c>%s<b>.";
-	public static String groupAlreadyMember = "<b>You are already a member <c>%s<b>.";
-	public static String groupPlayerAlreadyMember = "<c>%s<b> is already a member of <c>%s<b>.";
-	public static String groupPlayerAlreadyInvited = "<c>%s<b> is already invited to <c>%s<b>.";
-	public static String groupNotExist = "<b>The group <c>%s <b>doesn't exist.";
-	public static String groupNotOwner = "<b>You are not owner of <c>%s<b>.";
-	public static String groupNotMember = "<b>You are not a member of <c>%s<b>.";
-	public static String groupPlayerNotMember = "<c>%s <b>is not a member of <c>%s<b>.";
-	public static String groupRenamed = "<g>You renamed <c>%s<g> to <c>%s<g>.";
-	public static String groupPlayerInvited = "<g>You invited <c>%s <g>to <c>%s<g>.";
-	public static String groupPlayerNotInvited = "<c>%s <b>is not invited to <c>%s<b>.";
-	public static String groupPlayerUninvited = "<g>You uninvited <c>%s <g>from <c>%s<g>.";
-	public static String groupNotInviteSelf = "<b>You are already a member of <c>%s<b>.";
-	public static String groupNotTransferSelf = "<b>You cannot transfer a group to yourself.";
-	public static String groupNotKickSelf = "<b>You cannot kick yourself.";
-	public static String groupNotRankSelf = "<b>You cannot change your own rank.";
-	public static String unknownPlayer = "<b>Unknown player <c>%s<b>.";
-	public static String groupInvited = "<g>You were invited to <c>%s<g>.";
-	public static String groupNotInvited = "<b>You are not invited to <c>%s<b>.";
-	public static String groupYouJoined = "<g>You joined <c>%s<g>.";
-	public static String groupPlayerJoined = "<c>%s <i>joined <c>%s<i>.";
-	public static String groupYouLeft = "<g>You left <c>%s<g>.";
-	public static String groupPlayerLeft = "<c>%s <i>left <c>%s<i>.";
-	public static String groupYouKicked = "<g>You kicked <c>%s <g>from <c>%s<g>.";
-	public static String groupPlayerKicked = "<c>%s <g>kicked <c>%s <g>from <c>%s<g>.";
-	public static String groupYouWereKicked = "<i>You were kicked from <c>%s<i>.";
-	public static String groupCheckRank = "<i>Your rank in <c>%s <i>is <n>%s<i>.";
-	public static String groupBadRank= "<b>Unknown rank, use:<i> OWNER, ADMIN, OFFICER, BUILDER, MEMBER";
-	public static String groupSetRank= "<g>You set the rank of <c>%s <g>to <i>%s<g>";
-	public static String groupTriedJoin = "<c>%s <i>tried to join <c>%s<i>.";
-	public static String groupUseTransfer = "<b>You can't set another owner.";
-	public static String groupNotLeaveOwner = "<b>The group owner cannot leave.";
-	public static String groupTransferred = "<g>You transferred <c>%s <g>to <c>%s<g>.";
-	public static String groupPlayerTransferred = "<c>%s <i>transferred <c>%s <i>to you.";
-	public static String groupAutoJoinEnabled = "<i>Set auto-join status to <g>enabled<i>.";
-	public static String groupAutoJoinDisabled = "<i>Set auto-join status to <b>disabled<i>.";
-	public static String groupJoinHelp = "<i>Use '<c>/f join <c>%s<i>' to join.";
-	public static String groupLeaveHelp = "<i>Use '<c>/f leave <c>%s<i>' to leave.";
-	public static String groupTransferHelp = "<i>Use '<c>/f transfer <c>%s<i>' to transfer the group.";
+	public static final String groupCreated = "<g>You created the group <c>%s<g>.";
+	public static final String groupAlreadyExists = "<b>The group <c>%s <b>already exists.";
+	public static final String groupAlreadyOwn = "<b>You already own <c>%s<b>.";
+	public static final String groupAlreadyMember = "<b>You are already a member <c>%s<b>.";
+	public static final String groupPlayerAlreadyMember = "<c>%s<b> is already a member of <c>%s<b>.";
+	public static final String groupPlayerAlreadyInvited = "<c>%s<b> is already invited to <c>%s<b>.";
+	public static final String groupNotExist = "<b>The group <c>%s <b>doesn't exist.";
+	public static final String groupNotOwner = "<b>You are not owner of <c>%s<b>.";
+	public static final String groupNotMember = "<b>You are not a member of <c>%s<b>.";
+	public static final String groupPlayerNotMember = "<c>%s <b>is not a member of <c>%s<b>.";
+	public static final String groupRenamed = "<g>You renamed <c>%s<g> to <c>%s<g>.";
+	public static final String groupPlayerInvited = "<g>You invited <c>%s <g>to <c>%s<g>.";
+	public static final String groupPlayerNotInvited = "<c>%s <b>is not invited to <c>%s<b>.";
+	public static final String groupPlayerUninvited = "<g>You uninvited <c>%s <g>from <c>%s<g>.";
+	public static final String groupNotInviteSelf = "<b>You are already a member of <c>%s<b>.";
+	public static final String groupNotTransferSelf = "<b>You cannot transfer a group to yourself.";
+	public static final String groupNotKickSelf = "<b>You cannot kick yourself.";
+	public static final String groupNotRankSelf = "<b>You cannot change your own rank.";
+	public static final String unknownPlayer = "<b>Unknown player <c>%s<b>.";
+	public static final String groupInvited = "<g>You were invited to <c>%s<g>.";
+	public static final String groupNotInvited = "<b>You are not invited to <c>%s<b>.";
+	public static final String groupYouJoined = "<g>You joined <c>%s<g>.";
+	public static final String groupPlayerJoined = "<c>%s <i>joined <c>%s<i>.";
+	public static final String groupYouLeft = "<g>You left <c>%s<g>.";
+	public static final String groupPlayerLeft = "<c>%s <i>left <c>%s<i>.";
+	public static final String groupYouKicked = "<g>You kicked <c>%s <g>from <c>%s<g>.";
+	public static final String groupPlayerKicked = "<c>%s <g>kicked <c>%s <g>from <c>%s<g>.";
+	public static final String groupYouWereKicked = "<i>You were kicked from <c>%s<i>.";
+	public static final String groupCheckRank = "<i>Your rank in <c>%s <i>is <n>%s<i>.";
+	public static final String groupBadRank= "<b>Unknown rank, use:<i> OWNER, ADMIN, OFFICER, BUILDER, MEMBER";
+	public static final String groupSetRank= "<g>You set the rank of <c>%s <g>to <i>%s<g>";
+	public static final String groupTriedJoin = "<c>%s <i>tried to join <c>%s<i>.";
+	public static final String groupUseTransfer = "<b>You can't set another owner.";
+	public static final String groupNotLeaveOwner = "<b>The group owner cannot leave.";
+	public static final String groupTransferred = "<g>You transferred <c>%s <g>to <c>%s<g>.";
+	public static final String groupPlayerTransferred = "<c>%s <i>transferred <c>%s <i>to you.";
+	public static final String groupAutoJoinEnabled = "<i>Set auto-join status to <g>enabled<i>.";
+	public static final String groupAutoJoinDisabled = "<i>Set auto-join status to <b>disabled<i>.";
+	public static final String groupJoinHelp = "<i>Use '<c>/f join <c>%s<i>' to join.";
+	public static final String groupLeaveHelp = "<i>Use '<c>/f leave <c>%s<i>' to leave.";
+	public static final String groupTransferHelp = "<i>Use '<c>/f transfer <c>%s<i>' to transfer the group.";
+	public static final String groupMute = "<b>You muted chat from <c>%s<b>.";
+	public static final String groupUnmute = "<g>You unmuted chat from <c>%s<g>.";
 	
 	
 	// CHAT
-	public static String chatPlayerNowOffline = "<i>You were chatting with <c>%s <i>who is now offline.";
-	public static String chatMovedGlobal = "<i>Moved to global chat.";
-	public static String chatMovedServerBcast = "<h>Moved to server broadcast chat.";
-	public static String chatMovedGroup = "<i>Moved to <c>%s <i>group chat.\n";
-	public static String chatMovedGroupHelp = "<i>Use '<c>/f c' <i>to return to global chat.";
-	public static String chatNoOneHears = "<silver>No one hears you.";
-	public static String chatChattingWith = "<lp>You are now chatting with <c>%s<lp>.";
-	public static String chatNoReply = "<lp>You have no one to reply to.";
-	public static String chatWillReplyTo = "<lp>You will reply to <c>%s<lp>.";
-	public static String chatPlayerOffline = "<c>%s <b>is offline.";
-	public static String chatOfflineActivity = "<i>There was some activity while you were offline:";
+	public static final String chatPlayerNowOffline = "<i>You were chatting with <c>%s <i>who is now offline.";
+	public static final String chatMovedGlobal = "<i>Moved to global chat.";
+	public static final String chatMovedServerBcast = "<h>Moved to server broadcast chat.";
+	public static final String chatMovedGroup = "<i>Moved to <c>%s <i>group chat.\n";
+	public static final String chatMovedGroupHelp = "<i>Use '<c>/f c' <i>to return to global chat.";
+	public static final String chatNoOneHears = "<silver>No one hears you.";
+	public static final String chatChattingWith = "<lp>You are now chatting with <c>%s<lp>.";
+	public static final String chatNoReply = "<lp>You have no one to reply to.";
+	public static final String chatWillReplyTo = "<lp>You will reply to <c>%s<lp>.";
+	public static final String chatPlayerOffline = "<c>%s <b>is offline.";
+	public static final String chatOfflineActivity = "<i>There was some activity while you were offline:";
 	
 	
 	// BUILD
-	public static String blockInfoEnable = "<i>INFO mode is now <g>enabled<i>.";
-	public static String blockInfoDisable = "<i>INFO mode is now <b>disabled<i>.";
-	public static String blockBypassEnable = "<i>BYPASS mode is now <g>enabled<i>.";
-	public static String blockBypassDisable = "<i>BYPASS mode is now <b>disabled<i>.";
-	public static String blockBuildMode = "<i>Build mode set to <n>%s<i>.";
-	public static String blockBuildModeGroup = "<g>Build mode set to <n>%s <g>for <c>%s<g>.";
-	public static String blockNotMaterial = "<b>That is not a valid reinforcement material.";
-	public static String blockMaterialDepleted = "<n>%s <i>depleted, left fortification mode.";
-	public static String blockNotReinforceable = "<b>That block cannot be reinforced.";
-	public static String blockShowType = "<i>That's a <n>%s<i>.";
-	public static String blockShowInfo = "<b>%s with <n>%s <b>at <n>%s%% <b>health.";
-	public static String blockShowInfoAccess = "<g>%s to <c>%s <g>with <n>%s <g>at <n>%s%% <g>health.";
-	public static String blockShowInfoSpecial = "<n>%s <b>is %s with <n>%s <b>at <n>%s%% <b>health.";
-	public static String blockShowInfoAccessSpecial = "<n>%s <g>is %s to <c>%s <g>with <n>%s <g>at <n>%s%% <g>health.";
-	public static String blockMismatched = "<b>You can't do that, mismatched reinforcement.";
-	public static String blockIsLocked = "<b>%s is locked.";
-	public static String blockIsLockedSpecial = "<n>%s <b>is locked.";
-	public static String blockAdminBypassEnable = "<h>ADMIN BYPASS <i>mode is now <g>enabled<i>.";
-	public static String blockAdminBypassDisable = "<h>ADMIN BYPASS <i>mode is now <b>disabled<i>.";
-	public static String blockNoReinforcement = "<i>No reinforcement.";
-	public static String blockFailedToReinforce = "<b>Failed to create reinforcement.";
-	public static String blockNoChange = "<i>No change was made.";
-	public static String blockChanged = "<i>Changed to <n>%s <i>with <n>%s<i>.";
-	public static String blockCantPlace = "<i>You cannot place this block.";
-	public static String blockMaterialHasLore = "<b>You cannot reinforce with lore items.";
-	public static String blockNoAccess = "<i>You don't have access to do that.";
+	public static final String blockInfoEnable = "<i>INFO mode is now <g>enabled<i>.";
+	public static final String blockInfoDisable = "<i>INFO mode is now <b>disabled<i>.";
+	public static final String blockBypassEnable = "<i>BYPASS mode is now <g>enabled<i>.";
+	public static final String blockBypassDisable = "<i>BYPASS mode is now <b>disabled<i>.";
+	public static final String blockBuildMode = "<i>Build mode set to <n>%s<i>.";
+	public static final String blockBuildModeGroup = "<g>Build mode set to <n>%s <g>for <c>%s<g>.";
+	public static final String blockNotMaterial = "<b>That is not a valid reinforcement material.";
+	public static final String blockMaterialDepleted = "<n>%s <i>depleted, left fortification mode.";
+	public static final String blockNotReinforceable = "<b>That block cannot be reinforced.";
+	public static final String blockShowType = "<i>That's a <n>%s<i>.";
+	public static final String blockShowInfo = "<b>%s with <n>%s <b>at <n>%s%% <b>health.";
+	public static final String blockShowInfoAccess = "<g>%s to <c>%s <g>with <n>%s <g>at <n>%s%% <g>health.";
+	public static final String blockShowInfoSpecial = "<n>%s <b>is %s with <n>%s <b>at <n>%s%% <b>health.";
+	public static final String blockShowInfoAccessSpecial = "<n>%s <g>is %s to <c>%s <g>with <n>%s <g>at <n>%s%% <g>health.";
+	public static final String blockMismatched = "<b>You can't do that, mismatched reinforcement.";
+	public static final String blockIsLocked = "<b>%s is locked.";
+	public static final String blockIsLockedSpecial = "<n>%s <b>is locked.";
+	public static final String blockAdminBypassEnable = "<h>ADMIN BYPASS <i>mode is now <g>enabled<i>.";
+	public static final String blockAdminBypassDisable = "<h>ADMIN BYPASS <i>mode is now <b>disabled<i>.";
+	public static final String blockNoReinforcement = "<i>No reinforcement.";
+	public static final String blockFailedToReinforce = "<b>Failed to create reinforcement.";
+	public static final String blockNoChange = "<i>No change was made.";
+	public static final String blockChanged = "<i>Changed to <n>%s <i>with <n>%s<i>.";
+	public static final String blockCantPlace = "<i>You cannot place this block.";
+	public static final String blockMaterialHasLore = "<b>You cannot reinforce with lore items.";
+	public static final String blockNoAccess = "<i>You don't have access to do that.";
 	
 	
 	// ADMIN
-	public static String adminPlayerModifyBan = "Your account is being modified. \nPlease wait a minute before logging back in.";
-	public static String adminNameExists = "<b>A player with the name <c>%s <b>already exists.";
-	public static String adminChangedPlayerName = "<g>The player <c>%s <g>is now known as <c>%s<g>.";
-	public static String adminRemovedPlayer = "<g>You deleted the player <c>%s<g>.";
-	public static String adminBannedPlayer = "<g>You banned the player <c>%s<g> with the reason \"<i>%s<g>\".";
-	public static String adminUnbannedPlayer = "<g>You unbanned the player <c>%s<g>.";
-	public static String adminPlayerNotBanned = "<b>The player <c>%s <b>is not banned.";
-	public static String adminYourNameIsNow = "<i>Your name has been set to <c>%s<i>.";
-	public static String adminYouBypassed = "<h>You bypassed this block on <c>%s<h>.";
-	public static String adminSetSpawn = "<g>You set the spawn location.";
-	public static String adminInvalidItem = "<c>That item does not exist.";
-	public static String adminVanished = "<teal>You have vanished. Poof.";
-	public static String adminUnvanished = "<teal>You have become visible.";
-	public static String adminFlyOn = "<i>You are now flying.";
-	public static String adminFlyOff = "<i>You stopped flying.";
-	public static String adminInvalidMode = "<b>Invalid game mode.";
-	public static String adminUpdatedMode = "<g>Updated game mode to <c>%s<g>.";
+	public static final String adminPlayerModifyBan = "Your account is being modified. \nPlease wait a minute before logging back in.";
+	public static final String adminNameExists = "<b>A player with the name <c>%s <b>already exists.";
+	public static final String adminChangedPlayerName = "<g>The player <c>%s <g>is now known as <c>%s<g>.";
+	public static final String adminRemovedPlayer = "<g>You deleted the player <c>%s<g>.";
+	public static final String adminBannedPlayer = "<g>You banned the player <c>%s<g> with the reason \"<i>%s<g>\".";
+	public static final String adminUnbannedPlayer = "<g>You unbanned the player <c>%s<g>.";
+	public static final String adminPlayerNotBanned = "<b>The player <c>%s <b>is not banned.";
+	public static final String adminYourNameIsNow = "<i>Your name has been set to <c>%s<i>.";
+	public static final String adminYouBypassed = "<h>You bypassed this block on <c>%s<h>.";
+	public static final String adminSetSpawn = "<g>You set the spawn location.";
+	public static final String adminInvalidItem = "<c>That item does not exist.";
+	public static final String adminVanished = "<teal>You have vanished. Poof.";
+	public static final String adminUnvanished = "<teal>You have become visible.";
+	public static final String adminFlyOn = "<i>You are now flying.";
+	public static final String adminFlyOff = "<i>You stopped flying.";
+	public static final String adminInvalidMode = "<b>Invalid game mode.";
+	public static final String adminUpdatedMode = "<g>Updated game mode to <c>%s<g>.";
 	
 	
 	
@@ -125,6 +127,8 @@ public class Lang
 	public static final String snitchNotifyEnabled = "<i>Notifications for this snitch are now <g>on<i>.";
 	public static final String snitchNotifyDisabled = "<i>Notifications for this snitch are now <b>off<i>.";
 	public static final String snitchNotifyWasPlaced = "<i>You broke a snitch placed by <c>%s <i>on <a>%s.";
+	public static final String snitchMute = "<b>You muted snitches from <c>%s<b>.";
+	public static final String snitchUnmute = "<g>You unmuted snitches from <c>%s<g>.";
 	
 	
 	// SIGNS

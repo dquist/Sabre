@@ -25,3 +25,5 @@ admin
 admins
 enchantments
 biome
+snitch
+snitches
