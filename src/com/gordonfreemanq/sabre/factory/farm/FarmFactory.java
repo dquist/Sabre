@@ -44,8 +44,11 @@ public class FarmFactory extends BaseFactory {
 	// Efficiency factory based on proximity to other farms from 0 to 1.0
 	private double proximityFactor;
 	
-	// Biome specific efficiency factor
+	// Chunk fertility factor
 	private double fertilityFactor;
+	
+	// Biome efficiency factor
+	private double biomeFactor;
 	
 	// The amount of farmed goods
 	private HashMap<CropType, Integer> farmedCrops;
@@ -75,6 +78,7 @@ public class FarmFactory extends BaseFactory {
 		this.layoutFactor = 0.0;
 		this.proximityFactor = 0.0;
 		this.fertilityFactor = 0.0;
+		this.biomeFactor = 0.0;
 		this.farmedCrops = new HashMap<CropType, Integer>();
 		this.lastSurvey = new Date(0);
 		this.storageSize = 64;
@@ -192,11 +196,11 @@ public class FarmFactory extends BaseFactory {
 		this.layoutFactor = Math.min(layoutFactor, 1.0);
 		this.proximityFactor = Math.min(proximityFactor, 1.0);
 		this.fertilityFactor = Math.min(fertilityFactor, 1.0);
+		this.biomeFactor = Math.min(biomeFactor, 1.0);
 		
 		CropType cropType = fr.getCrop();
 		int alreadyFarmed = farmedCrops.get(cropType);
-		int realOutput = (int)(fr.getProductionRate() * layoutFactor * proximityFactor * fertilityFactor);
-		int total = alreadyFarmed + realOutput;
+		int total = alreadyFarmed + this.getRealOutput();
 		
 		// Limit the output to the storage size of the factory
 		total = Math.min(this.storageSize, total);
@@ -262,6 +266,7 @@ public class FarmFactory extends BaseFactory {
 		
 		this.layoutFactor = surveyor.getCoverageFactor();
 		this.fertilityFactor = surveyor.getFertilityFactor();
+		this.biomeFactor = surveyor.getBiomeFactor();
 		return true;
 	}
 	
@@ -273,6 +278,8 @@ public class FarmFactory extends BaseFactory {
 		double factor = 1.0;
 		proximityLimitLocation = null;
 
+		// Iterate through all the other running farms and find out if any other
+		// farm factories are within the exclusion zone
 		for (BaseFactory f : FactoryWorker.getInstance().getRunningFactories()) {
 			if (!(f instanceof FarmFactory)) {
 				continue;
@@ -280,6 +287,7 @@ public class FarmFactory extends BaseFactory {
 			
 			FarmFactory farm = (FarmFactory)f;
 			
+			// Ignore self
 			if (f.getLocation().equals(this.location)) {
 				continue;
 			}
@@ -299,6 +307,7 @@ public class FarmFactory extends BaseFactory {
 			
 			// No need to go below zero
 			if (factor <= 0) {
+				factor = 0;
 				break;
 			}
 		}
@@ -352,6 +361,15 @@ public class FarmFactory extends BaseFactory {
     
     
     /**
+     * Gets the biome factor percent
+     * @return The biome percent
+     */
+    public Long getBiomeFactorPercent() {
+    	return Math.round(biomeFactor * 100.0);
+    }
+    
+    
+    /**
      * Gets the real output rate
      * @return The real output rate
      */
@@ -361,7 +379,7 @@ public class FarmFactory extends BaseFactory {
     	}
     	
     	FarmRecipe fr = (FarmRecipe)recipe;
-    	return (int)(fr.getProductionRate() * layoutFactor * proximityFactor * fertilityFactor);
+    	return (int)(fr.getProductionRate() * ((layoutFactor + proximityFactor + fertilityFactor + biomeFactor) / 4));
     }
     
     /**
@@ -390,6 +408,7 @@ public class FarmFactory extends BaseFactory {
 		doc = doc.append("layout", this.layoutFactor);
 		doc = doc.append("proximity", this.proximityFactor);
 		doc = doc.append("fertility", this.fertilityFactor);
+		doc = doc.append("biome", this.biomeFactor);
 		
 		BasicDBList cropList = new BasicDBList();
 		for(Entry<CropType, Integer> e : this.farmedCrops.entrySet()) {
@@ -414,7 +433,8 @@ public class FarmFactory extends BaseFactory {
 		
 		this.layoutFactor = o.getDouble("layout", 0);
 		this.proximityFactor = o.getDouble("proximity", 0);
-		this.fertilityFactor = o.getDouble("biome", 0);
+		this.fertilityFactor = o.getDouble("fertility", 0);
+		this.biomeFactor = o.getDouble("biome", 0);
 		
 		if (o.containsField("crops")) {
 			BasicDBList cropObject = (BasicDBList)o.get("crops");

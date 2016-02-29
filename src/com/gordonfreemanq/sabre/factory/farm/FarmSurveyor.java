@@ -19,7 +19,7 @@ import com.gordonfreemanq.sabre.util.SabreUtil;
  * 
  * Since checking every single block would be time prohibitive,
  * the algorithm checks a random number of blocks within the farm
- * radius each time it does a new survey.
+ * area each time it does a new survey.
  * 
  * @author GFQ
  *
@@ -37,22 +37,28 @@ public class FarmSurveyor {
 	// The calculated coverage factor
 	private double coverageFactor;
 	
+	// The biome factor for the farm chunks
+	private double biomeFactor;
+	
 	// The fertility factor for the farm chunks
 	private double fertilityFactor;
 	
 	// The farm chunk radius
+	// A radius of 1 would result in a 3x3 chunk farm
+	// A radius of 2 would result in a 5x5 chunk farm
 	private final int chunkRadius;
 	
 	// The number of blocks to sample during a survey
 	private final int squareLength;
 	
-	private final Random rand;
-	
 	// The number of samples to get for each survey
 	private final int maxSamples;
 	
-	// The stored samples
-	private double surveyTotal;
+	// The stored layout samples
+	private double surveyLayoutTotal;
+	
+	// The stored biome samples
+	private double surveyBiomeTotal;
 	
 	// The world the farm is located in
 	protected World farmWorld;
@@ -66,6 +72,7 @@ public class FarmSurveyor {
 	// The farm material
 	protected final Material plantMaterial;
 	
+	private final Random rand;
 	private Location factoryLocation;
 	private int numSamples;
 	private int minY;
@@ -78,6 +85,7 @@ public class FarmSurveyor {
 		this.cropType = cropType;
 		this.plantMaterial = plantMaterial;
 		this.coverageFactor = 0.0;
+		this.biomeFactor = 0.0;
 		this.chunkRadius = SabrePlugin.getPlugin().getSabreConfig().getFarmChunkRadius();
 		this.maxSamples = SabrePlugin.getPlugin().getSabreConfig().getFarmSurveySampleSize();
 		this.squareLength = (chunkRadius * 2 * 16) + 16;
@@ -111,7 +119,8 @@ public class FarmSurveyor {
 		calculateFertility();
 		
 		numSamples = 0;
-		surveyTotal = 0;
+		surveyLayoutTotal = 0;
+		surveyBiomeTotal = 0;
 		int x = 0;
 		int z = 0;
 		
@@ -132,7 +141,8 @@ public class FarmSurveyor {
 		}
 		
 		// Calculate and return the new coverage factor
-		this.coverageFactor = surveyTotal / numSamples;
+		this.coverageFactor = surveyLayoutTotal / numSamples;
+		this.biomeFactor = surveyBiomeTotal / numSamples;
 	}
 	
 	
@@ -185,9 +195,10 @@ public class FarmSurveyor {
 		boolean isCrop = blockType.equals(this.plantMaterial);
 		
 		if (hasLight && isCrop && isCropMature(b)) {
-			double sFactor = sampleSubstrateDepth(b.getRelative(BlockFace.DOWN), MAX_SUBSTRATE_DEPTH);
+			double lFactor = sampleSubstrateDepth(b.getRelative(BlockFace.DOWN), MAX_SUBSTRATE_DEPTH);
 			double bFactor = cropType.getBiomeFactor(b.getBiome());
-			surveyTotal += (sFactor * bFactor);
+			surveyLayoutTotal += lFactor;
+			surveyBiomeTotal += bFactor;
 		}
 		
 		numSamples++;
@@ -202,21 +213,22 @@ public class FarmSurveyor {
 		return this.coverageFactor;
 	}
 	
+	
+	/**
+	 * Gets the biome factor
+	 * @return The biome factor
+	 */
+	public double getBiomeFactor() {
+		return this.biomeFactor;
+	}
+	
+	
 	/**
 	 * Gets the fertility factor
 	 * @return The fertility factor
 	 */
 	public double getFertilityFactor() {
 		return this.fertilityFactor;
-	}
-	
-	
-	/**
-	 * Sets the coverage factor
-	 * @param coverageFactor The coverage factor
-	 */
-	public void setCoverageFactor(double coverageFactor) {
-		this.coverageFactor = coverageFactor;
 	}
 	
 	

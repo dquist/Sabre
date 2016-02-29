@@ -65,9 +65,10 @@ public class FarmController extends AbstractController {
 				Location l = farm.proximityLimitLocation;
 				lore.add(parse("      <b><it>Output limited by nearby farm: (%d, %d)", l.getBlockX(), l.getBlockZ()));
 			}
-			
-			lore.add(parse("    <a>Fertility: <n>%s%%", farm.getFertilityFactorPercent().toString()));
+
 			lore.add(parse("    <a>Layout: <n>%s%%", farm.getLayoutFactorPercent().toString()));
+			lore.add(parse("    <a>Biome: <n>%s%%", farm.getBiomeFactorPercent().toString()));
+			lore.add(parse("    <a>Fertility: <n>%s%%", farm.getFertilityFactorPercent().toString()));
 			lore.add(parse("    <a>Output rate: <lime>%d/%d", farm.getRealOutput(), farm.getNominalOutput()));
 		}
 		
