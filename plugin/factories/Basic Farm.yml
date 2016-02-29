@@ -20,13 +20,13 @@ recipes:
     inputs:
       Dirt:
         material: DIRT
-        amount: 2048
+        amount: 512
       Cobblestone:
         material: COBBLESTONE
-        amount: 896
+        amount: 256
       Gravel:
         material: GRAVEL
-        amount: 512
+        amount: 128
     outputs:
       Aspect of Agriculture:
         custom_item: Aspect of Agriculture
@@ -37,10 +37,7 @@ upgrades:
     inputs:
       Aspect of Agriculture:
         custom_item: Aspect of Agriculture
-        amount: 32
-      Bushel of Wheat:
-        custom_item: Bushel of Wheat
-        amount: 1024
+        amount: 8
     outputs:
       Wheat Farm 1:
         custom_item: Wheat Farm 1
@@ -50,10 +47,7 @@ upgrades:
     inputs:
       Aspect of Agriculture:
         custom_item: Aspect of Agriculture
-        amount: 32
-      Bushel of Potatoes:
-        custom_item: Bushel of Potatoes
-        amount: 1024
+        amount: 8
     outputs:
       Potato Farm 1:
         custom_item: Potato Farm 1
@@ -63,10 +57,7 @@ upgrades:
     inputs:
       Aspect of Agriculture:
         custom_item: Aspect of Agriculture
-        amount: 32
-      Bushel of Carrots:
-        custom_item: Bushel of Carrots
-        amount: 1024
+        amount: 8
     outputs:
       Carrot Farm 1:
         custom_item: Carrot Farm 1
