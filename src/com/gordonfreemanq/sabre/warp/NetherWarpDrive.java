@@ -96,15 +96,15 @@ public class NetherWarpDrive extends AbstractWarpDrive {
 			
 			destPad = (TeleportPad)BlockManager.createBlockFromItem(is, destPadLocation);
 			bm.addBlock(destPad);
-
-			// Link the two pads together 
-			destPad.setDriveLocation(sourcePad.getDriveLocation());
-			destPad.setDestPadLocation(sourcePadLocation);
-			destPad.setNetherGenerated(true);
-			destPad.saveSettings();
-			sourcePad.setDestPadLocation(destPadLocation);
-			sourcePad.saveSettings();
 		}
+
+		// Link the two pads together 
+		destPad.setDriveLocation(sourcePad.getDriveLocation());
+		destPad.setDestPadLocation(sourcePadLocation);
+		destPad.setNetherGenerated(true);
+		destPad.saveSettings();
+		sourcePad.setDestPadLocation(destPadLocation);
+		sourcePad.saveSettings();
 		
 		if (!destIsValid) {
 			sp.msg(Lang.warpNoPadFound);
