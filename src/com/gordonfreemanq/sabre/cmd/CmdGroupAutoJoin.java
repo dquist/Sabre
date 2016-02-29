@@ -28,7 +28,7 @@ public class CmdGroupAutoJoin extends SabreCommand {
 			setTo = !me.getAutoJoin();
 		}
 		
-		me.setAutoJoin(setTo);
+		pm.setAutoJoin(me, setTo);
 		if (setTo) {
 			msg(Lang.groupAutoJoinEnabled);
 		} else {
