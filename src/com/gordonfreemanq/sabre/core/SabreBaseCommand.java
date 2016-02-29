@@ -247,7 +247,7 @@ public abstract class SabreBaseCommand<T extends AbstractSabrePlugin>
 			return true;
 		}
 		
-		return plugin.perm.has(sender, this.permission, informSenderIfNot);
+		return plugin.perm.has(sender, this.permission, this.visibility, informSenderIfNot);
 	}
 	
 	

@@ -217,4 +217,5 @@ public class Lang
 	public static String exceptionLogin = "An internal server error occurred.";
 	public static String exceptionConsoleDuring = "An exception error occurred during \"%s\"";
 	public static String exceptionBlockOp = "<b>An internal error occurred during this block operation.";
+	public static String unknownCommand = "Unknown command. Type \"/help\" for help.";
 }

@@ -9,6 +9,7 @@ import org.bukkit.permissions.Permission;
 
 import com.gordonfreemanq.sabre.Lang;
 import com.gordonfreemanq.sabre.core.AbstractSabrePlugin;
+import com.gordonfreemanq.sabre.core.CommandVisibility;
 
 
 public class PermUtil {
@@ -65,11 +66,14 @@ public class PermUtil {
 		return me.hasPermission(perm);
 	}
 	
-	public boolean has (CommandSender me, String perm, boolean informSenderIfNot)
+	public boolean has (CommandSender me, String perm, CommandVisibility visiblity, boolean informSenderIfNot)
 	{
 		if (has(me, perm))
 		{
 			return true;
+		}
+		else if (visiblity != CommandVisibility.VISIBLE) {
+			me.sendMessage(Lang.unknownCommand);
 		}
 		else if (informSenderIfNot && me != null)
 		{

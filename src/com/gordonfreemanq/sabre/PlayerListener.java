@@ -13,6 +13,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
+import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
 import org.bukkit.event.player.AsyncPlayerPreLoginEvent;
@@ -131,12 +132,7 @@ public class PlayerListener implements Listener {
 		if (sp == null) {
 			// This player has never logged in before, make a new instance
 			sp = pm.createNewPlayer(p);
-			
-			Location spawnLocation = SabreUtil.chooseSpawn(p.getWorld(), 5000);
-			SabreUtil.sendToGround(p, spawnLocation);
-			p.setBedSpawnLocation(spawnLocation, true);
-			p.teleport(spawnLocation);
-			p.sendMessage("You wake up in an unfamiliar place.");
+			SabreUtil.doRandomSpawn(p);
 		}
 		
 		
@@ -268,4 +264,29 @@ public class PlayerListener implements Listener {
 			e.setCancelled(true);
 		}
 	}
+	
+	
+    /**
+     * Prevents admins from being harmed
+     * @param e The event args
+     */
+	@EventHandler(priority=EventPriority.LOWEST, ignoreCancelled = true)
+	public void onPlayerDamage(EntityDamageEvent  e) {
+        if (!(e.getEntity() instanceof Player)) {
+            return;
+        }
+        
+        Player p = (Player)e.getEntity();
+        
+        SabrePlayer sp = pm.getPlayerByName(p.getName());
+        if (sp == null) {
+        	return;
+        }
+        
+        if (sp.isAdmin()) {
+        	e.setCancelled(true);
+        }
+	}
+		
+		
 }

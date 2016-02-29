@@ -14,6 +14,7 @@ import org.bukkit.entity.Player;
 import com.gordonfreemanq.sabre.blocks.BuildState;
 import com.gordonfreemanq.sabre.chat.IChatChannel;
 import com.gordonfreemanq.sabre.core.INamed;
+import com.gordonfreemanq.sabre.core.Permission;
 
 /**
  * Represents a player that has joined the server and may or may not be online
@@ -491,5 +492,13 @@ public class SabrePlayer implements INamed, IChatChannel {
 	 */
 	public void setRequestedBcastPlayer(SabrePlayer broadcastRequestPlayer) {
 		this.broadcastRequestPlayer = broadcastRequestPlayer;
+	}
+	
+	
+	/**
+	 * Gets whether the player has admin permissions
+	 */
+	public boolean isAdmin() {
+		return player.hasPermission(Permission.ADMIN.node);
 	}
 }

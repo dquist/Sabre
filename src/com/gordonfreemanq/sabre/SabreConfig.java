@@ -126,6 +126,7 @@ public class SabreConfig {
 	private double foodSaturationMultiplier = 0.0;
 	private double hungerSlowdown = 0.0;
 	private int xpBottle = 10;
+	private int respawnRadius = 5000;
 	
 	
 	/**
@@ -585,5 +586,13 @@ public class SabreConfig {
 	 */
 	public int getXpBottleValue() {
 		return this.xpBottle;
+	}
+	
+	/**
+	 * Gets the respawn radius
+	 * @return The respawn radius
+	 */
+	public int getRespawnRadius() {
+		return this.respawnRadius;
 	}
 }
