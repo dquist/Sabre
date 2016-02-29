@@ -16,7 +16,7 @@ recipes:
     inputs:
       Aspect of Domain:
         custom_item: Aspect of Domain
-        amount: 4
+        amount: 8
     outputs:
       Direct Warp Drive:
         custom_item: Direct Warp Drive
@@ -37,25 +37,21 @@ recipes:
   Craft Aspect of Domain:
     fuel_cost: 10
     inputs:
-      Aspect of Masonry:
-        custom_item: Aspect of Masonry
-        amount: 4
       Aspect of Framing:
         custom_item: Aspect of Framing
-        amount: 4
+        amount: 8
+      Aspect of Masonry:
+        custom_item: Aspect of Masonry
+        amount: 6
       Aspect of Metallurgy:
         custom_item: Aspect of Metallurgy
-        amount: 2
+        amount: 1
       Aspect of Casting:
         custom_item: Aspect of Casting
-        amount: 2
+        amount: 1
       Redstone Coil:
         custom_item: Redstone Coil
         amount: 1
       Gearbox:
         custom_item: Gearbox
-        amount: 1
-    outputs:
-      Aspect of Domain:
-        custom_item: Aspect of Domain
         amount: 1
