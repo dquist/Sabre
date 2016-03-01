@@ -41,7 +41,7 @@ import com.gordonfreemanq.sabre.util.VanishApi;
 
 public class SabrePlugin extends AbstractSabrePlugin
 {
-	public final static String version = "0.1.11";
+	public final static String version = "0.1.12";
 	
 	private static SabrePlugin instance;
 
@@ -338,6 +338,5 @@ public class SabrePlugin extends AbstractSabrePlugin
 		}
 
 		return null;
-	}
-	
+	}	
 }
