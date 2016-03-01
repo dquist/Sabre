@@ -66,6 +66,7 @@ public class Lang
 	public static final String chatWillReplyTo = "<lp>You will reply to <c>%s<lp>.";
 	public static final String chatPlayerOffline = "<c>%s <b>is offline.";
 	public static final String chatOfflineActivity = "<i>There was some activity while you were offline:";
+	public static final String chatYouAreIgnored = "<i>The player <c>%s <i>has ignored you.";
 	
 	
 	// BUILD

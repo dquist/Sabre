@@ -2,8 +2,9 @@ package com.gordonfreemanq.sabre;
 
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.LinkedList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
@@ -22,30 +23,61 @@ import com.gordonfreemanq.sabre.core.Permission;
  */
 public class SabrePlayer implements INamed, IChatChannel {
 
+	// Unique ID of the player
 	private final UUID id;
+	
+	// The player's display name
 	private String name;
+	
+	// The Bukkit player instance
 	private Player player;
+	
+	// Login and play time data
 	private Date firstLogin;
 	private Date lastLogin;
 	private long playTime;
-	private boolean autoJoin;
-	private IChatChannel chatChannel;
-	private SabrePlayer lastMessaged;
 	private boolean banned;
 	private String banMessage;
+	
+	// Whether the player auto-joins groups
+	private boolean autoJoin;
+	
+	// The current chat channel
+	private IChatChannel chatChannel;
+	
+	// The player last messaged, used for replying
+	private SabrePlayer lastMessaged;
+	
+	// Pending offline messages for the player
 	private List<String> offlineMessages;
+	
+	// The current build mode of the player
 	private BuildState buildState;
+	
+	// Whether admin bypass mode is enabled
 	private boolean adminBypass;
+	
+	// Whether the player is vanished or not
 	private boolean vanished;
+	
+	// Whether the player was freed from a prison pearl while offline
 	private boolean freedOffline;
+	
+	// The player's bed location
 	private Location bedLocation;
-	private List<SabrePlayer> ignoredPlayers;
-	private List<SabrePlayer> bcastPlayers;
+	
+	// Other players that are being ignored by this player
+	private Set<SabrePlayer> ignoredPlayers;
+	
+	// Players that are receiving prison pearl broadcast messages
+	private Set<SabrePlayer> bcastPlayers;
+	
+	// The last player who requested a prison pearl broadcast
 	private SabrePlayer broadcastRequestPlayer;
 	
 	
 	/**
-	 * Constructor
+	 * Creates a new SabrePlayer instance
 	 * @param id The player's ID
 	 * @param name The player's display name
 	 */
@@ -65,8 +97,8 @@ public class SabrePlayer implements INamed, IChatChannel {
 		this.adminBypass = false;
 		this.vanished = false;
 		this.freedOffline = false;
-		this.ignoredPlayers = new LinkedList<SabrePlayer>();
-		this.bcastPlayers = new LinkedList<SabrePlayer>();
+		this.ignoredPlayers = new HashSet<SabrePlayer>();
+		this.bcastPlayers = new HashSet<SabrePlayer>();
 		this.broadcastRequestPlayer = null;
 	}
 	
@@ -181,7 +213,7 @@ public class SabrePlayer implements INamed, IChatChannel {
 	
 	/**
 	 * Gets the total play time
-	 * @return The total playtime
+	 * @return The total play time
 	 */
 	public long getPlaytime() {
 		return this.playTime;
@@ -189,8 +221,8 @@ public class SabrePlayer implements INamed, IChatChannel {
 	
 	
 	/**
-	 * Sets the total playtime
-	 * @param lastLogin The total playtime
+	 * Sets the total play time
+	 * @param lastLogin The total play time
 	 */
 	public void setPlaytime(long playTime) {
 		this.playTime = playTime;
@@ -319,6 +351,17 @@ public class SabrePlayer implements INamed, IChatChannel {
 	@Override
 	public void chat(SabrePlayer sender, String msg) {
 		if (this.isOnline()) {
+			if (this.ignoredPlayers.contains(sender)) {
+				sender.msg(Lang.chatYouAreIgnored, this.name);
+				
+				// Move to global chat
+				if (sender.getChatChannel().equals(this)) {
+					sender.setChatChannel(SabrePlugin.getPlugin().getGlobalChat());
+					sender.msg(Lang.chatMovedGlobal);
+				}
+				return;
+			}
+			
 			sender.msg("<lp>To %s: %s", this.getName(), msg);
 			this.msg("<lp>From %s: %s", sender.getName(), msg);
 			this.setLastMessaged(sender);
@@ -326,7 +369,12 @@ public class SabrePlayer implements INamed, IChatChannel {
 			SabrePlugin.getPlugin().log(Level.INFO, "%s -> %s: %s", sender.getName(), this.getName(), msg);
 		} else {
 			sender.msg(Lang.chatPlayerNowOffline, this.getName());
-			sender.msg(Lang.chatMovedGlobal, this.getName());
+			
+			// Move to global chat
+			if (sender.getChatChannel().equals(this)) {
+				sender.setChatChannel(SabrePlugin.getPlugin().getGlobalChat());
+				sender.msg(Lang.chatMovedGlobal);
+			}
 		}
 	}
 	
@@ -361,7 +409,7 @@ public class SabrePlayer implements INamed, IChatChannel {
 	
 	
 	/**
-	 * Gets the offlines messages for the player
+	 * Gets the offline messages for the player
 	 * @return The offline messages
 	 */
 	public List<String> getOfflineMessages() {
@@ -371,7 +419,7 @@ public class SabrePlayer implements INamed, IChatChannel {
 	
 	/**
 	 * Adds an offline message for the player
-	 * @param message The meessage to add
+	 * @param message The message to add
 	 */
 	public void addOfflineMessage(String message) {
 		this.offlineMessages.add(message);
@@ -460,11 +508,25 @@ public class SabrePlayer implements INamed, IChatChannel {
 	
 	
 	/**
-	 * Gets the ignored players
-	 * @return The ignored players
+	 * Sets the ignored state of a player
+	 * @param sp The player to set
+	 * @param ignored The ignored status
 	 */
-	public List<SabrePlayer> getIgnoredPlayers() {
-		return this.ignoredPlayers;
+	public void setIgnored(SabrePlayer sp, boolean ignored) {
+		if (ignored && !ignoredPlayers.contains(sp)) {
+			ignoredPlayers.add(sp);
+		} else {
+			ignoredPlayers.remove(sp);
+		}
+	}
+	
+	
+	/**
+	 * Gets whether a player is ignored
+	 * @return Whether the player is ignored
+	 */
+	public boolean isIgnoring(SabrePlayer sp) {
+		return ignoredPlayers.contains(sp);
 	}
 	
 	
@@ -472,7 +534,7 @@ public class SabrePlayer implements INamed, IChatChannel {
 	 * Gets the broadcasting players
 	 * @return The broadcast players
 	 */
-	public List<SabrePlayer> getBcastPlayers() {
+	public Set<SabrePlayer> getBcastPlayers() {
 		return this.bcastPlayers;
 	}
 	

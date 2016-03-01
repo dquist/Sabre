@@ -27,3 +27,4 @@ enchantments
 biome
 snitch
 snitches
+offline

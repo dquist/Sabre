@@ -40,7 +40,7 @@ public class CmdGroupMute extends SabreCommand {
 			setTo = !g.isChatMutedBy(me);
 		}
 		
-		g.setChatMutedBy(me,  setTo);
+		g.setChatMutedBy(me, setTo);
 		
 		if (setTo) {
 			me.msg(Lang.groupMute, groupName);
