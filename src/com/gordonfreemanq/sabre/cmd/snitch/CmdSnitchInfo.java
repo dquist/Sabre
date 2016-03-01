@@ -17,6 +17,7 @@ public class CmdSnitchInfo  extends SabreCommand {
 		super();
 		
 		this.aliases.add("info");
+		this.hiddenAliases.add("jainfo");
 		
 		this.optionalArgs.put("page", "1");
 		
@@ -26,12 +27,15 @@ public class CmdSnitchInfo  extends SabreCommand {
 	@Override
 	public void perform()
 	{
-		Location l = SnitchController.parseLocation(me, true);
+		Snitch snitch = null;
+		
+		Location l = SnitchController.parseLocation(me, false);
 		if (l == null) {
-			return;
+			snitch = bm.getSnitches().getSnitchUnderCursor(me);
+		} else {
+			snitch = (Snitch)bm.getBlockAt(l);
 		}
 		
-		Snitch snitch = (Snitch)bm.getBlockAt(l);
 		if (snitch == null) {
 			msg(Lang.snitchNotFound);
 			AbstractController.normalizeHeldController(me);
@@ -49,6 +53,5 @@ public class CmdSnitchInfo  extends SabreCommand {
 		}
 		
 		SnitchLogger.getInstance().requestReport(me, snitch, page);
-		
 	}
 }

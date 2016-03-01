@@ -1,13 +1,19 @@
 package com.gordonfreemanq.sabre.snitch;
 
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Set;
 import java.util.TreeSet;
 
 import org.bukkit.Chunk;
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.World;
+import org.bukkit.block.Block;
+import org.bukkit.util.BlockIterator;
 
+import com.gordonfreemanq.sabre.SabrePlayer;
+import com.gordonfreemanq.sabre.SabrePlugin;
 import com.gordonfreemanq.sabre.blocks.BlockCollection;
 import com.gordonfreemanq.sabre.blocks.SabreBlock;
 import com.gordonfreemanq.sabre.snitch.QTBox;
@@ -98,10 +104,10 @@ public class SnitchCollection extends BlockCollection {
 	
 	
 	/**
-	 * Finds snitches for a loction
+	 * Finds snitches for a location
 	 * @param world The world to search
 	 * @param location
-	 * @return
+	 * @return The set of snitches
 	 */
 	public Set<Snitch> findSnitches(Location location) {
         return findSnitches(location, false);
@@ -111,7 +117,7 @@ public class SnitchCollection extends BlockCollection {
 	/**
 	 * Finds the snitches for a location
 	 * @param l The location to check
-	 * @param includePaddingZone whether to include the padding histerisis
+	 * @param includePaddingZone whether to include the padding hysteresis
 	 * @return The set of snitches
 	 */
     public Set<Snitch> findSnitches(Location l, boolean includePaddingZone) {
@@ -133,4 +139,86 @@ public class SnitchCollection extends BlockCollection {
     }
 	
 	
+	/**
+	 * Searches for a snitch around a player
+	 * @param player The player
+	 * @return The snitch if found
+	 */
+    public Snitch getSnitchUnderCursor(SabrePlayer sp) {
+        Iterator<Block> itr = new BlockIterator(sp.getPlayer(), 40); // Within 2.5 chunks
+        while (itr.hasNext()) {
+            final Block block = itr.next();
+            final Material mat = block.getType();
+            if (mat != Material.JUKEBOX) {
+                continue;
+            }
+            
+            Snitch snitch = (Snitch)this.get(block.getLocation());
+            if (snitch != null) {
+            	return snitch;
+            }
+        }
+        return null;
+    }
+    
+    
+    /**
+     * Checks if a snitch block actually exists
+     * @param snitch The snitch to check
+     * @param cleanup Whether to remove any ghost snitches
+     * @return true if the snitch block exists
+     */
+    public boolean doesSnitchExist(Snitch snitch, boolean cleanup) {
+    	
+    	Location l = snitch.getLocation();
+    	if (l.getBlock().getType().equals(Material.JUKEBOX)) {
+    		return true;
+    	} else if (cleanup) {
+            final SabrePlugin plugin = SabrePlugin.getPlugin();
+            int x = l.getBlockX();
+            int y = l.getBlockY();
+            int z = l.getBlockZ();
+            plugin.log("Removing ghost snitch '" + snitch.getDisplayName() + "' at x:" + x + " y:" + y + " z:" + z);
+            this.remove(snitch);
+    	}
+        return false;
+    }
+    
+    
+    /**
+     * Finds the closest owned snitch
+     * @param player The player
+     * @return The closest snitch, or null if one doesn't exist
+     */
+    public Snitch findClosestOwnedSnitch(SabrePlayer sp) {
+        Snitch closestSnitch = null;
+        double closestDistance = Double.MAX_VALUE;
+        Location playerLoc = sp.getPlayer().getLocation();
+        
+        Set<Snitch> snitches = this.findSnitches(playerLoc);
+        for (final Snitch snitch : snitches) {
+            if (doesSnitchExist(snitch, true) && snitch.canPlayerAccess(sp)) {
+                double distance = snitch.getLocation().distanceSquared(playerLoc);
+                if (distance < closestDistance) {
+                    closestDistance = distance;
+                    closestSnitch = snitch;
+                }
+            }
+        }
+        return closestSnitch;
+    }
+	
+	
+    /**
+     * Finds the targeted snitch
+     * @param sp The player
+     * @return The snitch if it exists
+     */
+    public Snitch findTargetedOwnedSnitch(SabrePlayer sp) {
+        Snitch snitch = getSnitchUnderCursor(sp);
+        if (snitch != null && doesSnitchExist(snitch, true) && snitch.canPlayerAccess(sp)) {
+            return snitch;
+        }
+        return findClosestOwnedSnitch(sp);
+    }
 }

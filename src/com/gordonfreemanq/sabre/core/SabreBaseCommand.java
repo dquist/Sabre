@@ -32,9 +32,7 @@ public abstract class SabreBaseCommand<T extends AbstractSabrePlugin>
 	
 	// The different names this commands will react to  
 	public CustomStringList aliases;
-	
-	// Aliases for executing commands directly
-	public CustomStringList rawAliases;
+	public CustomStringList hiddenAliases;
 	
 	// Information on the args
 	public List<String> requiredArgs;
@@ -84,7 +82,7 @@ public abstract class SabreBaseCommand<T extends AbstractSabrePlugin>
 		
 		this.subCommands = new ArrayList<SabreBaseCommand<?>>();
 		this.aliases = new CustomStringList();
-		this.rawAliases = new CustomStringList();
+		this.hiddenAliases = new CustomStringList();
 		
 		this.requiredArgs = new ArrayList<String>();
 		this.optionalArgs = new LinkedHashMap<String, String>();
@@ -125,22 +123,13 @@ public abstract class SabreBaseCommand<T extends AbstractSabrePlugin>
 		{
 			for (SabreBaseCommand<?> subCommand: this.subCommands)
 			{
-				if (subCommand.aliases.contains(args.get(0)))
+				if (subCommand.aliases.contains(args.get(0)) || subCommand.hiddenAliases.contains(args.get(0)))
 				{
 					args.remove(0);
 					commandChain.add(this);
 					subCommand.execute(sender, args, commandChain);
 					return;
 				}
-			}
-			
-			// Is there a matching raw alias?
-			SabreBaseCommand<?> rawAlias = getRawAliasCommand(args.get(0));
-			if (rawAlias != null) {
-				args.remove(0);
-				commandChain.add(this);
-				rawAlias.execute(sender, args, commandChain);
-				return;
 			}
 		}
 		
@@ -166,26 +155,7 @@ public abstract class SabreBaseCommand<T extends AbstractSabrePlugin>
 	
 	// -------------------------------------------- //
 	// Call Validation
-	// -------------------------------------------- //
-	
-	public SabreBaseCommand<?> getRawAliasCommand(String alias) {
-				
-		if (this.rawAliases.contains(alias)) {
-			return this;
-		}
-		
-		for (SabreBaseCommand<?> subCommand: this.subCommands)
-		{
-			SabreBaseCommand<?> cmd = subCommand.getRawAliasCommand(alias);
-			if (cmd != null) {
-				return cmd;
-			}
-		}
-		
-		// no match
-		return null;
-	}
-	
+	// -------------------------------------------- //	
 	
 	
 	/**
