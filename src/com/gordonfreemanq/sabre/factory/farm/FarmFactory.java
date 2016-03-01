@@ -206,7 +206,7 @@ public class FarmFactory extends BaseFactory {
 		// Limit the output to the storage size of the factory
 		total = Math.min(this.storageSize, total);
 		farmedCrops.put(cropType, total);
-		SabrePlugin.getPlugin().log(Level.INFO, "Doing farm recipe - %d crops", total);
+		//SabrePlugin.getPlugin().log(Level.INFO, "Doing farm recipe - %d crops", total);
 		
 		// Power off zero-output factories so they don't run forever
 		if (this.getRealOutput() == 0) {

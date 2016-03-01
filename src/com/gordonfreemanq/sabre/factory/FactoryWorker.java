@@ -56,7 +56,7 @@ public class FactoryWorker implements Runnable {
 		}
 		
 		// Update all running factories
-		SabrePlugin.getPlugin().log(Level.INFO, "Running Factories: %d", runningFactories.size());
+		//SabrePlugin.getPlugin().log(Level.INFO, "Running Factories: %d", runningFactories.size());
 		for(BaseFactory f : runningFactories.values()) {
 			if (f.getRunning()) {
 				f.update();
