@@ -96,6 +96,14 @@ public class Lang
 	public static final String blockCantPlace = "<i>You cannot place this block.";
 	public static final String blockMaterialHasLore = "<b>You cannot reinforce with lore items.";
 	public static final String blockNoAccess = "<i>You don't have access to do that.";
+	public static final String blockNoPermission = "<b>You don't have permission to modify that block.";
+	public static final String acidNotAcidBlock = "<b>That's not an acid block.";
+	public static final String acidNotReinforced = "<b>That block is not reinforced.";
+	public static final String acidNotMature = "<b>That acid block is not mature yet.";
+	public static final String acidNoBlockAbove = "<b>There is no block above to remove.";
+	public static final String acidNoReinforcementAbove = "<b>That block doesn't have a reinforcement.";
+	public static final String acidSameGroup = "<b>That block is on the same group as the acid block.";
+	public static final String acidTooWeak = "<b>This acid block is too weak for that reinforcement.";
 	
 	
 	// ADMIN

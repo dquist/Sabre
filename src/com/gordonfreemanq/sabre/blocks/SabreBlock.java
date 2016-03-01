@@ -5,12 +5,15 @@ import java.util.List;
 
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.block.Block;
 import org.bukkit.event.block.BlockBreakEvent;
+import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 
 import com.gordonfreemanq.sabre.SabrePlayer;
 import com.gordonfreemanq.sabre.SabrePlugin;
+import com.gordonfreemanq.sabre.SabreTweaks;
 import com.mongodb.BasicDBObject;
 
 public class SabreBlock {
@@ -317,6 +320,16 @@ public class SabreBlock {
 	
 	
 	/**
+	 * Handles the block placing
+	 * @param p The player placing the block
+	 * @param e The event args
+	 */
+	public void onBlockPlaced(SabrePlayer p, BlockPlaceEvent e) {
+		// Do nothing
+	}
+	
+	
+	/**
 	 * Handles the block breaking, low priority event
 	 * @param p The player breaking the block
 	 * @param e The event args
@@ -346,5 +359,27 @@ public class SabreBlock {
 	 */
 	public void onBlockBroken(SabrePlayer p, BlockBreakEvent e) {
 		// Do nothing
+	}
+	
+	
+	/**
+	 * Drops the block naturally
+	 */
+	public void dropNaturally() {
+		
+		Block b = this.location.getBlock();
+		
+		// Create a new item stack for this block type
+		ItemStack is = this.createItemStack(b.getType(), 1);
+
+		if (is == null) {
+			is = new ItemStack(b.getType());
+		}
+		
+		b.getLocation().getBlock().setType(Material.AIR);
+		
+		if (this.getDropsBlock()) {
+			SabreTweaks.dropItemAtLocation(b.getLocation(), is);
+		}
 	}
 }

@@ -22,6 +22,7 @@ public class CmdRoot extends SabreCommand {
 		this.addSubCommand(new CmdBuildInfo());
 		this.addSubCommand(new CmdBuildReinforce());
 		this.addSubCommand(new CmdBuildOff());
+		this.addSubCommand(new CmdBuildAcid());
 		this.addSubCommand(new CmdChat());
 		this.addSubCommand(new CmdChatMe());
 		this.addSubCommand(new CmdChatMsg());

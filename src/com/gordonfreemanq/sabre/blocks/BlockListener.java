@@ -156,6 +156,7 @@ public class BlockListener implements Listener {
 			// Commit the new block record if it exists
 			if (b != null) {
 				bm.addBlock(b);
+				b.onBlockPlaced(p, e);
 			}
 
 			if (r != null) {

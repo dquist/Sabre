@@ -1,0 +1,16 @@
+name: Acid Block
+material: GOLD_BLOCK
+class: com.gordonfreemanq.sabre.customitems.AcidBlock
+amount: 1
+lore:
+  - '<c>This block can be used to remove other reinforced blocks.'
+  - '<n>Place the acid block directly under the block you wish to'
+  - '<n>remove and reinforce it with the same strength material.'
+  - '<n>When the block has fully matured, use the <c>/acid'
+  - '<n> command to activate.'
+  - ''
+  - '<l>Maturation times:'
+  - '    <a>Stone: <n>1 hour'
+  - '    <a>Iron: <n>8 hours'
+  - '    <a>Diamond: <n>2 days'
+  - '    <a>Diamond Block: <n>6 days'
