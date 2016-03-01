@@ -10,7 +10,7 @@ public class CmdSnitch  extends SabreCommand {
 	public final SabreCommand cmdNotify = new CmdSnitchNotify();
 	public final SabreCommand cmdRefresh = new CmdSnitchRefresh();
 	public final SabreCommand cmdRename = new CmdSnitchRename();
-	public final SabreCommand cmdReport = new CmdSnitchReport();
+	public final SabreCommand cmdReport = new CmdSnitchInfo();
 	public final SabreCommand cmdMute = new CmdSnitchMute();
 	
 	

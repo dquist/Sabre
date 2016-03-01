@@ -9,14 +9,14 @@ import com.gordonfreemanq.sabre.cmd.SabreCommand;
 import com.gordonfreemanq.sabre.snitch.SnitchController;
 import com.gordonfreemanq.sabre.snitch.SnitchLogger;
 
-public class CmdSnitchReport  extends SabreCommand {
+public class CmdSnitchInfo  extends SabreCommand {
 
 	
-	public CmdSnitchReport()
+	public CmdSnitchInfo()
 	{
 		super();
 		
-		this.aliases.add("report");
+		this.aliases.add("info");
 		
 		this.optionalArgs.put("page", "1");
 		

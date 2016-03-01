@@ -28,3 +28,4 @@ biome
 snitch
 snitches
 offline
+config

@@ -2,19 +2,14 @@ package com.gordonfreemanq.sabre.cmd;
 
 import java.util.Collections;
 
-import com.gordonfreemanq.sabre.cmd.factory.CmdFactory;
-import com.gordonfreemanq.sabre.cmd.pearl.CmdPearl;
-import com.gordonfreemanq.sabre.cmd.snitch.CmdSnitch;
-
 public class CmdRoot extends SabreCommand {
-	
-	public final SabreCommand cmdSnitch = new CmdSnitch();
 	
 	public CmdRoot()
 	{
 		super();
-		
+
 		this.aliases.add("f");
+		this.aliases.add("faction");
 		this.aliases.removeAll(Collections.singletonList(null));  // remove any nulls from extra commas
 		
 		this.setHelpShort("The Faction base command");
@@ -47,10 +42,6 @@ public class CmdRoot extends SabreCommand {
 		this.addSubCommand(new CmdGroupUninvite());
 		this.addSubCommand(new CmdHelp());
 		this.addSubCommand(new CmdUnknown());
-		this.addSubCommand(new CmdPearl());
-		
-		// Factory
-		this.addSubCommand(new CmdFactory());
 		
 		
 		// Admin commands
@@ -63,8 +54,6 @@ public class CmdRoot extends SabreCommand {
 		this.addSubCommand(new CmdAdminVanish());
 		this.addSubCommand(new CmdAdminGamemode());
 		this.addSubCommand(new CmdAdminRespawn());
-		
-		this.addSubCommand(cmdSnitch);
 	}
 	
 	@Override

@@ -2,6 +2,7 @@ package com.gordonfreemanq.sabre;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
 import java.util.logging.Level;
 
@@ -17,7 +18,11 @@ import com.gordonfreemanq.sabre.chat.GlobalChat;
 import com.gordonfreemanq.sabre.chat.ServerBroadcast;
 import com.gordonfreemanq.sabre.cmd.CmdAutoHelp;
 import com.gordonfreemanq.sabre.cmd.CmdRoot;
+import com.gordonfreemanq.sabre.cmd.factory.CmdFactory;
+import com.gordonfreemanq.sabre.cmd.pearl.CmdPearl;
+import com.gordonfreemanq.sabre.cmd.snitch.CmdSnitch;
 import com.gordonfreemanq.sabre.core.AbstractSabrePlugin;
+import com.gordonfreemanq.sabre.core.SabreBaseCommand;
 import com.gordonfreemanq.sabre.data.IDataAccess;
 import com.gordonfreemanq.sabre.data.MongoConnector;
 import com.gordonfreemanq.sabre.factory.FactoryConfig;
@@ -44,7 +49,7 @@ public class SabrePlugin extends AbstractSabrePlugin
 	private GroupManager groupManager;
 	private BlockManager blockManager;
 	private IDataAccess db;
-	private CmdRoot cmdBase;
+	private HashSet<SabreBaseCommand<?>> baseCommands;
 	private CmdAutoHelp cmdAutoHelp;
 	private GlobalChat globalChat;
 	private ServerBroadcast serverBcast;
@@ -243,9 +248,13 @@ public class SabrePlugin extends AbstractSabrePlugin
 		}
 
 
-		// Add Base Commands
+		// Add Commands
 		this.cmdAutoHelp = new CmdAutoHelp();
-		this.cmdBase = new CmdRoot();
+		this.baseCommands = new HashSet<SabreBaseCommand<?>>();
+		baseCommands.add(new CmdRoot());
+		baseCommands.add(new CmdPearl());
+		baseCommands.add(new CmdFactory());
+		baseCommands.add(new CmdSnitch());
 		
 		factoryWorker = new FactoryWorker();
 		factoryWorker.start();
@@ -292,26 +301,37 @@ public class SabrePlugin extends AbstractSabrePlugin
 	}
 
 
+	/**
+	 * Handles a bukkit command event
+	 */
 	public boolean onCommand(CommandSender sender, Command cmd, String alias, String[] args)
-	{
-		// Roll any other accepted raw commands into subcommands
-		if (!cmd.getLabel().equalsIgnoreCase("faction")) {
-			
-			String[] args2 = new String[args.length + 1];
-			args2[0] = cmd.getLabel();
-			for (int i = 0; i < args.length; i++) {
-				args2[i + 1] = args[i];
+	{		
+		for (SabreBaseCommand<?> c : baseCommands) {
+			if (c.aliases.contains(cmd.getLabel())) {
+
+				// Set the label to the default alias
+				cmd.setLabel(c.aliases.get(0));
+				
+				// Rebuild the argument list to strip out the first arg
+				String[] args2 = new String[args.length + 1];
+				args2[0] = cmd.getLabel();
+				for (int i = 0; i < args.length; i++) {
+					args2[i + 1] = args[i];
+				}
+				args = args2;
+				
+				c.execute(sender, new ArrayList<String>(Arrays.asList(args)));
+				return true;
 			}
-			
-			args = args2;
-			cmd.setLabel("f");
 		}
 		
-		
-		this.cmdBase.execute(sender, new ArrayList<String>(Arrays.asList(args)));
-		return true;
+		return false;
 	}
 	
+	
+	/**
+	 * Handles a tab complete event
+	 */
 	public List<String> onTabComplete(CommandSender sender, Command cmd, String alias, String[] args){
 		if (!loadSuccessful) {
 			return null;
