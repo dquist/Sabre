@@ -196,10 +196,10 @@ public class FarmSurveyor {
 		
 		if (hasLight && isCrop && isCropMature(b)) {
 			double lFactor = sampleSubstrateDepth(b.getRelative(BlockFace.DOWN), MAX_SUBSTRATE_DEPTH);
-			double bFactor = cropType.getBiomeFactor(b.getBiome());
 			surveyLayoutTotal += lFactor;
-			surveyBiomeTotal += bFactor;
 		}
+		double bFactor = cropType.getBiomeFactor(b.getBiome());
+		surveyBiomeTotal += bFactor;
 		
 		numSamples++;
 	}
