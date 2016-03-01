@@ -343,50 +343,57 @@ public class BlockListener implements Listener {
 			if (!a.equals(Action.RIGHT_CLICK_BLOCK) && !a.equals(Action.LEFT_CLICK_BLOCK)) {
 				return;
 			}
+			
+			if (a.equals(Action.RIGHT_CLICK_BLOCK) && p.getBuildState().getMode() == BuildMode.FORTIFY) {
+				return;
+			}
+			
+			// Only show block info when not in reinforce mode
+			if (p.getBuildState().getMode() != BuildMode.REINFORCE) {
+				if (sb != null) {
 
-			if (sb != null) {
+					// Show the special block name if player interacts with a stick
+					boolean showBlockName = sb.isSpecial() && p.getPlayer().getItemInHand().getType() != Material.STICK;
+					
+					canAccess = bm.playerCanAccessBlock(p, sb);
 
-				// Show the special block name if player interacts with a stick
-				boolean showBlockName = sb.isSpecial() && p.getPlayer().getItemInHand().getType() != Material.STICK;
-				
-				canAccess = bm.playerCanAccessBlock(p, sb);
-
-				// Disallow container access for those not in the group
-				if (a.equals(Action.RIGHT_CLICK_BLOCK)) {
-					if (config.blockIsLockable(b.getType()) && !canAccess) {
-						if (p.getAdminBypass()) {
-							String groupName = sb.getReinforcement().getGroup().getName();
-							p.msg(Lang.adminYouBypassed, groupName);
-						} else {
-							if (!state.getInfo()) {
-								if (sb.isSpecial()) {
-									p.msg(Lang.blockIsLockedSpecial, sb.getTypeName());
-								} else {
-									p.msg(Lang.blockIsLocked, b.getType());
+					// Disallow container access for those not in the group
+					if (a.equals(Action.RIGHT_CLICK_BLOCK)) {
+						if (config.blockIsLockable(b.getType()) && !canAccess) {
+							if (p.getAdminBypass()) {
+								String groupName = sb.getReinforcement().getGroup().getName();
+								p.msg(Lang.adminYouBypassed, groupName);
+							} else {
+								if (!state.getInfo()) {
+									if (sb.isSpecial()) {
+										p.msg(Lang.blockIsLockedSpecial, sb.getTypeName());
+									} else {
+										p.msg(Lang.blockIsLocked, b.getType());
+									}
+									
+									// Already showing a message, so don't show another message later
+									showBlockName = false;
 								}
 								
-								// Already showing a message, so don't show another message later
-								showBlockName = false;
+								e.setCancelled(true);
 							}
-							
-							e.setCancelled(true);
-						}
-					} 
+						} 
 
-				} 
-				if (state.getInfo()) {
-					showBlockInfo(p, sb);
-				}
-				// Interacting with a special block will notify the player what type of block it is.
-				// Ignore if holding a stick though, since that's the default interaction item, it makes
-				// the chat too noisy when cycling the factory recipes
-				else if (showBlockName && sb.getTellBlockName()) {
-					if (!sb.getRequireAccessForName() || sb.canPlayerAccess(p)) {
-						p.msg(Lang.blockShowType, sb.getDisplayName());
+					} 
+					if (state.getInfo()) {
+						showBlockInfo(p, sb);
 					}
+					// Interacting with a special block will notify the player what type of block it is.
+					// Ignore if holding a stick though, since that's the default interaction item, it makes
+					// the chat too noisy when cycling the factory recipes
+					else if (showBlockName && sb.getTellBlockName()) {
+						if (!sb.getRequireAccessForName() || sb.canPlayerAccess(p)) {
+							p.msg(Lang.blockShowType, sb.getDisplayName());
+						}
+					}
+				} else if (state.getInfo()) {
+					p.msg(Lang.blockNoReinforcement);
 				}
-			} else if (state.getInfo()) {
-				p.msg(Lang.blockNoReinforcement);
 			}
 
 			// Do we need to do a block reinforce?

@@ -44,6 +44,12 @@ public class CmdGroupMute extends SabreCommand {
 		
 		if (setTo) {
 			me.msg(Lang.groupMute, groupName);
+			
+			// Move to global chat
+			if (me.getChatChannel().equals(g)) {
+				me.setChatChannel(plugin.getGlobalChat());
+				me.msg(Lang.chatMovedGlobal);
+			}
 		} else {
 			me.msg(Lang.groupUnmute, groupName);
 		}

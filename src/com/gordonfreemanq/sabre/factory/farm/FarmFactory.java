@@ -379,7 +379,7 @@ public class FarmFactory extends BaseFactory {
     	}
     	
     	FarmRecipe fr = (FarmRecipe)recipe;
-    	return (int)(fr.getProductionRate() * ((layoutFactor + proximityFactor + fertilityFactor + biomeFactor) / 4));
+    	return (int)(fr.getProductionRate() * layoutFactor * proximityFactor * fertilityFactor * biomeFactor);
     }
     
     /**

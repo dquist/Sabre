@@ -50,8 +50,8 @@ public class Lang
 	public static final String groupJoinHelp = "<i>Use '<c>/f join <c>%s<i>' to join.";
 	public static final String groupLeaveHelp = "<i>Use '<c>/f leave <c>%s<i>' to leave.";
 	public static final String groupTransferHelp = "<i>Use '<c>/f transfer <c>%s<i>' to transfer the group.";
-	public static final String groupMute = "<b>You muted chat from <c>%s<b>.";
-	public static final String groupUnmute = "<g>You unmuted chat from <c>%s<g>.";
+	public static final String groupMute = "<i>Chat on group <c>%s <b>muted<i>.";
+	public static final String groupUnmute = "<i>Chat on group <c>%s <g>unmuted<i>.";
 	
 	
 	// CHAT
@@ -127,8 +127,8 @@ public class Lang
 	public static final String snitchNotifyEnabled = "<i>Notifications for this snitch are now <g>on<i>.";
 	public static final String snitchNotifyDisabled = "<i>Notifications for this snitch are now <b>off<i>.";
 	public static final String snitchNotifyWasPlaced = "<i>You broke a snitch placed by <c>%s <i>on <a>%s.";
-	public static final String snitchMute = "<b>You muted snitches from <c>%s<b>.";
-	public static final String snitchUnmute = "<g>You unmuted snitches from <c>%s<g>.";
+	public static final String snitchMute = "<i>Snitches on group <c>%s <b>muted<i>.";
+	public static final String snitchUnmute = "<i>Snitches on group <c>%s <g>unmuted<i>.";
 	
 	
 	// SIGNS

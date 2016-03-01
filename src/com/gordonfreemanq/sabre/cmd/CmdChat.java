@@ -46,5 +46,10 @@ public class CmdChat extends SabreCommand {
 		me.setChatChannel(g);
 		msg(Lang.chatMovedGroup, groupName);
 		msg(Lang.chatMovedGroupHelp, groupName);
+		
+		if (g.isChatMutedBy(me)) {
+			g.setChatMutedBy(me,  false);
+			me.msg(Lang.groupUnmute, groupName);
+		}
 	}
 }
