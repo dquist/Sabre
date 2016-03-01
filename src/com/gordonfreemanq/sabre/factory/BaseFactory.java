@@ -446,10 +446,14 @@ public class BaseFactory extends SpecialBlock {
 				return;
 			}
 			
-			
 			// Good to go
 			powerOn();
 			msg(Lang.factoryActivated, recipe.getName());
+			
+			// Warn if likely to run out of fuel
+			if (getTotalAvailableFuel() < recipe.getFuelCost()) {
+				msg(Lang.factoryLowFuel);
+			}
 		}
 	}
 	
@@ -560,8 +564,7 @@ public class BaseFactory extends SpecialBlock {
 	 * Checks if there is enough fuel available for at least once energy cycle
 	 * @return true if there is enough fuel, otherwise false
 	 */
-	private boolean checkFuel()
-	{
+	private boolean checkFuel() {
 		Inventory inv = getFuelInventory();
 		if (inv != null) {
 			for (FactoryFuel f : fuels) {
@@ -573,6 +576,24 @@ public class BaseFactory extends SpecialBlock {
 		}
 		
 		return false;
+	}
+	
+	
+	/**
+	 * Gets the total available fuel in the fuel chest
+	 * @return The total available fuel
+	 */
+	private int getTotalAvailableFuel() {
+		int total = 0;
+		
+		Inventory inv = getFuelInventory();
+		if (inv != null) {
+			for (FactoryFuel f : fuels) {
+				total += (f.getItems().amountAvailable(inv) * f.getEnergy());
+			}
+		}
+		
+		return total;
 	}
 	
 	

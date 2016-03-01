@@ -318,6 +318,7 @@ public class SabreBlock {
 	
 	/**
 	 * Handles the block breaking, low priority event
+	 * @param p The player breaking the block
 	 * @param e The event args
 	 */
 	public void onBlockBreaking(SabrePlayer p, BlockBreakEvent e) {
@@ -326,11 +327,24 @@ public class SabreBlock {
 	
 	
 	/**
-	 * Handles the block broken event
+	 * Handles a reinforcement broken event
+	 * Does not get called for bypassed blocks.
+	 * Called after onBlockBreaking and before onBlockBroken.
+	 * @param p The player that broke the block
+	 * @param e The event args
+	 */
+	public void onReinforcementBroken(SabrePlayer p, BlockBreakEvent e) {
+		// Do nothing
+	}
+	
+	
+	/**
+	 * Handles the block broken event.
+	 * Called after onBlockBreaking and onReinforcementBroken.
+	 * @param p The player that broke the block
 	 * @param e The event args
 	 */
 	public void onBlockBroken(SabrePlayer p, BlockBreakEvent e) {
 		// Do nothing
 	}
-	
 }

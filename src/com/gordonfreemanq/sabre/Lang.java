@@ -202,6 +202,7 @@ public class Lang
 	public static final String factoryCantDoWhileRunning = "<b>You can't do that while the factory is running.";
 	public static final String factoryUpdateController = "<i>Updated controller.";
 	public static final String factoryFertility = "<i>Chunk fertility is <c>%d%%";
+	public static final String factoryLowFuel = "<b>Low Fuel! <i>Not enough fuel to complete recipe.";
 	
 	
 	// MISC

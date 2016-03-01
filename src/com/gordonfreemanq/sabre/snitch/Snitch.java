@@ -400,6 +400,7 @@ public class Snitch extends SpecialBlock implements QTBox, Comparable {
     
 	/**
 	 * Handles the block broken event
+	 * @param p The player that broke the block
 	 * @param e The event args
 	 */
     @Override

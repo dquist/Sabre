@@ -260,7 +260,8 @@ public class BlockListener implements Listener {
 							r.setStrength(strength - 1);
 							bm.updateReinforcementStrength(sb);
 						} else {
-							// Block is worn down, let it break
+							// Reinforcement is broken, let it break
+							sb.onReinforcementBroken(p, e);
 							allowBreak = true;
 						}
 					}
