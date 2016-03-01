@@ -872,4 +872,29 @@ public class BaseFactory extends SpecialBlock {
     public boolean runUnloaded() {
     	return false;
     }
+    
+
+    /**
+     * Copies data from another instance
+     * @param other The other instance
+     */
+    public void copyFrom(BaseFactory other) {
+    	this.configureMode = other.configureMode;
+    	this.inputLocation = other.inputLocation;
+    	this.outputLocation = other.outputLocation;
+    	this.fuelLocation = other.fuelLocation;
+    	this.recipeIndex = other.recipeIndex;
+    	
+    	this.recipe = other.recipe;
+    	this.running = other.running;
+    	this.fuelPerBurn = other.fuelPerBurn;
+    	this.fuelCounter = other.fuelCounter;
+    	this.energyTimer = other.energyTimer;
+    	this.fuels = other.fuels;
+    	this.curFuel = other.curFuel;
+    	this.runner = other.runner;
+    	this.upgradeMode = other.upgradeMode;
+    	
+    	this.saveSettings();
+    }
 }

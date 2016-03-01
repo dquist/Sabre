@@ -4,6 +4,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map.Entry;
 import java.util.concurrent.TimeUnit;
+import java.util.logging.Level;
 
 import org.bukkit.Location;
 import org.bukkit.configuration.ConfigurationSection;
@@ -193,10 +194,10 @@ public class FarmFactory extends BaseFactory {
 		FarmRecipe fr = (FarmRecipe)recipe;
 		
 		// Just a quick sanity check on these numbers
-		this.layoutFactor = Math.min(layoutFactor, 1.0);
-		this.proximityFactor = Math.min(proximityFactor, 1.0);
-		this.fertilityFactor = Math.min(fertilityFactor, 1.0);
-		this.biomeFactor = Math.min(biomeFactor, 1.0);
+		this.layoutFactor = Math.max(Math.min(layoutFactor, 1.0), 0);
+		this.proximityFactor = Math.max(Math.min(proximityFactor, 1.0), 0);
+		this.biomeFactor = Math.max(Math.min(biomeFactor, 1.0), 0);
+		this.fertilityFactor = Math.max(fertilityFactor, 0);
 		
 		CropType cropType = fr.getCrop();
 		int alreadyFarmed = farmedCrops.get(cropType);
@@ -205,9 +206,15 @@ public class FarmFactory extends BaseFactory {
 		// Limit the output to the storage size of the factory
 		total = Math.min(this.storageSize, total);
 		farmedCrops.put(cropType, total);
+		SabrePlugin.getPlugin().log(Level.INFO, "Doing farm recipe - %d crops", total);
+		
+		// Power off zero-output factories so they don't run forever
+		if (this.getRealOutput() == 0) {
+			powerOff();
+		}
 		
 		// Power the factory off if it's full
-		if (total == storageSize) {
+		if (total >= storageSize) {
 			powerOff();
 		}
 		
@@ -241,10 +248,10 @@ public class FarmFactory extends BaseFactory {
 		Date now = new Date();
 		long timeDiff = now.getTime() - lastSurvey.getTime();
 		long diffMin = TimeUnit.MINUTES.convert(timeDiff, TimeUnit.MILLISECONDS);
-		
+
+		calculateProximityFactor();
 		if (force || diffMin >= this.surveyPeriodMin) {
 			if (survey()) {
-				calculateProximityFactor();
 				lastSurvey = now;
 				saveSettings();
 			}
@@ -472,5 +479,34 @@ public class FarmFactory extends BaseFactory {
     		return (FarmRecipe)recipe;
     	}
     	return null;
+    }
+    
+
+    /**
+     * Copies data from another instance
+     * @param other The other instance
+     */
+    @Override
+    public void copyFrom(BaseFactory other) {
+    	
+    	if (other instanceof FarmFactory) {
+    		FarmFactory farm = (FarmFactory)other;
+    		
+    		this.farmTickCounter = farm.farmTickCounter;
+    		this.farmTickCounter = farm.farmTickCounter;
+    		
+    		this.farmTickCounter = farm.farmTickCounter;
+    		this.layoutFactor = farm.layoutFactor;
+    		this.proximityFactor = farm.proximityFactor;
+    		this.fertilityFactor = farm.fertilityFactor;
+    		this.biomeFactor = farm.biomeFactor;
+    		this.farmedCrops = farm.farmedCrops;
+    		this.surveyor = farm.surveyor;
+    		this.lastSurvey = farm.lastSurvey;
+    		this.storageSize = farm.storageSize;
+    		this.proximityLimitLocation = farm.proximityLimitLocation;
+    	}
+    	
+    	super.copyFrom(other);
     }
 }

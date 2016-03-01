@@ -60,6 +60,7 @@ import com.gordonfreemanq.sabre.core.ISabreLog;
 import com.gordonfreemanq.sabre.core.Permission;
 import com.gordonfreemanq.sabre.factory.BaseFactory;
 import com.gordonfreemanq.sabre.factory.FactoryController;
+import com.gordonfreemanq.sabre.factory.FactoryWorker;
 import com.gordonfreemanq.sabre.groups.SabreGroup;
 import com.gordonfreemanq.sabre.groups.SabreMember;
 import com.gordonfreemanq.sabre.util.SabreUtil;
@@ -428,7 +429,11 @@ public class BlockListener implements Listener {
 				Location l = FactoryController.parseLocation(p, false);
 				
 				if (l != null) {
-					BaseFactory factory = (BaseFactory)bm.getFactories().get(l);
+					BaseFactory factory = FactoryWorker.getInstance().getRunningByLocation(l);
+					
+					if (factory == null) {
+						factory = (BaseFactory)bm.getFactories().get(l);
+					}
 					if (factory != null) {
 						if (factory.canPlayerAccess(p)) {
 							factory.createController(p);
@@ -436,6 +441,8 @@ public class BlockListener implements Listener {
 						} else {
 							p.msg(Lang.blockNoAccess);
 						}
+					} else {
+						p.msg(Lang.factoryNotFound);
 					}
 				}
 			}

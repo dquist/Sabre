@@ -630,9 +630,9 @@ public class MongoConnector implements IDataAccess {
 	public Collection<SabreBlock> blockGetRunningFactories() {
 		HashMap<Location, SabreBlock> records = new HashMap<Location, SabreBlock>();
 		
-		BasicDBObject where = new BasicDBObject();
-		where = where.append("factory", true)
-				.append("running", true);
+		BasicDBObject where = new BasicDBObject()
+				.append("settings.factory", true)
+				.append("settings.running", true);
 		
 		DBCursor cursor = colBlocks.find(where);
 		
@@ -701,8 +701,17 @@ public class MongoConnector implements IDataAccess {
 	}
 
 
-
-	private String formatChunk(Chunk c){
+	/**
+	 * Formats the chunk string for a location
+	 * DON'T USE getChunk() because it loads the chunk
+	 * @param l The location
+	 * @return The chunk string
+	 */
+	private String formatChunk(Location l) {
+		return String.format("%s,%s,%s", l.getWorld().getName(), l.getBlockX() >> 4, l.getBlockZ() >> 4);
+	}
+	
+	private String formatChunk(Chunk c) {
 		return String.format("%s,%s,%s", c.getWorld().getName(), c.getX(), c.getZ());
 	}
 	
@@ -719,7 +728,7 @@ public class MongoConnector implements IDataAccess {
 	public void blockInsert(SabreBlock b) {
 		Location l = b.getLocation();
 		BasicDBObject blockRecord = new BasicDBObject()
-		.append("chunk", formatChunk(l.getChunk()))
+		.append("chunk", formatChunk(l))
 		.append("x", l.getBlockX())
 		.append("y", l.getBlockY())
 		.append("z", l.getBlockZ())
@@ -741,7 +750,7 @@ public class MongoConnector implements IDataAccess {
 	public void blockRemove(SabreBlock b) {
 		Location l = b.getLocation();
 		BasicDBObject where = new BasicDBObject()
-		.append("chunk", formatChunk(b.getLocation().getChunk()))
+		.append("chunk", formatChunk(b.getLocation()))
 		.append("x", l.getBlockX())
 		.append("y", l.getBlockY())
 		.append("z", l.getBlockZ());
@@ -816,7 +825,7 @@ public class MongoConnector implements IDataAccess {
 		
 		Location l = b.getLocation();
 		BasicDBObject where = new BasicDBObject()
-		.append("chunk", formatChunk(b.getLocation().getChunk()))
+		.append("chunk", formatChunk(b.getLocation()))
 		.append("x", l.getBlockX())
 		.append("y", l.getBlockY())
 		.append("z", l.getBlockZ());

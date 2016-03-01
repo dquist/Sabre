@@ -3,6 +3,7 @@ package com.gordonfreemanq.sabre.factory;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.logging.Level;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -55,10 +56,12 @@ public class FactoryWorker implements Runnable {
 		}
 		
 		// Update all running factories
-		//SabrePlugin.getPlugin().log(Level.INFO, "Running Factories: %d", runningFactories.size());
+		SabrePlugin.getPlugin().log(Level.INFO, "Running Factories: %d", runningFactories.size());
 		for(BaseFactory f : runningFactories.values()) {
 			if (f.getRunning()) {
 				f.update();
+			} else {
+				pendingRemove.add(f);
 			}
 		}
 		
@@ -74,15 +77,12 @@ public class FactoryWorker implements Runnable {
 	 * Adds a new running factory
 	 * @param f The factory to add
 	 */
-	public void addRunning(BaseFactory f) {
-		// Make sure the same factory isn't running twice
-		for(BaseFactory run : runningFactories.values()) {
-			if (run.getLocation().equals(f.getLocation())) {
-				pendingRemove.add(f);
-			}
-		}
+	public void addRunning(BaseFactory f) {		
+		BaseFactory removed = runningFactories.put(f.getLocation(), f);
 		
-		runningFactories.put(f.getLocation(), f);
+		if (removed != null) {
+			f.copyFrom(removed);
+		}
 	}
 	
 	
@@ -100,5 +100,15 @@ public class FactoryWorker implements Runnable {
 	 */
 	public Set<BaseFactory> getRunningFactories() {
 		return new HashSet<BaseFactory>(runningFactories.values());
+	}
+	
+	
+	/**
+	 * Gets a running factory by location
+	 * @param l The location
+	 * @return The base factory
+	 */
+	public BaseFactory getRunningByLocation(Location l) {
+		return runningFactories.get(l);
 	}
 }
