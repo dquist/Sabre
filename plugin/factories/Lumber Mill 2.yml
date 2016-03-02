@@ -2,12 +2,12 @@ name: Lumber Mill 2
 production_speed: 2
 recipes:
   Cut Oak Planks:
-    fuel_cost: 10
+    fuel_cost: 5
     inputs:
       Logs:
         material: LOG
         durability: -1
-        amount: 256
+        amount: 32
         subs:
           Logs2:
             material: LOG_2
@@ -16,67 +16,67 @@ recipes:
       Oak Planks:
         material: WOOD
         durability: 0
-        amount: 1280
+        amount: 192
   Cut Spruce Planks:
-    fuel_cost: 10
+    fuel_cost: 5
     inputs:
       Spruce Logs:
         material: LOG
         durability: 1
-        amount: 256
+        amount: 32
     outputs:
       Spruce Planks:
         material: WOOD
         durability: 1
-        amount: 1280
+        amount: 192
   Cut Birch Planks:
-    fuel_cost: 10
+    fuel_cost: 5
     inputs:
       Birch Logs:
         material: LOG
         durability: 2
-        amount: 256
+        amount: 32
     outputs:
       Birch Planks:
         material: WOOD
         durability: 2
-        amount: 1280
+        amount: 192
   Cut Jungle Planks:
-    fuel_cost: 10
+    fuel_cost: 5
     inputs:
       Jungle Logs:
         material: LOG
         durability: 3
-        amount: 256
+        amount: 32
     outputs:
       Jungle Planks:
         material: WOOD
         durability: 3
-        amount: 1280
+        amount: 192
   Cut Acacia Planks:
-    fuel_cost: 10
+    fuel_cost: 5
     inputs:
       Acacia Logs:
         material: LOG_2
         durability: 0
-        amount: 256
+        amount: 32
     outputs:
       Acacia Planks:
         material: WOOD
         durability: 4
-        amount: 1280
+        amount: 192
   Cut Dark Oak Planks:
-    fuel_cost: 10
+    fuel_cost: 5
     inputs:
       Dark Oak Logs:
         material: LOG_2
         durability: 1
-        amount: 256
+        amount: 32
     outputs:
       Dark Oak Planks:
         material: WOOD
         durability: 5
-        amount: 1280
+        amount: 192
   Craft Aspect of Framing:
     fuel_cost: 10
     inputs:
@@ -94,7 +94,7 @@ upgrades:
     inputs:
       Aspect of Framing:
         custom_item: Aspect of Framing
-        amount: 32
+        amount: 48
     outputs:
       Lumber Mill 3:
         custom_item: Lumber Mill 3

@@ -2,7 +2,7 @@ name: Redstone Mechanism Factory 2
 production_speed: 2
 recipes:
   Produce Redstone Lamps:
-    fuel_cost: 10
+    fuel_cost: 2
     inputs:
       Glowstone:
         material: GLOWSTONE
@@ -16,119 +16,123 @@ recipes:
     outputs:
       Redstone Lamp:
         material: REDSTONE_LAMP_OFF
-        amount: 48
+        amount: 96
   Produce Pistons:
-    fuel_cost: 10
+    fuel_cost: 2
     inputs:
-      Stone:
-        material: STONE
-        amount: 128
+      Cobblestone:
+        material: COBBLESTONE
+        amount: 256
       Plank:
         material: WOOD
         durability: -1
-        amount: 96
-      Iron:
-        material: IRON_INGOT
-        amount: 32
+        amount: 192
       Redstone:
         material: REDSTONE
-        amount: 32
+        amount: 64
+      Iron:
+        material: IRON_INGOT
+        amount: 64
     outputs:
       Piston:
         material: PISTON_BASE
-        amount: 24
+        amount: 80
   Produce Sticky Pistons:
-    fuel_cost: 10
+    fuel_cost: 2
     inputs:
-      Stone:
-        material: STONE
+      Cobblestone:
+        material: COBBLESTONE
         amount: 64
       Plank:
         material: WOOD
         durability: -1
         amount: 48
-      Iron:
-        material: IRON_INGOT
-        amount: 16
       Redstone:
         material: REDSTONE
+        amount: 16
+      Iron:
+        material: IRON_INGOT
         amount: 16
       Slimeball:
         material: SLIME_BALL
         amount: 16
     outputs:
-      Piston:
+      Sticky Piston:
         material: PISTON_STICKY_BASE
-        amount: 12
+        amount: 20
   Produce Jukeboxes:
-    fuel_cost: 10
+    fuel_cost: 2
     inputs:
       Plank:
         material: WOOD
         durability: -1
-        amount: 48
+        amount: 128
       Diamond:
         material: DIAMOND
-        amount: 32
+        amount: 16
     outputs:
-      Piston:
-        amount: 24
+      Jukebox:
+        amount: 20
         material: JUKEBOX
   Produce Noteblocks:
-    fuel_cost: 10
+    fuel_cost: 2
     inputs:
       Plank:
         material: WOOD
         durability: -1
-        amount: 48
-      Redstone:
-        material: REDSTONE
-        amount: 32
-    outputs:
-      Piston:
-        material: NOTE_BLOCK
-        amount: 24
-  Produce Hoppers:
-    fuel_cost: 10
-    inputs:
-      Iron:
-        amount: 160
-        material: IRON_INGOT
-      Plank:
-        material: WOOD
-        durability: -1
-        amount: 256
-      Diamond:
-        material: DIAMOND
-        amount: 64
-      Redstone:
-        material: REDSTONE
-        amount: 32
-    outputs:
-      Piston:
-        material: HOPPER
-        amount: 8
-  Produce Droppers:
-    fuel_cost: 10
-    inputs:
-      Stone:
-        material: STONE
         amount: 128
-      Iron:
-        material: IRON_INGOT
-        amount: 32
-      Diamond:
-        material: DIAMOND
-        amount: 32
       Redstone:
         material: REDSTONE
-        amount: 32
+        amount: 16
     outputs:
-      Piston:
-        material: DROPPER
+      Noteblock:
+        material: NOTE_BLOCK
+        amount: 20
+  Produce Hoppers:
+    fuel_cost: 2
+    inputs:
+      Iron:
+        material: IRON_INGOT
+        amount: 40
+      Plank:
+        material: WOOD
+        durability: -1
+        amount: 64
+      Diamond:
+        material: DIAMOND
         amount: 8
+      Redstone:
+        material: REDSTONE
+        amount: 64
+    outputs:
+      Hopper:
+        material: HOPPER
+        amount: 6
+  Produce Droppers:
+    fuel_cost: 2
+    inputs:
+      Iron:
+        material: IRON_INGOT
+        amount: 40
+      Cobblestone:
+        material: COBBLESTONE
+        amount: 64
+      Plank:
+        material: WOOD
+        durability: -1
+        amount: 64
+      Diamond:
+        material: DIAMOND
+        amount: 8
+      Redstone:
+        material: REDSTONE
+        amount: 64
+    outputs:
+      Dropper:
+        material: DROPPER
+        amount: 6
   Produce Dispensers:
-    fuel_cost: 10
+    fuel_cost: 2
     inputs:
       Stone:
         material: STONE
@@ -147,11 +151,11 @@ recipes:
         material: REDSTONE
         amount: 32
     outputs:
-      Piston:
+      Dispenser:
         material: DISPENSER
-        amount: 16
+        amount: 12
   Produce Snitch:
-    fuel_cost: 10
+    fuel_cost: 2
     inputs:
       Jukebox:
         material: JUKEBOX
@@ -167,34 +171,34 @@ recipes:
         custom_item: Snitch
         amount: 18
   Produce Secure Sign:
-    fuel_cost: 10
+    fuel_cost: 2
     inputs:
       Planks:
         material: WOOD
         durability: -1
-        amount: 160
+        amount: 48
       Redstone:
         material: REDSTONE
-        amount: 96
+        amount: 16
       Iron:
         material: IRON_INGOT
-        amount: 16
+        amount: 8
     outputs:
       Secure Sign:
         custom_item: Secure Sign
-        amount: 6
+        amount: 10
   Produce Gearbox:
     fuel_cost: 10
     inputs:
+      Stone:
+        material: STONE
+        amount: 32
       Glowstone:
         material: GLOWSTONE
-        amount: 64
+        amount: 16
       Redstone Block:
         material: REDSTONE_BLOCK
-        amount: 16
-      Iron Block:
-        material: IRON_BLOCK
-        amount: 4
+        amount: 1
     outputs:
       Gearbox:
         custom_item: Gearbox
@@ -205,7 +209,7 @@ upgrades:
     inputs:
       Gearbox:
         custom_item: Gearbox
-        amount: 16
+        amount: 128
     outputs:
       Redstone Mechanism Factory 3:
         custom_item: Redstone Mechanism Factory 3

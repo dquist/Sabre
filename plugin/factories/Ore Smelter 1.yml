@@ -2,7 +2,7 @@ name: Ore Smelter 1
 production_speed: 1
 recipes:
   Smelt Diamond Ore:
-    fuel_cost: 10
+    fuel_cost: 20
     inputs:
       Diamond Ore:
         material: DIAMOND_ORE
@@ -10,9 +10,9 @@ recipes:
     outputs:
       Diamond:
         material: DIAMOND
-        amount: 16
+        amount: 20
   Smelt Iron Ore:
-    fuel_cost: 10
+    fuel_cost: 20
     inputs:
       Iron Ore:
         material: IRON_ORE
@@ -20,9 +20,9 @@ recipes:
     outputs:
       Iron Ingot:
         material: IRON_INGOT
-        amount: 64
+        amount: 80
   Smelt Gold Ore:
-    fuel_cost: 10
+    fuel_cost: 20
     inputs:
       Gold Ore:
         material: GOLD_ORE
@@ -30,9 +30,9 @@ recipes:
     outputs:
       Gold:
         material: GOLD_INGOT
-        amount: 32
+        amount: 40
   Smelt Coal Ore:
-    fuel_cost: 10
+    fuel_cost: 20
     inputs:
       Coal Ore:
         material: COAL_ORE
@@ -40,9 +40,9 @@ recipes:
     outputs:
       Coal:
         material: COAL
-        amount: 128
+        amount: 160
   Smelt Lapis Ore:
-    fuel_cost: 10
+    fuel_cost: 20
     inputs:
       Lapis Ore:
         material: LAPIS_ORE
@@ -51,9 +51,9 @@ recipes:
       Lapis:
         material: INK_SACK
         durability: 4
-        amount: 32
+        amount: 40
   Smelt Redstone Ore:
-    fuel_cost: 10
+    fuel_cost: 20
     inputs:
       Redstone Ore:
         material: REDSTONE_ORE
@@ -61,9 +61,9 @@ recipes:
     outputs:
       Redstone:
         material: REDSTONE
-        amount: 64
+        amount: 80
   Smelt Nether Quartz Ore:
-    fuel_cost: 10
+    fuel_cost: 20
     inputs:
       Nether Quartz Ore:
         material: QUARTZ_ORE
@@ -71,7 +71,7 @@ recipes:
     outputs:
       Quartz:
         material: QUARTZ
-        amount: 256
+        amount: 320
   Craft Aspect of Metallurgy:
     fuel_cost: 10
     inputs:
@@ -106,7 +106,7 @@ upgrades:
     inputs:
       Aspect of Metallurgy:
         custom_item: Aspect of Metallurgy
-        amount: 8
+        amount: 4
     outputs:
       Ore Smelter 2:
         custom_item: Ore Smelter 2

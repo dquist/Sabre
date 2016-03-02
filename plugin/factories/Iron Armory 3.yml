@@ -1,8 +1,8 @@
-name: Iron Armory 1
-production_speed: 1
+name: Iron Armory 3
+production_speed: 3
 recipes:
   Craft Iron Helmet:
-    fuel_cost: 30
+    fuel_cost: 8
     inputs:
       Iron:
         material: IRON_INGOT
@@ -10,9 +10,9 @@ recipes:
     outputs:
       Iron Helmet:
         material: IRON_HELMET
-        amount: 2
+        amount: 8
   Craft Iron Chestplate:
-    fuel_cost: 30
+    fuel_cost: 8
     inputs:
       Iron:
         material: IRON_INGOT
@@ -20,9 +20,9 @@ recipes:
     outputs:
       Iron Helmet:
         material: IRON_CHESTPLATE
-        amount: 2
+        amount: 8
   Craft Iron Leggings:
-    fuel_cost: 30
+    fuel_cost: 8
     inputs:
       Iron:
         material: IRON_INGOT
@@ -30,9 +30,9 @@ recipes:
     outputs:
       Iron Helmet:
         material: IRON_LEGGINGS
-        amount: 2
+        amount: 8
   Craft Iron Boots:
-    fuel_cost: 30
+    fuel_cost: 8
     inputs:
       Iron:
         material: IRON_INGOT
@@ -40,7 +40,7 @@ recipes:
     outputs:
       Iron Helmet:
         material: IRON_BOOTS
-        amount: 2
+        amount: 8
   Craft Iron Sword:
     fuel_cost: 30
     inputs:
@@ -50,15 +50,4 @@ recipes:
     outputs:
       Iron Helmet:
         material: IRON_SWORD
-        amount: 2
-upgrades:
-  Iron Armory 2 Upgrade:
-    fuel_cost: 10
-    inputs:
-      Iron:
-        material: IRON_INGOT
-        amount: 256
-    outputs:
-      Iron Armory 2:
-        custom_item: Iron Armory 2
-        amount: 1
+        amount: 8

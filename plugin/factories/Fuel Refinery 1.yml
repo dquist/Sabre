@@ -2,12 +2,12 @@ name: Fuel Refinery 1
 production_speed: 1
 recipes:
   Smelt Logs:
-    fuel_cost: 32
+    fuel_cost: 10
     inputs:
       Logs:
         material: LOG
         durability: -1
-        amount: 256
+        amount: 64
         subs:
           Logs2:
             material: LOG_2
@@ -16,28 +16,28 @@ recipes:
       Charcoal:
         material: COAL
         durability: 1
-        amount: 256
+        amount: 80
   Smelt Plasma:
-    fuel_cost: 10
+    fuel_cost: 5
     inputs:
       Charcoal:
         material: COAL
         durability: 1
-        amount: 256
+        amount: 64
       Sand:
         material: SAND
-        amount: 64
+        amount: 8
     outputs:
       Plasma:
         custom_item: Plasma
-        amount: 4
+        amount: 2
 upgrades:
   Fuel Refinery 2 Upgrade:
     fuel_cost: 10
     inputs:
       Plasma:
         custom_item: Plasma
-        amount: 32
+        amount: 4
     outputs:
       Fuel Refinery 2:
         custom_item: Fuel Refinery 2

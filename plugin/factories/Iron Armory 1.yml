@@ -1,64 +1,64 @@
-name: Iron Armory 2
-production_speed: 2
+name: Iron Armory 1
+production_speed: 1
 recipes:
   Craft Iron Helmet:
-    fuel_cost: 30
-    inputs:
-      Iron:
-        material: IRON_INGOT
-        amount: 25
-    outputs:
-      Iron Helmet:
-        material: IRON_HELMET
-        amount: 4
-  Craft Iron Chestplate:
-    fuel_cost: 30
-    inputs:
-      Iron:
-        material: IRON_INGOT
-        amount: 40
-    outputs:
-      Iron Helmet:
-        material: IRON_CHESTPLATE
-        amount: 4
-  Craft Iron Leggings:
-    fuel_cost: 30
+    fuel_cost: 8
     inputs:
       Iron:
         material: IRON_INGOT
         amount: 35
     outputs:
       Iron Helmet:
-        material: IRON_LEGGINGS
-        amount: 4
-  Craft Iron Boots:
-    fuel_cost: 30
+        material: IRON_HELMET
+        amount: 8
+  Craft Iron Chestplate:
+    fuel_cost: 8
     inputs:
       Iron:
         material: IRON_INGOT
-        amount: 20
+        amount: 56
+    outputs:
+      Iron Helmet:
+        material: IRON_CHESTPLATE
+        amount: 8
+  Craft Iron Leggings:
+    fuel_cost: 8
+    inputs:
+      Iron:
+        material: IRON_INGOT
+        amount: 49
+    outputs:
+      Iron Helmet:
+        material: IRON_LEGGINGS
+        amount: 8
+  Craft Iron Boots:
+    fuel_cost: 8
+    inputs:
+      Iron:
+        material: IRON_INGOT
+        amount: 28
     outputs:
       Iron Helmet:
         material: IRON_BOOTS
-        amount: 4
+        amount: 8
   Craft Iron Sword:
     fuel_cost: 30
     inputs:
       Iron:
         material: IRON_INGOT
-        amount: 10
+        amount: 14
     outputs:
       Iron Helmet:
         material: IRON_SWORD
-        amount: 4
+        amount: 8
 upgrades:
-  Iron Armory 3 Upgrade:
+  Iron Armory 2 Upgrade:
     fuel_cost: 10
     inputs:
-      Iron:
-        material: IRON_INGOT
-        amount: 384
+      Iron Block:
+        material: IRON_BLOCK
+        amount: 144
     outputs:
-      Iron Armory 3:
-        custom_item: Iron Armory 3
+      Iron Armory 2:
+        custom_item: Iron Armory 2
         amount: 1

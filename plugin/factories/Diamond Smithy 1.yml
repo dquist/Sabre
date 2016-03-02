@@ -2,52 +2,52 @@ name: Diamond Smithy 1
 production_speed: 1
 recipes:
   Craft Diamond Spade:
-    fuel_cost: 30
+    fuel_cost: 6
     inputs:
       Diamond:
         material: DIAMOND
-        amount: 5
+        amount: 6
     outputs:
       Diamond Space:
         material: DIAMOND_SPADE
-        amount: 2
+        amount: 8
   Craft Diamond Pickaxe:
-    fuel_cost: 30
+    fuel_cost: 6
     inputs:
       Diamond:
         material: DIAMOND
-        amount: 15
+        amount: 20
     outputs:
       Diamond Pickaxe:
         material: DIAMOND_PICKAXE
-        amount: 2
+        amount: 8
   Craft Diamond Axe:
-    fuel_cost: 30
+    fuel_cost: 6
     inputs:
       Diamond:
         material: DIAMOND
-        amount: 15
+        amount: 20
     outputs:
       Diamond Axe:
         material: DIAMOND_AXE
-        amount: 2
+        amount: 8
   Craft Diamond Hoe:
-    fuel_cost: 30
+    fuel_cost: 6
     inputs:
       Diamond:
         material: DIAMOND
-        amount: 10
+        amount: 12
     outputs:
       Diamond Hoe:
         material: DIAMOND_HOE
-        amount: 2
+        amount: 8
 upgrades:
   Diamond Smithy 2 Upgrade:
     fuel_cost: 10
     inputs:
-      Diamond:
-        material: DIAMOND
-        amount: 128
+      Diamond Block:
+        material: DIAMOND_BLOCK
+        amount: 64
     outputs:
       Diamond Smithy 2:
         custom_item: Diamond Smithy 2

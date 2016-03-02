@@ -1,8 +1,8 @@
-name: Leather Armory 2
-production_speed: 2
+name: Leather Armory 3
+production_speed: 3
 recipes:
   Craft Leather Helmet:
-    fuel_cost: 30
+    fuel_cost: 8
     inputs:
       Leather:
         material: LEATHER
@@ -10,9 +10,9 @@ recipes:
     outputs:
       Leather Helmet:
         material: LEATHER_HELMET
-        amount: 4
+        amount: 8
   Craft Leather Chestplate:
-    fuel_cost: 30
+    fuel_cost: 8
     inputs:
       Leather:
         material: LEATHER
@@ -20,9 +20,9 @@ recipes:
     outputs:
       Leather Helmet:
         material: LEATHER_CHESTPLATE
-        amount: 4
+        amount: 8
   Craft Leather Leggings:
-    fuel_cost: 30
+    fuel_cost: 8
     inputs:
       Leather:
         material: LEATHER
@@ -30,9 +30,9 @@ recipes:
     outputs:
       Leather Helmet:
         material: LEATHER_LEGGINGS
-        amount: 4
+        amount: 8
   Craft Leather Boots:
-    fuel_cost: 30
+    fuel_cost: 8
     inputs:
       Leather:
         material: LEATHER
@@ -40,15 +40,4 @@ recipes:
     outputs:
       Leather Helmet:
         material: LEATHER_BOOTS
-        amount: 4
-upgrades:
-  Leather Armory 3 Upgrade:
-    fuel_cost: 10
-    inputs:
-      Leather:
-        material: LEATHER
-        amount: 256
-    outputs:
-      Leather Armory 3:
-        custom_item: Leather Armory 3
-        amount: 1
+        amount: 8

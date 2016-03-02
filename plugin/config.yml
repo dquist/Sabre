@@ -7,7 +7,7 @@ database:
   user: ''
   pass: ''
 chat:
-  global_radius: 1000
+  global_radius: 800
 build:
   reinforcements:
     STONE:
@@ -24,73 +24,11 @@ snitch:
 prison_pearl:
   free_world: world
   prison_world: world_the_end
-  default_strength: 120
+  default_strength: 360
   weaken_interval_min: 60
   weaken_amount: 1
   days_inactive_threshold: 7
 disabled_recipes:
-  Leather Helmet:
-    material: LEATHER_HELMET
-  Leather Chestplate:
-    material: LEATHER_CHESTPLATE
-  Leather Leggings:
-    material: LEATHER_LEGGINGS
-  Leather Boots:
-    material: LEATHER_BOOTS
-  Iron Sword:
-    material: IRON_SWORD
-  Iron Shovel:
-    material: IRON_SPADE
-  Iron Pickaxe:
-    material: IRON_PICKAXE
-  Iron Axe:
-    material: IRON_AXE
-  Iron Hoe:
-    material: IRON_HOE
-  Iron Helmet:
-    material: IRON_HELMET
-  Iron Chestplate:
-    material: IRON_CHESTPLATE
-  Iron Leggings:
-    material: IRON_LEGGINGS
-  Iron Boots:
-    material: IRON_BOOTS
-  Gold Sword:
-    material: GOLD_SWORD
-  Gold Shovel:
-    material: GOLD_SPADE
-  Gold Pickaxe:
-    material: GOLD_PICKAXE
-  Gold Axe:
-    material: GOLD_AXE
-  Gold Hoe:
-    material: GOLD_HOE
-  Gold Helmet:
-    material: GOLD_HELMET
-  Gold Chestplate:
-    material: GOLD_CHESTPLATE
-  Gold Leggings:
-    material: GOLD_LEGGINGS
-  Gold Boots:
-    material: GOLD_BOOTS
-  Diamond Sword:
-    material: DIAMOND_SWORD
-  Diamond Shovel:
-    material: DIAMOND_SPADE
-  Diamond Pickaxe:
-    material: DIAMOND_PICKAXE
-  Diamond Axe:
-    material: DIAMOND_AXE
-  Diamond Hoe:
-    material: DIAMOND_HOE
-  Diamond Helmet:
-    material: DIAMOND_HELMET
-  Diamond Chestplate:
-    material: DIAMOND_CHESTPLATE
-  Diamond Leggings:
-    material: DIAMOND_LEGGINGS
-  Diamond Boots:
-    material: DIAMOND_BOOTS
   Granite:
     material: STONE
     durability: 2
@@ -100,51 +38,11 @@ disabled_recipes:
   Andesite:
     material: STONE
     durability: 6
-  Redstone Torch:
-    material: REDSTONE_TORCH_ON
-  Repeater:
-    material: DIODE
-  Comparator:
-    material: REDSTONE_COMPARATOR
-  Daylight Detector:
-    material: DAYLIGHT_DETECTOR
-  Redstone Lamp:
-    material: REDSTONE_LAMP_OFF
-  Piston:
-    material: PISTON_BASE
-  Sticky Piston:
-    material: PISTON_STICKY_BASE
-  Jukebox:
-    material: JUKEBOX
-  Noteblock:
-    material: NOTE_BLOCK
   Hopper:
     material: HOPPER
   Dropper:
     material: DROPPER
-  Dispenser:
-    material: DISPENSER
 no_smelt:
-  Coal Ore:
-    material: COAL_ORE
-  Iron Ore:
-    material: IRON_ORE
-  Gold Ore:
-    material: GOLD_ORE
-  Diamond Ore:
-    material: DIAMOND_ORE
-  Redstone Ore:
-    material: REDSTONE_ORE
-  Lapis Ore:
-    material: LAPIS_ORE
-  Quartz Ore:
-    material: QUARTZ_ORE
-  Emerald Ore:
-    material: EMERALD_ORE
-  Hard Clay:
-    material: HARD_CLAY
-  Clay Brick:
-    material: CLAY_BRICK
 farm:
   survey_period: 5
   production_ticks: 300

@@ -1,6 +1,0 @@
-name: Iron Armory 5
-material: FURNACE
-class: com.gordonfreemanq.sabre.factory.BaseFactory
-amount: 1
-lore:
-  - '<c>The most advanced iron armory.'

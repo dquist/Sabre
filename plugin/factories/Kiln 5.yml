@@ -36,8 +36,8 @@ recipes:
     inputs:
       Hardened Clay:
         material: HARD_CLAY
-        amount: 1024
+        amount: 256
     outputs:
       Hardened Clay:
         custom_item: Aspect of Ceramics
-        amount: 2
+        amount: 1

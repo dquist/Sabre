@@ -2,85 +2,85 @@ name: Redstone Factory 1
 production_speed: 1
 recipes:
   Produce Redstone Torches:
-    fuel_cost: 10
+    fuel_cost: 2
     inputs:
       Redstone:
         material: REDSTONE
-        amount: 128
+        amount: 64
       Stick:
         material: STICK
-        amount: 128
+        amount: 64
     outputs:
       Redstone Torch:
-        amount: 64
+        amount: 72
         material: REDSTONE_TORCH_ON
   Produce Repeaters:
-    fuel_cost: 10
+    fuel_cost: 2
     inputs:
       Redstone:
         material: REDSTONE
-        amount: 192
+        amount: 48
       Stick:
         material: STICK
-        amount: 128
+        amount: 32
       Stone:
         material: STONE
-        amount: 384
+        amount: 96
     outputs:
       Redstone Repeater:
-        amount: 32
+        amount: 18
         material: DIODE
   Produce Redstone Comparators:
-    fuel_cost: 10
+    fuel_cost: 2
     inputs:
       Redstone:
         material: REDSTONE
-        amount: 192
+        amount: 48
       Stick:
         material: STICK
-        amount: 128
+        amount: 32
       Stone:
         material: STONE
-        amount: 384
+        amount: 96
       Quartz:
         material: QUARTZ
-        amount: 64
+        amount: 16
     outputs:
       Redstone Comparator:
-        amount: 32
+        amount: 18
         material: REDSTONE_COMPARATOR
   Produce Daylight Sensors:
-    fuel_cost: 10
+    fuel_cost: 2
     inputs:
       Redstone:
         material: REDSTONE
-        amount: 32
+        amount: 16
       Stick:
         material: GLASS
-        amount: 96
+        amount: 48
       Plank:
         material: WOOD
         durability: -1
-        amount: 96
+        amount: 48
       Quartz:
         material: QUARTZ
-        amount: 96
+        amount: 48
     outputs:
       Daylight Detector:
-        amount: 16
+        amount: 18
         material: DAYLIGHT_DETECTOR
   Produce Redstone Coil:
     fuel_cost: 10
     inputs:
       Redstone Block:
         material: REDSTONE_BLOCK
-        amount: 8
+        amount: 4
       Quartz Block:
         material: QUARTZ_BLOCK
-        amount: 16
+        amount: 8
       Glass:
         material: GLASS
-        amount: 64
+        amount: 32
     outputs:
       Redstone Coil:
         amount: 1
@@ -91,7 +91,7 @@ upgrades:
     inputs:
       Redstone Coil:
         custom_item: Redstone Coil
-        amount: 8
+        amount: 16
     outputs:
       Redstone Factory 2:
         custom_item: Redstone Factory 2

@@ -57,7 +57,7 @@ upgrades:
     inputs:
       Aspect of Silica:
         custom_item: Aspect of Silica
-        amount: 24
+        amount: 16
     outputs:
       Glass Smelter 4:
         custom_item: Glass Smelter 4

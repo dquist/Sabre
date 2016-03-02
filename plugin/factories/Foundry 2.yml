@@ -1,6 +1,26 @@
 name: Foundry 2
 production_speed: 2
 recipes:
+  Craft Buckets:
+    fuel_cost: 10
+    inputs:
+      Iron Block:
+        material: IRON_BLOCK
+        amount: 5
+    outputs:
+      Bucket:
+        material: BUCKET
+        amount: 18
+  Craft Anvils:
+    fuel_cost: 40
+    inputs:
+      Iron Block:
+        material: IRON_BLOCK
+        amount: 32
+    outputs:
+      Anvil:
+        material: ANVIL
+        amount: 12
   Cast Steel Ingot:
     fuel_cost: 60
     inputs:
@@ -53,7 +73,7 @@ upgrades:
     inputs:
       Aspect of Casting:
         custom_item: Aspect of Casting
-        amount: 16
+        amount: 8
     outputs:
       Foundry 3:
         custom_item: Foundry 3

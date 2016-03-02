@@ -1,42 +1,42 @@
-name: Diamond Armory 4
-production_speed: 4
+name: Diamond Armory 1
+production_speed: 1
 recipes:
   Craft Diamond Helmet:
-    fuel_cost: 30
-    inputs:
-      Diamond:
-        material: DIAMOND
-        amount: 25
-    outputs:
-      Diamond Helmet:
-        material: DIAMOND_HELMET
-        amount: 8
-  Craft Diamond Chestplate:
-    fuel_cost: 30
-    inputs:
-      Diamond:
-        material: DIAMOND
-        amount: 40
-    outputs:
-      Diamond Helmet:
-        material: DIAMOND_CHESTPLATE
-        amount: 8
-  Craft Diamond Leggings:
-    fuel_cost: 30
+    fuel_cost: 8
     inputs:
       Diamond:
         material: DIAMOND
         amount: 35
     outputs:
       Diamond Helmet:
-        material: DIAMOND_LEGGINGS
+        material: DIAMOND_HELMET
         amount: 8
-  Craft Diamond Boots:
-    fuel_cost: 30
+  Craft Diamond Chestplate:
+    fuel_cost: 8
     inputs:
       Diamond:
         material: DIAMOND
-        amount: 20
+        amount: 56
+    outputs:
+      Diamond Helmet:
+        material: DIAMOND_CHESTPLATE
+        amount: 8
+  Craft Diamond Leggings:
+    fuel_cost: 8
+    inputs:
+      Diamond:
+        material: DIAMOND
+        amount: 49
+    outputs:
+      Diamond Helmet:
+        material: DIAMOND_LEGGINGS
+        amount: 8
+  Craft Diamond Boots:
+    fuel_cost: 8
+    inputs:
+      Diamond:
+        material: DIAMOND
+        amount: 28
     outputs:
       Diamond Helmet:
         material: DIAMOND_BOOTS
@@ -46,19 +46,19 @@ recipes:
     inputs:
       Diamond:
         material: DIAMOND
-        amount: 10
+        amount: 14
     outputs:
       Diamond Helmet:
         material: DIAMOND_SWORD
         amount: 8
 upgrades:
-  Diamond Armory 5 Upgrade:
+  Diamond Armory 2 Upgrade:
     fuel_cost: 10
     inputs:
-      Diamond:
-        material: DIAMOND
-        amount: 640
+      Diamond Block:
+        material: DIAMOND_BLOCK
+        amount: 96
     outputs:
-      Diamond Armory 5:
-        custom_item: Diamond Armory 5
+      Diamond Armory 2:
+        custom_item: Diamond Armory 2
         amount: 1

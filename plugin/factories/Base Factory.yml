@@ -20,9 +20,9 @@ upgrades:
   Stone Smelter 1 Upgrade:
     fuel_cost: 10
     inputs:
-      Cobblestone:
-        material: COBBLESTONE
-        amount: 1536
+      Stone:
+        material: STONE
+        amount: 512
     outputs:
       Stone Smelter 1:
         custom_item: Stone Smelter 1
@@ -33,7 +33,13 @@ upgrades:
       Charcoal:
         material: COAL
         durability: 1
-        amount: 256
+        amount: 128
+      Aspect of Masonry:
+        custom_item: Aspect of Masonry
+        amount: 1
+      Aspect of Framing:
+        custom_item: Aspect of Framing
+        amount: 1
     outputs:
       Fuel Refinery 1:
         custom_item: Fuel Refinery 1
@@ -41,12 +47,21 @@ upgrades:
   Ore Smelter 1 Upgrade:
     fuel_cost: 10
     inputs:
-      Iron Ore:
-        material: IRON_ORE
-        amount: 48
-      Coal Ore:
-        material: COAL_ORE
+      Diamond:
+        material: DIAMOND
         amount: 64
+      Iron Ingot:
+        material: IRON_INGOT
+        amount: 128
+      Gold Ingot:
+        material: GOLD_INGOT
+        amount: 32
+      Aspect of Masonry:
+        custom_item: Aspect of Masonry
+        amount: 1
+      Aspect of Framing:
+        custom_item: Aspect of Framing
+        amount: 1
     outputs:
       Ore Smelter 1:
         custom_item: Ore Smelter 1
@@ -54,14 +69,14 @@ upgrades:
   Foundry 1 Upgrade:
     fuel_cost: 10
     inputs:
+      Aspect of Metallurgy:
+        custom_item: Aspect of Metallurgy
+        amount: 1
       Aspect of Masonry:
         custom_item: Aspect of Masonry
         amount: 1
       Aspect of Framing:
         custom_item: Aspect of Framing
-        amount: 1
-      Aspect of Metallurgy:
-        custom_item: Aspect of Metallurgy
         amount: 1
     outputs:
       Foundry 1:
@@ -70,14 +85,14 @@ upgrades:
   Rail Factory 1 Upgrade:
     fuel_cost: 10
     inputs:
+      Aspect of Casting:
+        custom_item: Aspect of Casting
+        amount: 1
       Aspect of Masonry:
         custom_item: Aspect of Masonry
         amount: 1
       Aspect of Framing:
         custom_item: Aspect of Framing
-        amount: 1
-      Aspect of Casting:
-        custom_item: Aspect of Casting
         amount: 1
     outputs:
       Rail Factory 1:
@@ -95,6 +110,9 @@ upgrades:
       Quartz Block:
         material: QUARTZ_BLOCK
         amount: 32
+      Aspect of Masonry:
+        custom_item: Aspect of Masonry
+        amount: 1
       Aspect of Framing:
         custom_item: Aspect of Framing
         amount: 1
@@ -130,9 +148,9 @@ upgrades:
   Iron Smithy 1 Upgrade:
     fuel_cost: 10
     inputs:
-      Iron Ingot:
-        material: IRON_INGOT
-        amount: 64
+      Iron Block:
+        material: IRON_BLOCK
+        amount: 48
     outputs:
       Iron Smithy 1:
         custom_item: Iron Smithy 1
@@ -140,9 +158,9 @@ upgrades:
   Gold Smithy 1 Upgrade:
     fuel_cost: 10
     inputs:
-      Gold Ingot:
-        material: GOLD_INGOT
-        amount: 64
+      Gold Block:
+        material: GOLD_BLOCK
+        amount: 24
     outputs:
       Gold Smithy 1:
         custom_item: Gold Smithy 1
@@ -150,9 +168,9 @@ upgrades:
   Diamond Smithy 1 Upgrade:
     fuel_cost: 10
     inputs:
-      Diamond Ingot:
-        material: DIAMOND
-        amount: 64
+      Diamond Block:
+        material: DIAMOND_BLOCK
+        amount: 32
     outputs:
       Diamond Smithy 1:
         custom_item: Diamond Smithy 1
@@ -162,7 +180,7 @@ upgrades:
     inputs:
       Leather:
         material: LEATHER
-        amount: 64
+        amount: 128
     outputs:
       Leather Armory 1:
         custom_item: Leather Armory 1
@@ -171,8 +189,8 @@ upgrades:
     fuel_cost: 10
     inputs:
       Iron Ingot:
-        material: IRON_INGOT
-        amount: 128
+        material: IRON_BLOCK
+        amount: 72
     outputs:
       Iron Armory 1:
         custom_item: Iron Armory 1
@@ -181,8 +199,8 @@ upgrades:
     fuel_cost: 10
     inputs:
       Gold Ingot:
-        material: GOLD_INGOT
-        amount: 128
+        material: GOLD_BLOCK
+        amount: 36
     outputs:
       Gold Armory 1:
         custom_item: Gold Armory 1
@@ -191,24 +209,73 @@ upgrades:
     fuel_cost: 10
     inputs:
       Diamond:
-        material: DIAMOND
-        amount: 128
+        material: DIAMOND_BLOCK
+        amount: 96
     outputs:
       Diamond Armory 1:
         custom_item: Diamond Armory 1
         amount: 1
-  Dharma Factory 1 Upgrade:
+  Kiln 1 Upgrade:
+    fuel_cost: 10
+    inputs:
+      Clay:
+        material: CLAY
+        amount: 256
+    outputs:
+      Kiln 1:
+        custom_item: Kiln 1
+        amount: 1
+  Glass Smelter 1 Upgrade:
+    fuel_cost: 10
+    inputs:
+      Glass:
+        material: GLASS
+        amount: 256
+    outputs:
+      Glass Smelter 1:
+        custom_item: Glass Smelter 1
+        amount: 1
+  Basic Farm:
+    fuel_cost: 10
+    inputs:
+      Dirt:
+        material: DIRT
+        amount: 256
+      Cobblestone:
+        material: COBBLESTONE
+        amount: 64
+      Gravel:
+        material: GRAVEL
+        amount: 32
+    outputs:
+      Basic Farm:
+        custom_item: Basic Farm
+        amount: 1
+  Emerald Cauldron 1:
+    fuel_cost: 10
+    inputs:
+      Iron:
+        material: IRON_INGOT
+        amount: 64
+      Diamond:
+        material: DIAMOND
+        amount: 32
+    outputs:
+      Emerald Cauldron 1:
+        custom_item: Emerald Cauldron 1
+        amount: 1
+          Dharma Factory 1 Upgrade:
     fuel_cost: 10
     inputs:
       End Stone:
         material: ENDER_STONE
-        amount: 2048
+        amount: 256
       Obsidian:
         material: OBSIDIAN
-        amount: 512
+        amount: 128
       Diamond:
         material: DIAMOND
-        amount: 128
+        amount: 64
     outputs:
       Dharma Factory 1:
         custom_item: Dharma Factory 1
@@ -222,68 +289,19 @@ upgrades:
       Aspect of Framing:
         custom_item: Aspect of Framing
         amount: 2
-      Aspect of Metallurgy:
-        custom_item: Aspect of Metallurgy
-        amount: 2
-      Aspect of Casting:
-        custom_item: Aspect of Casting
-        amount: 16
       Redstone Coil:
         custom_item: Redstone Coil
-        amount: 8
+        amount: 2
       Gearbox:
         custom_item: Gearbox
-        amount: 8
+        amount: 2
+      Aspect of Metallurgy:
+        custom_item: Aspect of Metallurgy
+        amount: 1
+      Aspect of Casting:
+        custom_item: Aspect of Casting
+        amount: 1
     outputs:
       Civics Factory 1:
         custom_item: Civics Factory 1
-        amount: 1
-  Kiln 1 Upgrade:
-    fuel_cost: 10
-    inputs:
-      Clay:
-        material: CLAY
-        amount: 1280
-    outputs:
-      Kiln 1:
-        custom_item: Kiln 1
-        amount: 1
-  Glass Smelter 1 Upgrade:
-    fuel_cost: 10
-    inputs:
-      Glass:
-        material: GLASS
-        amount: 1536
-    outputs:
-      Glass Smelter 1:
-        custom_item: Glass Smelter 1
-        amount: 1
-  Basic Farm:
-    fuel_cost: 10
-    inputs:
-      Dirt:
-        material: DIRT
-        amount: 2048
-      Cobblestone:
-        material: COBBLESTONE
-        amount: 1024
-    outputs:
-      Basic Farm:
-        custom_item: Basic Farm
-        amount: 1
-  Emerald Cauldron 1:
-    fuel_cost: 10
-    inputs:
-      Diamond:
-        material: DIAMOND
-        amount: 128
-      Iron:
-        material: IRON_INGOT
-        amount: 256
-      Glass:
-        material: GLASS
-        amount: 1024
-    outputs:
-      Emerald Cauldron 1:
-        custom_item: Emerald Cauldron 1
         amount: 1

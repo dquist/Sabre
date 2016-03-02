@@ -2,7 +2,7 @@ name: Ore Smelter 5
 production_speed: 5
 recipes:
   Smelt Diamond Ore:
-    fuel_cost: 10
+    fuel_cost: 20
     inputs:
       Diamond Ore:
         material: DIAMOND_ORE
@@ -12,7 +12,7 @@ recipes:
         material: DIAMOND
         amount: 48
   Smelt Iron Ore:
-    fuel_cost: 10
+    fuel_cost: 20
     inputs:
       Iron Ore:
         material: IRON_ORE
@@ -22,7 +22,7 @@ recipes:
         material: IRON_INGOT
         amount: 192
   Smelt Gold Ore:
-    fuel_cost: 10
+    fuel_cost: 20
     inputs:
       Gold Ore:
         material: GOLD_ORE
@@ -32,7 +32,7 @@ recipes:
         material: GOLD_INGOT
         amount: 96
   Smelt Coal Ore:
-    fuel_cost: 10
+    fuel_cost: 20
     inputs:
       Coal Ore:
         material: COAL_ORE
@@ -42,7 +42,7 @@ recipes:
         material: COAL
         amount: 384
   Smelt Lapis Ore:
-    fuel_cost: 10
+    fuel_cost: 20
     inputs:
       Lapis Ore:
         material: LAPIS_ORE
@@ -53,7 +53,7 @@ recipes:
         durability: 4
         amount: 96
   Smelt Redstone Ore:
-    fuel_cost: 10
+    fuel_cost: 20
     inputs:
       Redstone Ore:
         material: REDSTONE_ORE
@@ -63,7 +63,7 @@ recipes:
         material: REDSTONE
         amount: 192
   Smelt Nether Quartz Ore:
-    fuel_cost: 10
+    fuel_cost: 20
     inputs:
       Nether Quartz Ore:
         material: QUARTZ_ORE

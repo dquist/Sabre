@@ -14,13 +14,13 @@ recipes:
     inputs:
       Dirt:
         material: DIRT
-        amount: 512
+        amount: 256
       Cobblestone:
         material: COBBLESTONE
-        amount: 256
+        amount: 64
       Gravel:
         material: GRAVEL
-        amount: 128
+        amount: 32
     outputs:
       Aspect of Agriculture:
         custom_item: Aspect of Agriculture
@@ -31,7 +31,7 @@ upgrades:
     inputs:
       Aspect of Agriculture:
         custom_item: Aspect of Agriculture
-        amount: 192
+        amount: 32
     outputs:
       Potato Farm 4:
         custom_item: Potato Farm 4
