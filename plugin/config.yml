@@ -7,7 +7,7 @@ database:
   user: ''
   pass: ''
 chat:
-  global_radius: 800
+  global_radius: 1500
 build:
   reinforcements:
     STONE:
