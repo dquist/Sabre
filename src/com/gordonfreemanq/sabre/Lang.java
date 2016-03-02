@@ -155,6 +155,7 @@ public class Lang
 	public static final String warpDirectMissingDrive = "<i>That teleport pad is not linked to a direct warp drive.";
 	public static final String warpMissingPad = "<i>Teleport pad is not linked to another pad.";
 	public static final String warpMissingDestDrive = "<i>Destination teleport pad is not linked to a direct warp drive.";
+	public static final String warpStandOnPad = "<b>You must be standing on the teleport pad to use it.";
 	public static final String warping = "<i>Teleporting...";
 	
 	

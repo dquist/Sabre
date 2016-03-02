@@ -2,6 +2,7 @@ package com.gordonfreemanq.sabre.warp;
 
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.block.BlockFace;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
@@ -87,6 +88,11 @@ public class TeleportPad extends SpecialBlock {
 				sp.msg(Lang.warpDirectMissingDrive);
 			}
 			
+			return;
+		}
+		
+		if (sp.getPlayer().getLocation().getBlock().getRelative(BlockFace.DOWN).getLocation() != this.location) {
+			sp.msg(Lang.warpStandOnPad);
 			return;
 		}
 		
