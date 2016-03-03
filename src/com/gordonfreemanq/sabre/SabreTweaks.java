@@ -1173,20 +1173,35 @@ public class SabreTweaks implements Listener {
 
 
 	/**
-	 * A better version of dropNaturally so the dropped item is placed
-	 * where you would expect it to be
-	 * @param l The location
+	 * A better version of dropNaturally that mimics normal drop behavior.
+	 * 
+	 * The built-in version of Bukkit's dropItem() method places the item at the block 
+	 * vertex which can make the item jump around. 
+	 * This method places the item in the middle of the block location with a slight 
+	 * vertical velocity to mimic how normal broken blocks appear.
+	 * @param l The location to drop the item
 	 * @param is The item to drop
+	 * 
+	 * @author GordonFreemanQ
 	 */
-	public static void dropItemAtLocation(Location l, ItemStack is) {
-		l.getWorld().dropItem(l.add(0.5, 0.5, 0.5), is).setVelocity(new Vector(0, 0.05, 0));
+	public static void dropItemAtLocation(final Location l, final ItemStack is) {
+		
+		// Schedule the item to drop 1 tick later
+		Bukkit.getScheduler().scheduleSyncDelayedTask(SabrePlugin.getPlugin(), new Runnable() {
+			@Override
+			public void run() {
+				l.getWorld().dropItem(l.add(0.5, 0.5, 0.5), is).setVelocity(new Vector(0, 0.05, 0));
+			}
+		}, 1);
 	}
-
+	
+	
 	/**
-	 * A better version of dropNaturally so the dropped item is placed
-	 * where you would expect it to be
+	 * Overload for dropItemAtLocation(Location l, ItemStack is) that accepts a block parameter.
 	 * @param b The block to drop it at
 	 * @param is The item to drop
+	 * 
+	 * @author GordonFreemanQ
 	 */
 	public static void dropItemAtLocation(Block b, ItemStack is) {
 		dropItemAtLocation(b.getLocation(), is);
