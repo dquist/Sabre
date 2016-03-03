@@ -41,7 +41,7 @@ public class Reinforcement {
 		this.creationTime = creationTime;
 		this.isPublic = false;
 		this.isInsecure = false;
-		this.admin = true;
+		this.admin = admin;
 	}
 	
 	

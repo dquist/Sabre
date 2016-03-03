@@ -33,6 +33,7 @@ public class CmdBuildAcid extends SabreCommand {
 		Reinforcement r = null;
 		Reinforcement topR = null;
 		AcidBlock acid = null;
+		boolean found = false;
 		
 		Iterator<Block> itr = new BlockIterator(me.getPlayer(), 40); // Within 2.5 chunks
 		while (itr.hasNext()) {
@@ -97,6 +98,11 @@ public class CmdBuildAcid extends SabreCommand {
 			
 			bm.removeBlock(sb);
 			sb.dropNaturally();
+			found = true;
+		}
+		
+		if (!found) {
+			me.msg(Lang.acidNotFound);
 		}
 	}
 }

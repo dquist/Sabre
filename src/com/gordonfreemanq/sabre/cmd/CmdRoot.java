@@ -9,7 +9,6 @@ public class CmdRoot extends SabreCommand {
 		super();
 
 		this.aliases.add("f");
-		this.aliases.add("faction");
 		this.aliases.removeAll(Collections.singletonList(null));  // remove any nulls from extra commas
 		
 		this.setHelpShort("The Faction base command");
@@ -17,18 +16,6 @@ public class CmdRoot extends SabreCommand {
 		
 		
 		this.addSubCommand(new CmdGroupAutoJoin());
-		this.addSubCommand(new CmdBuildBypass());
-		this.addSubCommand(new CmdBuildFortify());
-		this.addSubCommand(new CmdBuildInfo());
-		this.addSubCommand(new CmdBuildReinforce());
-		this.addSubCommand(new CmdBuildOff());
-		this.addSubCommand(new CmdBuildAcid());
-		this.addSubCommand(new CmdChat());
-		this.addSubCommand(new CmdChatMe());
-		this.addSubCommand(new CmdChatMsg());
-		this.addSubCommand(new CmdChatReply());
-		this.addSubCommand(new CmdChatServer());
-		this.addSubCommand(new CmdChatSay());
 		this.addSubCommand(new CmdGroupCreate());
 		this.addSubCommand(new CmdGroupInvite());
 		this.addSubCommand(new CmdGroupJoin());
@@ -43,18 +30,6 @@ public class CmdRoot extends SabreCommand {
 		this.addSubCommand(new CmdGroupUninvite());
 		this.addSubCommand(new CmdHelp());
 		this.addSubCommand(new CmdUnknown());
-		
-		
-		// Admin commands
-		this.addSubCommand(new CmdAdminRoot());
-		this.addSubCommand(new CmdSpeed());
-		this.addSubCommand(new CmdTest());
-		this.addSubCommand(new CmdTeleport());
-		this.addSubCommand(new CmdTeleportHere());
-		this.addSubCommand(new CmdAdminFly());
-		this.addSubCommand(new CmdAdminVanish());
-		this.addSubCommand(new CmdAdminGamemode());
-		this.addSubCommand(new CmdAdminRespawn());
 	}
 	
 	@Override

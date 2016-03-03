@@ -42,13 +42,13 @@ public class CmdChatIgnore extends SabreCommand {
 		if (this.args.size() > 1) {
 			setTo = this.argAsBool(1);
 		} else {
-			setTo = me.isIgnoring(p);
+			setTo = !me.isIgnoring(p);
 		}
 		
 		me.setIgnored(p, setTo);
 		
 		if (setTo) {
-			me.msg(Lang.groupMute, p.getName());
+			me.msg(Lang.chatIgnoring, p.getName());
 			
 			// Move to global chat
 			if (me.getChatChannel().equals(p)) {
@@ -56,7 +56,7 @@ public class CmdChatIgnore extends SabreCommand {
 				me.msg(Lang.chatMovedGlobal);
 			}
 		} else {
-			me.msg(Lang.groupUnmute, p.getName());
+			me.msg(Lang.chatStoppedIgnoring, p.getName());
 		}
 	}
 }

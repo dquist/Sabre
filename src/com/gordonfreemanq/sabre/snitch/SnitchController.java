@@ -36,11 +36,11 @@ public class SnitchController extends AbstractController {
 		lore.add(parse("<a>Notifications: <n>%s", snitch.getNotifyString()));
 		lore.add(parse(""));
 		lore.add(parse("<l>Commands:"));
+		lore.add(parse(CmdSnitch.getInstance().cmdInfo.getUseageTemplate(true)));
 		lore.add(parse(CmdSnitch.getInstance().cmdClear.getUseageTemplate(true)));
 		lore.add(parse(CmdSnitch.getInstance().cmdNotify.getUseageTemplate(true)));
 		lore.add(parse(CmdSnitch.getInstance().cmdRefresh.getUseageTemplate(true)));
 		lore.add(parse(CmdSnitch.getInstance().cmdRename.getUseageTemplate(true)));
-		lore.add(parse(CmdSnitch.getInstance().cmdReport.getUseageTemplate(true)));
 		
 		return lore;
 	}

@@ -29,3 +29,5 @@ snitch
 snitches
 offline
 config
+snitch
+snitches

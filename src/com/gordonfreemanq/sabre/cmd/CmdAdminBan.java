@@ -2,6 +2,8 @@ package com.gordonfreemanq.sabre.cmd;
 
 import com.gordonfreemanq.sabre.Lang;
 import com.gordonfreemanq.sabre.SabrePlayer;
+import com.gordonfreemanq.sabre.core.CommandVisibility;
+import com.gordonfreemanq.sabre.core.Permission;
 
 
 public class CmdAdminBan extends SabreCommand {
@@ -17,6 +19,8 @@ public class CmdAdminBan extends SabreCommand {
 		this.setHelpShort("Bans a player");
 		
 		this.errorOnToManyArgs = false;
+		this.permission = Permission.ADMIN.node;
+		this.visibility = CommandVisibility.SECRET;
 	}
 
 	@Override

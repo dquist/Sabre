@@ -91,11 +91,6 @@ public class TeleportPad extends SpecialBlock {
 			return;
 		}
 		
-		if (sp.getPlayer().getLocation().getBlock().getRelative(BlockFace.DOWN).getLocation() != this.location) {
-			sp.msg(Lang.warpStandOnPad);
-			return;
-		}
-		
 		ItemStack is = (new TeleportLinker(this)).toItemStack();
 		sp.getPlayer().getInventory().setItemInHand(is);
 		sp.msg(Lang.warpHitDrive);
@@ -132,6 +127,11 @@ public class TeleportPad extends SpecialBlock {
 		// Verify warp drive exists
 		if (driveLocation != null) {
 			drive = (AbstractWarpDrive)BlockManager.getInstance().getBlockAt(driveLocation);
+		}
+		
+		if (!sp.getPlayer().getLocation().getBlock().getRelative(BlockFace.DOWN).equals(this.location.getBlock())) {
+			sp.msg(Lang.warpStandOnPad);
+			return;
 		}
 		
 		if (drive != null) {

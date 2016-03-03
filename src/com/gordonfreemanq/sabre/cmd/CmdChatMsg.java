@@ -43,6 +43,11 @@ public class CmdChatMsg extends SabreCommand {
 			return;
 		}
 		
+		if(me.isIgnoring(p)) {
+			me.setIgnored(p, false);
+			me.msg(Lang.chatStoppedIgnoring, p.getName());
+		}
+		
 		if (args.size() == 1) {
 			me.setChatChannel(p);
 			msg(Lang.chatChattingWith, p.getName());

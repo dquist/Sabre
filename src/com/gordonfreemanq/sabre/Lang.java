@@ -67,6 +67,8 @@ public class Lang
 	public static final String chatPlayerOffline = "<c>%s <b>is offline.";
 	public static final String chatOfflineActivity = "<i>There was some activity while you were offline:";
 	public static final String chatYouAreIgnored = "<i>The player <c>%s <i>has ignored you.";
+	public static final String chatIgnoring = "<i>You are now ignoring <c>%s<i>.";
+	public static final String chatStoppedIgnoring = "<i>You stopped ignoring <c>%s<i>.";
 	
 	
 	// BUILD
@@ -79,7 +81,7 @@ public class Lang
 	public static final String blockNotMaterial = "<b>That is not a valid reinforcement material.";
 	public static final String blockMaterialDepleted = "<n>%s <i>depleted, left fortification mode.";
 	public static final String blockNotReinforceable = "<b>That block cannot be reinforced.";
-	public static final String blockShowType = "<i>That's a <n>%s<i>.";
+	public static final String blockShowType = "<i>That's a%s <n>%s<i>.";
 	public static final String blockShowInfo = "<b>%s with <n>%s <b>at <n>%s%% <b>health.";
 	public static final String blockShowInfoAccess = "<g>%s to <c>%s <g>with <n>%s <g>at <n>%s%% <g>health.";
 	public static final String blockShowInfoSpecial = "<n>%s <b>is %s with <n>%s <b>at <n>%s%% <b>health.";
@@ -104,6 +106,7 @@ public class Lang
 	public static final String acidNoReinforcementAbove = "<b>That block doesn't have a reinforcement.";
 	public static final String acidSameGroup = "<b>That block is on the same group as the acid block.";
 	public static final String acidTooWeak = "<b>This acid block is too weak for that reinforcement.";
+	public static final String acidNotFound = "<b>No acid block was found.";
 	
 	
 	// ADMIN
@@ -128,7 +131,7 @@ public class Lang
 	
 	
 	// SNITCH
-	public static final String snitchNotFound = "<b>No snitch was found.";
+	public static final String snitchNotFound = "<i>You don't own any snitches nearby.";
 	public static final String snitchCleared = "<g>Snitch entries cleared.";
 	public static final String snitchEntry = "<c>%s entry at <a>%s <n>[%d %d %d %s]";
 	public static final String snitchLoggedIn = "<c>%s login at <a>%s <n>[%d %d %d %s]";
@@ -211,7 +214,7 @@ public class Lang
 	public static final String factoryCantDoWhileRunning = "<b>You can't do that while the factory is running.";
 	public static final String factoryUpdateController = "<i>Updated controller.";
 	public static final String factoryFertility = "<i>Chunk fertility is <c>%d%%";
-	public static final String factoryLowFuel = "<b>Low Fuel! <i>Not enough fuel to complete recipe.";
+	public static final String factoryLowFuel = "<b>* * * <i>Not enough fuel to complete recipe. <b>* * *";
 	
 	
 	// MISC

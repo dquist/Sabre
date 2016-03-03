@@ -16,8 +16,35 @@ import com.gordonfreemanq.sabre.blocks.CustomItems;
 import com.gordonfreemanq.sabre.blocks.SignHandler;
 import com.gordonfreemanq.sabre.chat.GlobalChat;
 import com.gordonfreemanq.sabre.chat.ServerBroadcast;
+import com.gordonfreemanq.sabre.cmd.CmdAdminBan;
+import com.gordonfreemanq.sabre.cmd.CmdAdminFly;
+import com.gordonfreemanq.sabre.cmd.CmdAdminGamemode;
+import com.gordonfreemanq.sabre.cmd.CmdAdminGive;
+import com.gordonfreemanq.sabre.cmd.CmdAdminMore;
+import com.gordonfreemanq.sabre.cmd.CmdAdminRespawn;
+import com.gordonfreemanq.sabre.cmd.CmdAdminRoot;
+import com.gordonfreemanq.sabre.cmd.CmdAdminUnban;
+import com.gordonfreemanq.sabre.cmd.CmdAdminVanish;
 import com.gordonfreemanq.sabre.cmd.CmdAutoHelp;
+import com.gordonfreemanq.sabre.cmd.CmdBuildAcid;
+import com.gordonfreemanq.sabre.cmd.CmdBuildBypass;
+import com.gordonfreemanq.sabre.cmd.CmdBuildFortify;
+import com.gordonfreemanq.sabre.cmd.CmdBuildInfo;
+import com.gordonfreemanq.sabre.cmd.CmdBuildOff;
+import com.gordonfreemanq.sabre.cmd.CmdBuildReinforce;
+import com.gordonfreemanq.sabre.cmd.CmdChat;
+import com.gordonfreemanq.sabre.cmd.CmdChatIgnore;
+import com.gordonfreemanq.sabre.cmd.CmdChatMe;
+import com.gordonfreemanq.sabre.cmd.CmdChatMsg;
+import com.gordonfreemanq.sabre.cmd.CmdChatReply;
+import com.gordonfreemanq.sabre.cmd.CmdChatSay;
+import com.gordonfreemanq.sabre.cmd.CmdChatServer;
+import com.gordonfreemanq.sabre.cmd.CmdHelp;
 import com.gordonfreemanq.sabre.cmd.CmdRoot;
+import com.gordonfreemanq.sabre.cmd.CmdSpeed;
+import com.gordonfreemanq.sabre.cmd.CmdTeleport;
+import com.gordonfreemanq.sabre.cmd.CmdTeleportHere;
+import com.gordonfreemanq.sabre.cmd.CmdTest;
 import com.gordonfreemanq.sabre.cmd.factory.CmdFactory;
 import com.gordonfreemanq.sabre.cmd.pearl.CmdPearl;
 import com.gordonfreemanq.sabre.cmd.snitch.CmdSnitch;
@@ -255,6 +282,36 @@ public class SabrePlugin extends AbstractSabrePlugin
 		baseCommands.add(new CmdPearl());
 		baseCommands.add(new CmdFactory());
 		baseCommands.add(new CmdSnitch());
+		baseCommands.add(new CmdChat());
+		baseCommands.add(new CmdChatMe());
+		baseCommands.add(new CmdChatMsg());
+		baseCommands.add(new CmdChatReply());
+		baseCommands.add(new CmdChatServer());
+		baseCommands.add(new CmdChatSay());
+		baseCommands.add(new CmdChatIgnore());
+		baseCommands.add(new CmdBuildBypass());
+		baseCommands.add(new CmdBuildFortify());
+		baseCommands.add(new CmdBuildInfo());
+		baseCommands.add(new CmdBuildReinforce());
+		baseCommands.add(new CmdBuildOff());
+		baseCommands.add(new CmdBuildAcid());
+		baseCommands.add(new CmdHelp());
+		
+
+		// Admin commands
+		baseCommands.add(new CmdAdminRoot());
+		baseCommands.add(new CmdSpeed());
+		baseCommands.add(new CmdTest());
+		baseCommands.add(new CmdTeleport());
+		baseCommands.add(new CmdTeleportHere());
+		baseCommands.add(new CmdAdminFly());
+		baseCommands.add(new CmdAdminVanish());
+		baseCommands.add(new CmdAdminGamemode());
+		baseCommands.add(new CmdAdminRespawn());
+		baseCommands.add(new CmdAdminBan());
+		baseCommands.add(new CmdAdminUnban());
+		baseCommands.add(new CmdAdminMore());
+		baseCommands.add(new CmdAdminGive());
 		
 		factoryWorker = new FactoryWorker();
 		factoryWorker.start();
@@ -311,14 +368,6 @@ public class SabrePlugin extends AbstractSabrePlugin
 
 				// Set the label to the default alias
 				cmd.setLabel(c.aliases.get(0));
-				
-				// Rebuild the argument list to strip out the first arg
-				String[] args2 = new String[args.length + 1];
-				args2[0] = cmd.getLabel();
-				for (int i = 0; i < args.length; i++) {
-					args2[i + 1] = args[i];
-				}
-				args = args2;
 				
 				c.execute(sender, new ArrayList<String>(Arrays.asList(args)));
 				return true;

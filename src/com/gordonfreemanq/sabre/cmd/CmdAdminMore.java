@@ -2,6 +2,9 @@ package com.gordonfreemanq.sabre.cmd;
 
 import org.bukkit.inventory.ItemStack;
 
+import com.gordonfreemanq.sabre.core.CommandVisibility;
+import com.gordonfreemanq.sabre.core.Permission;
+
 
 public class CmdAdminMore extends SabreCommand {
 
@@ -13,6 +16,8 @@ public class CmdAdminMore extends SabreCommand {
 		this.setHelpShort("Gives more items");
 		
 		this.errorOnToManyArgs = false;
+		this.permission = Permission.ADMIN.node;
+		this.visibility = CommandVisibility.SECRET;
 	}
 
 	@Override

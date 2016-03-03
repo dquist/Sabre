@@ -368,7 +368,7 @@ public class BlockListener implements Listener {
 								p.msg(Lang.adminYouBypassed, groupName);
 							} else {
 								if (!state.getInfo()) {
-									if (sb.isSpecial()) {
+									if (sb.isSpecial() && sb.getTellBlockName() && (!sb.getRequireAccessForName() || sb.canPlayerAccess(p))) {
 										p.msg(Lang.blockIsLockedSpecial, sb.getTypeName());
 									} else {
 										p.msg(Lang.blockIsLocked, b.getType());
@@ -391,7 +391,14 @@ public class BlockListener implements Listener {
 					// the chat too noisy when cycling the factory recipes
 					else if (showBlockName && sb.getTellBlockName()) {
 						if (!sb.getRequireAccessForName() || sb.canPlayerAccess(p)) {
-							p.msg(Lang.blockShowType, sb.getDisplayName());
+							
+							char starting = sb.getDisplayName().toLowerCase().charAt(0);
+							String vowelModifier = "";
+							if (starting == 'a' || starting == 'e' || starting == 'i' || starting == 'u' || starting == 'o' ) {
+								vowelModifier = "n";
+							}
+							
+							p.msg(Lang.blockShowType, vowelModifier, sb.getDisplayName());
 						}
 					}
 				} else if (state.getInfo()) {
@@ -612,7 +619,7 @@ public class BlockListener implements Listener {
 		boolean special = false;
 
 		// Tell the user if this is a special block
-		if (!b.getTypeName().equalsIgnoreCase("block")) {
+		if (!b.getTypeName().equalsIgnoreCase("block") && b.getTellBlockName() && (!b.getRequireAccessForName() || b.canPlayerAccess(p))) {
 			special = true;
 			//p.msg(Lang.blockShowType, b.getTypeName());
 		}

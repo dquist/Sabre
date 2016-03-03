@@ -35,6 +35,11 @@ public class CmdChatReply extends SabreCommand {
 			return;
 		}
 		
+		if(me.isIgnoring(p)) {
+			me.setIgnored(p, false);
+			me.msg(Lang.chatStoppedIgnoring, p.getName());
+		}
+		
 		StringBuilder sb = new StringBuilder();
 		for (int i = 0; i < args.size(); i++) {
 			sb.append(args.get(i));

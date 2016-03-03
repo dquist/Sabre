@@ -5,9 +5,9 @@ description: Sabre plugin
 author: GFQ
 depend: [PermissionsEx, CombatTagPlus, ProtocolLib, PacketWrapper, VanishNoPacket]
 commands:
-  faction:
+  f:
     description: The Faction base command
-    aliases: [f]
+    aliases: [faction]
   msg:
     description: Sends a player a message.
     usage: /<command> <player> <message>
@@ -30,7 +30,7 @@ commands:
   unknown:
     description: Unknown commands
     usage: /<command>
-    aliases: [ban, parson, give]
+    aliases: [parson]
   bdi:
     description: Get block information
     usage: /<command>
@@ -51,19 +51,22 @@ commands:
     description: Toggles bypass mode
     usage: /<command>
     aliases: [ctb]
+  admin:
   sn:
   pp:
   factory:
   speed:
-  tp:
-  tphere:
   say:
   vanish:
-  fly:
-  gamemode:
-  gm:
   respawn:
   mute:
   ignore:
   acid:
+  give:
+  more:
+  tp:
+  tphere:
+  fly:
+  gm:
+    aliases: [gamemode]
    

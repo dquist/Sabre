@@ -1,11 +1,14 @@
 package com.gordonfreemanq.sabre.customitems;
 
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.inventory.ItemStack;
 
 import com.gordonfreemanq.sabre.Lang;
 import com.gordonfreemanq.sabre.SabrePlayer;
+import com.gordonfreemanq.sabre.SabreTweaks;
 import com.gordonfreemanq.sabre.blocks.Reinforcement;
 import com.gordonfreemanq.sabre.blocks.SignHandler;
 import com.mongodb.BasicDBObject;
@@ -126,7 +129,7 @@ public class SecureSign extends SpecialBlock {
 	@Override
 	public void onBlockBroken(SabrePlayer p, BlockBreakEvent e) {
 		if (!dropsBlock) {
-			e.setCancelled(false); // Allows the normal sign to drop naturally
+			SabreTweaks.dropItemAtLocation(this.location, new ItemStack(Material.SIGN, 1));
 		}
 	}
 }

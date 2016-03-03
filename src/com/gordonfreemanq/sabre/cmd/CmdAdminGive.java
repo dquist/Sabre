@@ -3,6 +3,8 @@ package com.gordonfreemanq.sabre.cmd;
 import com.gordonfreemanq.sabre.Lang;
 import com.gordonfreemanq.sabre.blocks.CustomItems;
 import com.gordonfreemanq.sabre.blocks.SabreItemStack;
+import com.gordonfreemanq.sabre.core.CommandVisibility;
+import com.gordonfreemanq.sabre.core.Permission;
 
 
 public class CmdAdminGive extends SabreCommand {
@@ -17,6 +19,8 @@ public class CmdAdminGive extends SabreCommand {
 		this.errorOnToManyArgs = false;
 		this.requiredArgs.add("item name");
 		this.optionalArgs.put("amount", "1");
+		this.permission = Permission.ADMIN.node;
+		this.visibility = CommandVisibility.SECRET;
 	}
 
 	@Override

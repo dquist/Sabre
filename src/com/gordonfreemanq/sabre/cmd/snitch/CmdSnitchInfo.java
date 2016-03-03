@@ -31,7 +31,7 @@ public class CmdSnitchInfo  extends SabreCommand {
 		
 		Location l = SnitchController.parseLocation(me, false);
 		if (l == null) {
-			snitch = bm.getSnitches().getSnitchUnderCursor(me);
+			snitch = bm.getSnitches().findTargetedOwnedSnitch(me);
 		} else {
 			snitch = (Snitch)bm.getBlockAt(l);
 		}

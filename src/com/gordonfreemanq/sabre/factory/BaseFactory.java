@@ -565,6 +565,10 @@ public class BaseFactory extends SpecialBlock {
 	 * @return true if there is enough fuel, otherwise false
 	 */
 	private boolean checkFuel() {
+		if (energyTimer > 0) {
+			return true;
+		}
+		
 		Inventory inv = getFuelInventory();
 		if (inv != null) {
 			for (FactoryFuel f : fuels) {
@@ -584,7 +588,7 @@ public class BaseFactory extends SpecialBlock {
 	 * @return The total available fuel
 	 */
 	private int getTotalAvailableFuel() {
-		int total = 0;
+		int total = energyTimer;
 		
 		Inventory inv = getFuelInventory();
 		if (inv != null) {
