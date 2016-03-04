@@ -264,7 +264,7 @@ upgrades:
       Emerald Cauldron 1:
         custom_item: Emerald Cauldron 1
         amount: 1
-          Dharma Factory 1 Upgrade:
+  Dharma Factory 1 Upgrade:
     fuel_cost: 10
     inputs:
       End Stone:
