@@ -1,16 +1,6 @@
-# CivFactions #
+# Sabre Plugin (CivFactions) #
 
-CivFactions Repo.
-
-## Getting Set Up ##
-
-The project can be logically divided into two distinct parts, the server and the Sabre plugin.
-
-### Server ###
-
-The server repo contains everything required to run the actual minecraft server minus things like world data and log files. It has all the binaries and configuration files so that everyone on the team can set up their own development server and know they are running the same configuration as everyone else.
-
-### Sabre ###
+Repository for the Sabre plugin which powers the CivFactions server.
 
 Sabre is the main plugin for the server and peforms the functionality of all the following civcraft plugins:
 
@@ -28,14 +18,13 @@ Combining the code for all these concepts into a single plugin allows for easier
 
 ### Developing ###
 
-This repo contains everything required to start developing and debugging the Sabre plugin. 
+This repo contains everything required to start developing and debugging the Sabre plugin.
 
-First, clone both projects to your local workstation with the following directory structure - I recommend using SourceTree because it interfaces nicely with BitBucket. 
-
-    - CivFactions
-      - Plugin
+    - civfactions
+      - eclipse
         - Sabre  <-- Clone civfactions/sabre here
-      - Server   <-- Clone civfactions/server here
+        - CivLobby
+      - factions   <-- Clone civfactions/factions here
 
 The build script is set up to copy the build output directly to the server plugin folder.
 
