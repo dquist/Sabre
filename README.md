@@ -1,14 +1,6 @@
 # CivFactions #
 
-Welcome to the CivFactions development team. My goal here is to create a more enjoyable, reliable and focused civilization minecraft server. Civcraft is a great concept and has been very successful, but it is plagued by poor leadership and lack of innovation. I aim to take and improve upon the ideas that made civcraft so popular while fixing the many mistakes that it made.
-
-### Confidential ###
-
-By adding you to this repo, it means that I trust you. Please do not violate this trust. All the information here is considered private and should not be shared outside this group. For the time being this is a closed-source project, although it may be open-sourced post launch.
-
-### Schedule ###
-
-I'm hoping for launching a month-long open beta server on 1/1/2016 with a full release a month or two after. The open beta will allow us to iron out any major bugs and balancing issues.
+CivFactions Repo.
 
 ## Getting Set Up ##
 
@@ -20,7 +12,7 @@ The server repo contains everything required to run the actual minecraft server 
 
 ### Sabre ###
 
-Sabre is the main plugin for the server and replaces the following civcraft plugins:
+Sabre is the main plugin for the server and peforms the functionality of all the following civcraft plugins:
 
 * Citadel
 * PrisonPearl
@@ -53,13 +45,11 @@ To build the plugin, open build.ant and click the Run icon. This will build a ne
 
 ## Workflow ##
 
-* Jira is used to track issues and bugs
 * Each project has two main branches: master and develop
 * All work should be done in feature branches off of develop
 * When a feature branch is ready to be merged, create a pull-request and I will merge it
 * Develop will be merged into master on each major release
-* Each Jira issue should ideally get its own feature branch.
-* Use smart commits to auto-change Jira issues: https://confluence.atlassian.com/bitbucket/processing-jira-software-issues-with-smart-commit-messages-298979931.html
+* Each issue should ideally get its own feature branch.
 * For more reference, visit http://nvie.com/posts/a-successful-git-branching-model/
 
 \- Gordon
