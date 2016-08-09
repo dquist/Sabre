@@ -22,7 +22,6 @@ import org.bukkit.block.Biome;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.BlockState;
-import org.bukkit.block.Furnace;
 import org.bukkit.block.Sign;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Ageable;
@@ -61,8 +60,6 @@ import org.bukkit.event.entity.EntityInteractEvent;
 import org.bukkit.event.entity.EntityPortalEvent;
 import org.bukkit.event.entity.ExpBottleEvent;
 import org.bukkit.event.entity.FoodLevelChangeEvent;
-import org.bukkit.event.inventory.FurnaceBurnEvent;
-import org.bukkit.event.inventory.FurnaceSmeltEvent;
 import org.bukkit.event.inventory.InventoryOpenEvent;
 import org.bukkit.event.inventory.PrepareItemCraftEvent;
 import org.bukkit.event.player.PlayerBucketEmptyEvent;
@@ -1297,47 +1294,6 @@ public class SabreTweaks implements Listener {
 			e.setCancelled(true);
 			e.getBlock().setType(Material.AIR);
 			dropItemAtLocation(e.getBlock(), new ItemStack(dropItem, 1));
-		}
-	}
-
-
-	/**
-	 * Blocks certain items from being cooked/smelted in vanilla furnaces
-	 * @param e
-	 */
-	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
-	public void onFurnaceBurn(FurnaceBurnEvent e) {
-
-		Furnace f = (Furnace)e.getBlock().getState();
-		ItemStack smelting = f.getInventory().getSmelting();
-
-		// Loop through the disabled items and cancel the burn if it's found
-		for(SabreItemStack is : config.getDisabledSmelts()) {
-			if (is.isSimilar(smelting)) {
-
-				e.setBurning(false);
-				e.setCancelled(true);
-				break;
-			}
-		}
-	}
-
-
-	/**
-	 * Blocks certain items from being cooked/smelted in vanilla furnaces
-	 * @param e
-	 */
-	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
-	public void onFurnaceSmelt(FurnaceSmeltEvent e) {
-		ItemStack smelting = e.getSource();
-
-		// Loop through the disabled items and cancel the burn if it's found
-		for(SabreItemStack is : config.getDisabledSmelts()) {
-			if (is.isSimilar(smelting)) {
-				e.setResult(new ItemStack(Material.COAL, 1, (short)1));
-				//e.setCancelled(true);
-				break;
-			}
 		}
 	}
 

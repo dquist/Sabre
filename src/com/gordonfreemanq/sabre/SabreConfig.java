@@ -41,7 +41,6 @@ public class SabreConfig {
 		this.reinforcementMaterials = new ArrayList<ReinforcementMaterial>();
 		this.disabledRecipes = new ArrayList<SabreItemStack>();
 		this.disabledItemDrops = new HashSet<Material>();
-		this.noSmelts = new HashSet<SabreItemStack>();
 		this.prisonWorld = "world_the_end";
 		this.freeWorld = "world";
 		
@@ -98,7 +97,6 @@ public class SabreConfig {
 	private List<ReinforcementMaterial> reinforcementMaterials;
 	private List<SabreItemStack> disabledRecipes;
 	private Set<Material> disabledItemDrops;
-	private Set<SabreItemStack> noSmelts;
 	
 	
 	
@@ -231,26 +229,6 @@ public class SabreConfig {
 				
 				if (m != null) {
 					this.disabledItemDrops.add(m);
-				}
-			}
-		}
-		
-		
-		this.noSmelts.clear();
-		if (fc.contains("no_smelt")) {
-			Set<String> rKeys = fc.getConfigurationSection("no_smelt").getKeys(false);
-			for (String s : rKeys) {
-				String materialKey = String.format("no_smelt.%s.material", s);
-				String duraKey = String.format("no_smelt.%s.durability", s);
-				
-				Material m = Material.getMaterial(fc.getString(materialKey));
-				int durability = 0;
-				if (fc.contains(duraKey)) {
-					durability = fc.getInt(duraKey);
-				}
-				
-				if (m != null) {
-					this.noSmelts.add(new SabreItemStack(m, m.name(), 1));
 				}
 			}
 		}
@@ -427,17 +405,7 @@ public class SabreConfig {
 	 */
 	public Set<Material> getDisabledEntityDrops() {
 		return this.disabledItemDrops;
-	}
-	
-	
-	/**
-	 * Gets the items that are prevented from being smelted in a furnace
-	 * @return The disabled smelt items
-	 */
-	public Set<SabreItemStack> getDisabledSmelts() {
-		return this.noSmelts;
-	}
-	
+	}	
 	
 	
 	/**

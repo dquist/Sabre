@@ -7,7 +7,7 @@ database:
   user: ''
   pass: ''
 chat:
-  global_radius: 1500
+  global_radius: 800
 build:
   reinforcements:
     STONE:
@@ -29,20 +29,10 @@ prison_pearl:
   weaken_amount: 1
   days_inactive_threshold: 7
 disabled_recipes:
-  Granite:
-    material: STONE
-    durability: 2
-  Diorite:
-    material: STONE
-    durability: 4
-  Andesite:
-    material: STONE
-    durability: 6
   Hopper:
     material: HOPPER
   Dropper:
     material: DROPPER
-no_smelt:
 farm:
   survey_period: 5
   production_ticks: 300
