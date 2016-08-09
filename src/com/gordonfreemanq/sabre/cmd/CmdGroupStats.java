@@ -142,7 +142,7 @@ public class CmdGroupStats extends SabreCommand {
 	private void getGroupStats() {
 		String groupName = this.argAsString(0);
 
-		SabreGroup g = checkGroupExists(groupName);
+		SabreGroup g = checkGroupExists(groupName, true);
 		if (g == null) {
 			return;
 		}

@@ -1,9 +1,12 @@
 package com.gordonfreemanq.sabre.cmd;
 
+import java.util.Collection;
+
 import com.gordonfreemanq.sabre.Lang;
 import com.gordonfreemanq.sabre.groups.Rank;
 import com.gordonfreemanq.sabre.groups.SabreGroup;
 import com.gordonfreemanq.sabre.groups.SabreMember;
+import com.gordonfreemanq.sabre.util.TextUtil;
 
 
 public class CmdGroupJoin extends SabreCommand {
@@ -12,7 +15,6 @@ public class CmdGroupJoin extends SabreCommand {
 	{
 		super();
 		this.aliases.add("join");
-		this.aliases.add("j");
 
 		this.requiredArgs.add("group");
 		
@@ -24,20 +26,26 @@ public class CmdGroupJoin extends SabreCommand {
 	@Override
 	public void perform() 
 	{
-		String groupName = this.argAsString(0);
+		final String searchName = this.argAsString(0);
 		
-		SabreGroup g = checkGroupExists(groupName);
+		// Get all the groups that the player is invited to
+		Collection<SabreGroup> invited = gm.getInvitedGroups(me);
+		
+		// Get the group by the requested name
+		SabreGroup g = invited.stream().filter(g1 -> g1.getName().equalsIgnoreCase(searchName)).findFirst().orElse(null);
+		
+		// If no match, find closest match
 		if (g == null) {
-			return;
+			g = TextUtil.getBestNamedMatch(invited, searchName, "");
+		}
+		
+		// Still no match
+		if (g == null) {
+			me.msg(Lang.groupNoInvite);
 		}
 		
 		// Get the correct name
-		groupName = g.getName();
-		
-		if (g.getMember(me) != null) {
-			msg(Lang.groupAlreadyMember, groupName);
-			return;
-		}
+		String groupName = g.getName();
 		
 		
 		if (g.getMembers().size() == 0) {

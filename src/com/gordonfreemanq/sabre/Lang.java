@@ -22,7 +22,7 @@ public class Lang
 	public static final String groupAlreadyMember = "<b>You are already a member <c>%s<b>.";
 	public static final String groupPlayerAlreadyMember = "<c>%s<b> is already a member of <c>%s<b>.";
 	public static final String groupPlayerAlreadyInvited = "<c>%s<b> is already invited to <c>%s<b>.";
-	public static final String groupNotExist = "<b>The group <c>%s <b>doesn't exist.";
+	public static final String groupNotExist = "<b>You are not on any group name <c>%s<b>.";
 	public static final String groupNotOwner = "<b>You are not owner of <c>%s<b>.";
 	public static final String groupNotMember = "<b>You are not a member of <c>%s<b>.";
 	public static final String groupPlayerNotMember = "<c>%s <b>is not a member of <c>%s<b>.";
@@ -31,7 +31,9 @@ public class Lang
 	public static final String groupPlayerNotInvited = "<c>%s <b>is not invited to <c>%s<b>.";
 	public static final String groupPlayerUninvited = "<g>You uninvited <c>%s <g>from <c>%s<g>.";
 	public static final String groupNotInviteSelf = "<b>You are already a member of <c>%s<b>.";
+	public static final String groupNoInvite = "<b>You are not invited to any group by that name.";
 	public static final String groupNotTransferSelf = "<b>You cannot transfer a group to yourself.";
+	public static final String groupNotTransferName = "<b>The player <c>%s <b>already owns a group with the same name. Rename it first.";
 	public static final String groupNotKickSelf = "<b>You cannot kick yourself.";
 	public static final String groupNotRankSelf = "<b>You cannot change your own rank.";
 	public static final String unknownPlayer = "<b>Unknown player <c>%s<b>.";

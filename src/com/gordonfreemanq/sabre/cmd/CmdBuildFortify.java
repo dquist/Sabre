@@ -33,7 +33,7 @@ public class CmdBuildFortify extends SabreCommand {
 		boolean publicMode = false;
 		boolean insecureMode = false;
 
-		SabreGroup g = checkGroupExists(groupName);
+		SabreGroup g = checkGroupExists(groupName, true);
 		if (g == null) {
 			return;
 		}

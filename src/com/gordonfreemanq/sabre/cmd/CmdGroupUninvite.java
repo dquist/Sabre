@@ -29,7 +29,7 @@ public class CmdGroupUninvite extends SabreCommand {
 		String playerName = this.argAsString(1);
 		SabrePlayer p = this.argAsPlayer(1);
 		
-		SabreGroup g = checkGroupExists(groupName);
+		SabreGroup g = checkGroupExists(groupName, true);
 		if (g == null) {
 			return;
 		}

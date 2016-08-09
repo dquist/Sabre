@@ -30,7 +30,7 @@ public class CmdChat extends SabreCommand {
 		
 		String groupName = this.argAsString(0);
 		
-		SabreGroup g = this.checkGroupExists(groupName);
+		SabreGroup g = this.checkGroupExists(groupName, true);
 		if (g == null) {
 			return;
 		}

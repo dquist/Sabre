@@ -35,7 +35,7 @@ public class CmdGroupSetRank extends SabreCommand {
 		Rank rank = Rank.fromString(rankName);
 		SabrePlayer p = this.argAsPlayer(1);
 
-		SabreGroup g = checkGroupExists(groupName);
+		SabreGroup g = checkGroupExists(groupName, true);
 		if (g == null) {
 			return;
 		}

@@ -1,5 +1,7 @@
 package com.gordonfreemanq.sabre.cmd;
 
+import java.util.Collection;
+
 import com.gordonfreemanq.sabre.Lang;
 import com.gordonfreemanq.sabre.PlayerManager;
 import com.gordonfreemanq.sabre.SabreConfig;
@@ -92,16 +94,23 @@ public abstract class SabreCommand extends SabreBaseCommand<SabrePlugin>
 	 * @param name The group name
 	 * @return The group instance if it exists, otherwise null
 	 */
-	public SabreGroup checkGroupExists(SabrePlayer owner, String name) {
+	public SabreGroup checkGroupExists(SabrePlayer owner, String name, boolean searchSimilar) {
 		
+		// First try to find the group by owner and name
 		curGroup = gm.getGroupByName(owner, name);
 		
-		// Try to find best batch
+		// If no match, search all the groups that this player is a member of
 		if (curGroup == null) {
-			curGroup = TextUtil.getBestNamedMatch(gm.getPlayerGroups(me), name, "");
+			Collection<SabreGroup> playerGroups = gm.getPlayerGroups(me);
+			curGroup = playerGroups.stream().filter(g -> g.getName().equalsIgnoreCase(name)).findFirst().orElse(null);
+
+			// If no exact hit, try to find the best match group that the player is a member of
+			if (curGroup == null && searchSimilar) {
+				curGroup = TextUtil.getBestNamedMatch(playerGroups, name, "");
+			}
 		}
 
-		// Does the group exist?
+		// No group found
 		if (curGroup == null) {
 			msg(Lang.groupNotExist, name);
 		}
@@ -115,7 +124,7 @@ public abstract class SabreCommand extends SabreBaseCommand<SabrePlugin>
 	 * @param name The group name
 	 * @return The group instance if it exists, otherwise null
 	 */
-	public SabreGroup checkGroupExists(String name) {
-		return checkGroupExists(me, name);
+	public SabreGroup checkGroupExists(String name, boolean searchSimilar) {
+		return checkGroupExists(me, name, searchSimilar);
 	}
 }

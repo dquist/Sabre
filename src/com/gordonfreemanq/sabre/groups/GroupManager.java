@@ -62,13 +62,22 @@ public class GroupManager {
 		return groups.values();
 	}
 	
+	
 	/**
 	 * Gets all the groups a player is on
 	 * @return A collection of all the groups the player is on
 	 */
 	public Collection<SabreGroup> getPlayerGroups(SabrePlayer player) {
-		return groups.values().stream().filter(g -> g.isMember(player)).
-			    collect(Collectors.toSet());
+		return groups.values().stream().filter(g -> g.isMember(player)).collect(Collectors.toSet());
+	}
+	
+	
+	/**
+	 * Gets all the groups that a player is invited to
+	 * @return A collection of all the the player is invited to
+	 */
+	public Collection<SabreGroup> getInvitedGroups(SabrePlayer p) {
+		return groups.values().stream().filter(g -> g.isInvited(p)).collect(Collectors.toSet());
 	}
 	
 	
@@ -111,7 +120,7 @@ public class GroupManager {
 	 */
 	public SabreGroup getGroupByName(SabrePlayer owner, String name) {
 		for (SabreGroup g : groups.values()) {
-			if (g.getName().equalsIgnoreCase(name)) {
+			if (g.getName().equalsIgnoreCase(name) && g.getOwnerID().equals(owner.getID())) {
 				return g;
 			}
 		}

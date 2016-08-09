@@ -31,7 +31,7 @@ public class CmdGroupTransfer extends SabreCommand {
 		String playerName = this.argAsString(1);
 		SabrePlayer p = this.argAsPlayer(1);
 		
-		SabreGroup g = checkGroupExists(groupName);
+		SabreGroup g = checkGroupExists(groupName, false);
 		if (g == null) {
 			return;
 		}
@@ -54,6 +54,11 @@ public class CmdGroupTransfer extends SabreCommand {
 			msg(Lang.groupNotTransferSelf, groupName);
 			return;
 		}
+		
+		if (gm.getGroupByName(p, groupName) != null) {
+			msg(Lang.groupNotTransferName, p.getName());
+			return;
+		}		
 		
 		SabreMember memberTarget = g.getMember(p);
 		if (memberTarget == null) {

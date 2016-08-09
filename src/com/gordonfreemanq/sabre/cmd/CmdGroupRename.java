@@ -26,7 +26,7 @@ public class CmdGroupRename extends SabreCommand {
 		String groupName = this.argAsString(0);
 		String newName = this.argAsString(1);
 		
-		SabreGroup g = checkGroupExists(groupName);
+		SabreGroup g = checkGroupExists(groupName, true);
 		if (g == null) {
 			return;
 		}
