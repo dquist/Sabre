@@ -18,6 +18,7 @@ public class SabreGroup implements INamed, IChatChannel {
 
 	private final UUID id;
 	private String name;
+	private final boolean isFaction;
 	private final HashSet<SabreMember> members;
 	
 	// Players who have been invited to the group
@@ -34,9 +35,10 @@ public class SabreGroup implements INamed, IChatChannel {
 	 * @param name The group name
 	 * @param owner The group owner
 	 */
-	public SabreGroup(UUID id, String name) {
+	public SabreGroup(UUID id, String name, boolean isFaction) {
 		this.id = id;
 		this.name = name;
+		this.isFaction = isFaction;
 		this.members = new HashSet<SabreMember>();
 
 		this.invited = new HashSet<UUID>();
@@ -60,6 +62,15 @@ public class SabreGroup implements INamed, IChatChannel {
 	 */
 	public String getName() {
 		return this.name;
+	}
+
+
+	/**
+	 * Gets whether the group is a faction
+	 * @return true if the group is a faction
+	 */
+	public boolean isFaction() {
+		return this.isFaction;
 	}
 
 

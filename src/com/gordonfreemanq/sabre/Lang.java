@@ -8,6 +8,13 @@ public class Lang
 	public static final String playerBedMissing = "<b>Your bed was missing or obstructed.";
 	
 	
+	// FACTION
+	public static final String factionCreateAlreadyMember = "<b>You must leave your current faction before you can create a new one.";
+	public static final String factionUseCreateGroup = "<i>Use <c>/f creategroup <i>to create a reinforcement group.";
+	public static final String factionCreated = "<g>You created the faction <c>%s<g>.";
+	public static final String factionAlreadyExists = "<b>The faction <c>%s <b>already exists.";
+	
+	
 	// GROUPS
 	public static final String groupCreated = "<g>You created the group <c>%s<g>.";
 	public static final String groupAlreadyExists = "<b>The group <c>%s <b>already exists.";

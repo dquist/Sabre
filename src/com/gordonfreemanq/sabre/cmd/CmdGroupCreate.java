@@ -12,11 +12,12 @@ public class CmdGroupCreate extends SabreCommand {
 	{
 		super();
 		
-		this.aliases.add("create");
+		this.aliases.add("creategroup");
+		this.aliases.add("cg");
 
-		this.requiredArgs.add("group");
+		this.requiredArgs.add("name");
 		
-		this.setHelpShort("Creates a new group");
+		this.setHelpShort("Creates a new reinforcement group");
 
 		senderMustBePlayer = true;
 	}
@@ -25,7 +26,7 @@ public class CmdGroupCreate extends SabreCommand {
 	public void perform() 
 	{
 		String groupName = this.argAsString(0);
-		SabreGroup g = gm.getGroupByName(groupName);
+		SabreGroup g = gm.getGroupByName(me, groupName);
 		
 		// Does the group already exist?
 		if (g != null) {
@@ -41,8 +42,8 @@ public class CmdGroupCreate extends SabreCommand {
 		}
 		
 		// Success
-		g = gm.createNewGroup(groupName, me);
-		gm.addGroup(g);
+		g = gm.createNewGroup(me, groupName, false);
+		gm.addGroup(me, g);
 		msg(Lang.groupCreated, groupName);
 	}
 }

@@ -85,15 +85,20 @@ public abstract class SabreCommand extends SabreBaseCommand<SabrePlugin>
 	{
 		return this.strAsPlayer(argAsString(idx));
 	}
-
-
-	public SabreGroup checkGroupExists(String name) {
+	
+	/**
+	 * Checks if a group exists
+	 * @param owner The group owner
+	 * @param name The group name
+	 * @return The group instance if it exists, otherwise null
+	 */
+	public SabreGroup checkGroupExists(SabrePlayer owner, String name) {
 		
-		curGroup = gm.getGroupByName(name);
+		curGroup = gm.getGroupByName(owner, name);
 		
 		// Try to find best batch
 		if (curGroup == null) {
-			curGroup = TextUtil.getBestNamedMatch(gm.getGroups(), name, "");
+			curGroup = TextUtil.getBestNamedMatch(gm.getPlayerGroups(me), name, "");
 		}
 
 		// Does the group exist?
@@ -102,5 +107,15 @@ public abstract class SabreCommand extends SabreBaseCommand<SabrePlugin>
 		}
 		
 		return curGroup;
+		
+	}
+
+	/**
+	 * Checks if a group exists
+	 * @param name The group name
+	 * @return The group instance if it exists, otherwise null
+	 */
+	public SabreGroup checkGroupExists(String name) {
+		return checkGroupExists(me, name);
 	}
 }

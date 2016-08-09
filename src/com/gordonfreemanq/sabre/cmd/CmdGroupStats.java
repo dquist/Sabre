@@ -48,7 +48,7 @@ public class CmdGroupStats extends SabreCommand {
 		ArrayList<SabreGroup> members = new ArrayList<SabreGroup>();
 		
 		
-		for (SabreGroup gr: gm.getGroups()) {
+		for (SabreGroup gr: gm.getPlayerGroups(me)) {
 			SabreMember m = gr.getMember(me);
 			if (m == null) {
 				continue;

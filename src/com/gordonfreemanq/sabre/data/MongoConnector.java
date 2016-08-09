@@ -401,7 +401,7 @@ public class MongoConnector implements IDataAccess {
 		DBCursor cursor = colGroups.find();
 		try {
 			while(cursor.hasNext()) {
-				DBObject o = cursor.next();
+				BasicDBObject o = (BasicDBObject)cursor.next();
 
 				//logger.log(Level.INFO, "Loaded group: %s", o.toString());
 
@@ -409,10 +409,11 @@ public class MongoConnector implements IDataAccess {
 					boolean update = false;
 					UUID id = UUID.fromString(o.get("_id").toString());
 					String name = o.get("name").toString();
+					boolean isFaction = o.getBoolean("isFaction", false);
 					BasicDBList memberList = (BasicDBList)o.get("members");
 
 					// The group instance
-					g = new SabreGroup(id, name);
+					g = new SabreGroup(id, name, isFaction);
 
 					// Load the members for this group
 					if (memberList.size() > 0) {
@@ -476,6 +477,7 @@ public class MongoConnector implements IDataAccess {
 		BasicDBObject doc = new BasicDBObject()
 		.append("_id", g.getID().toString())
 		.append("name", g.getName())
+		.append("isFaction", g.isFaction())
 		.append("members", memberList)
 		.append("invited", new ArrayList<String>());
 

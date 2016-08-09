@@ -14,6 +14,7 @@ public class CmdRoot extends SabreCommand {
 		this.setHelpShort("The Faction base command");
 		this.optionalArgs.put("page", "1");
 		
+		this.addSubCommand(new CmdFactionCreate());
 		
 		this.addSubCommand(new CmdGroupAutoJoin());
 		this.addSubCommand(new CmdGroupCreate());

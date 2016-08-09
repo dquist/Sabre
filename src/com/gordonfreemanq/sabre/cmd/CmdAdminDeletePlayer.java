@@ -34,7 +34,7 @@ public class CmdAdminDeletePlayer extends SabreCommand {
 		pm.setBanStatus(p, true, Lang.adminPlayerModifyBan);
 		
 		// Remove the player from groups
-		for (SabreGroup g : gm.getGroups()) {
+		for (SabreGroup g : gm.getPlayerGroups(p)) {
 			if (g.isMember(p)) {
 				gm.removePlayer(g, p);
 			}

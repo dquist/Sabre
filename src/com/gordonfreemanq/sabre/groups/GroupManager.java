@@ -4,6 +4,7 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.UUID;
 import java.util.logging.Level;
+import java.util.stream.Collectors;
 
 import org.bukkit.Chunk;
 import org.bukkit.World;
@@ -57,19 +58,33 @@ public class GroupManager {
 	 * Gets all the groups
 	 * @return A collection of all the groups
 	 */
-	public Collection<SabreGroup> getGroups() {
+	public Collection<SabreGroup> getAllGroups() {
 		return groups.values();
+	}
+	
+	/**
+	 * Gets all the groups a player is on
+	 * @return A collection of all the groups the player is on
+	 */
+	public Collection<SabreGroup> getPlayerGroups(SabrePlayer player) {
+		return groups.values().stream().filter(g -> g.isMember(player)).
+			    collect(Collectors.toSet());
 	}
 	
 	
 	/**
 	 * Adds a new group to the group manager
+	 * @param owner The group owner
 	 * @param group The new group to add
 	 */
-	public void addGroup(SabreGroup g) {
+	public void addGroup(SabrePlayer owner, SabreGroup g) {
 		String name = g.getName();
-		if (getGroupByName(name) != null) {
-			throw new RuntimeException("Tried to add group '%s' that already exists.");
+		if (getGroupByName(owner, name) != null) {
+			throw new RuntimeException(String.format("Tried to add group '%s' for player %s that already exists.", g.getName(), owner.getName()));
+		}
+		
+		if (g.isFaction() && getFactionByName(name) != null) {
+			throw new RuntimeException(String.format("Tried to add faction '%s' that already exists.", g.getName()));
 		}
 		
 		db.groupInsert(g);
@@ -89,13 +104,29 @@ public class GroupManager {
 	
 	
 	/**
-	 * Gets a group by name
+	 * Gets a player's group by name
+	 * @param owner The group owner
 	 * @param name The name of the group
 	 * @return The group instance if it exists, otherwise null
 	 */
-	public SabreGroup getGroupByName(String name) {
+	public SabreGroup getGroupByName(SabrePlayer owner, String name) {
 		for (SabreGroup g : groups.values()) {
 			if (g.getName().equalsIgnoreCase(name)) {
+				return g;
+			}
+		}
+		
+		return null;
+	}
+	
+	/**
+	 * Gets a faction by name
+	 * @param name The name of the faction
+	 * @return The faction instance if it exists, otherwise null
+	 */
+	public SabreGroup getFactionByName(String name) {
+		for (SabreGroup g : groups.values()) {
+			if (g.getName().equalsIgnoreCase(name) && g.isFaction()) {
 				return g;
 			}
 		}
@@ -129,12 +160,13 @@ public class GroupManager {
 	
 	/**
 	 * Creates a new group instance
-	 * @param name The name of the group
 	 * @param owner The group owner
+	 * @param name The name of the group
+	 * @param isFaction Whether the group is a faction group
 	 * @return The new group instance
 	 */
-	public SabreGroup createNewGroup(String name, SabrePlayer owner) {
-		SabreGroup g = new SabreGroup(UUID.randomUUID(), name);
+	public SabreGroup createNewGroup(SabrePlayer owner, String name, boolean isFaction) {
+		SabreGroup g = new SabreGroup(UUID.randomUUID(), name, isFaction);
 		SabreMember member = g.addMember(owner, Rank.OWNER);
 		member.setRank(Rank.OWNER);
 		return g;
