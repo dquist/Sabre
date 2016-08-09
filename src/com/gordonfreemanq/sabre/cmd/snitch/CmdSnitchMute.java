@@ -30,7 +30,7 @@ public class CmdSnitchMute  extends SabreCommand {
 		}
 		
 		// Get the correct name
-		groupName = g.getName();
+		groupName = g.getFullName();
 		
 		boolean setTo = false;
 		

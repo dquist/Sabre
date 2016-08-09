@@ -35,11 +35,11 @@ public class CmdGroupInvite extends SabreCommand {
 		}
 		
 		// Get the correct name
-		groupName = g.getName();
+		groupName = g.getFullName();
 		
 		SabreMember memberMe = g.getMember(me);
 		if (memberMe == null || !memberMe.canInvite()) {
-			msg(Lang.noPermission, groupName);
+			msg(Lang.noPermission);
 			return;
 		}
 		
@@ -63,10 +63,10 @@ public class CmdGroupInvite extends SabreCommand {
 			return;
 		}
 		
-		if (p.getAutoJoin()) {
+		if (p.getAutoJoin() && (!g.isFaction() || p.getFaction() == null)) {
 			gm.uninvitePlayer(g, p);
 			gm.addPlayer(g, p);
-			p.msg(Lang.groupYouJoined, g.getName());
+			p.msg(Lang.groupYouJoined, g.getFullName());
 			g.msgAllBut(p, Lang.groupPlayerJoined, p.getName(), groupName);
 		} else {
 			gm.invitePlayer(g, p);

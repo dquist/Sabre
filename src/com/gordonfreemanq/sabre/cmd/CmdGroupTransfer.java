@@ -41,7 +41,7 @@ public class CmdGroupTransfer extends SabreCommand {
 		
 		SabreMember memberMe = g.getMember(me);
 		if (memberMe == null || !memberMe.isOwner()) {
-			msg(Lang.noPermission, groupName);
+			msg(Lang.noPermission);
 			return;
 		}
 		

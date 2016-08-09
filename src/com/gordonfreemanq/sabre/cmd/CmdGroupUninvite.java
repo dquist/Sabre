@@ -35,11 +35,11 @@ public class CmdGroupUninvite extends SabreCommand {
 		}
 		
 		// Get the correct name
-		groupName = g.getName();
+		groupName = g.getFullName();
 		
 		SabreMember memberMe = g.getMember(me);
 		if (!memberMe.canInvite()) {
-			msg(Lang.noPermission, groupName);
+			msg(Lang.noPermission);
 			return;
 		}
 		

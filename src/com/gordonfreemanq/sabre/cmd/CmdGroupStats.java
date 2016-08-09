@@ -77,7 +77,7 @@ public class CmdGroupStats extends SabreCommand {
 		StringBuilder ownerNames = new StringBuilder();
 		if(owners.size() > 0) {
 			for (SabreGroup m : owners) {
-				ownerNames.append(String.format("%s, ", m.getName()));
+				ownerNames.append(String.format("%s, ", m.getFullName()));
 			}
 			ownerNames.setLength(ownerNames.length() - 2);
 		}		
@@ -148,11 +148,11 @@ public class CmdGroupStats extends SabreCommand {
 		}
 		
 		// Get the correct name
-		groupName = g.getName();
+		groupName = g.getFullName();
 		
 		SabreMember memberMe = g.getMember(me);
 		if (memberMe == null || memberMe.getRank().ordinal() < Rank.OFFICER.ordinal()) {
-			msg(Lang.noPermission, groupName);
+			msg(Lang.noPermission);
 			return;
 		}
 		
@@ -211,7 +211,13 @@ public class CmdGroupStats extends SabreCommand {
 		}
 		
 		StringBuilder stats = new StringBuilder();
-		stats.append(plugin.txt.titleize(String.format("Stats for group <c>%s<g>:", g.getName())) + "\n");
+		
+		String groupTypeName = "group";
+		if (g.isFaction()) {
+			groupTypeName = "faction";
+		}
+		
+		stats.append(plugin.txt.titleize(String.format("Stats for %s <c>%s<g>:", groupTypeName, g.getName())) + "\n");
 		stats.append(String.format("<a>OWNER (1): <n>%s\n", ownerName));
 		stats.append(String.format("<a>ADMIN (%d): <n>%s\n", admins.size(), adminNames));
 		stats.append(String.format("<a>OFFICER (%d): <n>%s\n", officers.size(), officerNames));

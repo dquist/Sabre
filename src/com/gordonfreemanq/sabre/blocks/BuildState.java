@@ -167,7 +167,7 @@ public class BuildState {
 	 * @return The mode string
 	 */
 	public String getBuildGroupString() {
-		String str = buildGroup.getName();
+		String str = buildGroup.getFullName();
 		
 		if (this.publicMode) {
 			str += "-PUBLIC";

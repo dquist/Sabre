@@ -94,25 +94,43 @@ public abstract class SabreCommand extends SabreBaseCommand<SabrePlugin>
 	 * @param name The group name
 	 * @return The group instance if it exists, otherwise null
 	 */
-	public SabreGroup checkGroupExists(SabrePlayer owner, String name, boolean searchSimilar) {
+	public SabreGroup checkGroupExists(SabrePlayer owner, String searchName, boolean searchSimilar) {
+
+		String groupName = searchName;
+		
+		// If the search name contains the '#' character, split up the group name and owner name
+		if (searchName.contains("#")) {
+			String[] split = searchName.split("#");
+			if (split.length > 0) {
+				groupName = split[0];
+			}
+			if (split.length > 1) {
+				SabrePlayer searchOwner = pm.getPlayerByName(split[1]);
+				if (searchOwner != null) {
+					owner = searchOwner;
+				}
+			}
+		}
+		
+		final String queryName = groupName;
 		
 		// First try to find the group by owner and name
-		curGroup = gm.getGroupByName(owner, name);
+		curGroup = gm.getGroupByName(owner, groupName);
 		
 		// If no match, search all the groups that this player is a member of
 		if (curGroup == null) {
 			Collection<SabreGroup> playerGroups = gm.getPlayerGroups(me);
-			curGroup = playerGroups.stream().filter(g -> g.getName().equalsIgnoreCase(name)).findFirst().orElse(null);
+			curGroup = playerGroups.stream().filter(g -> g.getName().equalsIgnoreCase(queryName)).findFirst().orElse(null);
 
 			// If no exact hit, try to find the best match group that the player is a member of
 			if (curGroup == null && searchSimilar) {
-				curGroup = TextUtil.getBestNamedMatch(playerGroups, name, "");
+				curGroup = TextUtil.getBestNamedMatch(playerGroups, groupName, "");
 			}
 		}
 
 		// No group found
 		if (curGroup == null) {
-			msg(Lang.groupNotExist, name);
+			msg(Lang.groupNotExist, searchName);
 		}
 		
 		return curGroup;

@@ -10,6 +10,7 @@ import org.bukkit.Chunk;
 import org.bukkit.World;
 
 import com.gordonfreemanq.sabre.Lang;
+import com.gordonfreemanq.sabre.PlayerManager;
 import com.gordonfreemanq.sabre.SabrePlayer;
 import com.gordonfreemanq.sabre.blocks.BlockManager;
 import com.gordonfreemanq.sabre.blocks.BuildMode;
@@ -24,6 +25,7 @@ import com.gordonfreemanq.sabre.data.IDataAccess;
 
 public class GroupManager {
 
+	private final PlayerManager pm;
 	private final IDataAccess db;
 	private final ISabreLog logger;
 	private final HashMap<UUID, SabreGroup> groups;
@@ -34,7 +36,8 @@ public class GroupManager {
 		return instance;
 	}
 	
-	public GroupManager(IDataAccess db, ISabreLog logger) {
+	public GroupManager(PlayerManager pm, IDataAccess db, ISabreLog logger) {
+		this.pm = pm;
 		this.db = db;
 		this.logger = logger;
 		this.groups = new HashMap<UUID, SabreGroup>();
@@ -120,7 +123,7 @@ public class GroupManager {
 	 */
 	public SabreGroup getGroupByName(SabrePlayer owner, String name) {
 		for (SabreGroup g : groups.values()) {
-			if (g.getName().equalsIgnoreCase(name) && g.getOwnerID().equals(owner.getID())) {
+			if (g.getName().equalsIgnoreCase(name) && g.getOwner().getID().equals(owner.getID())) {
 				return g;
 			}
 		}
@@ -133,10 +136,10 @@ public class GroupManager {
 	 * @param name The name of the faction
 	 * @return The faction instance if it exists, otherwise null
 	 */
-	public SabreGroup getFactionByName(String name) {
+	public SabreFaction getFactionByName(String name) {
 		for (SabreGroup g : groups.values()) {
-			if (g.getName().equalsIgnoreCase(name) && g.isFaction()) {
-				return g;
+			if (g.getName().equalsIgnoreCase(name) && g.isFaction() && g instanceof SabreFaction) {
+				return (SabreFaction)g;
 			}
 		}
 		
@@ -171,11 +174,24 @@ public class GroupManager {
 	 * Creates a new group instance
 	 * @param owner The group owner
 	 * @param name The name of the group
-	 * @param isFaction Whether the group is a faction group
 	 * @return The new group instance
 	 */
-	public SabreGroup createNewGroup(SabrePlayer owner, String name, boolean isFaction) {
-		SabreGroup g = new SabreGroup(UUID.randomUUID(), name, isFaction);
+	public SabreGroup createNewGroup(SabrePlayer owner, String name) {
+		SabreGroup g = new SabreGroup(UUID.randomUUID(), name);
+		SabreMember member = g.addMember(owner, Rank.OWNER);
+		member.setRank(Rank.OWNER);
+		return g;
+	}
+	
+	
+	/**
+	 * Creates a new faction instance
+	 * @param owner The faction owner
+	 * @param name The name of the faction
+	 * @return The new faction instance
+	 */
+	public SabreFaction createNewFaction(SabrePlayer owner, String name) {
+		SabreFaction g = new SabreFaction(UUID.randomUUID(), name);
 		SabreMember member = g.addMember(owner, Rank.OWNER);
 		member.setRank(Rank.OWNER);
 		return g;
@@ -191,11 +207,22 @@ public class GroupManager {
 	public SabreMember addPlayer(SabreGroup g, SabrePlayer p) {
 		SabreMember m = null;
 		
-		if (!g.isMember(p)) {
-			m = g.addMember(p, Rank.MEMBER);
-			db.groupAddMember(g, m);
-			updateGroupSigns(g, p);
+		if (g.isMember(p)) {
+			throw new RuntimeException(String.format("Tried to add '%s' to group '%s' but player is already member.", p.getName(), g.getName()));
 		}
+		
+		if (g.isFaction() && p.getFaction() != null) {
+			throw new RuntimeException(String.format("Tried to add '%s' to faction '%s' but player is already in a faction.", p.getName(), g.getName()));
+		}
+
+		m = g.addMember(p, Rank.MEMBER);
+		db.groupAddMember(g, m);
+
+		if (g instanceof SabreFaction) {
+			pm.setFaction(p, (SabreFaction)g);
+		}
+		
+		updateGroupSigns(g, p);
 		
 		return m;
 	}
@@ -210,13 +237,20 @@ public class GroupManager {
 	public SabreMember removePlayer(SabreGroup g, SabrePlayer p) {
 		SabreMember m = null;
 		
-		if (g.isMember(p)) {
-			m = g.removePlayer(p);
-			db.groupRemoveMember(g,  m);
-			checkRemoveChat(g, p);
-			checkResetBuildMode(g, p);
-			updateGroupSigns(g, p);
+		if (!g.isMember(p)) {
+			throw new RuntimeException(String.format("Tried to remove '%s' from group '%s' but player is not a member.", p.getName(), g.getName()));
 		}
+		
+		m = g.removePlayer(p);
+		db.groupRemoveMember(g,  m);
+		
+		if (g instanceof SabreFaction) {
+			pm.setFaction(p, null);
+		}
+		
+		checkRemoveChat(g, p);
+		checkResetBuildMode(g, p);
+		updateGroupSigns(g, p);
 		
 		return m;
 	}

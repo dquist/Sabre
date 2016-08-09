@@ -24,6 +24,7 @@ public interface IDataAccess {
 	public void playerInsert(SabrePlayer p);
 	public void playerUpdateLastLogin(SabrePlayer p);
 	public void playerUpdateAutoJoin(SabrePlayer p);
+	public void playerUpdateFaction(SabrePlayer p);
 	public void playerUpdateName(SabrePlayer p);
 	public void playerUpdateBan(SabrePlayer p);
 	public void playerUpdatePlayTime(SabrePlayer p);

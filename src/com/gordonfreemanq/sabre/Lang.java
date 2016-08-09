@@ -9,10 +9,13 @@ public class Lang
 	
 	
 	// FACTION
-	public static final String factionCreateAlreadyMember = "<b>You must leave your current faction before you can create a new one.";
+	public static final String factionAlreadyMember = "<b>You must leave your current faction before you can do that.";
 	public static final String factionUseCreateGroup = "<i>Use <c>/f creategroup <i>to create a reinforcement group.";
 	public static final String factionCreated = "<g>You created the faction <c>%s<g>.";
 	public static final String factionAlreadyExists = "<b>The faction <c>%s <b>already exists.";
+	public static final String factionPlayerJoined = "<c>%s <i>joined your faction.";
+	public static final String factionPlayerLeft = "<c>%s <i>left your faction.";
+	public static final String factionYouLeft = "<g>You left your faction.";
 	
 	
 	// GROUPS
@@ -22,7 +25,7 @@ public class Lang
 	public static final String groupAlreadyMember = "<b>You are already a member <c>%s<b>.";
 	public static final String groupPlayerAlreadyMember = "<c>%s<b> is already a member of <c>%s<b>.";
 	public static final String groupPlayerAlreadyInvited = "<c>%s<b> is already invited to <c>%s<b>.";
-	public static final String groupNotExist = "<b>You are not on any group name <c>%s<b>.";
+	public static final String groupNotExist = "<b>You are not on any group named <c>%s<b>.";
 	public static final String groupNotOwner = "<b>You are not owner of <c>%s<b>.";
 	public static final String groupNotMember = "<b>You are not a member of <c>%s<b>.";
 	public static final String groupPlayerNotMember = "<c>%s <b>is not a member of <c>%s<b>.";
@@ -49,7 +52,6 @@ public class Lang
 	public static final String groupCheckRank = "<i>Your rank in <c>%s <i>is <n>%s<i>.";
 	public static final String groupBadRank= "<b>Unknown rank, use:<i> OWNER, ADMIN, OFFICER, BUILDER, MEMBER";
 	public static final String groupSetRank= "<g>You set the rank of <c>%s <g>to <i>%s<g>";
-	public static final String groupTriedJoin = "<c>%s <i>tried to join <c>%s<i>.";
 	public static final String groupUseTransfer = "<b>You can't set another owner.";
 	public static final String groupNotLeaveOwner = "<b>The group owner cannot leave.";
 	public static final String groupTransferred = "<g>You transferred <c>%s <g>to <c>%s<g>.";

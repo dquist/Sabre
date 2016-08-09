@@ -1,9 +1,7 @@
 package com.gordonfreemanq.sabre.cmd;
 
 import com.gordonfreemanq.sabre.Lang;
-import com.gordonfreemanq.sabre.groups.SabreMember;
-import com.gordonfreemanq.sabre.groups.Rank;
-import com.gordonfreemanq.sabre.groups.SabreGroup;
+import com.gordonfreemanq.sabre.groups.SabreFaction;
 
 
 public class CmdFactionCreate extends SabreCommand {
@@ -25,23 +23,23 @@ public class CmdFactionCreate extends SabreCommand {
 	public void perform() 
 	{
 		String factionName = this.argAsString(0);
-		SabreGroup faction = gm.getFactionByName(factionName);
+		
+		if (me.getFaction() != null) {
+			me.msg(Lang.factionAlreadyMember);
+			me.msg(Lang.factionUseCreateGroup);
+			return;
+		}
+		
+		SabreFaction faction = gm.getFactionByName(factionName);
 		
 		// Does the faction already exist?
 		if (faction != null) {
-			SabreMember m = faction.getMember(me);
-			if (m == null) {
-				msg(Lang.factionAlreadyExists, faction.getName());
-			} else if (m.getRank() == Rank.OWNER) {
-				msg(Lang.groupAlreadyOwn, faction.getName());
-			} else {
-				msg(Lang.groupAlreadyMember, faction.getName());
-			}
+			msg(Lang.factionAlreadyExists, faction.getName());
 			return;
 		}
 		
 		// Success
-		faction = gm.createNewGroup(me, factionName, true);
+		faction = gm.createNewFaction(me, factionName);
 		gm.addGroup(me, faction);
 		msg(Lang.groupCreated, factionName);
 	}

@@ -16,6 +16,7 @@ import com.gordonfreemanq.sabre.blocks.BuildState;
 import com.gordonfreemanq.sabre.chat.IChatChannel;
 import com.gordonfreemanq.sabre.core.INamed;
 import com.gordonfreemanq.sabre.core.Permission;
+import com.gordonfreemanq.sabre.groups.SabreFaction;
 
 /**
  * Represents a player that has joined the server and may or may not be online
@@ -31,6 +32,9 @@ public class SabrePlayer implements INamed, IChatChannel {
 	
 	// The Bukkit player instance
 	private Player player;
+	
+	//The player's faction
+	private SabreFaction faction;
 	
 	// Login and play time data
 	private Date firstLogin;
@@ -100,6 +104,7 @@ public class SabrePlayer implements INamed, IChatChannel {
 		this.ignoredPlayers = new HashSet<SabrePlayer>();
 		this.bcastPlayers = new HashSet<SabrePlayer>();
 		this.broadcastRequestPlayer = null;
+		this.faction = null;
 	}
 	
 	
@@ -152,6 +157,24 @@ public class SabrePlayer implements INamed, IChatChannel {
 	public void setPlayer(Player player) {
 		this.player = player;
 	}
+	
+	
+	/**
+	 * Gets the player's faction
+	 * @return The player's faction
+	 */
+	public SabreFaction getFaction() {
+		return this.faction;
+	}
+	
+	
+	/**
+	 * Sets the player's faction
+	 * @param faction The player's faction
+	 */
+	public void setFaction(SabreFaction faction) {
+		this.faction = faction;
+	}	
 	
 	
 	/**

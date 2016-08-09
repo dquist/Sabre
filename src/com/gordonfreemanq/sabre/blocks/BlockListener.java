@@ -247,8 +247,7 @@ public class BlockListener implements Listener {
 				} else if (p.getAdminBypass()) {
 					allowBreak = true;
 					refund = true;
-					String groupName = r.getGroup().getName();
-					p.msg(Lang.adminYouBypassed, groupName);
+					p.msg(Lang.adminYouBypassed, r.getGroup().getFullName());
 				}
 
 				if (!allowBreak) {
@@ -364,8 +363,7 @@ public class BlockListener implements Listener {
 					if (a.equals(Action.RIGHT_CLICK_BLOCK)) {
 						if (config.blockIsLockable(b.getType()) && !canAccess) {
 							if (p.getAdminBypass()) {
-								String groupName = sb.getReinforcement().getGroup().getName();
-								p.msg(Lang.adminYouBypassed, groupName);
+								p.msg(Lang.adminYouBypassed, sb.getReinforcement().getGroup().getFullName());
 							} else {
 								if (!state.getInfo()) {
 									if (sb.isSpecial() && sb.getTellBlockName() && (!sb.getRequireAccessForName() || sb.canPlayerAccess(p))) {
@@ -641,7 +639,7 @@ public class BlockListener implements Listener {
 			verb = verb.toLowerCase();
 		}
 
-		String groupName = g.getName();
+		String groupName = g.getFullName();
 		if (r.getPublic()) {
 			groupName += "-PUBLIC";
 		} else if (r.getInsecure()) {

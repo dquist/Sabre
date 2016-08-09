@@ -246,7 +246,7 @@ public class SabrePlugin extends AbstractSabrePlugin
 		// Create objects
 		this.db = new MongoConnector(this, config);
 		this.playerManager = new PlayerManager(db, this);
-		this.groupManager = new GroupManager(db, this);
+		this.groupManager = new GroupManager(playerManager, db, this);
 		this.blockManager = new BlockManager(db);
 		this.globalChat = new GlobalChat(playerManager, config);
 		this.serverBcast = new ServerBroadcast(playerManager);

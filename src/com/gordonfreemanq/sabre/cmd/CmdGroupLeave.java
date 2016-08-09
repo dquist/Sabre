@@ -31,7 +31,7 @@ public class CmdGroupLeave extends SabreCommand {
 		}
 		
 		// Get the correct name
-		groupName = g.getName();
+		groupName = g.getFullName();
 		
 		SabreMember memberMe = g.getMember(me);
 		if (memberMe == null) {
@@ -47,6 +47,13 @@ public class CmdGroupLeave extends SabreCommand {
 		
 		gm.removePlayer(g, me);
 		msg(Lang.groupYouLeft, groupName);
-		g.msgAll(Lang.groupPlayerLeft, false, me.getName(), g.getName());
+		
+		if (g.isFaction()) {
+			msg(Lang.factionYouLeft, groupName);
+			g.msgAll(Lang.factionPlayerLeft, false, me.getName());
+		} else {
+			msg(Lang.groupYouLeft, groupName);
+			g.msgAll(Lang.groupPlayerLeft, false, me.getName(), g.getName());
+		}
 	}
 }

@@ -55,7 +55,7 @@ public class CmdGroupSetRank extends SabreCommand {
 		}
 		
 		if (p.equals(me)) {
-			msg(Lang.groupNotRankSelf, groupName);
+			msg(Lang.groupNotRankSelf);
 			return;
 		}
 

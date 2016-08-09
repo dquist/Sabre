@@ -12,6 +12,7 @@ import org.bukkit.entity.Player;
 
 import com.gordonfreemanq.sabre.core.ISabreLog;
 import com.gordonfreemanq.sabre.data.IDataAccess;
+import com.gordonfreemanq.sabre.groups.SabreFaction;
 
 
 public class PlayerManager {
@@ -199,6 +200,17 @@ public class PlayerManager {
 	public void setAutoJoin(SabrePlayer p, boolean autoJoin) {
 		p.setAutoJoin(autoJoin);
 		db.playerUpdateAutoJoin(p);
+	}
+	
+	
+	/**
+	 * Sets the player's faction
+	 * @param p The player to update
+	 * @param faction The new faction
+	 */
+	public void setFaction(SabrePlayer p, SabreFaction faction) {
+		p.setFaction(faction);
+		db.playerUpdateFaction(p);
 	}
 	
 	

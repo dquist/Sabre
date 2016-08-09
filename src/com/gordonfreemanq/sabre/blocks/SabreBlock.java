@@ -173,7 +173,7 @@ public class SabreBlock {
 	 */
 	public String getGroupName() {
 		if (this.reinforcememnt != null) {
-			return this.reinforcememnt.getGroup().getName();
+			return this.reinforcememnt.getGroup().getFullName();
 		}
 		return "";
 	}

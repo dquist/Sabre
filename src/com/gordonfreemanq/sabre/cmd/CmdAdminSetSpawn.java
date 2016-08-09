@@ -13,7 +13,7 @@ public class CmdAdminSetSpawn extends SabreCommand {
 		super();
 		this.aliases.add("setspawn");
 
-		this.setHelpShort("Sets the spawn location");
+		this.setHelpShort("Sets the world spawn location");
 		
 		this.errorOnToManyArgs = false;
 	}

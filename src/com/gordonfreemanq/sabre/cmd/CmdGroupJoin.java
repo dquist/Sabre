@@ -3,9 +3,7 @@ package com.gordonfreemanq.sabre.cmd;
 import java.util.Collection;
 
 import com.gordonfreemanq.sabre.Lang;
-import com.gordonfreemanq.sabre.groups.Rank;
 import com.gordonfreemanq.sabre.groups.SabreGroup;
-import com.gordonfreemanq.sabre.groups.SabreMember;
 import com.gordonfreemanq.sabre.util.TextUtil;
 
 
@@ -28,6 +26,11 @@ public class CmdGroupJoin extends SabreCommand {
 	{
 		final String searchName = this.argAsString(0);
 		
+		if (me.getFaction() != null) {
+			me.msg(Lang.factionAlreadyMember);
+			return;
+		}
+		
 		// Get all the groups that the player is invited to
 		Collection<SabreGroup> invited = gm.getInvitedGroups(me);
 		
@@ -43,28 +46,15 @@ public class CmdGroupJoin extends SabreCommand {
 		if (g == null) {
 			me.msg(Lang.groupNoInvite);
 		}
-		
-		// Get the correct name
-		String groupName = g.getName();
-		
-		
-		if (g.getMembers().size() == 0) {
-			gm.uninvitePlayer(g, me);
-			SabreMember m = gm.addPlayer(g, me);
-			gm.setPlayerRank(m,  Rank.OWNER);
-			me.msg(Lang.groupYouJoined, g.getName());
-			return;
-		}
-		
-		if (!g.isInvited(me)) {
-			msg(Lang.groupNotInvited, groupName);
-			g.msgAll(Lang.groupTriedJoin, false, me.getName(), g.getName());
-			return;
-		}
 
 		gm.uninvitePlayer(g, me);
 		gm.addPlayer(g, me);
-		me.msg(Lang.groupYouJoined, g.getName());
-		g.msgAllBut(me, Lang.groupPlayerJoined, me.getName(), groupName);
+		me.msg(Lang.groupYouJoined, g.getFullName());
+		
+		if (g.isFaction()) {
+			g.msgAllBut(me, Lang.factionPlayerJoined, me.getName());
+		} else {
+			g.msgAllBut(me, Lang.groupPlayerJoined, me.getName(), g.getFullName());
+		}
 	}
 }

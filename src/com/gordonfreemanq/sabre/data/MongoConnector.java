@@ -24,6 +24,7 @@ import com.gordonfreemanq.sabre.blocks.SabreBlock;
 import com.gordonfreemanq.sabre.core.ISabreLog;
 import com.gordonfreemanq.sabre.groups.SabreMember;
 import com.gordonfreemanq.sabre.groups.Rank;
+import com.gordonfreemanq.sabre.groups.SabreFaction;
 import com.gordonfreemanq.sabre.groups.SabreGroup;
 import com.gordonfreemanq.sabre.prisonpearl.BlockHolder;
 import com.gordonfreemanq.sabre.prisonpearl.IItemHolder;
@@ -262,6 +263,20 @@ public class MongoConnector implements IDataAccess {
 
 
 	/**
+	 * Updates a player's faction
+	 * @param p The player instance to update
+	 */
+	@Override
+	public void playerUpdateFaction(SabrePlayer p) {
+		if (p.getFaction() == null) {
+			updatePlayerRecordValue(p, "factionId", null);
+		} else {
+			updatePlayerRecordValue(p, "factionId", p.getFaction().getID().toString());
+		}
+	}
+
+
+	/**
 	 * Updates a player's display name
 	 * @param p The player instance to update
 	 */
@@ -413,7 +428,12 @@ public class MongoConnector implements IDataAccess {
 					BasicDBList memberList = (BasicDBList)o.get("members");
 
 					// The group instance
-					g = new SabreGroup(id, name, isFaction);
+					if (isFaction) {
+						g = new SabreFaction(id, name);
+					} else {
+						g = new SabreGroup(id, name);
+					}
+					
 
 					// Load the members for this group
 					if (memberList.size() > 0) {
@@ -426,6 +446,10 @@ public class MongoConnector implements IDataAccess {
 							SabrePlayer memberPlayer = getLoadedPlayerByID(memberId);
 							if (memberPlayer != null) {
 								g.addMember(memberPlayer, rank);
+								
+								if (isFaction) {
+									memberPlayer.setFaction((SabreFaction)g);
+								}
 							} else {
 								logger.log(Level.WARNING, "Loaded group member %s with no matching player ID.", id.toString());
 							}

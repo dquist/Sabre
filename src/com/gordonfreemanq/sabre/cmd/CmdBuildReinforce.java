@@ -39,14 +39,9 @@ public class CmdBuildReinforce extends SabreCommand {
 		}
 		
 		// Get the correct name
-		groupName = g.getName();
+		groupName = g.getFullName();
 		
 		SabreMember memberMe = g.getMember(me);
-		if (memberMe == null) {
-			msg(Lang.groupNotMember, groupName);
-			return;
-		}
-		
 		if (!memberMe.canBuild()) {
 			msg(Lang.noPermission);
 			return;

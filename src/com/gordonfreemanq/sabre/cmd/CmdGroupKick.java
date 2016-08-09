@@ -12,7 +12,6 @@ public class CmdGroupKick extends SabreCommand {
 	{
 		super();
 		this.aliases.add("kick");
-		this.aliases.add("k");
 
 		this.requiredArgs.add("group");
 		this.requiredArgs.add("player");
@@ -35,7 +34,7 @@ public class CmdGroupKick extends SabreCommand {
 		}
 		
 		// Get the correct name
-		groupName = g.getName();
+		groupName = g.getFullName();
 		
 		SabreMember memberMe = g.getMember(me);
 		if (memberMe == null) {
@@ -49,7 +48,7 @@ public class CmdGroupKick extends SabreCommand {
 		}
 		
 		if (p.equals(me)) {
-			msg(Lang.groupNotKickSelf, groupName);
+			msg(Lang.groupNotKickSelf);
 			msg(Lang.groupLeaveHelp, groupName);
 			return;
 		}
@@ -61,7 +60,7 @@ public class CmdGroupKick extends SabreCommand {
 		}
 		
 		if (!memberMe.canKickMember(memberTarget)) {
-			msg(Lang.noPermission, groupName);
+			msg(Lang.noPermission);
 			return;
 		}
 

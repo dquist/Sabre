@@ -18,7 +18,6 @@ public class SabreGroup implements INamed, IChatChannel {
 
 	private final UUID id;
 	private String name;
-	private final boolean isFaction;
 	private final HashSet<SabreMember> members;
 	
 	// Players who have been invited to the group
@@ -35,10 +34,9 @@ public class SabreGroup implements INamed, IChatChannel {
 	 * @param name The group name
 	 * @param owner The group owner
 	 */
-	public SabreGroup(UUID id, String name, boolean isFaction) {
+	public SabreGroup(UUID id, String name) {
 		this.id = id;
 		this.name = name;
-		this.isFaction = isFaction;
 		this.members = new HashSet<SabreMember>();
 
 		this.invited = new HashSet<UUID>();
@@ -63,6 +61,14 @@ public class SabreGroup implements INamed, IChatChannel {
 	public String getName() {
 		return this.name;
 	}
+	
+	/**
+	 * Gets the full name of the group with the owner
+	 * @return The full name of the group in the format GROUP#OWNER
+	 */
+	public String getFullName() {
+		return String.format("%s#%s", this.name, getOwner().getName());
+	}
 
 
 	/**
@@ -70,7 +76,7 @@ public class SabreGroup implements INamed, IChatChannel {
 	 * @return true if the group is a faction
 	 */
 	public boolean isFaction() {
-		return this.isFaction;
+		return false;
 	}
 
 
@@ -243,17 +249,10 @@ public class SabreGroup implements INamed, IChatChannel {
 
 	/**
 	 * Gets the owner of the group
-	 * @return
+	 * @return The group owner
 	 */
-	public UUID getOwnerID() {
-		for (SabreMember m : members) {
-			if (m.getRank() == Rank.OWNER) {
-				return m.getID();
-			}
-		}
-
-		// This should never happen
-		return null;
+	public SabrePlayer getOwner() {
+		return members.stream().filter(m -> m.getRank() == Rank.OWNER).map(p -> p.getPlayer()).findFirst().orElse(null);
 	}
 
 

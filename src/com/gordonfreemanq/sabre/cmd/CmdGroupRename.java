@@ -36,7 +36,7 @@ public class CmdGroupRename extends SabreCommand {
 		
 		SabreMember m = g.getMember(me);
 		if (m == null || !m.isOwner()) {
-			msg(Lang.noPermission, groupName);
+			msg(Lang.noPermission);
 			return;
 		}
 		
