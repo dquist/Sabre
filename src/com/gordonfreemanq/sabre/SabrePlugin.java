@@ -1,5 +1,6 @@
 package com.gordonfreemanq.sabre;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
@@ -8,6 +9,9 @@ import java.util.logging.Level;
 
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
+import org.bukkit.plugin.PluginDescriptionFile;
+import org.bukkit.plugin.PluginLoader;
+import org.bukkit.Server;
 
 import com.comphenix.protocol.ProtocolLibrary;
 import com.gordonfreemanq.sabre.blocks.BlockListener;
@@ -98,6 +102,8 @@ public class SabrePlugin extends AbstractSabrePlugin
 	private CombatInterface combatTag;
 	private VanishApi vanishApi;
 	
+	private File serverFolder = new File(System.getProperty("user.dir"));
+	
 	/**
 	 * Gets the player manager
 	 * @return The player manager
@@ -181,6 +187,13 @@ public class SabrePlugin extends AbstractSabrePlugin
 	{
 		instance = this;
 	}
+	
+    /**
+     * This is for unit testing.
+     */
+    public SabrePlugin(PluginLoader loader, Server server, PluginDescriptionFile description, File dataFolder, File file) {
+        super(loader, server, description, dataFolder, file);
+    }
 
 
 	public static SabrePlugin getPlugin() { 
@@ -387,5 +400,27 @@ public class SabrePlugin extends AbstractSabrePlugin
 		}
 
 		return null;
-	}	
+	}
+	
+	
+    /**
+     * Gets the server's root-folder
+     * @return The server's root-folder
+     */
+    public File getServerFolder() {
+        return serverFolder;
+    }
+    
+    
+    /**
+     * Sets this server's root-folder.
+     * @param newServerFolder The new server-root
+     */
+    public void setServerFolder(File newServerFolder) {
+        if (!newServerFolder.isDirectory()) {
+            throw new IllegalArgumentException("That's not a folder!");
+        }
+
+        this.serverFolder = newServerFolder;
+    }
 }

@@ -1,9 +1,13 @@
 package com.gordonfreemanq.sabre.core;
 
+import java.io.File;
 import java.lang.reflect.Modifier;
 import java.util.logging.Level;
 
 import org.bukkit.Bukkit;
+import org.bukkit.Server;
+import org.bukkit.plugin.PluginDescriptionFile;
+import org.bukkit.plugin.PluginLoader;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import com.google.gson.Gson;
@@ -23,6 +27,10 @@ public abstract class AbstractSabrePlugin extends JavaPlugin implements ISabreLo
 	private Integer saveTask = null;
 	private boolean autoSave = true;
 	protected boolean loadSuccessful = false;
+	public AbstractSabrePlugin(PluginLoader loader, Server server, PluginDescriptionFile description, File dataFolder,
+			File file) {
+		// TODO Auto-generated constructor stub
+	}
 	public boolean getAutoSave() {return this.autoSave;}
 	public void setAutoSave(boolean val) {this.autoSave = val;}
 	
