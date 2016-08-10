@@ -1,7 +1,7 @@
 <project name="Sabre" default="jar">    
   <property name="root" location="." />
   <property name="build" location="${root}/build" />
-  <property name="plugins" location="${root}/../../Server/plugins" />
+  <property name="plugins" location="${root}/../../servers/factions/plugins" />
 	
   <target name="jar">
     <jar manifest="${root}/META-INF/MANIFEST.MF" 

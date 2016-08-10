@@ -3,7 +3,8 @@ main: com.gordonfreemanq.sabre.SabrePlugin
 version: 0.1.12
 description: Sabre plugin
 author: GFQ
-depend: [PermissionsEx, CombatTagPlus, ProtocolLib, PacketWrapper, VanishNoPacket]
+depend: [PermissionsEx, CombatTagPlus, ProtocolLib, PacketWrapper]
+softdepend: [VanishNoPacket]
 commands:
   f:
     description: The Faction base command

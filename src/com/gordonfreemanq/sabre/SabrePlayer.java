@@ -92,7 +92,7 @@ public class SabrePlayer implements INamed, IChatChannel {
 		this.lastLogin = new Date();
 		this.playTime = 0;
 		this.autoJoin = false;
-		this.chatChannel = SabrePlugin.getPlugin().getGlobalChat();
+		this.chatChannel = SabreAPI.getInstance().getGlobalChat();
 		this.lastMessaged = null;
 		this.banned = false;
 		this.banMessage = "";
