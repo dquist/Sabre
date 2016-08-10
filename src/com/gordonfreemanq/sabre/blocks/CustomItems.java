@@ -56,6 +56,10 @@ public class CustomItems {
 
 	    File[] files = folder.listFiles();
 	    
+	    if (files == null) {
+	    	return;
+	    }
+	    
 	    for (int i = 0; i < files.length; i++) {
 	    	File f = files[i];
 	    	

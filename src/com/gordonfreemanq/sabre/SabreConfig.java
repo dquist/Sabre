@@ -170,10 +170,19 @@ public class SabreConfig {
 		
 		
 		ConfigurationSection sub = fc.getConfigurationSection("farm");
+		if (sub == null) {
+			sub = fc.createSection("farm"); 
+			sub.addDefault("survey_period", 60);
+			sub.addDefault("production_ticks", 300);
+			sub.addDefault("proximity", 500);
+			sub.addDefault("chunk_radius", 1);
+			sub.addDefault("survey_sample_size", 20);
+		}
+		
 		this.farmSurveyPeriod = sub.getInt("survey_period", 60);
 		this.farmProductionTicks = sub.getInt("production_ticks", 300);
 		this.farmProximity = sub.getInt("proximity", 500);
-		this.farmChunkRadius = sub.getInt("chunk_radius", 3);
+		this.farmChunkRadius = sub.getInt("chunk_radius", 1);
 		this.farmSurveySampleSize = sub.getInt("survey_sample_size", 20);
 		
 		this.reinforcementMaterials.clear();

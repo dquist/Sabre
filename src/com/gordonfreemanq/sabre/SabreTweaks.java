@@ -141,6 +141,7 @@ public class SabreTweaks implements Listener {
 	 * 
 	 * @param e
 	 */
+	/*
 	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
 	public void onBlockPlaceEvent(BlockPlaceEvent e) {
 		Block b = e.getBlock();
@@ -153,7 +154,7 @@ public class SabreTweaks implements Listener {
 				e.getBlock().getWorld().spawnFallingBlock(b.getLocation(), m, b.getData());
 			}
 		}
-	}
+	} */
 	
 	
 	/**

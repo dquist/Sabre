@@ -174,6 +174,15 @@ public class SabrePlugin extends AbstractSabrePlugin
 
 	
 	/**
+	 * Sets the Data Access Object
+	 * @return The Data Access Object
+	 */
+	public void setDataAccess(IDataAccess db) {
+		this.db = db;
+	}
+
+	
+	/**
 	 * Gets the auto-help command
 	 * @return The auto-help command
 	 */
@@ -182,11 +191,9 @@ public class SabrePlugin extends AbstractSabrePlugin
 	}
 
 	/**
-	 * @brief Groups constructor 
+	 * @brief SabrePlugin constructor 
 	 */
-	public SabrePlugin()
-	{
-		instance = this;
+	public SabrePlugin() {
 	}
 	
     /**
@@ -202,7 +209,7 @@ public class SabrePlugin extends AbstractSabrePlugin
 	}
 
 	public String GetCommandAlias() {
-		return "g";
+		return "f";
 	}
 	
 	
@@ -253,6 +260,8 @@ public class SabrePlugin extends AbstractSabrePlugin
 		if (!super.preEnable()) {
 			return;
 		}
+		
+		instance = this;
 		
 		// Load config
 		loadConfig();
