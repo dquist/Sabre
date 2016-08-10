@@ -6,9 +6,7 @@ import static org.junit.Assert.*;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map.Entry;
-import java.util.Set;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 import com.gordonfreemanq.sabre.SabreAPI;
 import com.gordonfreemanq.sabre.SabrePlayer;
@@ -54,17 +52,8 @@ public class SabreGroupTest {
 	}
 
 	@Test
-	public void testGetID() {
+	public void test() {
 		assertEquals(m_Group.getID(), m_GroupUuid);
-	}
-
-	@Test
-	public void testGetFullName() {
-		assertEquals(m_Group.getFullName(), String.format("%s#%s", m_Group.getName(), m_Group.getOwner().getName()));
-	}
-
-	@Test
-	public void testIsFaction() {
 		assertFalse(m_Group.isFaction());
 	}
 
@@ -77,18 +66,71 @@ public class SabreGroupTest {
 		assertEquals(m_Group.getName(), testName);
 		m_Group.setName(oldName);
 		assertEquals(m_Group.getName(), oldName);
+		
+		// Full name
+		assertEquals(m_Group.getFullName(), String.format("%s#%s", m_Group.getName(), m_Group.getOwner().getName()));
 	}
 
 	@Test
-	public void testGetMembers() {
+	public void testMembers() {
 		
 		Collection<SabreMember> members = m_Group.getMembers();
 		assertEquals(members.size(), m_Members.size());
-		Set<SabrePlayer> groupPlayers = members.stream().map(m -> m.getPlayer()).collect(Collectors.toSet());
 		
-		for(Entry<SabrePlayer, Rank> entry : m_Members.entrySet()) {
-			assertTrue(groupPlayers.contains(entry.getKey()));
+		for(SabreMember member : members) {
+			assertEquals(m_Members.get(member.getPlayer()), member.getRank());
 		}
+		
+		SabrePlayer testPlayer = new SabrePlayer(UUID.randomUUID(), "TestPlayer");
+		assertFalse(m_Group.isMember(testPlayer));
+		assertFalse(m_Group.isInvited(testPlayer));
+		
+		m_Group.addMember(testPlayer, Rank.MEMBER);
+		assertTrue(m_Group.isMember(testPlayer));
+		assertFalse(m_Group.isInvited(testPlayer));
+		assertFalse(m_Group.isBuilder(testPlayer));
+		
+		m_Group.removePlayer(testPlayer);
+		assertFalse(m_Group.isMember(testPlayer));
+		assertFalse(m_Group.isInvited(testPlayer));
+		assertFalse(m_Group.isBuilder(testPlayer));
+		assertFalse(m_Group.isOfficer(testPlayer));
+		
+		m_Group.addMember(testPlayer, Rank.MEMBER);
+		assertTrue(m_Group.isMember(testPlayer));
+		assertFalse(m_Group.isBuilder(testPlayer));
+		assertFalse(m_Group.isOfficer(testPlayer));
+		
+		SabreMember testMember = m_Group.getMember(testPlayer);
+		assertNotNull(testMember);
+		assertTrue(m_Group.isRank(testPlayer, Rank.MEMBER));
+		assertFalse(m_Group.isRank(testPlayer, Rank.OFFICER));
+		
+		testMember.setRank(Rank.BUILDER);
+		assertTrue(m_Group.isBuilder(testPlayer));
+		assertFalse(m_Group.isOfficer(testPlayer));
+		assertTrue(m_Group.isRank(testPlayer, Rank.BUILDER));
+		
+		testMember.setRank(Rank.OFFICER);
+		assertTrue(m_Group.isBuilder(testPlayer));
+		assertTrue(m_Group.isOfficer(testPlayer));
+		assertTrue(m_Group.isRank(testPlayer, Rank.OFFICER));
+		
+		testMember.setRank(Rank.ADMIN);
+		assertTrue(m_Group.isBuilder(testPlayer));
+		assertTrue(m_Group.isOfficer(testPlayer));
+		assertTrue(m_Group.isRank(testPlayer, Rank.ADMIN));
+		
+		m_Group.removeMember(testMember);
+		assertFalse(m_Group.isMember(testPlayer));
+		
+		assertFalse(m_Group.isInvited(testPlayer));
+		
+		m_Group.addInvited(testPlayer);
+		assertTrue(m_Group.isInvited(testPlayer));
+		
+		m_Group.removeInvited(testPlayer);
+		assertFalse(m_Group.isInvited(testPlayer));
 	}
 
 }
