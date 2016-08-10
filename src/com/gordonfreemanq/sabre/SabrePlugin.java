@@ -19,6 +19,7 @@ import com.gordonfreemanq.sabre.blocks.BlockManager;
 import com.gordonfreemanq.sabre.blocks.CustomItems;
 import com.gordonfreemanq.sabre.blocks.SignHandler;
 import com.gordonfreemanq.sabre.chat.GlobalChat;
+import com.gordonfreemanq.sabre.chat.IChatChannel;
 import com.gordonfreemanq.sabre.chat.ServerBroadcast;
 import com.gordonfreemanq.sabre.cmd.CmdAdminBan;
 import com.gordonfreemanq.sabre.cmd.CmdAdminFly;
@@ -140,7 +141,7 @@ public class SabrePlugin extends AbstractSabrePlugin
 	 * Returns the global chat instance
 	 * @return The global chat instance
 	 */
-	public GlobalChat getGlobalChat() {
+	public IChatChannel getGlobalChat() {
 		return this.globalChat;
 	}
 	

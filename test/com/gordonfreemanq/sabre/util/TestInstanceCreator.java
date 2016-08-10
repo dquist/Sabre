@@ -17,6 +17,8 @@ import org.mockito.Matchers;
 import org.mockito.Mockito;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
+import org.powermock.api.mockito.PowerMockito;
+import org.powermock.core.MockGateway;
 
 import com.gordonfreemanq.sabre.SabrePlugin;
 
@@ -39,7 +41,7 @@ public class TestInstanceCreator {
     private Server mockServer;
     private CommandSender commandSender;
 
-    public static final File pluginDirectory = new File("bin/test/server/plugins/coretest");
+    public static final File pluginDirectory = new File("bin/test/server/plugins/sabretest");
     public static final File serverDirectory = new File("bin/test/server");
     public static final File worldsDirectory = new File("bin/test/server");
 
@@ -60,11 +62,11 @@ public class TestInstanceCreator {
             when(mockServer.getWorldContainer()).thenReturn(worldsDirectory);
 
             // Return a fake PDF file.
-            PluginDescriptionFile pdf = Mockito.spy(new PluginDescriptionFile("Multiverse-Core", "2.2-Test",
-                    "com.onarandombox.MultiverseCore.MultiverseCore"));
+            PluginDescriptionFile pdf = PowerMockito.spy(new PluginDescriptionFile("Sabre", "0.1.12",
+                    "com.gordonfreemanq.sabre.SabrePlugin"));
             when(pdf.getAuthors()).thenReturn(new ArrayList<String>());
 
-            core = Mockito.spy(new SabrePlugin(pluginLoader, mockServer, pdf, pluginDirectory, new File(pluginDirectory, "testPluginFile")));
+            core = PowerMockito.spy(new SabrePlugin(pluginLoader, mockServer, pdf, pluginDirectory, new File(pluginDirectory, "testPluginFile")));
             
             /*
             Mockito.doAnswer(new Answer<Void>() {
@@ -85,7 +87,7 @@ public class TestInstanceCreator {
             JavaPlugin[] plugins = new JavaPlugin[] { core };
 
             // Mock the Plugin Manager
-            PluginManager mockPluginManager = Mockito.mock(PluginManager.class);
+            PluginManager mockPluginManager = PowerMockito.mock(PluginManager.class);
             when(mockPluginManager.getPlugins()).thenReturn(plugins);
             when(mockPluginManager.getPlugin("Multiverse-Core")).thenReturn(core);
             when(mockPluginManager.getPermission(anyString())).thenReturn(null);

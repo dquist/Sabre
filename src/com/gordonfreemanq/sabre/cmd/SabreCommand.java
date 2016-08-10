@@ -8,7 +8,7 @@ import com.gordonfreemanq.sabre.SabreConfig;
 import com.gordonfreemanq.sabre.SabrePlayer;
 import com.gordonfreemanq.sabre.SabrePlugin;
 import com.gordonfreemanq.sabre.blocks.BlockManager;
-import com.gordonfreemanq.sabre.chat.GlobalChat;
+import com.gordonfreemanq.sabre.chat.IChatChannel;
 import com.gordonfreemanq.sabre.core.SabreBaseCommand;
 import com.gordonfreemanq.sabre.groups.GroupManager;
 import com.gordonfreemanq.sabre.groups.SabreGroup;
@@ -25,7 +25,7 @@ public abstract class SabreCommand extends SabreBaseCommand<SabrePlugin>
 {
 	protected GroupManager gm;
 	protected SabreGroup curGroup;
-	protected GlobalChat gc;
+	protected IChatChannel gc;
 	protected BlockManager bm = BlockManager.getInstance();
 	protected PearlManager pearls;
 	protected SabreConfig config;

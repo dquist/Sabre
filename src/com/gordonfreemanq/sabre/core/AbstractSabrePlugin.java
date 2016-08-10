@@ -27,12 +27,21 @@ public abstract class AbstractSabrePlugin extends JavaPlugin implements ISabreLo
 	private Integer saveTask = null;
 	private boolean autoSave = true;
 	protected boolean loadSuccessful = false;
-	public AbstractSabrePlugin(PluginLoader loader, Server server, PluginDescriptionFile description, File dataFolder,
-			File file) {
-		// TODO Auto-generated constructor stub
-	}
 	public boolean getAutoSave() {return this.autoSave;}
 	public void setAutoSave(boolean val) {this.autoSave = val;}
+	
+	public AbstractSabrePlugin() {
+		
+	}
+
+	/**
+	 * For Unit Tests
+	 */
+	@SuppressWarnings("deprecation")
+	public AbstractSabrePlugin(PluginLoader loader, Server server, PluginDescriptionFile description, File dataFolder,
+			File file) {
+		super(loader, server, description, dataFolder, file);
+	}
 	
 
 	// -------------------------------------------- //

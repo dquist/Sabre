@@ -1,10 +1,7 @@
 package com.gordonfreemanq.sabre.groups;
-
 import org.junit.*;
 
 import static org.junit.Assert.*;
-
-import static org.mockito.Mockito.*;
 
 import java.util.Collection;
 import java.util.HashMap;
@@ -15,7 +12,6 @@ import java.util.stream.Collectors;
 
 import com.gordonfreemanq.sabre.SabreAPI;
 import com.gordonfreemanq.sabre.SabrePlayer;
-import com.gordonfreemanq.sabre.chat.IChatChannel;
 
 public class SabreGroupTest {
 	
@@ -30,11 +26,13 @@ public class SabreGroupTest {
 	private final SabreGroup m_Group;
 	private final HashMap<SabrePlayer, Rank> m_Members;
 	
+
 	public SabreGroupTest() {
 		m_Group = new SabreGroup(m_GroupUuid, m_GroupName);
 		
 		// Add members to the group
 		m_Members = new HashMap<SabrePlayer, Rank>();
+
 		m_Members.put(new SabrePlayer(UUID.randomUUID(), OWNER_NAME), Rank.OWNER);
 		m_Members.put(new SabrePlayer(UUID.randomUUID(), ADMIN_NAME), Rank.ADMIN);
 		m_Members.put(new SabrePlayer(UUID.randomUUID(), OFFICER_NAME), Rank.OFFICER);
@@ -49,14 +47,10 @@ public class SabreGroupTest {
 	@BeforeClass
 	public static void setUp() throws Exception {
 		SabreAPI.IsUnitTesting = true;
-		
-		IChatChannel chat = mock(IChatChannel.class);
-		chat.chat(new SabrePlayer(UUID.randomUUID(), MEMBER_NAME), "test");
 	}
 	
 	@AfterClass
 	public static void tearDown() throws Exception {
-		
 	}
 
 	@Test
@@ -93,7 +87,7 @@ public class SabreGroupTest {
 		Set<SabrePlayer> groupPlayers = members.stream().map(m -> m.getPlayer()).collect(Collectors.toSet());
 		
 		for(Entry<SabrePlayer, Rank> entry : m_Members.entrySet()) {
-			assertTrue(groupPlayers.contains(entry.getValue()));
+			assertTrue(groupPlayers.contains(entry.getKey()));
 		}
 	}
 
