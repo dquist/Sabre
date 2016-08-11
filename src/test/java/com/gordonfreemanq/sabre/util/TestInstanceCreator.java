@@ -274,12 +274,6 @@ public class TestInstanceCreator {
     }
 
     public boolean tearDown() {
-    	/*
-        List<MultiverseWorld> worlds = new ArrayList<MultiverseWorld>(core.getMVWorldManager()
-                .getMVWorlds());
-        for (MultiverseWorld world : worlds) {
-            core.getMVWorldManager().deleteWorld(world.getName());
-        } */
 
         try {
             Field serverField = Bukkit.class.getDeclaredField("server");
@@ -297,6 +291,8 @@ public class TestInstanceCreator {
 
         FileUtils.deleteFolder(serverDirectory);
         MockWorldFactory.clearWorlds();
+        
+        Util.log("TEAR DOWN COMPLETE");
 
         return true;
     }

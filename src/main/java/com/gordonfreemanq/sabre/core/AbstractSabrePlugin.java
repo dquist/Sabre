@@ -80,7 +80,7 @@ public abstract class AbstractSabrePlugin extends JavaPlugin implements ISabreLo
 			saveTask = null;
 		}
 
-		log("Disabled");
+		log("=== Sabre Plugin Disabled ===");
 	}
 	
 	public void suicide()

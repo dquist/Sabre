@@ -32,18 +32,15 @@ import com.gordonfreemanq.sabre.util.TestInstanceCreator;
 })
 public class SabrePluginTest {
 	
-    private TestInstanceCreator creator;
-    private SabrePlugin plugin;
-    private CommandSender mockCommandSender;
-    private PlayerManager pm;
-    private PlayerListener playerListener;
-    
-    private MockPlayer newPlayer;
-    private PlayerJoinEvent playerJoinEvent;
+    private static TestInstanceCreator creator;
+    private static SabrePlugin plugin;
+    private static CommandSender mockCommandSender;
+    private static PlayerManager pm;
+    private static PlayerListener playerListener;
     
 	
-	@Before
-	public void setUp() throws Exception {
+	@BeforeClass
+	public static void setUp() throws Exception {
         creator = new TestInstanceCreator();
         assertTrue(creator.setUp());
         plugin = creator.getPlugin();
@@ -51,19 +48,20 @@ public class SabrePluginTest {
         
         pm = plugin.getPlayerManager();
         playerListener = plugin.getPlayerListener();
-        
-        
-        newPlayer = createMockPlayer();
-        createEvents();
 	}
 	
-	@After
-	public void tearDown() throws Exception {
+	@AfterClass
+	public static void tearDown() throws Exception {
 		creator.tearDown();
 	}
 	
 	@Test
-	public void testPlayerListener() throws Exception {
+	public void testPlayerJoin() throws Exception {
+		
+        MockPlayer newPlayer = createMockPlayer("NewPlayer");
+
+        PlayerJoinEvent playerJoinEvent = PowerMockito.mock(PlayerJoinEvent.class);
+        when(playerJoinEvent.getPlayer()).thenReturn(newPlayer);
         
         // New player join
 		assertNull(pm.getPlayerById(newPlayer.getUniqueId()));
@@ -80,32 +78,18 @@ public class SabrePluginTest {
 		assertEquals("No offline messages", sp.getOfflineMessages().size(), 0);
 		assertEquals("Spawn in free world", sp.getPlayer().getWorld(), plugin.getServer().getWorld(plugin.getSabreConfig().getFreeWorldName()));
 		verify(newPlayer, times(1)).teleport(any(Location.class));
-	}
-	
-	
-	/**
-	 * Create events
-	 */
-	private void createEvents() {
-        
-        playerJoinEvent = PowerMockito.mock(PlayerJoinEvent.class);
-        when(playerJoinEvent.getPlayer()).thenReturn(newPlayer);
+		assertEquals(newPlayer.messages.poll(), Lang.playerYouWakeUp);
 	}
 	
 	
 	/**
 	 * Creates a mock player instance
 	 */
-	private MockPlayer createMockPlayer() {
+	private MockPlayer createMockPlayer(String name) {
         // Create a mock player
 		MockPlayer mockPlayer = mock(MockPlayer.class, Mockito.CALLS_REAL_METHODS);
-		
-		Player player = mock(Player.class);
-		mockPlayer.ID = UUID.randomUUID();
-        when(player.hasPlayedBefore()).thenReturn(false);
-        when(player.getUniqueId()).thenReturn(mockPlayer.ID);
-        when(player.getName()).thenReturn(mockPlayer.name);
+		mockPlayer.name = name;
         
-        return mockPlayer;
+        return mockPlayer.init();
 	}
 }

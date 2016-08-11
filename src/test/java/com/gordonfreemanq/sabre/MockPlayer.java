@@ -1,5 +1,6 @@
 package com.gordonfreemanq.sabre;
 
+import java.util.PriorityQueue;
 import java.util.UUID;
 
 import org.bukkit.Location;
@@ -10,10 +11,18 @@ import org.bukkit.entity.Player;
 public abstract class MockPlayer implements Player {
 	
     public UUID ID;
-    public String name = "TestPlayer";
-    public boolean isOnline = false;
+    public String name;
+    public boolean isOnline;
     public World world;
     public Location location;
+    public PriorityQueue<String> messages;
+    
+    public MockPlayer init() {
+		ID = UUID.randomUUID();
+    	name = "TestPlayer";
+    	messages = new PriorityQueue<String>();
+    	return this;
+    }
     
     @Override
     public UUID getUniqueId() {
@@ -45,5 +54,17 @@ public abstract class MockPlayer implements Player {
     	this.location = l;
     	this.world = l.getWorld();
     	return true;
+    }
+    
+    @Override
+    public void sendMessage(String msg) {
+    	messages.add(msg);
+    }
+    
+    @Override
+    public void sendMessage(String[] msg) {
+    	for(String m : msg) {
+    		messages.add(m);
+    	}
     }
 }

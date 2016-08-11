@@ -6,6 +6,7 @@ public class Lang
 	public static final String playerSetBed = "<g>You set your bed location.";
 	public static final String playerSetBedFreeWorld = "<b>You can only set your bed in the overworld.";
 	public static final String playerBedMissing = "<b>Your bed was missing or obstructed.";
+	public static final String playerYouWakeUp = "You wake up in an unfamiliar place.";
 	
 	
 	// FACTION
