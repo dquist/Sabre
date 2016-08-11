@@ -1,7 +1,7 @@
 package com.gordonfreemanq.sabre;
 
+import com.gordonfreemanq.sabre.MockSabreAPI;
 import com.gordonfreemanq.sabre.chat.IChatChannel;
-import com.gordonfreemanq.sabre.test.MockSabreAPI;
 
 public class SabreAPI {
 	

@@ -1,4 +1,4 @@
-package com.gordonfreemanq.sabre.test;
+package com.gordonfreemanq.sabre;
 
 import org.junit.*;
 

@@ -1,4 +1,4 @@
-package com.gordonfreemanq.sabre.test;
+package com.gordonfreemanq.sabre;
 
 import com.gordonfreemanq.sabre.SabreAPI;
 import com.gordonfreemanq.sabre.chat.IChatChannel;

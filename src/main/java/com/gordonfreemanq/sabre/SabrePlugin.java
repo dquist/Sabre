@@ -267,7 +267,10 @@ public class SabrePlugin extends AbstractSabrePlugin
 		loadConfig();
 		
 		// Create objects
-		this.db = new MongoConnector(this, config);
+		if (this.db == null) {
+			this.db = new MongoConnector(this, config);
+		}
+		
 		this.playerManager = new PlayerManager(db, this);
 		this.groupManager = new GroupManager(playerManager, db, this);
 		this.blockManager = new BlockManager(db);
@@ -347,7 +350,7 @@ public class SabrePlugin extends AbstractSabrePlugin
 		getServer().getPluginManager().registerEvents(sabreTweaks, this);
 		getServer().getPluginManager().registerEvents(factoryListener, this);
 		signHandler = new SignHandler();
-		ProtocolLibrary.getProtocolManager().addPacketListener(signHandler);
+		//ProtocolLibrary.getProtocolManager().addPacketListener(signHandler); // TODO ProtocolLibrary
 		statsTracker = new StatsTracker(playerManager);
 		statsTracker.start();
 		
