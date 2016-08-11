@@ -617,7 +617,6 @@ public class SabreUtil {
 		World spawnWorld = Bukkit.getServer().getWorld(SabrePlugin.getPlugin().getSabreConfig().getFreeWorldName());
 		Location spawnLocation = SabreUtil.chooseSpawn(spawnWorld, SabrePlugin.getPlugin().getSabreConfig().getRespawnRadius());
 		SabreUtil.sendToGround(p, spawnLocation);
-		p.setBedSpawnLocation(spawnLocation, true);
 		p.teleport(spawnLocation);
 		p.sendMessage("You wake up in an unfamiliar place.");
 	}
