@@ -877,7 +877,7 @@ public class SabreTweaks implements Listener {
 			int z_adj = 0;
 			for (int x = chunk_x; x < chunk_end_x; ++x) {
 				for (int z = chunk_z + z_adj; z < chunk_end_z; z += 3) {
-					int block_type = world.getBlockTypeIdAt(x, y, z);
+					int block_type = world.getBlockAt(x, y, z).getTypeId();
 					if (block_type == ender_portal_id_
 							|| block_type == ender_portal_frame_id_) {
 						SabrePlugin.getPlugin().log(Level.INFO, String.format("End portal found at %d,%d", x, z));

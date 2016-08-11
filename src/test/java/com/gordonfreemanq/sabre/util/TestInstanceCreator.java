@@ -161,16 +161,15 @@ public class TestInstanceCreator {
                             } catch (Exception e) {
                                 return null;
                             }
-                            // Add special case for creating null worlds.
-                            // Not sure I like doing it this way, but this is a special case
-                            if (arg.name().equalsIgnoreCase("nullworld")) {
-                                return MockWorldFactory.makeNewNullMockWorld(arg.name(), arg.environment(), arg.type());
-                            }
                             return MockWorldFactory.makeNewMockWorld(arg.name(), arg.environment(), arg.type());
                         }
                     });
 
             when(mockServer.unloadWorld(anyString(), anyBoolean())).thenReturn(true);
+            
+            mockServer.createWorld(new WorldCreator("world"));
+            mockServer.createWorld(new WorldCreator("world_nether"));
+            mockServer.createWorld(new WorldCreator("world_the_end"));
 
             // add mock scheduler
             BukkitScheduler mockScheduler = mock(BukkitScheduler.class);

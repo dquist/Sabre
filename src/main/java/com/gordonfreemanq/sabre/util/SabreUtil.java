@@ -398,25 +398,25 @@ public class SabreUtil {
 		int blockid = 0;
 
 		if(world.getEnvironment().equals(Environment.NETHER)){
-			int blockYid = world.getBlockTypeIdAt((int) x, (int) y, (int) z);
-			int blockY2id = world.getBlockTypeIdAt((int) x, (int) (y+1), (int) z);
+			int blockYid = world.getBlockAt((int) x, (int) y, (int) z).getTypeId();
+			int blockY2id = world.getBlockAt((int) x, (int) (y+1), (int) z).getTypeId();
 			while(y < 128 && !(blockYid == 0 && blockY2id == 0)){				
 				y++;
 				blockYid = blockY2id;
-				blockY2id = world.getBlockTypeIdAt((int) x, (int) (y+1), (int) z);
+				blockY2id = world.getBlockAt((int) x, (int) (y+1), (int) z).getTypeId();
 			}
 			if(y == 127) return -1;
 		}else{
 			y = 257;
 			while(y >= 0 && blockid == 0){
 				y--;
-				blockid = world.getBlockTypeIdAt((int) x, (int) y, (int) z);
+				blockid = world.getBlockAt((int) x, (int) y, (int) z).getTypeId();
 			}
 			if(y == 0) return -1;
 		}
 
 		if (blacklist.contains(blockid)) return -1;
-		if (blacklist.contains(81) && world.getBlockTypeIdAt((int) x, (int) (y+1), (int) z) == 81) return -1; // Check for cacti
+		if (blacklist.contains(81) && world.getBlockAt((int) x, (int) (y+1), (int) z).getTypeId() == 81) return -1; // Check for cacti
 
 		return y;
 	}
@@ -614,7 +614,8 @@ public class SabreUtil {
 	
 	
 	public static void doRandomSpawn(Player p) {
-		Location spawnLocation = SabreUtil.chooseSpawn(p.getWorld(), SabrePlugin.getPlugin().getSabreConfig().getRespawnRadius());
+		World spawnWorld = Bukkit.getServer().getWorld(SabrePlugin.getPlugin().getSabreConfig().getFreeWorldName());
+		Location spawnLocation = SabreUtil.chooseSpawn(spawnWorld, SabrePlugin.getPlugin().getSabreConfig().getRespawnRadius());
 		SabreUtil.sendToGround(p, spawnLocation);
 		p.setBedSpawnLocation(spawnLocation, true);
 		p.teleport(spawnLocation);

@@ -104,91 +104,6 @@ public class SabrePlugin extends AbstractSabrePlugin
 	private VanishApi vanishApi;
 	
 	private File serverFolder = new File(System.getProperty("user.dir"));
-	
-	/**
-	 * Gets the player manager
-	 * @return The player manager
-	 */
-	public PlayerManager getPlayerManager() {
-		return this.playerManager;
-	}
-
-	/**
-	 * Gets the group manager
-	 * @return The group manager
-	 */
-	public GroupManager getGroupManager() {
-		return this.groupManager;
-	}
-	
-	/**
-	 * Gets the group manager
-	 * @return The group manager
-	 */
-	public CombatInterface getCombatTag() {
-		return this.combatTag;
-	}
-	
-	/**
-	 * Gets the vanish API
-	 * @return The vanish API
-	 */
-	public VanishApi getVanishApi() {
-		return this.vanishApi;
-	}
-	
-	/**
-	 * Returns the global chat instance
-	 * @return The global chat instance
-	 */
-	public IChatChannel getGlobalChat() {
-		return this.globalChat;
-	}
-	
-
-	/**
-	 * Returns the global configuration instance
-	 * @return The global configuration instance
-	 */
-	public SabreConfig getSabreConfig() {
-		return this.config;
-	}
-	
-	
-	/**
-	 * Gets the server broadcast instance
-	 * @return the Server broadcast instance
-	 */
-	public ServerBroadcast getServerBroadcast() {
-		return this.serverBcast;
-	}
-
-	
-	/**
-	 * Gets the Data Access Object
-	 * @return The Data Access Object
-	 */
-	public IDataAccess getDataAccess() {
-		return this.db;
-	}
-
-	
-	/**
-	 * Sets the Data Access Object
-	 * @return The Data Access Object
-	 */
-	public void setDataAccess(IDataAccess db) {
-		this.db = db;
-	}
-
-	
-	/**
-	 * Gets the auto-help command
-	 * @return The auto-help command
-	 */
-	public CmdAutoHelp getCmdAutoHelp() { 
-		return cmdAutoHelp;
-	}
 
 	/**
 	 * @brief SabrePlugin constructor 
@@ -436,4 +351,98 @@ public class SabrePlugin extends AbstractSabrePlugin
 
         this.serverFolder = newServerFolder;
     }
+	
+	/**
+	 * Gets the player manager
+	 * @return The player manager
+	 */
+	public PlayerManager getPlayerManager() {
+		return this.playerManager;
+	}
+
+	/**
+	 * Gets the group manager
+	 * @return The group manager
+	 */
+	public GroupManager getGroupManager() {
+		return this.groupManager;
+	}
+	
+	/**
+	 * Gets the group manager
+	 * @return The group manager
+	 */
+	public CombatInterface getCombatTag() {
+		return this.combatTag;
+	}
+	
+	/**
+	 * Gets the vanish API
+	 * @return The vanish API
+	 */
+	public VanishApi getVanishApi() {
+		return this.vanishApi;
+	}
+	
+	/**
+	 * Returns the global chat instance
+	 * @return The global chat instance
+	 */
+	public IChatChannel getGlobalChat() {
+		return this.globalChat;
+	}
+	
+
+	/**
+	 * Returns the global configuration instance
+	 * @return The global configuration instance
+	 */
+	public SabreConfig getSabreConfig() {
+		return this.config;
+	}
+	
+	
+	/**
+	 * Gets the server broadcast instance
+	 * @return the Server broadcast instance
+	 */
+	public ServerBroadcast getServerBroadcast() {
+		return this.serverBcast;
+	}
+
+	
+	/**
+	 * Gets the Data Access Object
+	 * @return The Data Access Object
+	 */
+	public IDataAccess getDataAccess() {
+		return this.db;
+	}
+
+	
+	/**
+	 * Sets the Data Access Object
+	 * @return The Data Access Object
+	 */
+	public void setDataAccess(IDataAccess db) {
+		this.db = db;
+	}
+
+	
+	/**
+	 * Gets the auto-help command
+	 * @return The auto-help command
+	 */
+	public CmdAutoHelp getCmdAutoHelp() { 
+		return cmdAutoHelp;
+	}
+
+	
+	/**
+	 * Gets the player listener
+	 * @return The player listener
+	 */
+	public PlayerListener getPlayerListener() { 
+		return this.playerListener;
+	}
 }

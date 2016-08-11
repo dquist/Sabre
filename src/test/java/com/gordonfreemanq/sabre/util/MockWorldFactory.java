@@ -1,5 +1,6 @@
 package com.gordonfreemanq.sabre.util;
 
+import org.bukkit.Chunk;
 import org.bukkit.Difficulty;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -102,89 +103,83 @@ public class MockWorldFactory {
                 return new File(TestInstanceCreator.serverDirectory, thiss.getName());
             }
         });
-        when(mockWorld.getBlockAt(any(Location.class))).thenAnswer(new Answer<Block>() {
-            @SuppressWarnings("deprecation")
-			@Override
-            public Block answer(InvocationOnMock invocation) throws Throwable {
-                Location loc;
-                try {
-                    loc = (Location) invocation.getArguments()[0];
-                } catch (Exception e) {
-                    return null;
-                }
-                Material blockType = Material.AIR;
-                Block mockBlock = mock(Block.class);
-                if (loc.getBlockY() < 64) {
-                    blockType = Material.DIRT;
-                }
-
-                when(mockBlock.getType()).thenReturn(blockType);
-                when(mockBlock.getTypeId()).thenReturn(blockType.getId());
-                when(mockBlock.getWorld()).thenReturn(loc.getWorld());
-                when(mockBlock.getX()).thenReturn(loc.getBlockX());
-                when(mockBlock.getY()).thenReturn(loc.getBlockY());
-                when(mockBlock.getZ()).thenReturn(loc.getBlockZ());
-                when(mockBlock.getLocation()).thenReturn(loc);
-                when(mockBlock.isEmpty()).thenReturn(blockType == Material.AIR);
-                return mockBlock;
-            }
-        });
+        when(mockWorld.getBlockAt(any(Location.class))).thenAnswer(getBlockAtAnswer);
+        when(mockWorld.getBlockAt(anyInt(), anyInt(), anyInt())).thenAnswer(getBlockAtAnswer);
+        
         when(mockWorld.getUID()).thenReturn(UUID.randomUUID());
+        when(mockWorld.getLoadedChunks()).thenReturn(new Chunk[0]);
+        when(mockWorld.getChunkAt(any(Location.class))).thenAnswer(chunkAnswer);
+        when(mockWorld.getChunkAt(any(Block.class))).thenAnswer(chunkAnswer);
+        when(mockWorld.getChunkAt(any(int.class), any(int.class))).thenAnswer(chunkAnswer);
         return mockWorld;
     }
-
-    private static World nullWorld(String world, World.Environment env, WorldType type) {
-        World mockWorld = mock(World.class);
-        when(mockWorld.getName()).thenReturn(world);
-        when(mockWorld.getEnvironment()).thenReturn(env);
-        when(mockWorld.getWorldType()).thenReturn(type);
-        when(mockWorld.getSpawnLocation()).thenReturn(new Location(mockWorld, 0, 64, 0));
-        when(mockWorld.getWorldFolder()).thenAnswer(new Answer<File>() {
-            @Override
-            public File answer(InvocationOnMock invocation) throws Throwable {
-                if (!(invocation.getMock() instanceof World))
-                    return null;
-
-                World thiss = (World) invocation.getMock();
-                return new File(TestInstanceCreator.serverDirectory, thiss.getName());
+    
+    static Answer<Chunk> chunkAnswer = new Answer<Chunk>() {
+        @Override
+        public Chunk answer(InvocationOnMock invocation) throws Throwable {
+            Location loc = null;
+            World mockWorld = (World)invocation.getMock();
+            
+            Object[] args = invocation.getArguments();
+            try {
+	            if (args[0] instanceof Location) {
+	                loc = (Location) args[0];
+	            } else if (args[0] instanceof Block) {
+	            	loc = ((Block)args[0]).getLocation();
+	            } else if (invocation.getArguments().length == 3){
+	            	loc = new Location(mockWorld, (int)args[0], (int)args[1], (int)args[2]);
+	            }
+            } catch (Exception e) {
+            	return null;
             }
-        });
-        when(mockWorld.getBlockAt(any(Location.class))).thenAnswer(new Answer<Block>() {
-            @SuppressWarnings("deprecation")
-			@Override
-            public Block answer(InvocationOnMock invocation) throws Throwable {
-                Location loc;
-                try {
-                    loc = (Location) invocation.getArguments()[0];
-                } catch (Exception e) {
-                    return null;
-                }
 
-                Block mockBlock = mock(Block.class);
-                Material blockType = Material.AIR;
+            Chunk mockChunk = mock(Chunk.class);
 
-                when(mockBlock.getType()).thenReturn(blockType);
-                when(mockBlock.getTypeId()).thenReturn(blockType.getId());
-                when(mockBlock.getWorld()).thenReturn(loc.getWorld());
-                when(mockBlock.getX()).thenReturn(loc.getBlockX());
-                when(mockBlock.getY()).thenReturn(loc.getBlockY());
-                when(mockBlock.getZ()).thenReturn(loc.getBlockZ());
-                when(mockBlock.getLocation()).thenReturn(loc);
-                when(mockBlock.isEmpty()).thenReturn(blockType == Material.AIR);
-                return mockBlock;
+            Block b = loc.getBlock();
+            when(mockChunk.getBlock(anyInt(), anyInt(), anyInt())).thenReturn(b);
+            when(mockChunk.getWorld()).thenReturn(loc.getWorld());
+            when(mockChunk.getX()).thenReturn(loc.getBlockX() >> 4);
+            when(mockChunk.getZ()).thenReturn(loc.getBlockZ() >> 4);
+            return mockChunk;
+        }
+    };
+        
+    static Answer<Block> getBlockAtAnswer = new Answer<Block>() {
+        @SuppressWarnings("deprecation")
+		@Override
+        public Block answer(InvocationOnMock invocation) throws Throwable {
+            
+        	Object[] args = invocation.getArguments();
+        	Location loc;
+            try {
+            	if (args.length == 3) {
+            		loc = new Location((World)invocation.getMock(), (int)args[0], (int)args[1], (int)args[2]);
+            	} else {
+            		loc = (Location) invocation.getArguments()[0];
+            	}
+            } catch (Exception e) {
+                return null;
             }
-        });
-        return mockWorld;
-    }
+            Material blockType = Material.AIR;
+            Block mockBlock = mock(Block.class);
+            if (loc.getBlockY() < 64) {
+                blockType = Material.DIRT;
+            }
+
+            when(mockBlock.getType()).thenReturn(blockType);
+            when(mockBlock.getTypeId()).thenReturn(blockType.getId());
+            when(mockBlock.getWorld()).thenReturn(loc.getWorld());
+            when(mockBlock.getX()).thenReturn(loc.getBlockX());
+            when(mockBlock.getY()).thenReturn(loc.getBlockY());
+            when(mockBlock.getZ()).thenReturn(loc.getBlockZ());
+            when(mockBlock.getLocation()).thenReturn(loc);
+            when(mockBlock.isEmpty()).thenReturn(blockType == Material.AIR);
+            return mockBlock;
+        }
+    };
 
     public static World makeNewMockWorld(String world, World.Environment env, WorldType type) {
         World w = basics(world, env, type);
-        registerWorld(w);
-        return w;
-    }
-
-    public static World makeNewNullMockWorld(String world, World.Environment env, WorldType type) {
-        World w = nullWorld(world, env, type);
         registerWorld(w);
         return w;
     }
