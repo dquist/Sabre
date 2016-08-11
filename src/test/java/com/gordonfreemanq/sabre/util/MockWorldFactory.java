@@ -8,6 +8,7 @@ import org.bukkit.World;
 import org.bukkit.WorldType;
 import org.bukkit.block.Block;
 import org.bukkit.generator.ChunkGenerator;
+import org.mockito.Mockito;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
 
@@ -40,69 +41,13 @@ public class MockWorldFactory {
     }
 
     private static World basics(String world, World.Environment env, WorldType type) {
-        World mockWorld = mock(World.class);
-        when(mockWorld.getName()).thenReturn(world);
-        when(mockWorld.getPVP()).thenAnswer(new Answer<Boolean>() {
-            @Override
-            public Boolean answer(InvocationOnMock invocation) throws Throwable {
-                World w = (World) invocation.getMock();
-                if (!pvpStates.containsKey(w))
-                    pvpStates.put(w, true); // default value
-                return pvpStates.get(w);
-            }
-        });
-        doAnswer(new Answer<Void>() {
-            @Override
-            public Void answer(InvocationOnMock invocation) throws Throwable {
-                pvpStates.put((World) invocation.getMock(), (Boolean) invocation.getArguments()[0]);
-                return null;
-            }
-        }).when(mockWorld).setPVP(anyBoolean());
-        when(mockWorld.getKeepSpawnInMemory()).thenAnswer(new Answer<Boolean>() {
-            @Override
-            public Boolean answer(InvocationOnMock invocation) throws Throwable {
-                World w = (World) invocation.getMock();
-                if (!keepSpawnInMemoryStates.containsKey(w))
-                    keepSpawnInMemoryStates.put(w, true); // default value
-                return keepSpawnInMemoryStates.get(w);
-            }
-        });
-        doAnswer(new Answer<Void>() {
-            @Override
-            public Void answer(InvocationOnMock invocation) throws Throwable {
-                keepSpawnInMemoryStates.put((World) invocation.getMock(), (Boolean) invocation.getArguments()[0]);
-                return null;
-            }
-        }).when(mockWorld).setKeepSpawnInMemory(anyBoolean());
-        when(mockWorld.getDifficulty()).thenAnswer(new Answer<Difficulty>() {
-            @Override
-            public Difficulty answer(InvocationOnMock invocation) throws Throwable {
-                World w = (World) invocation.getMock();
-                if (!difficultyStates.containsKey(w))
-                    difficultyStates.put(w, Difficulty.NORMAL); // default value
-                return difficultyStates.get(w);
-            }
-        });
-        doAnswer(new Answer<Void>() {
-            @Override
-            public Void answer(InvocationOnMock invocation) throws Throwable {
-                difficultyStates.put((World) invocation.getMock(), (Difficulty) invocation.getArguments()[0]);
-                return null;
-            }
-        }).when(mockWorld).setDifficulty(any(Difficulty.class));
-        when(mockWorld.getEnvironment()).thenReturn(env);
-        when(mockWorld.getWorldType()).thenReturn(type);
-        when(mockWorld.getSpawnLocation()).thenReturn(new Location(mockWorld, 0, 64, 0));
-        when(mockWorld.getWorldFolder()).thenAnswer(new Answer<File>() {
-            @Override
-            public File answer(InvocationOnMock invocation) throws Throwable {
-                if (!(invocation.getMock() instanceof World))
-                    return null;
+    	MockWorld mockWorld = mock(MockWorld.class, Mockito.CALLS_REAL_METHODS);
+    	mockWorld.init();
+    	mockWorld.name = world;
+    	mockWorld.env = env;
+    	mockWorld.worldType = type;
+        mockWorld.worldFolder = new File(TestInstanceCreator.serverDirectory, mockWorld.getName());
 
-                World thiss = (World) invocation.getMock();
-                return new File(TestInstanceCreator.serverDirectory, thiss.getName());
-            }
-        });
         when(mockWorld.getBlockAt(any(Location.class))).thenAnswer(getBlockAtAnswer);
         when(mockWorld.getBlockAt(anyInt(), anyInt(), anyInt())).thenAnswer(getBlockAtAnswer);
         
