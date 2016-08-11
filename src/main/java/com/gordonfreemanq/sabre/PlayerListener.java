@@ -34,8 +34,6 @@ import com.gordonfreemanq.sabre.util.SabreUtil;
 
 public class PlayerListener implements Listener {
 	
-	private static final String LOAD_ERR = "The server isn't loaded yet.";
-	
 	private final PlayerManager pm;
 	private final GlobalChat globalChat;
 	private final ISabreLog logger;
@@ -64,8 +62,9 @@ public class PlayerListener implements Listener {
 	{
 		// Don't let players join if things didn't start up correctly
 		if (!pluginLoaded) {
-			e.setKickMessage(LOAD_ERR);
+			e.setKickMessage(Lang.serverNotLoaded);
 			e.setLoginResult(Result.KICK_OTHER);
+			return;
 		}
 		
 		SabrePlayer sp = pm.getPlayerById(e.getUniqueId());
@@ -85,7 +84,6 @@ public class PlayerListener implements Listener {
 		e.setResult(PlayerLoginEvent.Result.KICK_OTHER);
 		
 		try {
-			
 			// Ok we're good! Let 'em in
 			e.setResult(PlayerLoginEvent.Result.ALLOWED);
 			e.setKickMessage(null);
@@ -135,7 +133,6 @@ public class PlayerListener implements Listener {
 			SabreUtil.doRandomSpawn(p);
 		}
 		
-		
 		// Update the player model
 		sp.setPlayer(p);
 		pm.setLastLogin(sp, new Date());
@@ -175,7 +172,7 @@ public class PlayerListener implements Listener {
 			if (pluginLoaded) {
 				handlePlayerJoin(p);
 			} else {
-				p.kickPlayer(LOAD_ERR);
+				p.kickPlayer(Lang.serverNotLoaded);
 			}
 		}
 	}
@@ -218,14 +215,14 @@ public class PlayerListener implements Listener {
 	 */
 	@EventHandler(priority=EventPriority.LOWEST, ignoreCancelled = true)
 	public void onPlayerRespawn(PlayerRespawnEvent e) {
-		SabrePlayer p = pm.getPlayerById(e.getPlayer().getUniqueId());
-		Location l = p.getBedLocation();
+		SabrePlayer sp = pm.getPlayerById(e.getPlayer().getUniqueId());
+		Location l = sp.getBedLocation();
 		boolean useBed = false;
 		
 		if (l != null) {
 			if (l.getBlock().getType() == Material.BED_BLOCK) {
 				SabreBlock b = BlockManager.getInstance().getBlockAt(SabreUtil.getRealBlock(l.getBlock()).getLocation());
-				if (b == null || b.canPlayerAccess(p)) {
+				if (b == null || b.canPlayerAccess(sp)) {
 					useBed = true;
 				}
 			}
@@ -235,14 +232,7 @@ public class PlayerListener implements Listener {
 			e.getPlayer().setBedSpawnLocation(l, true);
 		} else {
 			e.getPlayer().setBedSpawnLocation(null);
-			
-			World world = Bukkit.getWorld(SabreConfig.OVER_WORLD_NAME);
-			Location spawnLocation = SabreUtil.chooseSpawn(world, 10000);
-			
-			SabreUtil.sendToGround(p.getPlayer(), spawnLocation);
-			
-			e.setRespawnLocation(spawnLocation);
-			p.msg("You wake up in an unfamiliar place.");
+			SabreUtil.doRandomSpawn(e.getPlayer());
 		}
 	}
 	

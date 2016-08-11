@@ -11,11 +11,13 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.permissions.Permission;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginDescriptionFile;
+import org.bukkit.plugin.PluginLoader;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitScheduler;
 import org.junit.Assert;
 import org.mockito.Matchers;
+import org.mockito.Mockito;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
 import org.powermock.api.mockito.PowerMockito;
@@ -54,7 +56,7 @@ public class TestInstanceCreator {
 
             MockGateway.MOCK_STANDARD_METHODS = false;
 
-            TestPluginLoader pluginLoader = new TestPluginLoader();
+            PluginLoader pluginLoader = Mockito.mock(PluginLoader.class);
             MockDataAccess mockData = PowerMockito.spy(new MockDataAccess());
 
             // Initialize the Mock server.
@@ -75,14 +77,6 @@ public class TestInstanceCreator {
 
             sabrePlugin = PowerMockito.spy(new SabrePlugin(pluginLoader, mockServer, pdf, pluginDirectory, new File(pluginDirectory, "testPluginFile")));
             sabrePlugin.setDataAccess(mockData);
-            
-            /*
-            PowerMockito.doAnswer(new Answer<Void>() {
-                @Override
-                public Void answer(InvocationOnMock invocation) throws Throwable {
-                    return null; // don't run metrics in tests
-                }
-            }).when(sabrePlugin, "setupMetrics"); */
 
             // Let's let all MV files go to bin/test
             doReturn(pluginDirectory).when(sabrePlugin).getDataFolder();
@@ -99,8 +93,6 @@ public class TestInstanceCreator {
             when(mockPluginManager.getPlugins()).thenReturn(plugins);
             when(mockPluginManager.getPlugin("Sabre")).thenReturn(sabrePlugin);
             when(mockPluginManager.getPermission(anyString())).thenReturn(null);
-            // Tell Buscript Vault is not available.
-            //when(mockPluginManager.getPermission("Vault")).thenReturn(null);
 
             // Make some fake folders to fool the fake MV into thinking these worlds exist
             File worldNormalFile = new File(sabrePlugin.getServerFolder(), "world");

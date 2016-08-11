@@ -1,4 +1,4 @@
-package com.gordonfreemanq.sabre;
+package com.gordonfreemanq.sabre.util;
 
 import java.util.PriorityQueue;
 import java.util.UUID;

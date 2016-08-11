@@ -5,9 +5,41 @@ import java.util.logging.Handler;
 import java.util.logging.Level;
 import java.util.logging.LogRecord;
 import java.util.logging.Logger;
+import java.io.PrintWriter;
+import java.io.StringWriter;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.logging.Formatter;
 
 public class Util {
     private Util() {}
+    
+    /**
+     * Formatter to format log-messages in tests
+     *
+     */
+    private static class MVTestLogFormatter extends Formatter {
+        private static final DateFormat df = new SimpleDateFormat("HH:mm:ss");
+
+        public String format(LogRecord record) {
+            StringBuilder ret = new StringBuilder();
+
+            ret.append("[").append(df.format(record.getMillis())).append("] [")
+                    .append(record.getLoggerName()).append("] [")
+                    .append(record.getLevel().getLocalizedName()).append("] ");
+            ret.append(record.getMessage());
+            ret.append('\n');
+
+            if (record.getThrown() != null) {
+                // An Exception was thrown! Let's print the StackTrace!
+                StringWriter writer = new StringWriter();
+                record.getThrown().printStackTrace(new PrintWriter(writer));
+                ret.append(writer);
+            }
+
+            return ret.toString();
+        }
+    }
 
     public static final Logger logger = Logger.getLogger("Sabre-Test");
 
