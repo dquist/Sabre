@@ -632,7 +632,7 @@ public class MongoConnector implements IDataAccess {
 		HashMap<Location, SabreBlock> records = new HashMap<Location, SabreBlock>();
 		
 		BasicDBObject where = new BasicDBObject();
-		where.append("chunk", formatChunk(c));
+		where.append("chunk", SabreUtil.formatChunkName(c));
 		
 		DBCursor cursor = colBlocks.find(where);
 		
@@ -725,21 +725,6 @@ public class MongoConnector implements IDataAccess {
 		
 		return b;
 	}
-
-
-	/**
-	 * Formats the chunk string for a location
-	 * DON'T USE getChunk() because it loads the chunk
-	 * @param l The location
-	 * @return The chunk string
-	 */
-	private String formatChunk(Location l) {
-		return String.format("%s,%s,%s", l.getWorld().getName(), l.getBlockX() >> 4, l.getBlockZ() >> 4);
-	}
-	
-	private String formatChunk(Chunk c) {
-		return String.format("%s,%s,%s", c.getWorld().getName(), c.getX(), c.getZ());
-	}
 	
 	
 	private Location parseBlockLocation(String chunkStr, int x, int y, int z) {
@@ -754,7 +739,7 @@ public class MongoConnector implements IDataAccess {
 	public void blockInsert(SabreBlock b) {
 		Location l = b.getLocation();
 		BasicDBObject blockRecord = new BasicDBObject()
-		.append("chunk", formatChunk(l))
+		.append("chunk", SabreUtil.formatChunkName(l))
 		.append("x", l.getBlockX())
 		.append("y", l.getBlockY())
 		.append("z", l.getBlockZ())
@@ -776,7 +761,7 @@ public class MongoConnector implements IDataAccess {
 	public void blockRemove(SabreBlock b) {
 		Location l = b.getLocation();
 		BasicDBObject where = new BasicDBObject()
-		.append("chunk", formatChunk(b.getLocation()))
+		.append("chunk", SabreUtil.formatChunkName(b.getLocation()))
 		.append("x", l.getBlockX())
 		.append("y", l.getBlockY())
 		.append("z", l.getBlockZ());
@@ -851,7 +836,7 @@ public class MongoConnector implements IDataAccess {
 		
 		Location l = b.getLocation();
 		BasicDBObject where = new BasicDBObject()
-		.append("chunk", formatChunk(b.getLocation()))
+		.append("chunk", SabreUtil.formatChunkName(b.getLocation()))
 		.append("x", l.getBlockX())
 		.append("y", l.getBlockY())
 		.append("z", l.getBlockZ());

@@ -16,14 +16,12 @@ import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitScheduler;
 import org.junit.Assert;
 import org.mockito.Matchers;
-import org.mockito.Mockito;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
 import org.powermock.api.mockito.PowerMockito;
 import org.powermock.core.MockGateway;
 
 import com.gordonfreemanq.sabre.SabrePlugin;
-import com.gordonfreemanq.sabre.data.IDataAccess;
 
 import java.io.File;
 import java.lang.reflect.Field;
@@ -57,6 +55,7 @@ public class TestInstanceCreator {
             MockGateway.MOCK_STANDARD_METHODS = false;
 
             TestPluginLoader pluginLoader = new TestPluginLoader();
+            MockDataAccess mockData = PowerMockito.spy(new MockDataAccess());
 
             // Initialize the Mock server.
             mockServer = mock(Server.class);
@@ -75,7 +74,7 @@ public class TestInstanceCreator {
             when(pdf.getAuthors()).thenReturn(new ArrayList<String>());
 
             sabrePlugin = PowerMockito.spy(new SabrePlugin(pluginLoader, mockServer, pdf, pluginDirectory, new File(pluginDirectory, "testPluginFile")));
-            sabrePlugin.setDataAccess(Mockito.mock(IDataAccess.class));
+            sabrePlugin.setDataAccess(mockData);
             
             /*
             PowerMockito.doAnswer(new Answer<Void>() {

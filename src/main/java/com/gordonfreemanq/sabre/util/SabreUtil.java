@@ -8,6 +8,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.bukkit.Bukkit;
+import org.bukkit.Chunk;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
@@ -618,5 +619,20 @@ public class SabreUtil {
 		p.setBedSpawnLocation(spawnLocation, true);
 		p.teleport(spawnLocation);
 		p.sendMessage("You wake up in an unfamiliar place.");
+	}
+	
+
+	/**
+	 * Formats the chunk string for a location
+	 * DON'T USE getChunk() because it loads the chunk
+	 * @param l The location
+	 * @return The chunk string
+	 */
+	public static String formatChunkName(Location l) {
+		return String.format("%s,%s,%s", l.getWorld().getName(), l.getBlockX() >> 4, l.getBlockZ() >> 4);
+	}
+	
+	public static String formatChunkName(Chunk c) {
+		return String.format("%s,%s,%s", c.getWorld().getName(), c.getX(), c.getZ());
 	}
 }
