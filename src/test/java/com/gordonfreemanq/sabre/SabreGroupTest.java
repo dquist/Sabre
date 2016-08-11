@@ -1,4 +1,4 @@
-package com.gordonfreemanq.sabre.groups;
+package com.gordonfreemanq.sabre;
 import org.junit.*;
 import org.mockito.Mockito;
 
@@ -11,6 +11,9 @@ import java.util.UUID;
 
 import com.gordonfreemanq.sabre.SabreAPI;
 import com.gordonfreemanq.sabre.SabrePlayer;
+import com.gordonfreemanq.sabre.groups.Rank;
+import com.gordonfreemanq.sabre.groups.SabreGroup;
+import com.gordonfreemanq.sabre.groups.SabreMember;
 
 public class SabreGroupTest {
 	
