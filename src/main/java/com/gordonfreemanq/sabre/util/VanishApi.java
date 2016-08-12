@@ -20,6 +20,13 @@ public class VanishApi {
 	 * Creates a new VanishApi instance
 	 */
 	public VanishApi() {
+	}
+	
+	
+	/**
+	 * Initialize the class
+	 */
+	public void initialize() {
 		if(Bukkit.getPluginManager().getPlugin("VanishNoPacket") != null) {
 			VanishPlugin vp = (VanishPlugin) Bukkit.getPluginManager().getPlugin("VanishNoPacket");
 			vm = vp.getManager();

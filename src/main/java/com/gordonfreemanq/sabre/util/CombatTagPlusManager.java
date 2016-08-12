@@ -14,6 +14,10 @@ public class CombatTagPlusManager implements CombatInterface {
 	private boolean combatTagEnabled_ = false;
 
 	public CombatTagPlusManager() {
+	}
+	
+	@Override
+	public void initialize() {
 		if(Bukkit.getPluginManager().getPlugin("CombatTagPlus") != null) {
 			CombatTagPlus combat = (CombatTagPlus) Bukkit.getPluginManager().getPlugin("CombatTagPlus");
 			tagManager = combat.getTagManager();
@@ -21,6 +25,7 @@ public class CombatTagPlusManager implements CombatInterface {
 		}
 	}
 
+	@Override
 	public boolean tagPlayer(Player player) {
 		if (combatTagEnabled_ && tagManager != null) {
 			tagManager.tag(player, null);
@@ -29,6 +34,7 @@ public class CombatTagPlusManager implements CombatInterface {
 		return false;
 	}
 
+	@Override
 	@SuppressWarnings("deprecation")
 	public boolean tagPlayer(String playerName) {
 		Player player = Bukkit.getServer().getPlayer(playerName);
@@ -39,6 +45,7 @@ public class CombatTagPlusManager implements CombatInterface {
 		return false;
 	}
 
+	@Override
 	public Integer remainingSeconds(Player player) {
 		if (combatTagEnabled_
 				&& tagManager != null
@@ -52,6 +59,7 @@ public class CombatTagPlusManager implements CombatInterface {
 		return null;
 	}
 
+	@Override
 	public boolean isTagged(UUID player) {
 		return tagManager.isTagged(player);
 	}

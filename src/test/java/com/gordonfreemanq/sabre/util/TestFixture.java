@@ -191,7 +191,7 @@ public class TestFixture {
      * @return The new world
      */
     public World createMockWorld(WorldCreator creator) {
-        File worldFile = new File(sabrePlugin.getServerFolder(), creator.name());
+        File worldFile = new File(serverDirectory, creator.name());
         Util.log("Creating world-folder: " + worldFile.getAbsolutePath());
         worldFile.mkdirs();
     	

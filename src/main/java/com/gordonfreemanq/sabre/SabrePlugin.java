@@ -76,11 +76,9 @@ public class SabrePlugin extends JavaPlugin
 	private final PearlWorker pearlWorker = new PearlWorker(this);
 	private final VanishApi vanishApi = new VanishApi();
 	private final CommandList commandList = new CommandList();
-	
 	public final PermUtil perm = new PermUtil(this);
-	public final TextUtil txt = new TextUtil();	
+	public final TextUtil txt = new TextUtil();
 	
-	private File serverFolder = new File(System.getProperty("user.dir"));
 	private boolean pluginLoadError = false;
 
 	/**
@@ -88,6 +86,7 @@ public class SabrePlugin extends JavaPlugin
 	 */
 	public SabrePlugin() {
 		super();
+		instance = this;
 	}
 	
     /**
@@ -97,6 +96,7 @@ public class SabrePlugin extends JavaPlugin
     @Deprecated
     public SabrePlugin(PluginLoader loader, Server server, PluginDescriptionFile description, File dataFolder, File file) {
         super(loader, server, description, dataFolder, file);
+		instance = this;
     }
 
 
@@ -105,10 +105,6 @@ public class SabrePlugin extends JavaPlugin
 	 */
 	public static SabrePlugin instance() { 
 		return instance;
-	}
-
-	public String GetCommandAlias() {
-		return "f";
 	}
 	
 	
@@ -154,7 +150,6 @@ public class SabrePlugin extends JavaPlugin
 		log("=== ENABLE START ===");
 		long timeEnableStart = System.currentTimeMillis();
 		pluginLoadError = false;
-		instance = this;
 		
 		// Ensure base folder exists
 		this.getDataFolder().mkdirs();
@@ -163,9 +158,14 @@ public class SabrePlugin extends JavaPlugin
 		loadData();
 
 		// Register Commands
-		commandList.initialize();
+		commandList.registerCommands();
+		
+		// Other initialization
 		sabreTweaks.initialize();
+		combatTag.initialize();
+		vanishApi.initialize();
 
+		// Register events
 		getServer().getPluginManager().registerEvents(playerListener, this);
 		getServer().getPluginManager().registerEvents(playerListener, this);
 		playerListener.handleOnlinePlayers();
@@ -194,13 +194,8 @@ public class SabrePlugin extends JavaPlugin
 	 * Bukkit plugin disable function
 	 */
 	@Override
-	public void onDisable()
-	{
-		db.disconect();
-		
-		// Save the config
-		saveConfig();
-		
+	public void onDisable() {
+		db.disconect();		
 		log("=== Sabre Plugin Disabled ===");
 	}
 
@@ -239,27 +234,6 @@ public class SabrePlugin extends JavaPlugin
 		return null;
 	}
 	
-	
-    /**
-     * Gets the server's root-folder
-     * @return The server's root-folder
-     */
-    public File getServerFolder() {
-        return serverFolder;
-    }
-    
-    
-    /**
-     * Sets this server's root-folder.
-     * @param newServerFolder The new server-root
-     */
-    public void setServerFolder(File newServerFolder) {
-        if (!newServerFolder.isDirectory()) {
-            throw new IllegalArgumentException("That's not a folder!");
-        }
-
-        this.serverFolder = newServerFolder;
-    }
     
     /**
      * Gets the configuration class

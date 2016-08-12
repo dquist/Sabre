@@ -113,8 +113,6 @@ public class SabreTweaks implements Listener {
 	public SabreTweaks(SabrePlugin plugin) {
 		this.plugin = plugin;
 		this.rand = new Random(1337);
-		
-	    CACTUS_HIT = new FixedMetadataValue(SabrePlugin.instance(), true);
 	}
 	
 	
@@ -122,7 +120,8 @@ public class SabreTweaks implements Listener {
 	 * Initialize the class
 	 */
 	public void initialize() {
-
+		
+	    CACTUS_HIT = new FixedMetadataValue(SabrePlugin.instance(), true);
 		registerCustomRecipes();
 		registerTimerForPearlCheck();
 	}

@@ -17,7 +17,7 @@ public class CommandList implements Set<SabreCommand> {
 	public CommandList() {
 	}
 	
-	public void initialize() {
+	public void registerCommands() {
 		
 		// Help command
 		cmdAutoHelp = new CmdAutoHelp();

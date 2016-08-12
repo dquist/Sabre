@@ -42,7 +42,6 @@ public class MockPlugin extends SabrePlugin {
 		
         doReturn(true).when(plugin).isEnabled();
         doReturn(Util.logger).when(plugin).getLogger();
-        plugin.setServerFolder(TestFixture.serverDirectory);
         
         // Set mock database
         MockDataAccess db = PowerMockito.spy(new MockDataAccess());
