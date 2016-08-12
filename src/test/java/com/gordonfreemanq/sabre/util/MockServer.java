@@ -38,7 +38,7 @@ public abstract class MockServer implements Server {
 	
 	@Override
 	public String getName() {
-		return "TestServer";
+		return "TestBukkit";
 	}
 	
 	@Override
@@ -73,7 +73,7 @@ public abstract class MockServer implements Server {
 	
 	@Override
 	public PluginManager getPluginManager() {
-		return fixture.getPluginManager();
+		return fixture.getMockPluginManager();
 	}
 	
 	@Override
@@ -89,5 +89,15 @@ public abstract class MockServer implements Server {
 	@Override
 	public BukkitScheduler getScheduler() {
 		return mockScheduler;
+	}
+	
+	@Override
+    public String getVersion() {
+		return "0.0.0";
+	}
+
+	@Override
+    public String getBukkitVersion() {
+		return "0.0.0";
 	}
 }

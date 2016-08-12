@@ -5,7 +5,7 @@ import java.util.List;
 
 import org.bukkit.inventory.ItemStack;
 
-import com.gordonfreemanq.sabre.SabrePlugin;
+import com.gordonfreemanq.sabre.SabreConfig;
 import com.gordonfreemanq.sabre.blocks.CustomItems;
 import com.gordonfreemanq.sabre.blocks.SabreItemStack;
 import com.gordonfreemanq.sabre.customitems.MokshaRod;
@@ -41,7 +41,7 @@ public class ChargeMokshaRodRecipe implements IRecipe {
 	public ChargeMokshaRodRecipe(String name, int productionSpeed, int fuelCost) {
 		this.name = name;
 		this.productionSpeed = productionSpeed;
-		this.costFactor = SabrePlugin.instance().getSabreConfig().getJailbreakCostFactor();
+		this.costFactor = SabreConfig.instance().getJailbreakCostFactor();
 		this.configFuelCost = fuelCost;
 		this.inputs = new ItemList<SabreItemStack>();
 		this.outputs = new ItemList<SabreItemStack>();

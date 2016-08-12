@@ -40,7 +40,7 @@ public abstract class SabreCommand extends SabreBaseCommand<SabrePlugin>
 		this.bm = BlockManager.instance();
 		
 		this.gc = plugin.getGlobalChat();
-		this.config = plugin.getSabreConfig();
+		this.config = SabreConfig.instance();
 		this.curGroup = null;
 		this.pearls = PearlManager.getInstance();
 	}

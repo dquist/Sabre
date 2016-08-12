@@ -11,8 +11,8 @@ import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 
+import com.gordonfreemanq.sabre.SabreConfig;
 import com.gordonfreemanq.sabre.SabrePlayer;
-import com.gordonfreemanq.sabre.SabrePlugin;
 import com.gordonfreemanq.sabre.factory.BaseFactory;
 import com.gordonfreemanq.sabre.factory.FactoryWorker;
 import com.gordonfreemanq.sabre.factory.recipe.FarmRecipe;
@@ -71,9 +71,9 @@ public class FarmFactory extends BaseFactory {
 	 */
 	public FarmFactory(Location location, String typeName) {
 		super(location, typeName);
-		this.farmProductionTicks = SabrePlugin.instance().getSabreConfig().getFarmProductionTicks();
-		this.farmProximity = SabrePlugin.instance().getSabreConfig().getFarmProximity();
-		this.surveyPeriodMin = SabrePlugin.instance().getSabreConfig().getFarmSurveyPeriod();
+		this.farmProductionTicks = SabreConfig.instance().getFarmProductionTicks();
+		this.farmProximity = SabreConfig.instance().getFarmProximity();
+		this.surveyPeriodMin = SabreConfig.instance().getFarmSurveyPeriod();
 		this.farmTickCounter = 0;
 		this.layoutFactor = 0.0;
 		this.proximityFactor = 0.0;

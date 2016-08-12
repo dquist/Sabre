@@ -62,7 +62,7 @@ public class SabrePluginTest {
 	@Test
 	public void testPlayerJoin() throws Exception {
 		
-		MockWorld overWorld = testFixture.getWorld(plugin.getSabreConfig().getFreeWorldName());
+		MockWorld overWorld = testFixture.getWorld(SabreConfig.instance().getFreeWorldName());
         MockPlayer newPlayer = MockPlayer.create("NewPlayer");
         
         AsyncPlayerPreLoginEvent playerPreLoginEvent = new AsyncPlayerPreLoginEvent(newPlayer.name, Inet4Address.getLocalHost(), newPlayer.ID);

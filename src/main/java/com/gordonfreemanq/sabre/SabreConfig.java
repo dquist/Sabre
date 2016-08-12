@@ -31,9 +31,10 @@ public class SabreConfig {
 	/**
 	 * Creates a new SabreConfig instance
 	 */
-	public SabreConfig() {
+	public SabreConfig(FileConfiguration fc) {
 		instance = this;
-				
+
+		this.fc = fc;
 		this.DbAddress = "";
 		this.DbPort = 0;
 		this.DbName = "";
@@ -280,7 +281,6 @@ public class SabreConfig {
 			ConfigurationSection rSect = sect.createSection(r.material.toString());
 			rSect.set("strength", r.strength);
 		}
-		
 	}
 	
 	

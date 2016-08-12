@@ -18,24 +18,20 @@ import com.gordonfreemanq.sabre.blocks.SabreBlock;
 
 public class PlayerSpawner {
 	
+	private static PlayerSpawner instance;
+	
 	// Track the last spawn location for each player
 	private HashMap<SabrePlayer, PlayerSpawnResult> lastRandomSpawn;
 	
 	// Blocks that should not be spawned on
 	private HashSet<Material> nospawnBlocks;
-	
-	private static class PlayerSpawnerHolder {
-		public static PlayerSpawner INSTANCE = new PlayerSpawner();
-	}
-	
-	public static PlayerSpawner instance() {
-		return PlayerSpawnerHolder.INSTANCE;
-	}
 
 	/**
 	 * Creates a new PlayerSpawner instance
 	 */
 	public PlayerSpawner() {
+		instance = this;
+		
 		lastRandomSpawn = new HashMap<SabrePlayer, PlayerSpawnResult>();
 		
 		nospawnBlocks = new HashSet<Material>();
@@ -54,6 +50,13 @@ public class PlayerSpawner {
 		nospawnBlocks.add(Material.FENCE_GATE);
 		nospawnBlocks.add(Material.JUNGLE_FENCE_GATE);
 		nospawnBlocks.add(Material.SPRUCE_FENCE_GATE);
+	}
+	
+	/**
+	 * Gets the global instance
+	 */
+	public static PlayerSpawner instance() {
+		return instance;
 	}
 	
 	

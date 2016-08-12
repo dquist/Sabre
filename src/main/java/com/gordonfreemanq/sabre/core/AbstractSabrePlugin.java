@@ -31,14 +31,13 @@ public abstract class AbstractSabrePlugin extends JavaPlugin
 	public boolean getAutoSave() {return this.autoSave;}
 	public void setAutoSave(boolean val) {this.autoSave = val;}
 	
-	public AbstractSabrePlugin() {
-		
+	public AbstractSabrePlugin() {		
 	}
 
 	/**
-	 * For Unit Tests
+	 * Constructor for unit testing.
 	 */
-	@SuppressWarnings("deprecation")
+    @Deprecated
 	public AbstractSabrePlugin(PluginLoader loader, Server server, PluginDescriptionFile description, File dataFolder,
 			File file) {
 		super(loader, server, description, dataFolder, file);

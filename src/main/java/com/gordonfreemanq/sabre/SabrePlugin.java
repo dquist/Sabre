@@ -76,11 +76,11 @@ public class SabrePlugin extends AbstractSabrePlugin
 {
 	public final static String version = "0.1.12";
 	
+	// The global instance
 	private static SabrePlugin instance;
 
-	private final SabreConfig config;
-	private final IDataAccess db;
-	
+	private SabreConfig config;
+	private IDataAccess db;
 	private PlayerManager playerManager;
 	private GroupManager groupManager;
 	private BlockManager blockManager;
@@ -112,59 +112,22 @@ public class SabrePlugin extends AbstractSabrePlugin
 	 * Creates a new SabrePlugin instance
 	 */
 	public SabrePlugin() {
-		instance = this;
-		
-		config = new SabreConfig();
-		db = new MongoConnector(config);
-		playerManager = new PlayerManager(db);
-		groupManager = new GroupManager(playerManager, blockManager, db);
-		blockManager = new BlockManager(db);
-		pearlManager = new PearlManager(db, config);
-		globalChat = new GlobalChat(playerManager, config);
-		serverBcast = new ServerBroadcast(playerManager);
-		
-		playerListener = new PlayerListener(playerManager, globalChat);
-		blockListener = new BlockListener(playerManager, blockManager, config);
-		snitchLogger = new SnitchLogger(db, playerManager);
-		snitchListener = new SnitchListener(playerManager, blockManager, snitchLogger);
-		pearlListener = new PearlListener(pearlManager, playerManager);
-		
-		sabreTweaks = new SabreTweaks(config);
-		factoryListener = new FactoryListener(playerManager, blockManager);
-		factoryConfig = new FactoryConfig();
-		customItems = new CustomItems();
-		combatTag = new CombatTagPlusManager();
+		super();
 	}
 	
     /**
-     * This is for unit testing.
+     * Constructor for unit testing.
+     * @deprecated
      */
+    @Deprecated
     public SabrePlugin(PluginLoader loader, Server server, PluginDescriptionFile description, File dataFolder, File file) {
         super(loader, server, description, dataFolder, file);
-		
-		config = new SabreConfig();
-		db = new MongoConnector(config);
-		playerManager = new PlayerManager(db);
-		groupManager = new GroupManager(playerManager, blockManager, db);
-		blockManager = new BlockManager(db);
-		pearlManager = new PearlManager(db, config);
-		globalChat = new GlobalChat(playerManager, config);
-		serverBcast = new ServerBroadcast(playerManager);
-		
-		playerListener = new PlayerListener(playerManager, globalChat);
-		blockListener = new BlockListener(playerManager, blockManager, config);
-		snitchLogger = new SnitchLogger(db, playerManager);
-		snitchListener = new SnitchListener(playerManager, blockManager, snitchLogger);
-		pearlListener = new PearlListener(pearlManager, playerManager);
-		
-		sabreTweaks = new SabreTweaks(config);
-		factoryListener = new FactoryListener(playerManager, blockManager);
-		factoryConfig = new FactoryConfig();
-		customItems = new CustomItems();
-		combatTag = new CombatTagPlusManager();
     }
 
 
+	/**
+	 * Gets the global instance
+	 */
 	public static SabrePlugin instance() { 
 		return instance;
 	}
@@ -206,10 +169,33 @@ public class SabrePlugin extends AbstractSabrePlugin
 	 */
 	@Override
 	public void onEnable() {
+		instance = this;
+		
 		// Base plugin
 		if (!super.preEnable()) {
 			return;
 		}
+		
+		config = new SabreConfig(this.getConfig());
+		db = new MongoConnector(config);
+		playerManager = new PlayerManager(db);
+		groupManager = new GroupManager(playerManager, blockManager, db);
+		blockManager = new BlockManager(db);
+		pearlManager = new PearlManager(db, config);
+		globalChat = new GlobalChat(playerManager, config);
+		serverBcast = new ServerBroadcast(playerManager);
+		
+		playerListener = new PlayerListener(playerManager, globalChat);
+		blockListener = new BlockListener(playerManager, blockManager, config);
+		snitchLogger = new SnitchLogger(db, playerManager);
+		snitchListener = new SnitchListener(playerManager, blockManager, snitchLogger);
+		pearlListener = new PearlListener(pearlManager, playerManager);
+		
+		sabreTweaks = new SabreTweaks(config);
+		factoryListener = new FactoryListener(playerManager, blockManager);
+		factoryConfig = new FactoryConfig();
+		customItems = new CustomItems();
+		combatTag = new CombatTagPlusManager();
 		
 		// Read config
 		config.read();
@@ -399,15 +385,6 @@ public class SabrePlugin extends AbstractSabrePlugin
 	 */
 	public IChatChannel getGlobalChat() {
 		return this.globalChat;
-	}
-	
-
-	/**
-	 * Returns the global configuration instance
-	 * @return The global configuration instance
-	 */
-	public SabreConfig getSabreConfig() {
-		return this.config;
 	}
 	
 	
