@@ -24,12 +24,12 @@ public class MockWorldFactory {
     private static void registerWorld(World world) {
         createdWorlds.put(world.getName(), world);
         worldUIDS.put(world.getUID(), world);
-        new File(BukkitTestFixture.worldsDirectory, world.getName()).mkdir();
+        new File(TestFixture.worldsDirectory, world.getName()).mkdir();
     }
 
     private static World basics(String name, World.Environment env, WorldType type) {
     	MockWorld mockWorld = MockWorld.create(name, env, type);
-        mockWorld.worldFolder = new File(BukkitTestFixture.serverDirectory, mockWorld.getName());
+        mockWorld.worldFolder = new File(TestFixture.serverDirectory, mockWorld.getName());
         return mockWorld;
     }
 
@@ -68,7 +68,7 @@ public class MockWorldFactory {
 
     public static void clearWorlds() {
         for (String name : createdWorlds.keySet())
-            new File(BukkitTestFixture.worldsDirectory, name).delete();
+            new File(TestFixture.worldsDirectory, name).delete();
         createdWorlds.clear();
         worldUIDS.clear();
     }

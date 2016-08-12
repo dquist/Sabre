@@ -29,7 +29,7 @@ import org.powermock.modules.junit4.PowerMockRunner;
 
 import com.gordonfreemanq.sabre.SabrePlugin;
 import com.gordonfreemanq.sabre.util.MockPlayer;
-import com.gordonfreemanq.sabre.util.BukkitTestFixture;
+import com.gordonfreemanq.sabre.util.TestFixture;
 
 @RunWith(PowerMockRunner.class)
 @PrepareForTest({ PluginManager.class, SabrePlugin.class, Permission.class, Bukkit.class, PluginDescriptionFile.class
@@ -38,7 +38,7 @@ public class SabrePluginTest {
 	
 	private static String BAN_MESSAGE = "Test ban message";
 	
-    private static BukkitTestFixture creator;
+    private static TestFixture testFixture;
     private static SabrePlugin plugin;
     private static PlayerManager pm;
     private static PlayerListener playerListener;
@@ -46,9 +46,9 @@ public class SabrePluginTest {
 	
 	@BeforeClass
 	public static void setUp() throws Exception {
-        creator = new BukkitTestFixture();
-        assertTrue(creator.setUp());
-        plugin = creator.getPlugin();
+        testFixture = new TestFixture();
+        assertTrue(testFixture.setUp());
+        plugin = testFixture.getPlugin();
         
         pm = plugin.getPlayerManager();
         playerListener = plugin.getPlayerListener();
@@ -56,7 +56,7 @@ public class SabrePluginTest {
 	
 	@AfterClass
 	public static void tearDown() throws Exception {
-		creator.tearDown();
+		testFixture.tearDown();
 	}
 	
 	@Test
@@ -131,6 +131,14 @@ public class SabrePluginTest {
 		// Player respawn
 		PlayerRespawnEvent playerRespawnEvent = new PlayerRespawnEvent(newPlayer, new Location(overWorld, 0, 64, 0), false);
 		playerListener.onPlayerRespawn(playerRespawnEvent);
+		assertEquals(newPlayer.messages.poll(), Lang.playerYouWakeUp);
+		
+		// Player respawn bed
+		Location bedLocation = new Location(overWorld, 100, 50, 100);
+		overWorld.getBlockAt(bedLocation);
+		
+		PlayerRespawnEvent playerRespawnBedEvent = new PlayerRespawnEvent(newPlayer, new Location(overWorld, 100, 64, 100), true);
+		playerListener.onPlayerRespawn(playerRespawnBedEvent);
 		assertEquals(newPlayer.messages.poll(), Lang.playerYouWakeUp);
 		
 		// Player quit

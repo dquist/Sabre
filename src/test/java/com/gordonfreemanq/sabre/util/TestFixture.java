@@ -39,7 +39,7 @@ import static org.mockito.Mockito.anyBoolean;
 import static org.mockito.Mockito.anyLong;
 import static org.mockito.Mockito.*;
 
-public class BukkitTestFixture {
+public class TestFixture {
     private SabrePlugin sabrePlugin;
     private Server mockServer;
     private CommandSender commandSender;
@@ -54,6 +54,7 @@ public class BukkitTestFixture {
             pluginDirectory.mkdirs();
             Assert.assertTrue(pluginDirectory.exists());
 
+            // Don't mock toString() and equals()
             MockGateway.MOCK_STANDARD_METHODS = false;
 
             PluginLoader pluginLoader = Mockito.mock(PluginLoader.class);
@@ -78,7 +79,7 @@ public class BukkitTestFixture {
             sabrePlugin = PowerMockito.spy(new SabrePlugin(pluginLoader, mockServer, pdf, pluginDirectory, new File(pluginDirectory, "testPluginFile")));
             sabrePlugin.setDataAccess(mockData);
 
-            // Let's let all MV files go to bin/test
+            // Put all files go to bin/test
             doReturn(pluginDirectory).when(sabrePlugin).getDataFolder();
 
             doReturn(true).when(sabrePlugin).isEnabled();
@@ -94,7 +95,7 @@ public class BukkitTestFixture {
             when(mockPluginManager.getPlugin("Sabre")).thenReturn(sabrePlugin);
             when(mockPluginManager.getPermission(anyString())).thenReturn(null);
 
-            // Make some fake folders to fool the fake MV into thinking these worlds exist
+            // Make some fake folders to fool the fake plugin into thinking these worlds exist
             File worldNormalFile = new File(sabrePlugin.getServerFolder(), "world");
             Util.log("Creating world-folder: " + worldNormalFile.getAbsolutePath());
             worldNormalFile.mkdirs();
