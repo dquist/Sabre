@@ -18,7 +18,6 @@ import com.gordonfreemanq.sabre.SabrePlugin;
 import com.gordonfreemanq.sabre.customitems.SecureSign;
 import com.gordonfreemanq.sabre.factory.BaseFactory;
 import com.gordonfreemanq.sabre.factory.FactoryCollection;
-import com.gordonfreemanq.sabre.factory.FactoryWorker;
 import com.gordonfreemanq.sabre.groups.SabreGroup;
 import com.gordonfreemanq.sabre.groups.SabreMember;
 import com.gordonfreemanq.sabre.snitch.Snitch;
@@ -120,7 +119,7 @@ public class BlockManager {
 			if (b instanceof BaseFactory) {
 				BaseFactory bf = (BaseFactory)b;
 				if (bf.runUnloaded()) {
-					FactoryWorker.getInstance().addRunning(bf);
+					plugin.getFactoryWorker().addRunning(bf);
 				}
 			}
 		}
@@ -161,7 +160,7 @@ public class BlockManager {
 	 * Creates a new block instance from an item
 	 * @return The new block instance
 	 */
-	public static SabreBlock createBlockFromItem(ItemStack is, Location l) {
+	public SabreBlock createBlockFromItem(ItemStack is, Location l) {
 		
 		SabreBlock b = null;
 		String displayName = "";
@@ -203,14 +202,14 @@ public class BlockManager {
 	 * @param name The type name
 	 * @return The new instance
 	 */
-	public static SabreBlock blockFactory(Location l, String typeName) {
+	public SabreBlock blockFactory(Location l, String typeName) {
 		
 		
 		if (typeName.equalsIgnoreCase("block")) {
 			return new SabreBlock(l, typeName);
 		}
 		
-		Class<? extends SabreBlock> blockClass = CustomItems.getInstance().getItemClass(typeName);
+		Class<? extends SabreBlock> blockClass = plugin.getCustomItems().getItemClass(typeName);
 		
 		// Check if the class exists
 		if (blockClass == null) {

@@ -25,7 +25,6 @@ import com.gordonfreemanq.sabre.Lang;
 import com.gordonfreemanq.sabre.SabrePlayer;
 import com.gordonfreemanq.sabre.SabrePlugin;
 import com.gordonfreemanq.sabre.blocks.BlockManager;
-import com.gordonfreemanq.sabre.blocks.CustomItems;
 import com.gordonfreemanq.sabre.blocks.SabreBlock;
 import com.gordonfreemanq.sabre.blocks.SabreItemStack;
 import com.gordonfreemanq.sabre.customitems.SpecialBlock;
@@ -63,7 +62,7 @@ public class BaseFactory extends SpecialBlock {
 		super(location, typeName);
 		
 		// Get the recipes for this factory
-		this.properties = FactoryConfig.instance().getFactoryProperties(this.typeName);
+		this.properties = SabrePlugin.instance().getFactoryConfig().getFactoryProperties(this.typeName);
 		
 		List<IRecipe> recipes = properties.getRecipes();
 		
@@ -84,7 +83,7 @@ public class BaseFactory extends SpecialBlock {
 		FactoryFuel lavaFuel = new FactoryFuel(new SabreItemStack(Material.LAVA_BUCKET, "Lava Bucket", 1), 24);
 		lavaFuel.addReturnItem(new SabreItemStack(Material.BUCKET, "Bucket", 1));
 		fuels.add(lavaFuel);
-		fuels.add(new FactoryFuel(CustomItems.getInstance().getByName("Plasma"), 64));
+		fuels.add(new FactoryFuel(SabrePlugin.instance().getCustomItems().getByName("Plasma"), 64));
 		
 		setFurnaceState(false);
 		energyTimer = 0;
@@ -477,7 +476,7 @@ public class BaseFactory extends SpecialBlock {
 		running = true;
 		onPowerOn();
 		fuelCounter = 0;
-		FactoryWorker.getInstance().addRunning(this);
+		SabrePlugin.instance().getFactoryWorker().addRunning(this);
 		setActivationLever(true);
 		setFurnaceState(true);
 	}
@@ -491,7 +490,7 @@ public class BaseFactory extends SpecialBlock {
 		running = false;
 		fuelCounter = 0;
 		setActivationLever(false);
-		FactoryWorker.getInstance().removeRunning(this);
+		SabrePlugin.instance().getFactoryWorker().removeRunning(this);
 		setFurnaceState(false);
 		onPowerOff();
 		
@@ -743,7 +742,7 @@ public class BaseFactory extends SpecialBlock {
 		// This is the output item
 		SabreItemStack item = recipe.getOutputs().get(0);
 		
-		SabreBlock upgradeBlock = BlockManager.createBlockFromItem(item, this.getLocation());
+		SabreBlock upgradeBlock = SabrePlugin.instance().getBlockManager().createBlockFromItem(item, this.getLocation());
 		
 		if(upgradeBlock == null) {
 			runner.msg(Lang.factoryError);

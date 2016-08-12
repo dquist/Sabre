@@ -19,7 +19,6 @@ import org.bukkit.inventory.InventoryHolder;
 import com.gordonfreemanq.sabre.SabreConfig;
 import com.gordonfreemanq.sabre.SabrePlayer;
 import com.gordonfreemanq.sabre.SabrePlugin;
-import com.gordonfreemanq.sabre.blocks.BlockManager;
 import com.gordonfreemanq.sabre.blocks.Reinforcement;
 import com.gordonfreemanq.sabre.blocks.SabreBlock;
 import com.gordonfreemanq.sabre.groups.SabreMember;
@@ -53,7 +52,7 @@ public class MongoConnector implements IDataAccess {
 	private static final String COL_SNITCHES = "snitch_log";
 	private static final String COL_PEARLS = "pearls";
 
-	private final SabreConfig config;
+	private final SabrePlugin plugin;
 
 	private boolean connected;
 	private MongoClient mongoClient;
@@ -73,8 +72,8 @@ public class MongoConnector implements IDataAccess {
 	 * Creates a new MongoConnector instance
 	 * @param config The configuration instance
 	 */
-	public MongoConnector(SabreConfig config) {
-		this.config = config;
+	public MongoConnector(SabrePlugin plugin) {
+		this.plugin = plugin;
 		this.connected = false;
 	}
 
@@ -84,6 +83,7 @@ public class MongoConnector implements IDataAccess {
 	 */
 	@Override
 	public void connect() throws Exception {
+		SabreConfig config = plugin.config();
 		if (config.DbUser.isEmpty()) {
 			mongoClient = new MongoClient(new ServerAddress(config.DbAddress, config.DbPort));
 		} else {
@@ -693,7 +693,7 @@ public class MongoConnector implements IDataAccess {
 		Location l = parseBlockLocation(chunkStr, x, y, z);
 		
 		// Create the block instance from the factory
-		b = BlockManager.blockFactory(l, type);
+		b = plugin.getBlockManager().blockFactory(l, type);
 		b.setDisplayName(name);
 		
 		if (o.containsField("reinforcement")){
@@ -702,7 +702,7 @@ public class MongoConnector implements IDataAccess {
 			Material mat = Material.matchMaterial(rein.getString("material", ""));
 			int strength = rein.getInt("strength", 0);
 			long createdOn = rein.getLong("created_on", 0);
-			int startStrength = config.getReinforcementStrength(mat, (short)0);
+			int startStrength = plugin.config().getReinforcementStrength(mat, (short)0);
 			boolean isPublic = rein.getBoolean("public", false);
 			boolean isInsecure = rein.getBoolean("insecure", false);
 			boolean isAdmin = rein.getBoolean("admin", false);

@@ -14,7 +14,6 @@ import org.bukkit.inventory.ItemStack;
 import com.gordonfreemanq.sabre.SabrePlayer;
 import com.gordonfreemanq.sabre.SabrePlugin;
 import com.gordonfreemanq.sabre.factory.BaseFactory;
-import com.gordonfreemanq.sabre.factory.FactoryWorker;
 import com.gordonfreemanq.sabre.factory.recipe.FarmRecipe;
 import com.mongodb.BasicDBList;
 import com.mongodb.BasicDBObject;
@@ -295,7 +294,7 @@ public class FarmFactory extends BaseFactory {
 
 		// Iterate through all the other running farms and find out if any other
 		// farm factories are within the exclusion zone
-		for (BaseFactory f : FactoryWorker.getInstance().getRunningFactories()) {
+		for (BaseFactory f : SabrePlugin.instance().getFactoryWorker().getRunningFactories()) {
 			if (!(f instanceof FarmFactory)) {
 				continue;
 			}

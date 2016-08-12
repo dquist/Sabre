@@ -7,7 +7,7 @@ import org.bukkit.Bukkit;
  */
 public class StatsTracker implements Runnable {
 	
-	private final PlayerManager pm;
+	private final SabrePlugin plugin;
 	private long lastUpdate;
 	private boolean enabled;
 	
@@ -34,8 +34,8 @@ public class StatsTracker implements Runnable {
 	 * Creates a new StatsTracker instance
 	 * @param pm
 	 */
-	public StatsTracker(PlayerManager pm) {
-		this.pm = pm;
+	public StatsTracker(SabrePlugin plugin) {
+		this.plugin = plugin;
 		lastUpdate = System.currentTimeMillis();
 	}
 
@@ -46,6 +46,7 @@ public class StatsTracker implements Runnable {
 			return;
 		}
 		
+		PlayerManager pm = plugin.getPlayerManager();
 		long timeToAdd = System.currentTimeMillis() - lastUpdate;
 		
 		for (SabrePlayer p : pm.getOnlinePlayers()) {

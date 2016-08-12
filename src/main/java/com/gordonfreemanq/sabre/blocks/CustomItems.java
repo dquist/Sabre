@@ -13,16 +13,14 @@ import org.bukkit.configuration.file.YamlConfiguration;
 import com.gordonfreemanq.sabre.SabrePlugin;
 import com.gordonfreemanq.sabre.customitems.FarmProspector;
 import com.gordonfreemanq.sabre.customitems.MokshaRod;
-import com.gordonfreemanq.sabre.util.TextUtil;
 
 /**
  * Holds the custom item types
  * @author GFQ
  */
 public class CustomItems {
-
-	// The global instance
-	private static CustomItems instance;
+	
+	private final SabrePlugin plugin;
 	
 	private File folder = null;
 	private HashMap<String, SabreItemStack> customItems;
@@ -31,16 +29,8 @@ public class CustomItems {
 	/**
 	 * Creates a new CustomItems instance
 	 */
-	public CustomItems() {
-		instance = this;
-	}
-	
-	
-	/**
-	 * Gets the global instance
-	 */
-	public static CustomItems getInstance() {
-		return instance;
+	public CustomItems(SabrePlugin plugin) {
+		this.plugin = plugin;
 	}
 
 	
@@ -49,7 +39,7 @@ public class CustomItems {
 	 */
 	public void reload() {
 	    if (folder == null) {
-	    	folder = new File(SabrePlugin.instance().getDataFolder(), "custom_items");
+	    	folder = new File(plugin.getDataFolder(), "custom_items");
 	    }
 	    
 		this.customItems = new HashMap<String, SabreItemStack>();
@@ -88,10 +78,10 @@ public class CustomItems {
 		    	
 		    	List<String> loreStrings = config.getStringList("lore");
 		    	List<String> lore = new ArrayList<String>();
-		    	lore.add(TextUtil.instance().parse("<l>%s", itemName));
+		    	lore.add(plugin.txt.parse("<l>%s", itemName));
 		    	
 		    	for (String s : loreStrings) {
-		    		lore.add(TextUtil.instance().parse(s));
+		    		lore.add(plugin.txt.parse(s));
 		    	}
 		    	
 		    	SabreItemStack item = new SabreItemStack(material, itemName, amount, durability, lore);

@@ -32,3 +32,4 @@ config
 snitch
 snitches
 teleports
+logo

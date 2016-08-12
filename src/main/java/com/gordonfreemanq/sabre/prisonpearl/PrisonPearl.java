@@ -29,7 +29,6 @@ import com.gordonfreemanq.sabre.SabrePlayer;
 import com.gordonfreemanq.sabre.SabrePlugin;
 import com.gordonfreemanq.sabre.blocks.SabreItemStack;
 import com.gordonfreemanq.sabre.cmd.pearl.CmdPearl;
-import com.gordonfreemanq.sabre.util.TextUtil;
 
 
 /**
@@ -543,7 +542,7 @@ public class PrisonPearl {
 
 
 	protected static String parse(String str) {
-		return TextUtil.instance().parse(str);
+		return SabrePlugin.instance().txt.parse(str);
 	}
 
 	protected static String parse(String str, Object... args) {

@@ -3,6 +3,7 @@ package com.gordonfreemanq.sabre.factory.farm;
 import org.bukkit.Material;
 import org.bukkit.block.Biome;
 
+import com.gordonfreemanq.sabre.SabrePlugin;
 import com.gordonfreemanq.sabre.blocks.CustomItems;
 import com.gordonfreemanq.sabre.blocks.SabreItemStack;
 
@@ -23,24 +24,26 @@ public enum CropType {
 	 * @return The crop item stack
 	 */
 	public SabreItemStack createCropItem() {
+		
+		CustomItems customItems = SabrePlugin.instance().getCustomItems();
 		switch(this)
 		{
 		case WHEAT:
-			return CustomItems.getInstance().getByName("Bushel of Wheat");
+			return customItems.getByName("Bushel of Wheat");
 		case POTATO:
-			return CustomItems.getInstance().getByName("Bushel of Potatoes");
+			return customItems.getByName("Bushel of Potatoes");
 		case CARROT:
-			return CustomItems.getInstance().getByName("Bushel of Carrots");
+			return customItems.getByName("Bushel of Carrots");
 		case CACTUS:
-			return CustomItems.getInstance().getByName("Bushel of Cactus");
+			return customItems.getByName("Bushel of Cactus");
 		case COCOA:
-			return CustomItems.getInstance().getByName("Bushel of Cocoa");
+			return customItems.getByName("Bushel of Cocoa");
 		case MELON:
-			return CustomItems.getInstance().getByName("Bushel of Melons");
+			return customItems.getByName("Bushel of Melons");
 		case PUMPKIN:
-			return CustomItems.getInstance().getByName("Bushel of Pumpkins");
+			return customItems.getByName("Bushel of Pumpkins");
 		case SUGAR_CANE:
-			return CustomItems.getInstance().getByName("Bushel of Sugar Cane");
+			return customItems.getByName("Bushel of Sugar Cane");
 		default:
 			return null;
 		}

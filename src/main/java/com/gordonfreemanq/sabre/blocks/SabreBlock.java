@@ -211,7 +211,7 @@ public class SabreBlock {
 	 * @return The new item stack
 	 */
 	public ItemStack createItemStack(Material m, int amount) {
-		return CustomItems.getInstance().getByName(this.getTypeName());
+		return SabrePlugin.instance().getCustomItems().getByName(this.getTypeName());
 	}
 	
 	

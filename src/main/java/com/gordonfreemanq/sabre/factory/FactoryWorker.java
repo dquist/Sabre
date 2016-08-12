@@ -18,12 +18,6 @@ public class FactoryWorker implements Runnable {
 	private final HashMap<Location, BaseFactory> runningFactories;
 	private boolean enabled;
 	
-	private static FactoryWorker instance;
-	
-	public static FactoryWorker getInstance() {
-		return instance;
-	}
-	
 	private Set<BaseFactory> pendingRemove;
 	
 	/**
@@ -31,10 +25,8 @@ public class FactoryWorker implements Runnable {
 	 */
 	public FactoryWorker() {
 		runningFactories = new HashMap<Location, BaseFactory>();
+		pendingRemove = new HashSet<BaseFactory>();
 		enabled = false;
-		this.pendingRemove = new HashSet<BaseFactory>();
-		
-		instance = this;
 	}
 	
 	

@@ -12,18 +12,27 @@ import com.gordonfreemanq.sabre.core.INamed;
 
 public class TextUtil
 {	
-	public static class TextUtilHolder {
-		public static final TextUtil INSTANCE = new TextUtil();
-	}
-	
-	public static TextUtil instance() {
-		return TextUtilHolder.INSTANCE;
-	}
-	
 	public Map<String, String> tags;
 	
 	public TextUtil() {
 		this.tags = new HashMap<String, String>();
+		
+		createTags();
+	}
+	
+	private void createTags()
+	{
+		tags.put("l", TextUtil.parseColor("<green>"));		// logo
+		tags.put("a", TextUtil.parseColor("<gold>"));		// art
+		tags.put("n", TextUtil.parseColor("<silver>"));		// notice
+		tags.put("i", TextUtil.parseColor("<yellow>"));		// info
+		tags.put("g", TextUtil.parseColor("<lime>"));		// good
+		tags.put("b", TextUtil.parseColor("<rose>"));		// bad
+		tags.put("h", TextUtil.parseColor("<pink>"));		// highlight
+		tags.put("c", TextUtil.parseColor("<aqua>"));		// parameter
+		tags.put("p", TextUtil.parseColor("<teal>"));		// parameter
+		tags.put("w", TextUtil.parseColor("<white>"));		// parameter
+		tags.put("lp", TextUtil.parseColor("<lpurple>"));
 	}
 	
 	// -------------------------------------------- //

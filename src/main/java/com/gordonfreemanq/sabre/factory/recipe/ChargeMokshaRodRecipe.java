@@ -6,7 +6,6 @@ import java.util.List;
 import org.bukkit.inventory.ItemStack;
 
 import com.gordonfreemanq.sabre.SabrePlugin;
-import com.gordonfreemanq.sabre.blocks.CustomItems;
 import com.gordonfreemanq.sabre.blocks.SabreItemStack;
 import com.gordonfreemanq.sabre.customitems.MokshaRod;
 import com.gordonfreemanq.sabre.factory.BaseFactory;
@@ -114,7 +113,7 @@ public class ChargeMokshaRodRecipe implements IRecipe {
 		costFactor = SabrePlugin.instance().config().getJailbreakCostFactor();
 		
 		// The default recipe requires at least the factor amount of cuendillar
-		SabreItemStack inputCuendillar = CustomItems.getInstance().getByName("Cuendillar");
+		SabreItemStack inputCuendillar = SabrePlugin.instance().getCustomItems().getByName("Cuendillar");
 		inputCuendillar.setAmount(costFactor);
 		
 		// Change the recipe to use however much cuendillar is available in the inventory

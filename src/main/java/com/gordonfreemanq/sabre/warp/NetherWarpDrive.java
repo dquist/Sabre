@@ -11,7 +11,6 @@ import com.gordonfreemanq.sabre.SabreConfig;
 import com.gordonfreemanq.sabre.SabrePlayer;
 import com.gordonfreemanq.sabre.SabrePlugin;
 import com.gordonfreemanq.sabre.blocks.BlockManager;
-import com.gordonfreemanq.sabre.blocks.CustomItems;
 import com.gordonfreemanq.sabre.blocks.SabreItemStack;
 import com.gordonfreemanq.sabre.util.SabreUtil;
 
@@ -71,7 +70,7 @@ public class NetherWarpDrive extends AbstractWarpDrive {
 			}
 		}
 		
-		SabreItemStack is = CustomItems.getInstance().getByName(TeleportPad.blockName);
+		SabreItemStack is = SabrePlugin.instance().getCustomItems().getByName(TeleportPad.blockName);
 		
 		// Check if there is a valid pad on the other end
 		if (destPadLocation != null) {
@@ -95,7 +94,7 @@ public class NetherWarpDrive extends AbstractWarpDrive {
 			b.setData(is.getData().getData());
 			destIsValid = true;
 			
-			destPad = (TeleportPad)BlockManager.createBlockFromItem(is, destPadLocation);
+			destPad = (TeleportPad)SabrePlugin.instance().getBlockManager().createBlockFromItem(is, destPadLocation);
 			bm.addBlock(destPad);
 		}
 

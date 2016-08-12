@@ -45,7 +45,7 @@ public class PlayerListener implements Listener {
 	public void onPlayerPreLogin(AsyncPlayerPreLoginEvent e)
 	{
 		// Don't let players join if things didn't start up correctly
-		if (!plugin.getPluginLoaded()) {
+		if (!plugin.getSuccessfulLoad()) {
 			e.setKickMessage(Lang.serverNotLoaded);
 			e.setLoginResult(Result.KICK_OTHER);
 			return;
@@ -153,7 +153,7 @@ public class PlayerListener implements Listener {
 	 */
 	public void handleOnlinePlayers() {
 		for (Player p : Bukkit.getOnlinePlayers()) {
-			if (plugin.getPluginLoaded()) {
+			if (plugin.getSuccessfulLoad()) {
 				handlePlayerJoin(p);
 			} else {
 				p.kickPlayer(Lang.serverNotLoaded);

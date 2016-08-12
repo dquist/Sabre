@@ -1,7 +1,6 @@
 package com.gordonfreemanq.sabre.cmd;
 
 import com.gordonfreemanq.sabre.Lang;
-import com.gordonfreemanq.sabre.blocks.CustomItems;
 import com.gordonfreemanq.sabre.blocks.SabreItemStack;
 import com.gordonfreemanq.sabre.core.CommandVisibility;
 import com.gordonfreemanq.sabre.core.Permission;
@@ -34,7 +33,7 @@ public class CmdAdminGive extends SabreCommand {
 		
 		String itemName = sb.toString().trim();
 		
-		SabreItemStack item = CustomItems.getInstance().getByName(itemName);
+		SabreItemStack item = plugin.getCustomItems().getByName(itemName);
 		if (item == null) {
 			msg(Lang.adminInvalidItem);
 			return;

@@ -17,7 +17,6 @@ import com.gordonfreemanq.sabre.blocks.BuildState;
 import com.gordonfreemanq.sabre.blocks.Reinforcement;
 import com.gordonfreemanq.sabre.blocks.SabreBlock;
 import com.gordonfreemanq.sabre.blocks.SignCollection;
-import com.gordonfreemanq.sabre.chat.GlobalChat;
 import com.gordonfreemanq.sabre.customitems.SecureSign;
 
 public class GroupManager {
@@ -287,7 +286,7 @@ public class GroupManager {
 	private void checkRemoveChat(SabreGroup g, SabrePlayer p) {
 		// Remove from group chat
 		if(p.getChatChannel().equals(g)) {
-			p.setChatChannel(GlobalChat.getInstance());
+			p.setChatChannel(plugin.getGlobalChat());
 			p.msg(Lang.chatMovedGlobal);
 		}
 	}

@@ -3,7 +3,6 @@ package com.gordonfreemanq.sabre;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashSet;
 import java.util.List;
 import java.util.logging.Level;
 
@@ -11,6 +10,8 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.PluginLoader;
+import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.Bukkit;
 import org.bukkit.Server;
 
 import com.comphenix.protocol.ProtocolLibrary;
@@ -21,40 +22,9 @@ import com.gordonfreemanq.sabre.blocks.SignHandler;
 import com.gordonfreemanq.sabre.chat.GlobalChat;
 import com.gordonfreemanq.sabre.chat.IChatChannel;
 import com.gordonfreemanq.sabre.chat.ServerBroadcast;
-import com.gordonfreemanq.sabre.cmd.CmdAdminBan;
-import com.gordonfreemanq.sabre.cmd.CmdAdminFly;
-import com.gordonfreemanq.sabre.cmd.CmdAdminGamemode;
-import com.gordonfreemanq.sabre.cmd.CmdAdminGive;
-import com.gordonfreemanq.sabre.cmd.CmdAdminMore;
-import com.gordonfreemanq.sabre.cmd.CmdAdminRespawn;
-import com.gordonfreemanq.sabre.cmd.CmdAdminRoot;
-import com.gordonfreemanq.sabre.cmd.CmdAdminUnban;
-import com.gordonfreemanq.sabre.cmd.CmdAdminVanish;
 import com.gordonfreemanq.sabre.cmd.CmdAutoHelp;
-import com.gordonfreemanq.sabre.cmd.CmdBuildAcid;
-import com.gordonfreemanq.sabre.cmd.CmdBuildBypass;
-import com.gordonfreemanq.sabre.cmd.CmdBuildFortify;
-import com.gordonfreemanq.sabre.cmd.CmdBuildInfo;
-import com.gordonfreemanq.sabre.cmd.CmdBuildOff;
-import com.gordonfreemanq.sabre.cmd.CmdBuildReinforce;
-import com.gordonfreemanq.sabre.cmd.CmdChat;
-import com.gordonfreemanq.sabre.cmd.CmdChatIgnore;
-import com.gordonfreemanq.sabre.cmd.CmdChatMe;
-import com.gordonfreemanq.sabre.cmd.CmdChatMsg;
-import com.gordonfreemanq.sabre.cmd.CmdChatReply;
-import com.gordonfreemanq.sabre.cmd.CmdChatSay;
-import com.gordonfreemanq.sabre.cmd.CmdChatServer;
-import com.gordonfreemanq.sabre.cmd.CmdHelp;
-import com.gordonfreemanq.sabre.cmd.CmdRoot;
-import com.gordonfreemanq.sabre.cmd.CmdSpeed;
-import com.gordonfreemanq.sabre.cmd.CmdTeleport;
-import com.gordonfreemanq.sabre.cmd.CmdTeleportHere;
-import com.gordonfreemanq.sabre.cmd.CmdTest;
+import com.gordonfreemanq.sabre.cmd.CommandList;
 import com.gordonfreemanq.sabre.cmd.SabreCommand;
-import com.gordonfreemanq.sabre.cmd.factory.CmdFactory;
-import com.gordonfreemanq.sabre.cmd.pearl.CmdPearl;
-import com.gordonfreemanq.sabre.cmd.snitch.CmdSnitch;
-import com.gordonfreemanq.sabre.core.AbstractSabrePlugin;
 import com.gordonfreemanq.sabre.data.IDataAccess;
 import com.gordonfreemanq.sabre.data.MongoConnector;
 import com.gordonfreemanq.sabre.factory.FactoryConfig;
@@ -68,19 +38,21 @@ import com.gordonfreemanq.sabre.snitch.SnitchListener;
 import com.gordonfreemanq.sabre.snitch.SnitchLogger;
 import com.gordonfreemanq.sabre.util.CombatInterface;
 import com.gordonfreemanq.sabre.util.CombatTagPlusManager;
+import com.gordonfreemanq.sabre.util.PermUtil;
 import com.gordonfreemanq.sabre.util.PlayerSpawner;
+import com.gordonfreemanq.sabre.util.TextUtil;
 import com.gordonfreemanq.sabre.util.VanishApi;
 
 
-public class SabrePlugin extends AbstractSabrePlugin
+public class SabrePlugin extends JavaPlugin
 {
-	public final static String version = "0.1.12";
+	public final static String version = "0.2.0";
 	
 	// The global instance
 	private static SabrePlugin instance;
 
 	private final SabreConfig config = new SabreConfig(this.getConfig());
-	private final IDataAccess db = new MongoConnector(config);
+	private final IDataAccess db = new MongoConnector(this);
 	private final PlayerManager playerManager = new PlayerManager(this);
 	private final GroupManager groupManager = new GroupManager(this);
 	private final BlockManager blockManager = new BlockManager(this);
@@ -91,29 +63,25 @@ public class SabrePlugin extends AbstractSabrePlugin
 	private final SnitchListener snitchListener = new SnitchListener(this);
 	private final PearlListener pearlListener = new PearlListener(this);
 	private final PlayerSpawner playerSpawner = new PlayerSpawner(this);
+	private final GlobalChat globalChat = new GlobalChat(this);
+	private final ServerBroadcast serverBcast = new ServerBroadcast(this);
+	private final SabreTweaks sabreTweaks = new SabreTweaks(this);
+	private final FactoryListener factoryListener = new FactoryListener(this);
+	private final FactoryConfig factoryConfig = new FactoryConfig(this);
+	private final CustomItems customItems = new CustomItems(this);
+	private final CombatInterface combatTag = new CombatTagPlusManager();
+	private final StatsTracker statsTracker = new StatsTracker(this);
+	private final SignHandler signHandler = new SignHandler(this);
+	private final FactoryWorker factoryWorker = new FactoryWorker();
+	private final PearlWorker pearlWorker = new PearlWorker(this);
+	private final VanishApi vanishApi = new VanishApi();
+	private final CommandList commandList = new CommandList();
 	
-	
-	private HashSet<SabreCommand> baseCommands;
-	private CmdAutoHelp cmdAutoHelp;
-	private GlobalChat globalChat;
-	private ServerBroadcast serverBcast;
-	
-	
-	
-	
-	private SignHandler signHandler;
-	private StatsTracker statsTracker;
-	private SabreTweaks sabreTweaks;
-	private FactoryListener factoryListener;
-	private CustomItems customItems;
-	private FactoryConfig factoryConfig;
-	private FactoryWorker factoryWorker;
-	private PearlWorker pearlWorker;
-	private CombatInterface combatTag;
-	private VanishApi vanishApi;
+	public final PermUtil perm = new PermUtil(this);
+	public final TextUtil txt = new TextUtil();	
 	
 	private File serverFolder = new File(System.getProperty("user.dir"));
-	private boolean pluginLoaded = false;
+	private boolean pluginLoadError = false;
 
 	/**
 	 * Creates a new SabrePlugin instance
@@ -151,22 +119,29 @@ public class SabrePlugin extends AbstractSabrePlugin
 	}
 
 	/**
-	 * Connects to the database and loads the data
+	 * Reads configuration and loads data
 	 */
 	private void loadData() {
 		
 		try {
+			config.read();
 			customItems.reload();
 			factoryConfig.reload();
 			
-			db.connect();
+			try {
+				db.connect();
+			} catch (Exception ex) {
+				log(Level.SEVERE, "* * * Failed to connect to MongoDB database! * * * ");
+				pluginLoadError = true;
+			}
+			
 			playerManager.load();
 			groupManager.load();
 			pearlManager.load();
 			
-			
 		} catch(Exception ex) {
-			throw new RuntimeException(ex);
+			pluginLoadError = true;
+			log(Level.SEVERE, ex.getMessage());
 		}
 	}
 
@@ -176,75 +151,22 @@ public class SabrePlugin extends AbstractSabrePlugin
 	 */
 	@Override
 	public void onEnable() {
+		log("=== ENABLE START ===");
+		long timeEnableStart = System.currentTimeMillis();
+		pluginLoadError = false;
 		instance = this;
 		
-		// Base plugin
-		if (!super.preEnable()) {
-			return;
-		}
-
-		globalChat = new GlobalChat(playerManager, config);
-		serverBcast = new ServerBroadcast(playerManager);
-		sabreTweaks = new SabreTweaks(config);
-		factoryListener = new FactoryListener(playerManager, blockManager);
-		factoryConfig = new FactoryConfig();
-		customItems = new CustomItems();
-		combatTag = new CombatTagPlusManager();
+		// Ensure base folder exists
+		this.getDataFolder().mkdirs();
 		
-		// Read config
-		config.read();
-		
-		getServer().getPluginManager().registerEvents(playerListener, this);
-		
-		// Try to connect to the database and load the data
-		try {
-			this.loadData();
-			pluginLoaded = true;
-		} catch(Exception ex) {
-			log(Level.SEVERE, "Failed to connect to MongoDB database!");
-			throw ex;
-		}
+		// Read config and load data
+		loadData();
 
 		// Register Commands
-		cmdAutoHelp = new CmdAutoHelp();
-		baseCommands = new HashSet<SabreCommand>();
-		baseCommands.add(new CmdRoot());
-		baseCommands.add(new CmdPearl());
-		baseCommands.add(new CmdFactory());
-		baseCommands.add(new CmdSnitch());
-		baseCommands.add(new CmdChat());
-		baseCommands.add(new CmdChatMe());
-		baseCommands.add(new CmdChatMsg());
-		baseCommands.add(new CmdChatReply());
-		baseCommands.add(new CmdChatServer());
-		baseCommands.add(new CmdChatSay());
-		baseCommands.add(new CmdChatIgnore());
-		baseCommands.add(new CmdBuildBypass());
-		baseCommands.add(new CmdBuildFortify());
-		baseCommands.add(new CmdBuildInfo());
-		baseCommands.add(new CmdBuildReinforce());
-		baseCommands.add(new CmdBuildOff());
-		baseCommands.add(new CmdBuildAcid());
-		baseCommands.add(new CmdHelp());
-		
-		// Admin commands
-		baseCommands.add(new CmdAdminRoot());
-		baseCommands.add(new CmdSpeed());
-		baseCommands.add(new CmdTest());
-		baseCommands.add(new CmdTeleport());
-		baseCommands.add(new CmdTeleportHere());
-		baseCommands.add(new CmdAdminFly());
-		baseCommands.add(new CmdAdminVanish());
-		baseCommands.add(new CmdAdminGamemode());
-		baseCommands.add(new CmdAdminRespawn());
-		baseCommands.add(new CmdAdminBan());
-		baseCommands.add(new CmdAdminUnban());
-		baseCommands.add(new CmdAdminMore());
-		baseCommands.add(new CmdAdminGive());
-		
-		factoryWorker = new FactoryWorker();
-		factoryWorker.start();
+		commandList.initialize();
+		sabreTweaks.initialize();
 
+		getServer().getPluginManager().registerEvents(playerListener, this);
 		getServer().getPluginManager().registerEvents(playerListener, this);
 		playerListener.handleOnlinePlayers();
 		blockListener.handleLoadedChunks();
@@ -253,22 +175,18 @@ public class SabrePlugin extends AbstractSabrePlugin
 		getServer().getPluginManager().registerEvents(pearlListener, this);
 		getServer().getPluginManager().registerEvents(sabreTweaks, this);
 		getServer().getPluginManager().registerEvents(factoryListener, this);
-		signHandler = new SignHandler(playerManager, blockManager);
 		//ProtocolLibrary.getProtocolManager().addPacketListener(signHandler); // TODO ProtocolLibrary
-		statsTracker = new StatsTracker(playerManager);
-		statsTracker.start();
 		
-		// Load the running factories
+		// Load running factories - perform this AFTER blockListener.handleLoadedChunks is called
 		blockManager.loadRunningFactories();
 		
-		this.sabreTweaks.registerTimerForPearlCheck();
-		
-		pearlWorker = new PearlWorker(pearlManager, config);
+		// Start the various tasks
+		factoryWorker.start();
 		pearlWorker.start();
+		statsTracker.start();
 
-		postEnable();
-		this.loadSuccessful = true;
-		this.vanishApi = new VanishApi();
+		// Startup complete!
+		log("=== ENABLE DONE (Took "+(System.currentTimeMillis() - timeEnableStart)+"ms) ===");
 	}
 
 
@@ -278,20 +196,24 @@ public class SabrePlugin extends AbstractSabrePlugin
 	@Override
 	public void onDisable()
 	{
-		pluginLoaded = false;
 		db.disconect();
 		
 		// Save the config
 		saveConfig();
+		
+		log("=== Sabre Plugin Disabled ===");
 	}
 
 
 	/**
 	 * Handles a bukkit command event
 	 */
-	public boolean onCommand(CommandSender sender, Command cmd, String alias, String[] args)
-	{		
-		for (SabreCommand c : baseCommands) {
+	public boolean onCommand(CommandSender sender, Command cmd, String alias, String[] args) {
+		if (pluginLoadError) {
+			return false;
+		}
+		
+		for (SabreCommand c : commandList) {
 			if (c.aliases.contains(cmd.getLabel())) {
 
 				// Set the label to the default alias
@@ -310,7 +232,7 @@ public class SabrePlugin extends AbstractSabrePlugin
 	 * Handles a tab complete event
 	 */
 	public List<String> onTabComplete(CommandSender sender, Command cmd, String alias, String[] args){
-		if (!loadSuccessful) {
+		if (pluginLoadError) {
 			return null;
 		}
 
@@ -424,7 +346,7 @@ public class SabrePlugin extends AbstractSabrePlugin
 	 * @return The auto-help command
 	 */
 	public CmdAutoHelp getCmdAutoHelp() { 
-		return cmdAutoHelp;
+		return commandList.getAutoHelp();
 	}
 	
 	/**
@@ -447,8 +369,8 @@ public class SabrePlugin extends AbstractSabrePlugin
 	 * Gets whether the plugin is loaded
 	 * @return true if the plugin is loaded
 	 */
-	public boolean getPluginLoaded() {
-		return this.pluginLoaded;
+	public boolean getSuccessfulLoad() {
+		return !this.pluginLoadError;
 	}
 	
 	/**
@@ -457,5 +379,54 @@ public class SabrePlugin extends AbstractSabrePlugin
 	 */
 	public PlayerSpawner getSpawner() {
 		return this.playerSpawner;
+	}
+	
+	/**
+	 * Gets the factory config
+	 * @return The factory config
+	 */
+	public FactoryConfig getFactoryConfig() {
+		return this.factoryConfig;
+	}
+	
+	/**
+	 * Gets the custom items
+	 * @return The custom items
+	 */
+	public CustomItems getCustomItems() {
+		return this.customItems;
+	}
+	
+	/**
+	 * Gets the factory worker
+	 * @return The factory worker
+	 */
+	public FactoryWorker getFactoryWorker() {
+		return this.factoryWorker;
+	}
+	
+	/**
+	 * Gets the sign handler
+	 * @return The sign handler
+	 */
+	public SignHandler getSignHandler() {
+		return this.signHandler;
+	}
+
+
+	public static void log(Object msg) {
+		log(Level.INFO, msg);
+	}
+
+	public static void log(String str, Object... args) {
+		log(Level.INFO, SabrePlugin.instance.txt.parse(str, args));
+	}
+
+	public static void log(Level level, String str, Object... args) {
+		log(level, SabrePlugin.instance.txt.parse(str, args));
+	}
+
+	public static void log(Level level, Object msg) {
+		Bukkit.getLogger().log(level, String.format("[%s] %s", SabrePlugin.instance().getDescription().getFullName(), msg));
 	}
 }

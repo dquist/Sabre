@@ -8,7 +8,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.permissions.Permission;
 
 import com.gordonfreemanq.sabre.Lang;
-import com.gordonfreemanq.sabre.core.AbstractSabrePlugin;
+import com.gordonfreemanq.sabre.SabrePlugin;
 import com.gordonfreemanq.sabre.core.CommandVisibility;
 
 
@@ -16,28 +16,21 @@ public class PermUtil {
 
 	public Map<String, String> permissionDescriptions = new HashMap<String, String>();
 	
-	protected AbstractSabrePlugin plugin;
+	protected SabrePlugin plugin;
 	
-	public PermUtil(AbstractSabrePlugin p)
+	public PermUtil(SabrePlugin plugin)
 	{
-		this.plugin = p;
-		this.setup();
+		this.plugin = plugin;
+		
+		for(Permission permission : plugin.getDescription().getPermissions())
+		{
+			this.permissionDescriptions.put(permission.getName(), permission.getDescription());
+		}
 	}
 	
 	public String getForbiddenMessage(String perm)
 	{
 		return plugin.txt.parse(Lang.permForbidden, getPermissionDescription(perm));
-	}
-	
-	/**
-	 * This method hooks into all permission plugins we are supporting
-	 */
-	public final void setup()
-	{
-		for(Permission permission : plugin.getDescription().getPermissions())
-		{
-			this.permissionDescriptions.put(permission.getName(), permission.getDescription());
-		}
 	}
 
 	public String getPermissionDescription (String perm)

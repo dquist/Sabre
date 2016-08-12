@@ -19,7 +19,6 @@ import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
 import com.gordonfreemanq.sabre.SabrePlugin;
-import com.gordonfreemanq.sabre.blocks.CustomItems;
 import com.gordonfreemanq.sabre.blocks.SabreItemStack;
 import com.gordonfreemanq.sabre.factory.recipe.ProductionRecipe;
 import com.gordonfreemanq.sabre.factory.recipe.IRecipe;
@@ -30,9 +29,8 @@ import com.gordonfreemanq.sabre.factory.recipe.SpecialRecipeType;
  * @author GFQ
  */
 public class FactoryConfig {
-
-	// The global instance
-	private static FactoryConfig instance;
+	
+	private final SabrePlugin plugin;
 	
 	private File folder = null;
 	private HashMap<String, FactoryProperties> factoryProperties;
@@ -40,16 +38,8 @@ public class FactoryConfig {
 	/**
 	 * Creates a new FactoryConfig instance
 	 */
-	public FactoryConfig() {
-		instance = this;	
-	}
-	
-	
-	/**
-	 * Gets the global instance
-	 */
-	public static FactoryConfig instance() {
-		return instance;
+	public FactoryConfig(SabrePlugin plugin) {
+		this.plugin = plugin;	
 	}
 	
 	
@@ -58,7 +48,7 @@ public class FactoryConfig {
 	 */
 	public void reload() {
 	    if (folder == null) {
-	    	folder = new File(SabrePlugin.instance().getDataFolder(), "factories");
+	    	folder = new File(plugin.getDataFolder(), "factories");
 	    }
 	    
 	    factoryProperties = new HashMap<String, FactoryProperties>();
@@ -203,7 +193,7 @@ public class FactoryConfig {
 				String customItem = configItem.getString("custom_item");
 				int amount = configItem.getInt("amount",1);
 				if (customItem != null) {
-					sabreStack = CustomItems.getInstance().getByName(customItem);
+					sabreStack = plugin.getCustomItems().getByName(customItem);
 					if (sabreStack == null) {
 						SabrePlugin.log(Level.SEVERE, configItems.getCurrentPath() + " has invalid custom item " + customItem);
 						return items;

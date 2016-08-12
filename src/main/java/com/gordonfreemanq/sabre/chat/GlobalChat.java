@@ -3,29 +3,20 @@ package com.gordonfreemanq.sabre.chat;
 import java.util.logging.Level;
 
 import com.gordonfreemanq.sabre.Lang;
-import com.gordonfreemanq.sabre.PlayerManager;
-import com.gordonfreemanq.sabre.SabreConfig;
 import com.gordonfreemanq.sabre.SabrePlayer;
 import com.gordonfreemanq.sabre.SabrePlugin;
 
 public class GlobalChat implements IChatChannel {
 
-	private final PlayerManager pm;
-	private final SabreConfig config;
-	private int globalChatRadius;
+	private final SabrePlugin plugin;
 	
-	private static GlobalChat instance;
 	
-	public static GlobalChat getInstance() {
-		return instance;
-	}
-	
-	public GlobalChat(PlayerManager pm, SabreConfig config) {
-		this.pm = pm;
-		this.config = config;
-		this.globalChatRadius = 1000;
-		
-		instance = this;
+	/**
+	 * Creates a new GlobalChat instance
+	 * @param plugin The plugin instance
+	 */
+	public GlobalChat(SabrePlugin plugin) {
+		this.plugin = plugin;
 	}
 
 
@@ -34,7 +25,7 @@ public class GlobalChat implements IChatChannel {
 	 * @return The global chat radius
 	 */
 	public int getGlobalChatRadius() {
-		return this.globalChatRadius;
+		return plugin.config().ChatRadius;
 	}
 	
 	
@@ -43,8 +34,7 @@ public class GlobalChat implements IChatChannel {
 	 * @param globalChatRadius The new global chat radius
 	 */
 	public void setChatRadius(int globalChatRadius) {
-		this.globalChatRadius = globalChatRadius;
-		this.config.ChatRadius = globalChatRadius;
+		plugin.config().ChatRadius = globalChatRadius;
 	}
 	
 	
@@ -55,8 +45,8 @@ public class GlobalChat implements IChatChannel {
 		String formatted = SabrePlugin.instance().txt.parse("<w>%s: %s", senderName, msg);
 		SabrePlugin.log(Level.INFO, formatted);
 		
-		for (SabrePlayer p : pm.getOnlinePlayers()) {
-			if (p.getDistanceFrom(sender) <= globalChatRadius && p.getPlayer().getWorld().equals(sender.getPlayer().getWorld())) {
+		for (SabrePlayer p : plugin.getPlayerManager().getOnlinePlayers()) {
+			if (p.getDistanceFrom(sender) <= getGlobalChatRadius() && p.getPlayer().getWorld().equals(sender.getPlayer().getWorld())) {
 				p.getPlayer().sendMessage(formatted);
 				
 				if (!p.equals(sender)) {
@@ -78,8 +68,8 @@ public class GlobalChat implements IChatChannel {
 		boolean found = false;
 		String formatted = SabrePlugin.instance().txt.parse("<silver><it>%s %s", senderName, msg);
 		
-		for (SabrePlayer p : pm.getOnlinePlayers()) {
-			if (p.getDistanceFrom(sender) <= globalChatRadius && p.getPlayer().getWorld().equals(sender.getPlayer().getWorld())) {
+		for (SabrePlayer p : plugin.getPlayerManager().getOnlinePlayers()) {
+			if (p.getDistanceFrom(sender) <= getGlobalChatRadius() && p.getPlayer().getWorld().equals(sender.getPlayer().getWorld())) {
 				p.getPlayer().sendMessage(formatted);
 				
 				if (!p.equals(sender)) {

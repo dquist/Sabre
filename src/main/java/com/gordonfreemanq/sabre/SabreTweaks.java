@@ -96,10 +96,8 @@ import com.gordonfreemanq.sabre.blocks.SabreItemStack;
 @SuppressWarnings("deprecation")
 public class SabreTweaks implements Listener {
 
-	private final SabreConfig config;
+	private final SabrePlugin plugin;
 	private Random rand;
-
-	private final CombatInterface combatTag;
 
 	private Map<String, PearlTeleportInfo> pearlTeleportInfo = new TreeMap<String, PearlTeleportInfo>();
 	private final static int PEARL_THROTTLE_WINDOW = 10000;  // 10 sec
@@ -108,20 +106,29 @@ public class SabreTweaks implements Listener {
     private static final String CACTUS_HIT_TAG = "hitCactus";
     private static MetadataValue CACTUS_HIT;
 
-	public SabreTweaks(SabreConfig config) {
-		this.config = config;
+    /**
+     * Creates a new SabreTweaks instance
+     * @param plugin The plugin instance
+     */
+	public SabreTweaks(SabrePlugin plugin) {
+		this.plugin = plugin;
 		this.rand = new Random(1337);
-
-		RegisterCustomRecipes();
-		
-		// Combat Tag API
-		combatTag = SabrePlugin.instance().getCombatTag();
 		
 	    CACTUS_HIT = new FixedMetadataValue(SabrePlugin.instance(), true);
 	}
+	
+	
+	/**
+	 * Initialize the class
+	 */
+	public void initialize() {
+
+		registerCustomRecipes();
+		registerTimerForPearlCheck();
+	}
 
 
-	private void RegisterCustomRecipes() {
+	private void registerCustomRecipes() {
 
 		// Recipe: 1 XP bottle creates 9 Emeralds 
 		ShapelessRecipe expToEmeraldRecipe = new ShapelessRecipe(new ItemStack(Material.EMERALD, 1));
@@ -286,7 +293,7 @@ public class SabreTweaks implements Listener {
 
 		ItemStack result = e.getRecipe().getResult();
 
-		for (SabreItemStack is : config.getDisabledRecipes()) {
+		for (SabreItemStack is : plugin.config().getDisabledRecipes()) {
 			if (is.isSimilar(result)) {
 				e.getInventory().setResult(new ItemStack(Material.AIR));
 
@@ -427,7 +434,7 @@ public class SabreTweaks implements Listener {
 		if (event.getEntity() instanceof Player) {
 			return;
 		}
-		Set<Material> remove_ids = config.getDisabledEntityDrops();
+		Set<Material> remove_ids = plugin.config().getDisabledEntityDrops();
 		List<ItemStack> drops = event.getDrops();
 		ItemStack item;
 		int i = drops.size() - 1;
@@ -821,7 +828,7 @@ public class SabreTweaks implements Listener {
 	 */
 	@EventHandler(priority=EventPriority.HIGHEST)
 	public void onExpBottleEvent(ExpBottleEvent e) {
-		final int bottle_xp = config.getXpBottleValue();
+		final int bottle_xp = plugin.config().getXpBottleValue();
 		((Player) e.getEntity().getShooter()).giveExp(bottle_xp);
 	      e.setExperience(0);
 	}
@@ -1342,6 +1349,8 @@ public class SabreTweaks implements Listener {
 			return;
 		}
 		
+		CombatInterface combatTag = plugin.getCombatTag();
+		
 		final long current_time = System.currentTimeMillis();
 		final Player player = event.getPlayer();
 		final String player_name = player.getName();
@@ -1404,7 +1413,7 @@ public class SabreTweaks implements Listener {
 		final Player player = event.getPlayer();
 		ItemStack item = event.getItem();
 		Material mat = item.getType();
-		double multiplier = config.getFoodSaturationMultiplier();
+		double multiplier = plugin.config().getFoodSaturationMultiplier();
 		if (multiplier <= 0.000001 && multiplier >= -0.000001) {
 			return;
 		}
@@ -1472,7 +1481,7 @@ public class SabreTweaks implements Listener {
 	@EventHandler
 	public void onFoodLevelChange(FoodLevelChangeEvent event) {
 		final Player player = (Player) event.getEntity();
-		final double mod = config.getHungerSlowdown();
+		final double mod = plugin.config().getHungerSlowdown();
 		Double saturation;
 		if (playerLastEat_.containsKey(player)) { // if the player just ate
 			saturation = playerLastEat_.get(player);
@@ -1636,7 +1645,7 @@ public class SabreTweaks implements Listener {
     	}
 
     	Short currentEntityID = e.getEntity().getType().getTypeId();
-    	if (config.getEggEntityIDList().contains( currentEntityID) == false) {
+    	if (plugin.config().getEggEntityIDList().contains( currentEntityID) == false) {
     		return;
     	}
 
@@ -1663,8 +1672,8 @@ public class SabreTweaks implements Listener {
     	}
 
     	double randomNum = Math.random();
-    	double eggArthropodPercentage = config.getEggArthropodPercentage();
-    	double eggLootingPercentage = config.getEggLootingPercentage();
+    	double eggArthropodPercentage = plugin.config().getEggArthropodPercentage();
+    	double eggLootingPercentage = plugin.config().getEggLootingPercentage();
     	double levelOfArthropod = handstack.getEnchantmentLevel(org.bukkit.enchantments.Enchantment.DAMAGE_ARTHROPODS);
     	double levelOfLooting = handstack.getEnchantmentLevel(org.bukkit.enchantments.Enchantment.LOOT_BONUS_MOBS);
 

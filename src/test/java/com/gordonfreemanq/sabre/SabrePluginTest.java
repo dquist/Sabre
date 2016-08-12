@@ -72,14 +72,7 @@ public class SabrePluginTest {
         // Player doesn't exist yet
 		assertNull(pm.getPlayerById(newPlayer.getUniqueId()));
 		
-		// Prevent pre-login if plugin not loaded
-		playerListener.onPlayerPreLogin(playerPreLoginEvent);
-		assertEquals(playerPreLoginEvent.getLoginResult(), Result.KICK_OTHER);
-		assertEquals(playerPreLoginEvent.getKickMessage(), Lang.serverNotLoaded);
-
-		// Try again with plugin loaded
-		playerPreLoginEvent.setLoginResult(Result.ALLOWED);
-		playerPreLoginEvent.setKickMessage(null);
+		// Pre login
 		playerListener.onPlayerPreLogin(playerPreLoginEvent);
 		assertEquals(playerPreLoginEvent.getLoginResult(), Result.ALLOWED);
 		assertEquals(playerPreLoginEvent.getKickMessage(), null);

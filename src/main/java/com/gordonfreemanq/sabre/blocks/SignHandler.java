@@ -13,40 +13,23 @@ import com.comphenix.protocol.events.PacketContainer;
 import com.comphenix.protocol.events.PacketEvent;
 import com.comphenix.protocol.wrappers.BlockPosition;
 import com.comphenix.protocol.wrappers.WrappedChatComponent;
-import com.gordonfreemanq.sabre.PlayerManager;
 import com.gordonfreemanq.sabre.SabrePlayer;
 import com.gordonfreemanq.sabre.SabrePlugin;
 import com.gordonfreemanq.sabre.customitems.SecureSign;
 import com.gordonfreemanq.sabre.groups.SabreGroup;
 
 public class SignHandler extends PacketAdapter {
-
-	// The global instance
-	private static SignHandler instance;
 	
-	private final PlayerManager pm;
-	private final BlockManager bm;
-	
+	private final SabrePlugin plugin;
 	
 	/**
 	 * Creates a new SignHandler instace
 	 * @param pm The player manager
 	 * @param bm The block manager
 	 */
-	public SignHandler(PlayerManager pm, BlockManager bm) {
-		super(SabrePlugin.instance(), PacketType.Play.Server.UPDATE_SIGN);
-		instance = this;
-		
-		this.pm = pm;
-		this.bm = bm;
-	}
-	
-	
-	/**
-	 * Gets the global instance
-	 */
-	public static SignHandler instance() {
-		return instance;
+	public SignHandler(SabrePlugin plugin) {
+		super(plugin, PacketType.Play.Server.UPDATE_SIGN);
+		this.plugin = plugin;
 	}
 	
 
@@ -60,7 +43,7 @@ public class SignHandler extends PacketAdapter {
 		
 		Location l = w.getLocation().toVector().toLocation(e.getPlayer().getWorld());
 		// Is there a SabreBlock at this location?
-		SabreBlock b = bm.getBlockAt(l);
+		SabreBlock b = plugin.getBlockManager().getBlockAt(l);
 		
 		if (b == null) {
 			return;
@@ -74,7 +57,7 @@ public class SignHandler extends PacketAdapter {
 		// Are we a SecureSign?
 		if (b instanceof SecureSign) {
 			SecureSign sign = (SecureSign)b;
-			SabrePlayer p = pm.getPlayerById(e.getPlayer().getUniqueId());
+			SabrePlayer p = plugin.getPlayerManager().getPlayerById(e.getPlayer().getUniqueId());
 			updateSignPacket(w, sign, p);	
 		}
 	}
@@ -87,7 +70,7 @@ public class SignHandler extends PacketAdapter {
 	public void updateSign(SecureSign sign) {
 		
 		Location l = sign.getLocation();
-		for (SabrePlayer p : pm.getOnlinePlayers()) {
+		for (SabrePlayer p : plugin.getPlayerManager().getOnlinePlayers()) {
 			
 			if (p.getPlayer().getLocation().distance(l) < 64) {
 				WrapperPlayServerUpdateSign w = new WrapperPlayServerUpdateSign();

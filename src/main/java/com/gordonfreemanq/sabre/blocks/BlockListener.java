@@ -57,7 +57,6 @@ import com.gordonfreemanq.sabre.SabreTweaks;
 import com.gordonfreemanq.sabre.core.Permission;
 import com.gordonfreemanq.sabre.factory.BaseFactory;
 import com.gordonfreemanq.sabre.factory.FactoryController;
-import com.gordonfreemanq.sabre.factory.FactoryWorker;
 import com.gordonfreemanq.sabre.groups.SabreGroup;
 import com.gordonfreemanq.sabre.groups.SabreMember;
 import com.gordonfreemanq.sabre.util.SabreUtil;
@@ -108,7 +107,7 @@ public class BlockListener implements Listener {
 			SabrePlayer p = plugin.getPlayerManager().getPlayerById(e.getPlayer().getUniqueId());
 
 			// Create a new block instance and save it if the item in hand has block data
-			SabreBlock b = BlockManager.createBlockFromItem(e.getItemInHand(), e.getBlock().getLocation());
+			SabreBlock b = plugin.getBlockManager().createBlockFromItem(e.getItemInHand(), e.getBlock().getLocation());
 			
 			if (e.getItemInHand().hasItemMeta() && b == null) {
 				e.setCancelled(true);
@@ -423,7 +422,7 @@ public class BlockListener implements Listener {
 				Location l = FactoryController.parseLocation(p, false);
 				
 				if (l != null) {
-					BaseFactory factory = FactoryWorker.getInstance().getRunningByLocation(l);
+					BaseFactory factory = plugin.getFactoryWorker().getRunningByLocation(l);
 					
 					if (factory == null) {
 						factory = (BaseFactory)plugin.getBlockManager().getFactories().get(l);
@@ -443,7 +442,7 @@ public class BlockListener implements Listener {
 			
 			ItemStack is = p.getPlayer().getItemInHand();
 			if (is.hasItemMeta() && is.getItemMeta().hasLore()) {
-				SabreItemStack sis = CustomItems.getInstance().getByName(is.getItemMeta().getDisplayName());
+				SabreItemStack sis = plugin.getCustomItems().getByName(is.getItemMeta().getDisplayName());
 				if (sis != null) {
 					sis.onPlayerInteract(p, e);
 				}

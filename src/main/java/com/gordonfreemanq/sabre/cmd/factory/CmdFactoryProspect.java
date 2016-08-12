@@ -4,7 +4,6 @@ import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 
 import com.gordonfreemanq.sabre.Lang;
-import com.gordonfreemanq.sabre.blocks.CustomItems;
 import com.gordonfreemanq.sabre.cmd.SabreCommand;
 import com.gordonfreemanq.sabre.customitems.FarmProspector;
 
@@ -32,7 +31,7 @@ public class CmdFactoryProspect extends SabreCommand {
 			return;
 		}
 		
-		ItemStack is = CustomItems.getInstance().getByName(FarmProspector.itemName);
+		ItemStack is = plugin.getCustomItems().getByName(FarmProspector.itemName);
 		me.getPlayer().setItemInHand(is);
 		me.msg(Lang.factoryCreatedProspector);
 	}

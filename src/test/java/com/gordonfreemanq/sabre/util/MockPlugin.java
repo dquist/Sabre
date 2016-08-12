@@ -4,6 +4,7 @@ import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.when;
 
 import java.io.File;
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 
 import org.bukkit.Server;
@@ -42,6 +43,12 @@ public class MockPlugin extends SabrePlugin {
         doReturn(true).when(plugin).isEnabled();
         doReturn(Util.logger).when(plugin).getLogger();
         plugin.setServerFolder(TestFixture.serverDirectory);
+        
+        // Set mock database
+        MockDataAccess db = PowerMockito.spy(new MockDataAccess());
+        Field field = SabrePlugin.class.getDeclaredField("db");
+        field.setAccessible(true);
+        field.set(plugin, db);
 		
 		return plugin;
 	}

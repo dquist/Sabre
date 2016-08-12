@@ -8,9 +8,9 @@ import org.bukkit.inventory.ItemStack;
 
 import com.gordonfreemanq.sabre.Lang;
 import com.gordonfreemanq.sabre.SabrePlayer;
+import com.gordonfreemanq.sabre.SabrePlugin;
 import com.gordonfreemanq.sabre.SabreTweaks;
 import com.gordonfreemanq.sabre.blocks.Reinforcement;
-import com.gordonfreemanq.sabre.blocks.SignHandler;
 import com.mongodb.BasicDBObject;
 
 public class SecureSign extends SpecialBlock {
@@ -54,7 +54,7 @@ public class SecureSign extends SpecialBlock {
 		}
 		
 		saveSettings();
-		SignHandler.instance().updateSign(this);
+		SabrePlugin.instance().getSignHandler().updateSign(this);
 	}
 	
 	
@@ -80,7 +80,7 @@ public class SecureSign extends SpecialBlock {
 	 * Updates the sign for a given player
 	 */
 	public void updatefor(SabrePlayer p) {
-		SignHandler.instance().updateSign(this);
+		SabrePlugin.instance().getSignHandler().updateSign(this);
 	}
 	
 

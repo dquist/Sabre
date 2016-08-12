@@ -57,7 +57,6 @@ import com.gordonfreemanq.sabre.SabrePlayer;
 import com.gordonfreemanq.sabre.SabrePlugin;
 import com.gordonfreemanq.sabre.prisonpearl.PrisonPearlEvent.Type;
 import com.gordonfreemanq.sabre.util.SabreUtil;
-import com.gordonfreemanq.sabre.util.TextUtil;
 import com.mojang.authlib.GameProfile;
 
 /**
@@ -617,8 +616,8 @@ public class PearlListener implements Listener {
 	private void prisonMotd(PrisonPearl pp) {
 
 		if (!pp.getSummoned()) {
-			pp.getPlayer().getPlayer().sendMessage(TextUtil.instance().parse(Lang.pearlMotd));
-			pp.getPlayer().getPlayer().sendMessage(TextUtil.instance().parse(Lang.pearlMotd2));
+			pp.getPlayer().msg(Lang.pearlMotd);
+			pp.getPlayer().msg(Lang.pearlMotd2);
 		}
 	}
 

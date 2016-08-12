@@ -7,7 +7,6 @@ import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 
 import com.gordonfreemanq.sabre.SabrePlugin;
-import com.gordonfreemanq.sabre.blocks.CustomItems;
 import com.gordonfreemanq.sabre.blocks.SabreItemStack;
 import com.gordonfreemanq.sabre.factory.BaseFactory;
 import com.gordonfreemanq.sabre.factory.ItemList;
@@ -111,7 +110,7 @@ public class StrengthenPrisonPearlRecipe implements IRecipe {
 		inputs.add(pearlStack);
 		
 		// The default recipe requires at least 1 cuendillar item
-		SabreItemStack inputCuendillar = CustomItems.getInstance().getByName("Cuendillar");
+		SabreItemStack inputCuendillar = SabrePlugin.instance().getCustomItems().getByName("Cuendillar");
 		inputCuendillar.setAmount(1);
 		
 		// Change the recipe to use however much cuendillar is available in the inventory

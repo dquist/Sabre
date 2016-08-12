@@ -2,7 +2,6 @@ package com.gordonfreemanq.sabre.prisonpearl;
 
 import org.bukkit.Bukkit;
 
-import com.gordonfreemanq.sabre.SabreConfig;
 import com.gordonfreemanq.sabre.SabrePlugin;
 
 /**
@@ -11,11 +10,9 @@ import com.gordonfreemanq.sabre.SabrePlugin;
  */
 public class PearlWorker implements Runnable {
 
-	private final PearlManager pm;
+	private final SabrePlugin plugin;
+	
 	private boolean enabled = false;
-	private int weakenIntervalMin;
-	private int weakenAmount;
-	private int daysInactiveThreshold;
 	
 	// 20 * 60 ticks/ minute
 	private static final int TICKS_PER_MINUTE = 1200;
@@ -23,11 +20,8 @@ public class PearlWorker implements Runnable {
 	/**
 	 * Creates a new FactoryWorker instance
 	 */
-	public PearlWorker(PearlManager pm, SabreConfig config) {
-		this.pm = pm;
-		this.weakenIntervalMin = config.getPearlWeakenInterval();
-		this.weakenAmount = config.getPearlWeakenAmount();
-		this.daysInactiveThreshold = config.getPearlDaysInactiveThreshold();
+	public PearlWorker(SabrePlugin plugin) {
+		this.plugin = plugin;
 	}
 	
 	
@@ -36,7 +30,7 @@ public class PearlWorker implements Runnable {
 	 */
 	public void start() {
 		enabled = true;
-		long tickInterval = weakenIntervalMin * TICKS_PER_MINUTE;
+		long tickInterval = plugin.config().getPearlWeakenInterval() * TICKS_PER_MINUTE;
 		Bukkit.getScheduler().scheduleSyncRepeatingTask(SabrePlugin.instance(), this, 0, tickInterval);
 	}
 	
@@ -48,13 +42,17 @@ public class PearlWorker implements Runnable {
 			return;
 		}
 		
+		int weakenAmount = plugin.config().getPearlWeakenAmount();
+		int daysInactiveThreshold = plugin.config().getPearlDaysInactiveThreshold();
+		
+		PearlManager pearls = plugin.getPearlManager();
 		// Iterate through all the pearls and reduce the strength
 		// This will free any pearls that reach zero strength
-		for (PrisonPearl pp : pm.getPearls()) {
+		for (PrisonPearl pp : pearls.getPearls()) {
 			
 			// Only weaken the pearls of the players that have logged in within the threshold
 			if (pp.getPlayer().getDaysSinceLastLogin() < daysInactiveThreshold) {
-				pm.decreaseSealStrength(pp, weakenAmount);
+				pearls.decreaseSealStrength(pp, weakenAmount);
 				pp.verifyLocation();
 			}
 		}
