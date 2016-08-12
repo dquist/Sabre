@@ -6,6 +6,7 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.block.Block;
+import org.bukkit.block.BlockState;
 import org.mockito.Mockito;
 
 public abstract class MockBlock implements Block {
@@ -15,6 +16,7 @@ public abstract class MockBlock implements Block {
 	public int Y;
 	public int Z;
 	public Material type;
+	public MockBlockState state;
 	
 	public static MockBlock create(World world, int x, int y, int z, Material type) {
 		MockBlock b = mock(MockBlock.class, Mockito.CALLS_REAL_METHODS);
@@ -23,6 +25,7 @@ public abstract class MockBlock implements Block {
 		b.Y = y;
 		b.Z = z;
 		b.type = type;
+		b.state = MockBlockState.create(b);
 		return b;
 	}
 	
@@ -33,6 +36,11 @@ public abstract class MockBlock implements Block {
 	@Override
 	public Material getType() {
 		return type;
+	}
+	
+	@Override
+	public void setType(Material type) {
+		this.type = type;
 	}
 	
 	@SuppressWarnings("deprecation")
@@ -64,5 +72,10 @@ public abstract class MockBlock implements Block {
 	@Override
 	public boolean isEmpty() {
 		return type == Material.AIR;
+	}
+	
+	@Override
+	public BlockState getState() {
+		return this.state;
 	}
 }

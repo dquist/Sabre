@@ -10,25 +10,27 @@ import java.util.ArrayList;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
-import org.bukkit.World;
+import org.bukkit.Material;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.AsyncPlayerPreLoginEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.event.player.PlayerRespawnEvent;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.material.Bed;
 import org.bukkit.event.player.AsyncPlayerPreLoginEvent.Result;
 import org.bukkit.permissions.Permission;
 import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.PluginManager;
 import org.junit.runner.RunWith;
-import org.mockito.Mockito;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 
 import org.powermock.modules.junit4.PowerMockRunner;
 
 import com.gordonfreemanq.sabre.SabrePlugin;
+import com.gordonfreemanq.sabre.util.MockBlock;
 import com.gordonfreemanq.sabre.util.MockPlayer;
+import com.gordonfreemanq.sabre.util.MockWorld;
 import com.gordonfreemanq.sabre.util.TestFixture;
 
 @RunWith(PowerMockRunner.class)
@@ -61,8 +63,8 @@ public class SabrePluginTest {
 	@Test
 	public void testPlayerJoin() throws Exception {
 		
-		World overWorld = plugin.getServer().getWorld(plugin.getSabreConfig().getFreeWorldName());
-        MockPlayer newPlayer = createMockPlayer("NewPlayer");
+		MockWorld overWorld = testFixture.getWorld(plugin.getSabreConfig().getFreeWorldName());
+        MockPlayer newPlayer = MockPlayer.create("NewPlayer");
         
         AsyncPlayerPreLoginEvent playerPreLoginEvent = new AsyncPlayerPreLoginEvent(newPlayer.name, Inet4Address.getLocalHost(), newPlayer.ID);
         PlayerJoinEvent playerJoinEvent = new PlayerJoinEvent(newPlayer, null);
@@ -134,9 +136,25 @@ public class SabrePluginTest {
 		
 		// Player respawn bed
 		Location bedLocation = new Location(overWorld, 100, 50, 100);
-		overWorld.getBlockAt(bedLocation);
-		
+		MockBlock bedBlock = overWorld.addBlock(MockBlock.create(bedLocation, Material.BED_BLOCK));
+		Bed bed = new Bed();
+		bed.setHeadOfBed(false);
+		bedBlock.getState().setData(bed);
+		sp.setBedLocation(bedLocation);
 		PlayerRespawnEvent playerRespawnBedEvent = new PlayerRespawnEvent(newPlayer, new Location(overWorld, 100, 64, 100), true);
+		playerListener.onPlayerRespawn(playerRespawnBedEvent);
+		assertEquals(playerRespawnBedEvent.getRespawnLocation(), bedLocation);
+		assertEquals(newPlayer.getBedSpawnLocation(), bedLocation);
+		assertEquals(newPlayer.messages.poll(), null);
+		
+		// Random spawn if bed missing
+		bedBlock.setType(Material.AIR);
+		playerListener.onPlayerRespawn(playerRespawnBedEvent);
+		assertEquals(newPlayer.messages.poll(), plugin.txt.parse(Lang.playerBedMissing));
+		assertEquals(newPlayer.messages.poll(), Lang.playerYouWakeUp);
+		
+		// Random spawn again without bed message even if bed is back
+		bedBlock.setType(Material.BED_BLOCK);
 		playerListener.onPlayerRespawn(playerRespawnBedEvent);
 		assertEquals(newPlayer.messages.poll(), Lang.playerYouWakeUp);
 		
@@ -145,18 +163,5 @@ public class SabrePluginTest {
 		 sp = pm.getPlayerById(newPlayer.getUniqueId());
 		assertFalse("Player is offline", pm.getOnlinePlayers().contains(sp));
 		assertFalse("Player is online", sp.isOnline());
-	}
-	
-	
-	
-	/**
-	 * Creates a mock player instance
-	 */
-	private MockPlayer createMockPlayer(String name) {
-        // Create a mock player
-		MockPlayer mockPlayer = mock(MockPlayer.class, Mockito.CALLS_REAL_METHODS);
-		mockPlayer.name = name;
-        
-        return mockPlayer.init();
 	}
 }

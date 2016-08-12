@@ -117,38 +117,6 @@ public class TestFixture {
             serverfield.setAccessible(true);
             serverfield.set(sabrePlugin, mockServer);
 
-            /*
-            // Set buscript
-            Buscript buscript = Mockito.spy(new Buscript(core));
-            Field buscriptfield = MultiverseCore.class.getDeclaredField("buscript");
-            buscriptfield.setAccessible(true);
-            buscriptfield.set(core, buscript);
-            when(buscript.getPlugin()).thenReturn(core);
-
-            // Set worldManager
-            WorldManager wm = Mockito.spy(new WorldManager(core));
-            Field worldmanagerfield = MultiverseCore.class.getDeclaredField("worldManager");
-            worldmanagerfield.setAccessible(true);
-            worldmanagerfield.set(core, wm);
-
-            // Set playerListener
-            MVPlayerListener pl = Mockito.spy(new MVPlayerListener(core));
-            Field playerlistenerfield = MultiverseCore.class.getDeclaredField("playerListener");
-            playerlistenerfield.setAccessible(true);
-            playerlistenerfield.set(core, pl);
-
-            // Set entityListener
-            MVEntityListener el = Mockito.spy(new MVEntityListener(core));
-            Field entitylistenerfield = MultiverseCore.class.getDeclaredField("entityListener");
-            entitylistenerfield.setAccessible(true);
-            entitylistenerfield.set(core, el);
-
-            // Set weatherListener
-            MVWeatherListener wl = Mockito.spy(new MVWeatherListener(core));
-            Field weatherlistenerfield = MultiverseCore.class.getDeclaredField("weatherListener");
-            weatherlistenerfield.setAccessible(true);
-            weatherlistenerfield.set(core, wl); */
-
             // Init our command sender
             final Logger commandSenderLogger = Logger.getLogger("CommandSender");
             commandSenderLogger.setParent(Util.logger);
@@ -170,10 +138,8 @@ public class TestFixture {
 
             Bukkit.setServer(mockServer);
 
-            // Load Multiverse Core
+            // Load and enable the plugin
             sabrePlugin.onLoad();
-
-            // Enable it.
             sabrePlugin.onEnable();
 
             return true;
@@ -204,7 +170,6 @@ public class TestFixture {
         worlds.clear();
         
         Util.log("TEAR DOWN COMPLETE");
-
         return true;
     }
 

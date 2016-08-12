@@ -23,7 +23,7 @@ public abstract class MockWorld implements World {
 	public WorldType worldType;
 	public File worldFolder;
 	
-	public HashMap<Location, Block> blocks;
+	private HashMap<Location, Block> blocks;
 	public HashSet<MockChunk> loadedChunks;
 	
 	public static MockWorld create(String name, Environment env, WorldType type) {
@@ -108,5 +108,16 @@ public abstract class MockWorld implements World {
 		}
 		
 		return chunks;
+	}
+	
+	
+	public MockBlock addBlock(MockBlock b) {
+		blocks.put(b.getLocation(), b);
+		return b;
+	}
+	
+	public MockBlock removeBlock(MockBlock b) {
+		blocks.remove(b.getLocation(), b);
+		return b;
 	}
 }

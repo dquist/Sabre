@@ -1,11 +1,14 @@
 package com.gordonfreemanq.sabre.util;
 
-import java.util.PriorityQueue;
+import static org.mockito.Mockito.mock;
+
+import java.util.LinkedList;
 import java.util.UUID;
 
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
+import org.mockito.Mockito;
 
 // Mocks a Bukkit player class
 public abstract class MockPlayer implements Player {
@@ -15,13 +18,15 @@ public abstract class MockPlayer implements Player {
     public boolean isOnline;
     public World world;
     public Location location;
-    public PriorityQueue<String> messages;
+    public LinkedList<String> messages;
+    public Location bedLocation;
     
-    public MockPlayer init() {
-		ID = UUID.randomUUID();
-    	name = "TestPlayer";
-    	messages = new PriorityQueue<String>();
-    	return this;
+    public static MockPlayer create(String name) {
+    	MockPlayer p = mock(MockPlayer.class, Mockito.CALLS_REAL_METHODS);
+		p.ID = UUID.randomUUID();
+    	p.name = name;
+    	p.messages = new LinkedList<String>();
+    	return p;
     }
     
     @Override
@@ -66,5 +71,20 @@ public abstract class MockPlayer implements Player {
     	for(String m : msg) {
     		messages.add(m);
     	}
+    }
+    
+    @Override
+    public Location getBedSpawnLocation() {
+    	return bedLocation;
+    }
+    
+    @Override
+    public void setBedSpawnLocation(Location l) {
+    	bedLocation = l;
+    }
+    
+    @Override
+    public void setBedSpawnLocation(Location l, boolean force) {
+    	bedLocation = l;
     }
 }

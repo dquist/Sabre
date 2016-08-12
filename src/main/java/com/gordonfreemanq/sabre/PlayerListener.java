@@ -7,7 +7,6 @@ import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.Material;
-import org.bukkit.World;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -230,7 +229,13 @@ public class PlayerListener implements Listener {
 		
 		if (useBed) {
 			e.getPlayer().setBedSpawnLocation(l, true);
+			e.setRespawnLocation(l);
 		} else {
+			if (l != null) {
+				sp.msg(Lang.playerBedMissing);
+			}
+			
+			pm.setBedLocation(sp, null);
 			e.getPlayer().setBedSpawnLocation(null);
 			SabreUtil.doRandomSpawn(e.getPlayer());
 		}
