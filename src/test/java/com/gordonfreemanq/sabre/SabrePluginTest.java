@@ -46,8 +46,7 @@ public class SabrePluginTest {
 	
 	@BeforeClass
 	public static void setUp() throws Exception {
-        testFixture = new TestFixture();
-        assertTrue(testFixture.setUp());
+        testFixture = TestFixture.instance();
         plugin = testFixture.getPlugin();
         
         pm = plugin.getPlayerManager();

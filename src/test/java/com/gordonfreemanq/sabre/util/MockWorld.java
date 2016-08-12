@@ -18,7 +18,7 @@ import org.mockito.Mockito;
 public abstract class MockWorld implements World {
 
 	public String name;
-	public UUID ID;
+	public UUID uid;
 	public Environment env;
 	public WorldType worldType;
 	public File worldFolder;
@@ -29,7 +29,7 @@ public abstract class MockWorld implements World {
 	public static MockWorld create(String name, Environment env, WorldType type) {
 		MockWorld world = mock(MockWorld.class, Mockito.CALLS_REAL_METHODS);
 		world.name = name;
-		world.ID = UUID.randomUUID();
+		world.uid = UUID.randomUUID();
 		world.env = env;
 		world.worldType = type;
 		world.blocks = new HashMap<Location, Block>();
@@ -44,7 +44,7 @@ public abstract class MockWorld implements World {
 	
 	@Override
 	public UUID getUID() {
-		return ID;
+		return uid;
 	}
 	
 	@Override

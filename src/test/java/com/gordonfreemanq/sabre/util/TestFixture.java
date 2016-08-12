@@ -6,15 +6,11 @@ import org.bukkit.Server;
 import org.bukkit.World;
 import org.bukkit.WorldCreator;
 import org.bukkit.command.CommandSender;
-import org.bukkit.inventory.ItemFactory;
-import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.permissions.Permission;
-import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.PluginLoader;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
-import org.bukkit.scheduler.BukkitScheduler;
 import org.junit.Assert;
 import org.mockito.Matchers;
 import org.mockito.Mockito;
@@ -28,28 +24,46 @@ import com.gordonfreemanq.sabre.SabrePlugin;
 import java.io.File;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
-import java.util.List;
 import java.util.UUID;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import static org.mockito.Matchers.anyString;
-import static org.mockito.Mockito.any;
-import static org.mockito.Mockito.anyBoolean;
-import static org.mockito.Mockito.anyLong;
 import static org.mockito.Mockito.*;
 
 public class TestFixture {
     private SabrePlugin sabrePlugin;
     private Server mockServer;
     private CommandSender commandSender;
-    private ItemFactory itemFactory;
+    private ArrayList<MockWorld> worlds;
+    private PluginManager mockPluginManager;
 
     public static final File pluginDirectory = new File("bin/test/server/plugins/Sabre");
     public static final File serverDirectory = new File("bin/test/server");
     public static final File worldsDirectory = new File("bin/test/server");
+    
+    private static class TestFixtureLoader {
+        private static final TestFixture INSTANCE = new TestFixture();
+    }
+    
+    private TestFixture() {
+        if (TestFixtureLoader.INSTANCE != null) {
+            throw new IllegalStateException("Already instantiated");
+        }
+        
+        mockServer = MockServer.create(this);
+        mockPluginManager = mock(PluginManager.class);
+        worlds = new ArrayList<MockWorld>();
+        
+        
+        setUp();
+    }
+    
+    public static TestFixture instance() {
+    	return TestFixtureLoader.INSTANCE;
+    }
 
-    public boolean setUp() {
+    private boolean setUp() {
         try {
             pluginDirectory.mkdirs();
             Assert.assertTrue(pluginDirectory.exists());
@@ -59,17 +73,6 @@ public class TestFixture {
 
             PluginLoader pluginLoader = Mockito.mock(PluginLoader.class);
             MockDataAccess mockData = PowerMockito.spy(new MockDataAccess());
-
-            // Initialize the Mock server.
-            mockServer = mock(Server.class);
-            when(mockServer.getName()).thenReturn("TestBukkit");
-            Logger.getLogger("Minecraft").setParent(Util.logger);
-            when(mockServer.getLogger()).thenReturn(Util.logger);
-            when(mockServer.getWorldContainer()).thenReturn(worldsDirectory);
-            
-            itemFactory = PowerMockito.mock(ItemFactory.class);
-            when(itemFactory.getItemMeta(any())).thenReturn(PowerMockito.mock(ItemMeta.class));
-            when(mockServer.getItemFactory()).thenReturn(itemFactory);
 
             // Return a fake PDF file.
             PluginDescriptionFile pdf = PowerMockito.spy(new PluginDescriptionFile("Sabre", "0.1.12",
@@ -90,7 +93,6 @@ public class TestFixture {
             JavaPlugin[] plugins = new JavaPlugin[] { sabrePlugin };
 
             // Mock the Plugin Manager
-            PluginManager mockPluginManager = PowerMockito.mock(PluginManager.class);
             when(mockPluginManager.getPlugins()).thenReturn(plugins);
             when(mockPluginManager.getPlugin("Sabre")).thenReturn(sabrePlugin);
             when(mockPluginManager.getPermission(anyString())).thenReturn(null);
@@ -105,94 +107,10 @@ public class TestFixture {
             File worldSkylandsFile = new File(sabrePlugin.getServerFolder(), "world_the_end");
             Util.log("Creating world-folder: " + worldSkylandsFile.getAbsolutePath());
             worldSkylandsFile.mkdirs();
-
-
-
-            // Give the server some worlds
-            when(mockServer.getWorld(anyString())).thenAnswer(new Answer<World>() {
-                @Override
-                public World answer(InvocationOnMock invocation) throws Throwable {
-                    String arg;
-                    try {
-                        arg = (String) invocation.getArguments()[0];
-                    } catch (Exception e) {
-                        return null;
-                    }
-                    return MockWorldFactory.getWorld(arg);
-                }
-            });
-
-            when(mockServer.getWorld(any(UUID.class))).thenAnswer(new Answer<World>() {
-                @Override
-                public World answer(InvocationOnMock invocation) throws Throwable {
-                    UUID arg;
-                    try {
-                        arg = (UUID) invocation.getArguments()[0];
-                    } catch (Exception e) {
-                        return null;
-                    }
-                    return MockWorldFactory.getWorld(arg);
-                }
-            });
-
-            when(mockServer.getWorlds()).thenAnswer(new Answer<List<World>>() {
-                @Override
-                public List<World> answer(InvocationOnMock invocation) throws Throwable {
-                    return MockWorldFactory.getWorlds();
-                }
-            });
-
-            when(mockServer.getPluginManager()).thenReturn(mockPluginManager);
-
-            when(mockServer.createWorld(Matchers.isA(WorldCreator.class))).thenAnswer(
-                    new Answer<World>() {
-                        @Override
-                        public World answer(InvocationOnMock invocation) throws Throwable {
-                            WorldCreator arg;
-                            try {
-                                arg = (WorldCreator) invocation.getArguments()[0];
-                            } catch (Exception e) {
-                                return null;
-                            }
-                            return MockWorldFactory.makeNewMockWorld(arg.name(), arg.environment(), arg.type());
-                        }
-                    });
-
-            when(mockServer.unloadWorld(anyString(), anyBoolean())).thenReturn(true);
             
-            mockServer.createWorld(new WorldCreator("world"));
-            mockServer.createWorld(new WorldCreator("world_nether"));
-            mockServer.createWorld(new WorldCreator("world_the_end"));
-
-            // add mock scheduler
-            BukkitScheduler mockScheduler = mock(BukkitScheduler.class);
-            when(mockScheduler.scheduleSyncDelayedTask(any(Plugin.class), any(Runnable.class), anyLong())).
-            thenAnswer(new Answer<Integer>() {
-                @Override
-                public Integer answer(InvocationOnMock invocation) throws Throwable {
-                    Runnable arg;
-                    try {
-                        arg = (Runnable) invocation.getArguments()[1];
-                    } catch (Exception e) {
-                        return null;
-                    }
-                    arg.run();
-                    return null;
-                }});
-            when(mockScheduler.scheduleSyncDelayedTask(any(Plugin.class), any(Runnable.class))).
-            thenAnswer(new Answer<Integer>() {
-                @Override
-                public Integer answer(InvocationOnMock invocation) throws Throwable {
-                    Runnable arg;
-                    try {
-                        arg = (Runnable) invocation.getArguments()[1];
-                    } catch (Exception e) {
-                        return null;
-                    }
-                    arg.run();
-                    return null;
-                }});
-            when(mockServer.getScheduler()).thenReturn(mockScheduler);
+            createMockWorld(new WorldCreator("world"));
+            createMockWorld(new WorldCreator("world_nether"));
+            createMockWorld(new WorldCreator("world_the_end"));
 
             // Set server
             Field serverfield = JavaPlugin.class.getDeclaredField("server");
@@ -283,7 +201,7 @@ public class TestFixture {
         sabrePlugin.onDisable();
 
         FileUtils.deleteFolder(serverDirectory);
-        MockWorldFactory.clearWorlds();
+        worlds.clear();
         
         Util.log("TEAR DOWN COMPLETE");
 
@@ -300,5 +218,39 @@ public class TestFixture {
 
     public CommandSender getCommandSender() {
         return commandSender;
+    }
+    
+    public ArrayList<MockWorld> getWorlds() {
+    	return worlds;
+    }
+    
+    public MockWorld getWorld(String name) {
+    	for (MockWorld w : worlds) {
+    		if (w.name == name) {
+    			return w;
+    		}
+    	}
+    	return null;
+    }
+    
+    public MockWorld getWorld(UUID uid) {
+    	for (MockWorld w : worlds) {
+    		if (w.uid == uid) {
+    			return w;
+    		}
+    	}
+    	return null;
+    }
+    
+    public PluginManager getPluginManager() {
+    	return this.mockPluginManager;
+    }
+    
+    public World createMockWorld(WorldCreator creator) {
+    	MockWorld mockWorld = MockWorld.create(creator.name(), creator.environment(), creator.type());
+        mockWorld.worldFolder = new File(TestFixture.serverDirectory, mockWorld.getName());
+    	new File(TestFixture.worldsDirectory, mockWorld.getName()).mkdir();
+    	worlds.add(mockWorld);
+    	return mockWorld;
     }
 }
