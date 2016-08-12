@@ -4,6 +4,7 @@ import org.bukkit.Location;
 
 import com.gordonfreemanq.sabre.Lang;
 import com.gordonfreemanq.sabre.SabrePlayer;
+import com.gordonfreemanq.sabre.SabrePlugin;
 import com.gordonfreemanq.sabre.blocks.BlockManager;
 import com.gordonfreemanq.sabre.blocks.SabreBlock;
 import com.gordonfreemanq.sabre.util.SabreUtil;
@@ -32,7 +33,7 @@ public class DirectWarpDrive extends AbstractWarpDrive {
 		Location sourcePadLocation = sourcePad.getLocation();
 		Location destPadLocation = sourcePad.getDestPadLocation();
 		boolean destIsValid = false;
-		BlockManager bm = BlockManager.instance();
+		BlockManager bm = SabrePlugin.instance().getBlockManager();
 		TeleportPad destPad = null;
 		
 		// The drive must be linked to the overworld drive

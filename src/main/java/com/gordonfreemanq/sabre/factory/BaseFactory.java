@@ -294,7 +294,7 @@ public class BaseFactory extends SpecialBlock {
 	 * Saves settings for the block
 	 */
 	public void saveSettings() {
-		BlockManager.instance().updateSettings(this);
+		SabrePlugin.instance().getBlockManager().updateSettings(this);
 	}
 	
 	
@@ -408,7 +408,7 @@ public class BaseFactory extends SpecialBlock {
 		msg("<g>Switched recipe to: <c>%s", recipe.getName());
 		msg("<g>Next recipe is: <i><it>%s", nextRecipeName);
 		
-		BlockManager.instance().updateSettings(this);
+		SabrePlugin.instance().getBlockManager().updateSettings(this);
 	}
 	
 	
@@ -738,7 +738,7 @@ public class BaseFactory extends SpecialBlock {
 	 */
 	private void performUpgrade() {
 
-		BlockManager bm = BlockManager.instance();
+		BlockManager bm = SabrePlugin.instance().getBlockManager();
 		
 		// This is the output item
 		SabreItemStack item = recipe.getOutputs().get(0);

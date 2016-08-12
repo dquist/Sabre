@@ -297,7 +297,7 @@ public class SabreBlock {
 	 * Saves settings for the block
 	 */
 	public void saveSettings() {
-		BlockManager.instance().updateSettings(this);
+		SabrePlugin.instance().getBlockManager().updateSettings(this);
 	}
 	
 	

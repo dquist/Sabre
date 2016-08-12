@@ -9,6 +9,7 @@ import org.bukkit.block.Block;
 import com.gordonfreemanq.sabre.Lang;
 import com.gordonfreemanq.sabre.SabreConfig;
 import com.gordonfreemanq.sabre.SabrePlayer;
+import com.gordonfreemanq.sabre.SabrePlugin;
 import com.gordonfreemanq.sabre.blocks.BlockManager;
 import com.gordonfreemanq.sabre.blocks.CustomItems;
 import com.gordonfreemanq.sabre.blocks.SabreItemStack;
@@ -54,7 +55,7 @@ public class NetherWarpDrive extends AbstractWarpDrive {
 		Location sourcePadLocation = sourcePad.getLocation();
 		Location destPadLocation = sourcePad.getDestPadLocation();
 		boolean destIsValid = false;
-		BlockManager bm = BlockManager.instance();
+		BlockManager bm = SabrePlugin.instance().getBlockManager();
 		TeleportPad destPad = null;
 		
 		// The drive must be linked to the overworld pad

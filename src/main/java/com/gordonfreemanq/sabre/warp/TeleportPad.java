@@ -9,10 +9,10 @@ import org.bukkit.inventory.ItemStack;
 
 import com.gordonfreemanq.sabre.Lang;
 import com.gordonfreemanq.sabre.SabrePlayer;
+import com.gordonfreemanq.sabre.SabrePlugin;
 import com.gordonfreemanq.sabre.blocks.BlockManager;
 import com.gordonfreemanq.sabre.blocks.Reinforcement;
 import com.gordonfreemanq.sabre.customitems.SpecialBlock;
-import com.gordonfreemanq.sabre.prisonpearl.PearlManager;
 import com.gordonfreemanq.sabre.util.SabreUtil;
 import com.mongodb.BasicDBObject;
 
@@ -48,7 +48,7 @@ public class TeleportPad extends SpecialBlock {
 		}
 		
 		Reinforcement r = this.getReinforcement();
-		BlockManager bm = BlockManager.instance();
+		BlockManager bm = SabrePlugin.instance().getBlockManager();
 		
 		if (r != null && !r.getGroup().isBuilder(sp)) {
 			sp.msg(Lang.noPermission);
@@ -117,7 +117,7 @@ public class TeleportPad extends SpecialBlock {
 		}
 		
 		// Prevent pearled players from teleporting
-		if (PearlManager.getInstance().isImprisoned(sp)) {
+		if (SabrePlugin.instance().getPearlManager().isImprisoned(sp)) {
 			sp.msg(Lang.pearlCantDoThat);
 			return;
 		}
@@ -126,7 +126,7 @@ public class TeleportPad extends SpecialBlock {
 		
 		// Verify warp drive exists
 		if (driveLocation != null) {
-			drive = (AbstractWarpDrive)BlockManager.instance().getBlockAt(driveLocation);
+			drive = (AbstractWarpDrive)SabrePlugin.instance().getBlockManager().getBlockAt(driveLocation);
 		}
 		
 		if (!sp.getPlayer().getLocation().getBlock().getRelative(BlockFace.DOWN).equals(this.location.getBlock())) {

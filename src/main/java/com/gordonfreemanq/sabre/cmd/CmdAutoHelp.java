@@ -3,7 +3,6 @@ package com.gordonfreemanq.sabre.cmd;
 import java.util.ArrayList;
 
 import com.gordonfreemanq.sabre.core.CommandVisibility;
-import com.gordonfreemanq.sabre.core.SabreBaseCommand;
 
 public class CmdAutoHelp extends SabreCommand
 {
@@ -23,13 +22,13 @@ public class CmdAutoHelp extends SabreCommand
 	public void perform()
 	{
 		if (this.commandChain.size() == 0) return;
-		SabreBaseCommand<?> cmd = this.commandChain.get(this.commandChain.size()-1);
+		SabreCommand cmd = this.commandChain.get(this.commandChain.size()-1);
 		
 		ArrayList<String> lines = new ArrayList<String>();
 		
 		lines.addAll(cmd.helpLong);
 		
-		for(SabreBaseCommand<?> c : cmd.subCommands)
+		for(SabreCommand c : cmd.subCommands)
 		{
 			// Only list help for commands that are visible or the sender has permission for
 			if (c.visibility == CommandVisibility.VISIBLE || (c.visibility == CommandVisibility.SECRET && c.validSenderPermissions(sender, false))) {

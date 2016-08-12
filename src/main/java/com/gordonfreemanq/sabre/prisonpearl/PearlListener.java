@@ -53,11 +53,9 @@ import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.craftbukkit.v1_8_R3.CraftServer;
 
 import com.gordonfreemanq.sabre.Lang;
-import com.gordonfreemanq.sabre.PlayerManager;
 import com.gordonfreemanq.sabre.SabrePlayer;
 import com.gordonfreemanq.sabre.SabrePlugin;
 import com.gordonfreemanq.sabre.prisonpearl.PrisonPearlEvent.Type;
-import com.gordonfreemanq.sabre.util.PlayerSpawner;
 import com.gordonfreemanq.sabre.util.SabreUtil;
 import com.gordonfreemanq.sabre.util.TextUtil;
 import com.mojang.authlib.GameProfile;
@@ -68,17 +66,15 @@ import com.mojang.authlib.GameProfile;
  */
 public class PearlListener implements Listener {
 
-	private final PearlManager pearls;
-	private final PlayerManager pm;
+	private final SabrePlugin plugin;
 
 	/**
 	 * Creates a new PearlListener instance
 	 * @param pearls The pearl manager
 	 * @param pm The player manager
 	 */
-	public PearlListener(PearlManager pearls, PlayerManager pm) {
-		this.pearls = pearls;
-		this.pm = pm;
+	public PearlListener(SabrePlugin plugin) {
+		this.plugin = plugin;
 	}
 
 
@@ -110,7 +106,7 @@ public class PearlListener implements Listener {
 		}
 
 		if (item.getType() == Material.ENDER_PEARL && PrisonPearl.getIDFromItemStack(item) != null) {
-			PrisonPearl pp = pearls.getPearlByItem(item);
+			PrisonPearl pp = plugin.getPearlManager().getPearlByItem(item);
 			if (pp == null) {
 				return new ItemStack(Material.ENDER_PEARL, 1);
 			}
@@ -130,14 +126,14 @@ public class PearlListener implements Listener {
 	public void onItemSpawn(ItemSpawnEvent e) {
 		Item item = e.getEntity();
 
-		PrisonPearl pp = pearls.getPearlByItem(item.getItemStack());
+		PrisonPearl pp = plugin.getPearlManager().getPearlByItem(item.getItemStack());
 		if (pp == null) {
 			return;
 		}
 
 		pp.markMove();
 		pp.setHolder(item.getLocation());
-		pearls.updatePearl(pp);
+		plugin.getPearlManager().updatePearl(pp);
 		updatePearl(pp, e.getEntity());
 	}
 
@@ -191,7 +187,7 @@ public class PearlListener implements Listener {
 				continue;
 			}
 
-			PrisonPearl pp = pearls.getPearlByItem(item);
+			PrisonPearl pp = plugin.getPearlManager().getPearlByItem(item);
 			if (pp == null){
 				continue;
 			}
@@ -223,7 +219,7 @@ public class PearlListener implements Listener {
 		for (Entry<Integer, ? extends ItemStack> entry :
 			inv.all(Material.ENDER_PEARL).entrySet()) {
 			ItemStack item = entry.getValue();
-			PrisonPearl pp = pearls.getPearlByItem(item);
+			PrisonPearl pp = plugin.getPearlManager().getPearlByItem(item);
 			if (pp == null) {
 				continue;
 			}
@@ -243,7 +239,7 @@ public class PearlListener implements Listener {
 	 */
 	@EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
 	public void onItemDespawn(ItemDespawnEvent e) {
-		PrisonPearl pp = pearls.getPearlByItem(e.getEntity().getItemStack());
+		PrisonPearl pp = plugin.getPearlManager().getPearlByItem(e.getEntity().getItemStack());
 		if (pp != null) {
 			e.setCancelled(true);
 		}
@@ -260,13 +256,13 @@ public class PearlListener implements Listener {
 			return;
 		}
 
-		PrisonPearl pp = pearls.getPearlByItem(((Item) e.getEntity()).getItemStack());
+		PrisonPearl pp = plugin.getPearlManager().getPearlByItem(((Item) e.getEntity()).getItemStack());
 		if (pp == null) {
 			return;
 		}
 
 		SabrePlugin.log(Level.INFO, "%s (%s) is being freed. Reason: PrisonPearl combusted(lava/fire).", pp.getName(), pp.getPlayerID());
-		pearls.freePearl(pp);
+		plugin.getPearlManager().freePearl(pp);
 	}
 
 
@@ -282,7 +278,7 @@ public class PearlListener implements Listener {
 		for(Integer slot : items.keySet()) {
 			ItemStack item = items.get(slot);
 
-			PrisonPearl pearl = pearls.getPearlByItem(item);
+			PrisonPearl pearl = plugin.getPearlManager().getPearlByItem(item);
 			if(pearl != null) {
 				boolean clickedTop = event.getView().convertSlot(slot) == slot;
 
@@ -332,7 +328,7 @@ public class PearlListener implements Listener {
 	 */
 	private void updatePearl(PrisonPearl pp, Item item) {
 		pp.setHolder(item.getLocation());
-		pearls.updatePearl(pp);
+		plugin.getPearlManager().updatePearl(pp);
 		generatePearlEvent(pp, Type.DROPPED);
 	}
 
@@ -344,7 +340,7 @@ public class PearlListener implements Listener {
 	 */
 	private <ItemBlock extends InventoryHolder & BlockState> void updatePearl(PrisonPearl pp, ItemBlock block) {
 		pp.setHolder(block.getBlock());
-		pearls.updatePearl(pp);
+		plugin.getPearlManager().updatePearl(pp);
 		generatePearlEvent(pp, Type.HELD);
 	}
 
@@ -355,8 +351,8 @@ public class PearlListener implements Listener {
 	 * @param player The player holding the pearl
 	 */
 	private void updatePearl(PrisonPearl pp, Player player) {
-		pp.setHolder(pm.getPlayerById(player.getUniqueId()));
-		pearls.updatePearl(pp);
+		pp.setHolder(plugin.getPlayerManager().getPlayerById(player.getUniqueId()));
+		plugin.getPearlManager().updatePearl(pp);
 		generatePearlEvent(pp, Type.HELD);
 	}
 
@@ -369,10 +365,10 @@ public class PearlListener implements Listener {
 	public void onPrisonPearlClick(InventoryClickEvent e) {
 		Player clicker = (Player) e.getWhoClicked();
 
-		PrisonPearl pearl = pearls.getPearlByItem(e.getCurrentItem());
+		PrisonPearl pearl = plugin.getPearlManager().getPearlByItem(e.getCurrentItem());
 		if(pearl != null) {
-			if (pearls.isImprisoned(clicker)) {
-				pm.getPlayerById(clicker.getUniqueId()).msg(Lang.pearlCantHold);
+			if (plugin.getPearlManager().isImprisoned(clicker)) {
+				plugin.getPlayerManager().getPlayerById(clicker.getUniqueId()).msg(Lang.pearlCantHold);
 				e.setCancelled(true);
 			}
 		}
@@ -380,19 +376,19 @@ public class PearlListener implements Listener {
 
 
 	/**
-	 * Prevent imprisoned players from picking up PrisonPearls.
+	 * Prevent imprisoned players from picking up Prisonplugin.getPearlManager().
 	 * @param e The event args
 	 */
 	@EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
 	public void onPlayerPickupPearl(PlayerPickupItemEvent e) {
 		Item item = e.getItem();
 
-		PrisonPearl pp = pearls.getPearlByItem(item.getItemStack());
+		PrisonPearl pp = plugin.getPearlManager().getPearlByItem(item.getItemStack());
 		if (pp == null) {
 			return;
 		}
 
-		if (pearls.isImprisoned(e.getPlayer())) {
+		if (plugin.getPearlManager().isImprisoned(e.getPlayer())) {
 			e.setCancelled(true);
 		}
 	}
@@ -415,7 +411,7 @@ public class PearlListener implements Listener {
 		InventoryAction a = event.getAction();
 		if(a == InventoryAction.COLLECT_TO_CURSOR || a == InventoryAction.PICKUP_ALL 
 				|| a == InventoryAction.PICKUP_HALF || a == InventoryAction.PICKUP_ONE) {
-			PrisonPearl pearl = pearls.getPearlByItem(event.getCurrentItem());
+			PrisonPearl pearl = plugin.getPearlManager().getPearlByItem(event.getCurrentItem());
 
 			if(pearl != null) {
 				pearl.markMove();
@@ -425,7 +421,7 @@ public class PearlListener implements Listener {
 		else if(event.getAction() == InventoryAction.PLACE_ALL
 				|| event.getAction() == InventoryAction.PLACE_SOME
 				|| event.getAction() == InventoryAction.PLACE_ONE) {	
-			PrisonPearl pearl = pearls.getPearlByItem(event.getCursor());
+			PrisonPearl pearl = plugin.getPearlManager().getPearlByItem(event.getCursor());
 
 			if(pearl != null) {
 				boolean clickedTop = event.getView().convertSlot(event.getRawSlot()) == event.getRawSlot();
@@ -441,7 +437,7 @@ public class PearlListener implements Listener {
 			}
 		}
 		else if(event.getAction() == InventoryAction.MOVE_TO_OTHER_INVENTORY) {			
-			PrisonPearl pearl = pearls.getPearlByItem(event.getCurrentItem());
+			PrisonPearl pearl = plugin.getPearlManager().getPearlByItem(event.getCurrentItem());
 
 			if(pearl != null) {
 				boolean clickedTop = event.getView().convertSlot(event.getRawSlot()) == event.getRawSlot();
@@ -458,7 +454,7 @@ public class PearlListener implements Listener {
 		}
 		else if(event.getAction() == InventoryAction.HOTBAR_SWAP) {
 			PlayerInventory playerInventory = event.getWhoClicked().getInventory();
-			PrisonPearl pearl = pearls.getPearlByItem(playerInventory.getItem(event.getHotbarButton()));
+			PrisonPearl pearl = plugin.getPearlManager().getPearlByItem(playerInventory.getItem(event.getHotbarButton()));
 
 			if(pearl != null) {
 				boolean clickedTop = event.getView().convertSlot(event.getRawSlot()) == event.getRawSlot();
@@ -472,7 +468,7 @@ public class PearlListener implements Listener {
 			if(event.isCancelled())
 				return;
 
-			pearl = pearls.getPearlByItem(event.getCurrentItem());
+			pearl = plugin.getPearlManager().getPearlByItem(event.getCurrentItem());
 
 			if(pearl != null) {
 				pearl.markMove();
@@ -480,7 +476,7 @@ public class PearlListener implements Listener {
 			}
 		}
 		else if (event.getAction() == InventoryAction.SWAP_WITH_CURSOR) {
-			PrisonPearl pearl = pearls.getPearlByItem(event.getCursor());
+			PrisonPearl pearl = plugin.getPearlManager().getPearlByItem(event.getCursor());
 
 			if(pearl != null) {
 				boolean clickedTop = event.getView().convertSlot(event.getRawSlot()) == event.getRawSlot();
@@ -494,7 +490,7 @@ public class PearlListener implements Listener {
 			if(event.isCancelled())
 				return;
 
-			pearl = pearls.getPearlByItem(event.getCurrentItem());
+			pearl = plugin.getPearlManager().getPearlByItem(event.getCurrentItem());
 
 			if(pearl != null) {
 				pearl.markMove();
@@ -508,7 +504,7 @@ public class PearlListener implements Listener {
 			// Handled by onItemSpawn
 		}
 		else {
-			if(pearls.getPearlByItem(event.getCurrentItem()) != null || pearls.getPearlByItem(event.getCursor()) != null) {
+			if(plugin.getPearlManager().getPearlByItem(event.getCurrentItem()) != null || plugin.getPearlManager().getPearlByItem(event.getCursor()) != null) {
 				((Player) event.getWhoClicked()).sendMessage(ChatColor.RED + "Error: PrisonPearl doesn't support this inventory functionality quite yet!");
 
 				event.setCancelled(true);
@@ -525,14 +521,14 @@ public class PearlListener implements Listener {
 	public void onPlayerPickupItem(PlayerPickupItemEvent e) {
 		Item item = e.getItem();
 
-		PrisonPearl pp = pearls.getPearlByItem(item.getItemStack());
+		PrisonPearl pp = plugin.getPearlManager().getPearlByItem(item.getItemStack());
 		if (pp == null) {
 			return;
 		}
 
 		pp.markMove();
-		pp.setHolder(pm.getPlayerById(e.getPlayer().getUniqueId()));
-		pearls.updatePearl(pp);
+		pp.setHolder(plugin.getPlayerManager().getPlayerById(e.getPlayer().getUniqueId()));
+		plugin.getPearlManager().updatePearl(pp);
 		updatePearl(pp, (Player) e.getPlayer());
 	}
 
@@ -549,7 +545,7 @@ public class PearlListener implements Listener {
 
 		Player player = (Player)e.getEntity();
 		
-		PrisonPearl pp = pearls.getById(player.getUniqueId());
+		PrisonPearl pp = plugin.getPearlManager().getById(player.getUniqueId());
 		if (pp != null) {
 			if (pp.getSummoned()) {
 				pp.setSummoned(false);
@@ -559,10 +555,10 @@ public class PearlListener implements Listener {
 
 		Player killer = player.getKiller();
 		if (killer != null) {
-			SabrePlayer imprisoner = pm.getPlayerById(killer.getUniqueId());
+			SabrePlayer imprisoner = plugin.getPlayerManager().getPlayerById(killer.getUniqueId());
 			
 			// Need to get by name b/c of combat tag entity
-			SabrePlayer imprisoned = pm.getPlayerByName(e.getEntity().getName());
+			SabrePlayer imprisoned = plugin.getPlayerManager().getPlayerByName(e.getEntity().getName());
 
 			int firstpearl = Integer.MAX_VALUE;
 			for (Entry<Integer, ? extends ItemStack> entry : killer.getInventory().all(Material.ENDER_PEARL).entrySet()) {
@@ -574,7 +570,7 @@ public class PearlListener implements Listener {
 			}
 
 			if (firstpearl  !=  Integer.MAX_VALUE) {
-				pearls.imprisonPlayer(imprisoned, imprisoner);
+				plugin.getPearlManager().imprisonPlayer(imprisoned, imprisoner);
 			}
 
 		}
@@ -588,7 +584,7 @@ public class PearlListener implements Listener {
 	@EventHandler(priority=EventPriority.HIGHEST, ignoreCancelled = true)
 	public void onPlayerRespawn(PlayerRespawnEvent e) {
 
-		PrisonPearl pp = pearls.getById(e.getPlayer().getUniqueId());
+		PrisonPearl pp = plugin.getPearlManager().getById(e.getPlayer().getUniqueId());
 		if (pp == null) {
 			return;
 		}
@@ -605,11 +601,11 @@ public class PearlListener implements Listener {
 	 */
 	@EventHandler(priority=EventPriority.HIGHEST, ignoreCancelled = true)
 	public void onPlayerJoin(PlayerJoinEvent e) {
-		SabrePlayer sp = pm.getPlayerById(e.getPlayer().getUniqueId());
+		SabrePlayer sp = plugin.getPlayerManager().getPlayerById(e.getPlayer().getUniqueId());
 		if (sp.getFreedOffline()) {
 
-			pm.setFreedOffline(sp, false);
-			PlayerSpawner.instance().spawnPlayerBed(sp);
+			plugin.getPlayerManager().setFreedOffline(sp, false);
+			plugin.getSpawner().spawnPlayerBed(sp);
 		}
 	}
 
@@ -642,7 +638,7 @@ public class PearlListener implements Listener {
 		}
 
 		// Should be respawned in prison
-		if (!l.getWorld().equals(pearls.getPrisonWorld())) {
+		if (!l.getWorld().equals(plugin.getPearlManager().getPrisonWorld())) {
 			return getPrisonSpawnLocation();
 		}
 
@@ -661,7 +657,7 @@ public class PearlListener implements Listener {
 		Random rand = new Random();
 
 		// Start at spawn
-		Location loc = pearls.getPrisonWorld().getSpawnLocation();
+		Location loc = plugin.getPearlManager().getPrisonWorld().getSpawnLocation();
 
 		// For up to 30 iterations
 		for (int i = 0; i < 30; i++) {
@@ -728,7 +724,7 @@ public class PearlListener implements Listener {
 		
 		if(e.getAction().equals(Action.RIGHT_CLICK_AIR) || e.getAction().equals(Action.RIGHT_CLICK_BLOCK)) {
 			if(e.getPlayer().getItemInHand().getType().equals(Material.ENDER_PEARL)) {
-				PrisonPearl pp = pearls.getPearlByItem(e.getItem());
+				PrisonPearl pp = plugin.getPearlManager().getPearlByItem(e.getItem());
 				if (pp != null) {
 					// Update the pearl
 					e.getPlayer().setItemInHand(pp.createItemStack());
@@ -758,11 +754,11 @@ public class PearlListener implements Listener {
 	public void onPrisonPearlEvent(PrisonPearlEvent event) {
 		
 		PrisonPearl pp = event.getPrisonPearl();
-		SabrePlayer imprisoned = pm.getPlayerById(pp.getPlayerID());
+		SabrePlayer imprisoned = plugin.getPlayerManager().getPlayerById(pp.getPlayerID());
 		
 		if (event.getType() == PrisonPearlEvent.Type.NEW) {
 
-			SabrePlayer imprisoner = pm.getPlayerById(event.getImprisoner().getUniqueId());
+			SabrePlayer imprisoner = plugin.getPlayerManager().getPlayerById(event.getImprisoner().getUniqueId());
 			// Log the capturing PrisonPearl event.
 			SabrePlugin.log(Level.INFO, String.format("%s has bound %s to a PrisonPearl", imprisoner.getName(), imprisoned.getName()));
 			
@@ -790,7 +786,7 @@ public class PearlListener implements Listener {
 			
 			if (player != null) {
 				Location currentLoc = player.getLocation();
-				if (!player.isDead() && currentLoc.getWorld() == pearls.getPrisonWorld()) {
+				if (!player.isDead() && currentLoc.getWorld() == plugin.getPearlManager().getPrisonWorld()) {
 					
 					// if the player isn't dead and is in prison world
 					Location loc = null;
@@ -896,7 +892,7 @@ public class PearlListener implements Listener {
 
         Player player = (Player)e.getDamager();
         
-        if (pearls.isSummoned(player)) {
+        if (plugin.getPearlManager().isSummoned(player)) {
         	e.setCancelled(true);
         }
 	}

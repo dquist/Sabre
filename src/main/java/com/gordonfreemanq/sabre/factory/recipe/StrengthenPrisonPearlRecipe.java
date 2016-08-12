@@ -6,12 +6,12 @@ import java.util.List;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 
+import com.gordonfreemanq.sabre.SabrePlugin;
 import com.gordonfreemanq.sabre.blocks.CustomItems;
 import com.gordonfreemanq.sabre.blocks.SabreItemStack;
 import com.gordonfreemanq.sabre.factory.BaseFactory;
 import com.gordonfreemanq.sabre.factory.ItemList;
 import com.gordonfreemanq.sabre.factory.ProbabilisticEnchantment;
-import com.gordonfreemanq.sabre.prisonpearl.PearlManager;
 import com.gordonfreemanq.sabre.prisonpearl.PrisonPearl;
 
 /**
@@ -100,7 +100,7 @@ public class StrengthenPrisonPearlRecipe implements IRecipe {
 		SabreItemStack pearlStack = new SabreItemStack(Material.ENDER_PEARL, "Prison Pearl", 1, 1);
 		
 		// If a prison pearl exists in the inventory, then replace the default ingredient pearl with that item
-		List<PrisonPearl> pearls = PearlManager.getInstance().getInventoryPrisonPearls(factory.getInputInventory());
+		List<PrisonPearl> pearls = SabrePlugin.instance().getPearlManager().getInventoryPrisonPearls(factory.getInputInventory());
 		if (pearls.size() > 0) {
 			recipePearl = pearls.get(0);
 			pearlStack = recipePearl.createItemStack();
@@ -141,7 +141,7 @@ public class StrengthenPrisonPearlRecipe implements IRecipe {
 		recipePearl.setHolder(factory.getLocation());
 		
 		// Update the new strength
-		PearlManager.getInstance().increaseSealStrength(recipePearl, recipeStrengthAmount);
+		SabrePlugin.instance().getPearlManager().increaseSealStrength(recipePearl, recipeStrengthAmount);
 		
 		// Gets the item stack from the chest and validate it, which will update the strength lore
 		ItemStack is = recipePearl.getItemFromInventory(factory.getOutputInventory());

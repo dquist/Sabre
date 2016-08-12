@@ -62,7 +62,7 @@ public class SabrePluginTest {
 	@Test
 	public void testPlayerJoin() throws Exception {
 		
-		MockWorld overWorld = testFixture.getWorld(SabreConfig.instance().getFreeWorldName());
+		MockWorld overWorld = testFixture.getWorld(plugin.config().getFreeWorldName());
         MockPlayer newPlayer = MockPlayer.create("NewPlayer");
         
         AsyncPlayerPreLoginEvent playerPreLoginEvent = new AsyncPlayerPreLoginEvent(newPlayer.name, Inet4Address.getLocalHost(), newPlayer.ID);
@@ -73,13 +73,11 @@ public class SabrePluginTest {
 		assertNull(pm.getPlayerById(newPlayer.getUniqueId()));
 		
 		// Prevent pre-login if plugin not loaded
-		playerListener.setPluginLoaded(false);
 		playerListener.onPlayerPreLogin(playerPreLoginEvent);
 		assertEquals(playerPreLoginEvent.getLoginResult(), Result.KICK_OTHER);
 		assertEquals(playerPreLoginEvent.getKickMessage(), Lang.serverNotLoaded);
 
 		// Try again with plugin loaded
-		playerListener.setPluginLoaded(true);
 		playerPreLoginEvent.setLoginResult(Result.ALLOWED);
 		playerPreLoginEvent.setKickMessage(null);
 		playerListener.onPlayerPreLogin(playerPreLoginEvent);

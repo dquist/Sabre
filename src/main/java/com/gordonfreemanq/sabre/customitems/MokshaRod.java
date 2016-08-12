@@ -9,8 +9,8 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
-import com.gordonfreemanq.sabre.PlayerManager;
 import com.gordonfreemanq.sabre.SabrePlayer;
+import com.gordonfreemanq.sabre.SabrePlugin;
 import com.gordonfreemanq.sabre.blocks.SabreItemStack;
 import com.gordonfreemanq.sabre.cmd.pearl.CmdPearl;
 import com.gordonfreemanq.sabre.util.SabreUtil;
@@ -126,7 +126,7 @@ public class MokshaRod extends SabreItemStack {
 			}
 			
 			if (SabreUtil.loreContainsString(lore, "UUID:")) {
-				created.setBoundPlayer(PlayerManager.instance().getPlayerById(SabreUtil.parseLoreId(lore)));
+				created.setBoundPlayer(SabrePlugin.instance().getPlayerManager().getPlayerById(SabreUtil.parseLoreId(lore)));
 			}
 			
 			is.setItemMeta(created.getItemMeta());

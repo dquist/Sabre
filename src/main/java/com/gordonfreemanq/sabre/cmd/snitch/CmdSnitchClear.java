@@ -7,7 +7,6 @@ import com.gordonfreemanq.sabre.blocks.AbstractController;
 import com.gordonfreemanq.sabre.snitch.Snitch;
 import com.gordonfreemanq.sabre.cmd.SabreCommand;
 import com.gordonfreemanq.sabre.snitch.SnitchController;
-import com.gordonfreemanq.sabre.snitch.SnitchLogger;
 
 public class CmdSnitchClear  extends SabreCommand {
 
@@ -41,7 +40,7 @@ public class CmdSnitchClear  extends SabreCommand {
 			return;
 		}
 		
-		SnitchLogger.getInstance().clearEntries(snitch);
+		plugin.getSnitchLogger().clearEntries(snitch);
 		msg(Lang.snitchCleared);
 		
 	}

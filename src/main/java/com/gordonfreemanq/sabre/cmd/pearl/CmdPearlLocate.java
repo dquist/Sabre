@@ -8,7 +8,6 @@ import com.gordonfreemanq.sabre.Lang;
 import com.gordonfreemanq.sabre.SabrePlayer;
 import com.gordonfreemanq.sabre.SabrePlugin;
 import com.gordonfreemanq.sabre.cmd.SabreCommand;
-import com.gordonfreemanq.sabre.prisonpearl.PearlManager;
 import com.gordonfreemanq.sabre.prisonpearl.PrisonPearl;
 
 public class CmdPearlLocate extends SabreCommand {
@@ -51,7 +50,7 @@ public class CmdPearlLocate extends SabreCommand {
 			
 		} else {
 			SabrePlugin.log(Level.INFO, "%s is freed because the pearl could not be located.", pp.getLocation());
-			PearlManager.getInstance().freePearl(pp);
+			pearls.freePearl(pp);
 		}
 	}
 }

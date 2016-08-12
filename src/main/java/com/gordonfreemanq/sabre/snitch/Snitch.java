@@ -12,9 +12,8 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.util.Vector;
 
 import com.gordonfreemanq.sabre.Lang;
-import com.gordonfreemanq.sabre.PlayerManager;
 import com.gordonfreemanq.sabre.SabrePlayer;
-import com.gordonfreemanq.sabre.blocks.BlockManager;
+import com.gordonfreemanq.sabre.SabrePlugin;
 import com.gordonfreemanq.sabre.blocks.Reinforcement;
 import com.gordonfreemanq.sabre.customitems.SpecialBlock;
 import com.gordonfreemanq.sabre.snitch.QTBox;
@@ -115,7 +114,7 @@ public class Snitch extends SpecialBlock implements QTBox, Comparable {
 	 */
 	public void setSnitchName(String name) {
 		this.name = name;
-		BlockManager.instance().updateSettings(this);
+		SabrePlugin.instance().getBlockManager().updateSettings(this);
 	}
 	
 	
@@ -165,7 +164,7 @@ public class Snitch extends SpecialBlock implements QTBox, Comparable {
 	public void setNotify(boolean notifies) {
 		if (notifies != this.notifies) {
 			this.notifies = notifies;
-			BlockManager.instance().updateSettings(this);
+			SabrePlugin.instance().getBlockManager().updateSettings(this);
 		}
 	}
 
@@ -176,7 +175,7 @@ public class Snitch extends SpecialBlock implements QTBox, Comparable {
 	 */
 	public SabrePlayer getPlacedBy() {
 		if (placedBy == null) {
-			placedBy = PlayerManager.instance().getPlayerById(placedById);
+			placedBy =SabrePlugin.instance().getPlayerManager().getPlayerById(placedById);
 		}
 		return placedBy;
 	}

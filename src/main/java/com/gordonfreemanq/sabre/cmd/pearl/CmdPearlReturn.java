@@ -2,7 +2,6 @@ package com.gordonfreemanq.sabre.cmd.pearl;
 
 import com.gordonfreemanq.sabre.Lang;
 import com.gordonfreemanq.sabre.cmd.SabreCommand;
-import com.gordonfreemanq.sabre.prisonpearl.PearlManager;
 import com.gordonfreemanq.sabre.prisonpearl.PrisonPearl;
 
 public class CmdPearlReturn extends SabreCommand {
@@ -26,6 +25,6 @@ public class CmdPearlReturn extends SabreCommand {
 			return;
 		}
 
-		PearlManager.getInstance().returnPearl(pp, me);
+		pearls.returnPearl(pp, me);
 	}
 }

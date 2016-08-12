@@ -8,7 +8,7 @@ import org.bukkit.block.Block;
 import org.bukkit.inventory.InventoryHolder;
 import org.bukkit.material.Openable;
 
-import com.gordonfreemanq.sabre.groups.GroupManager;
+import com.gordonfreemanq.sabre.SabrePlugin;
 import com.gordonfreemanq.sabre.groups.SabreGroup;
 
 public class Reinforcement {
@@ -114,7 +114,7 @@ public class Reinforcement {
 	 */
 	public SabreGroup getGroup() {
 		if (group == null) {
-			group = GroupManager.instance().getGroupByID(groupID);
+			group = SabrePlugin.instance().getGroupManager().getGroupByID(groupID);
 		}
 		return group;
 	}

@@ -24,36 +24,20 @@ import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.event.player.PlayerKickEvent;
 import org.bukkit.event.player.PlayerRespawnEvent;
 
-import com.gordonfreemanq.sabre.chat.GlobalChat;
 import com.gordonfreemanq.sabre.chat.IChatChannel;
-import com.gordonfreemanq.sabre.util.PlayerSpawner;
 import com.gordonfreemanq.sabre.util.SabreUtil;
 
 public class PlayerListener implements Listener {
 	
-	private final PlayerManager pm;
-	private final GlobalChat globalChat;
-	private boolean pluginLoaded;
+	private final SabrePlugin plugin;
 	
 	
 	/**
 	 * Creates a new PlayerListener instance
-	 * @param pm The player manager
-	 * @param globalChat The global chat instance
+	 * @param plugin The plugin instance
 	 */
-	public PlayerListener(PlayerManager pm, GlobalChat globalChat) {
-		this.pm = pm;
-		this.globalChat = globalChat;
-		this.pluginLoaded = false;
-	}
-	
-	
-	/**
-	 * Sets the plugin loaded status which allows players to join
-	 * @param pluginLoaded The plugin loaded status
-	 */
-	public void setPluginLoaded(boolean pluginLoaded) {
-		this.pluginLoaded = pluginLoaded;
+	public PlayerListener(SabrePlugin plugin) {
+		this.plugin = plugin;
 	}
 	
 	
@@ -61,13 +45,13 @@ public class PlayerListener implements Listener {
 	public void onPlayerPreLogin(AsyncPlayerPreLoginEvent e)
 	{
 		// Don't let players join if things didn't start up correctly
-		if (!pluginLoaded) {
+		if (!plugin.getPluginLoaded()) {
 			e.setKickMessage(Lang.serverNotLoaded);
 			e.setLoginResult(Result.KICK_OTHER);
 			return;
 		}
 		
-		SabrePlayer sp = pm.getPlayerById(e.getUniqueId());
+		SabrePlayer sp = plugin.getPlayerManager().getPlayerById(e.getUniqueId());
 		if (sp != null && sp.getBanned()) {
 			e.setLoginResult(Result.KICK_BANNED);
 			String fullBanMessage = String.format("%s\n%s", Lang.youAreBanned, sp.getBanMessage());
@@ -126,26 +110,26 @@ public class PlayerListener implements Listener {
 	 * @param pThe player that is joining
 	 */
 	public void handlePlayerJoin(Player p) {
-		SabrePlayer sp = pm.getPlayerById(p.getUniqueId());
+		SabrePlayer sp = plugin.getPlayerManager().getPlayerById(p.getUniqueId());
 		if (sp == null) {
 			// This player has never logged in before, make a new instance and spawn them
-			sp = pm.createNewPlayer(p);
-			PlayerSpawner.instance().spawnPlayerRandom(sp);
+			sp = plugin.getPlayerManager().createNewPlayer(p);
+			plugin.getSpawner().spawnPlayerRandom(sp);
 		}
 		
 		// Update the player model
 		sp.setPlayer(p);
-		pm.setLastLogin(sp, new Date());
+		plugin.getPlayerManager().setLastLogin(sp, new Date());
 		
 		// This ensures the player name always stays the same
 		p.setDisplayName(sp.getName());
 		p.setCustomName(sp.getName());
 		p.setPlayerListName(sp.getName());
 		
-		pm.printOfflineMessages(sp);
-		pm.clearOfflineMessages(sp);
+		plugin.getPlayerManager().printOfflineMessages(sp);
+		plugin.getPlayerManager().clearOfflineMessages(sp);
 		
-		pm.onPlayerConnect(sp);
+		plugin.getPlayerManager().onPlayerConnect(sp);
 	}
 	
 	
@@ -154,10 +138,10 @@ public class PlayerListener implements Listener {
 	 * @param p The player that is disconnecting
 	 */
 	public void onPlayerDisconnect(Player p) {
-		SabrePlayer sp = pm.getPlayerById(p.getUniqueId());
+		SabrePlayer sp = plugin.getPlayerManager().getPlayerById(p.getUniqueId());
 		
 		// Removes the player from the online list
-		pm.onPlayerDisconnect(sp);
+		plugin.getPlayerManager().onPlayerDisconnect(sp);
 		
 		// Remove the bukkit player instance from the model
 		sp.setPlayer(null);
@@ -169,7 +153,7 @@ public class PlayerListener implements Listener {
 	 */
 	public void handleOnlinePlayers() {
 		for (Player p : Bukkit.getOnlinePlayers()) {
-			if (pluginLoaded) {
+			if (plugin.getPluginLoaded()) {
 				handlePlayerJoin(p);
 			} else {
 				p.kickPlayer(Lang.serverNotLoaded);
@@ -188,11 +172,11 @@ public class PlayerListener implements Listener {
 		 try {
 	        e.setCancelled(true);
 	        
-	        SabrePlayer p = pm.getPlayerById(e.getPlayer().getUniqueId());
+	        SabrePlayer p = plugin.getPlayerManager().getPlayerById(e.getPlayer().getUniqueId());
 	        
 	        IChatChannel channel = p.getChatChannel();
 	        if (channel == null) {
-	        	channel = globalChat;
+	        	channel = plugin.getGlobalChat();
 	        	p.setChatChannel(channel);
 	        }
 	        
@@ -215,8 +199,8 @@ public class PlayerListener implements Listener {
 	 */
 	@EventHandler(priority=EventPriority.LOWEST, ignoreCancelled = true)
 	public void onPlayerRespawn(PlayerRespawnEvent e) {
-		SabrePlayer sp = pm.getPlayerById(e.getPlayer().getUniqueId());
-		e.setRespawnLocation(PlayerSpawner.instance().spawnPlayerBed(sp));
+		SabrePlayer sp = plugin.getPlayerManager().getPlayerById(e.getPlayer().getUniqueId());
+		e.setRespawnLocation(plugin.getSpawner().spawnPlayerBed(sp));
 	}
 	
 
@@ -226,12 +210,12 @@ public class PlayerListener implements Listener {
 	 */
 	@EventHandler(priority=EventPriority.HIGHEST, ignoreCancelled = true)
 	public void onPlayerInteract(PlayerInteractEvent e) {
-		SabrePlayer p = pm.getPlayerById(e.getPlayer().getUniqueId());
+		SabrePlayer p = plugin.getPlayerManager().getPlayerById(e.getPlayer().getUniqueId());
 		
 		Action a = e.getAction();
 		if (a.equals(Action.RIGHT_CLICK_BLOCK) && e.getClickedBlock().getType().equals(Material.BED_BLOCK)) {
 			Location l = e.getClickedBlock().getLocation();
-			pm.setBedLocation(p, l);
+			plugin.getPlayerManager().setBedLocation(p, l);
 			p.msg(Lang.playerSetBed);
 			e.getPlayer().setBedSpawnLocation(l, true);
 			e.setCancelled(true);
@@ -251,7 +235,7 @@ public class PlayerListener implements Listener {
         
         Player p = (Player)e.getEntity();
         
-        SabrePlayer sp = pm.getPlayerByName(p.getName());
+        SabrePlayer sp = plugin.getPlayerManager().getPlayerByName(p.getName());
         if (sp == null) {
         	return;
         }

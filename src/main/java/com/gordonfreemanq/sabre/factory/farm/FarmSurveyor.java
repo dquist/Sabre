@@ -10,7 +10,7 @@ import org.bukkit.block.Biome;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 
-import com.gordonfreemanq.sabre.SabreConfig;
+import com.gordonfreemanq.sabre.SabrePlugin;
 import com.gordonfreemanq.sabre.util.SabreUtil;
 
 /**
@@ -46,13 +46,13 @@ public class FarmSurveyor {
 	// The farm chunk radius
 	// A radius of 1 would result in a 3x3 chunk farm
 	// A radius of 2 would result in a 5x5 chunk farm
-	private final int chunkRadius;
+	private int chunkRadius;
 	
 	// The number of blocks to sample during a survey
-	private final int squareLength;
+	private int squareLength;
 	
 	// The number of samples to get for each survey
-	private final int maxSamples;
+	private int maxSamples;
 	
 	// The stored layout samples
 	private double surveyLayoutTotal;
@@ -86,10 +86,18 @@ public class FarmSurveyor {
 		this.plantMaterial = plantMaterial;
 		this.coverageFactor = 0.0;
 		this.biomeFactor = 0.0;
-		this.chunkRadius = SabreConfig.instance().getFarmChunkRadius();
-		this.maxSamples = SabreConfig.instance().getFarmSurveySampleSize();
-		this.squareLength = (chunkRadius * 2 * 16) + 16;
 		this.rand = new Random();
+		readConfigValues();
+	}
+	
+	
+	/**
+	 * Fetch the latest config values
+	 */
+	private void readConfigValues() {
+		this.chunkRadius = SabrePlugin.instance().config().getFarmChunkRadius();
+		this.maxSamples = SabrePlugin.instance().config().getFarmSurveySampleSize();
+		this.squareLength = (chunkRadius * 2 * 16) + 16;
 	}
 	
 	
@@ -100,6 +108,7 @@ public class FarmSurveyor {
 	 * @return The efficiency factor
 	 */
 	public void surveyFarm(FarmFactory f) {
+		readConfigValues();
 		factoryLocation = f.getLocation();
 		
 		if (!factoryLocation.getChunk().isLoaded()) {
@@ -345,5 +354,4 @@ public class FarmSurveyor {
 	protected Material getSubstrate() {
 		return Material.CLAY;
 	}
-	
 }

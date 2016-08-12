@@ -2,7 +2,6 @@ package com.gordonfreemanq.sabre.cmd.pearl;
 
 import com.gordonfreemanq.sabre.Lang;
 import com.gordonfreemanq.sabre.cmd.SabreCommand;
-import com.gordonfreemanq.sabre.prisonpearl.PearlManager;
 import com.gordonfreemanq.sabre.prisonpearl.PrisonPearl;
 
 public class CmdPearlKill extends SabreCommand {
@@ -26,6 +25,6 @@ public class CmdPearlKill extends SabreCommand {
 			return;
 		}
 
-		PearlManager.getInstance().killPearl(pp, me);
+		pearls.killPearl(pp, me);
 	}
 }

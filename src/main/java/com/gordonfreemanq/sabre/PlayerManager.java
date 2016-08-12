@@ -10,7 +10,6 @@ import java.util.logging.Level;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
-import com.gordonfreemanq.sabre.data.IDataAccess;
 import com.gordonfreemanq.sabre.groups.SabreFaction;
 
 /**
@@ -18,11 +17,8 @@ import com.gordonfreemanq.sabre.groups.SabreFaction;
  * @author GFQ
  */
 public class PlayerManager {
-
-	// Global instance
-	private static PlayerManager instance;
 	
-	private final IDataAccess db;
+	private final SabrePlugin plugin;
 	private final HashMap<UUID, SabrePlayer> players;
 	private final HashMap<UUID, SabrePlayer> onlinePlayers;
 
@@ -30,20 +26,10 @@ public class PlayerManager {
 	/**
 	 * Creates a new PlayerManager instance 
 	 */
-	public PlayerManager(IDataAccess db) {
-		instance = this;
-		
-		this.db = db;
+	public PlayerManager(SabrePlugin plugin) {
+		this.plugin = plugin;
 		this.players = new HashMap<UUID, SabrePlayer>();
 		this.onlinePlayers = new HashMap<UUID, SabrePlayer>();
-	}
-	
-	
-	/**
-	 * Gets the global instance
-	 */
-	public static PlayerManager instance() {
-		return instance;
 	}
 	
 	
@@ -53,7 +39,7 @@ public class PlayerManager {
 	public void load() {
 		this.players.clear();
 		
-		for (SabrePlayer p : db.playerGetAll()) {
+		for (SabrePlayer p : plugin.getDataAccess().playerGetAll()) {
 			this.players.put(p.getID(), p);
 		}
 	}
@@ -65,7 +51,7 @@ public class PlayerManager {
 	 */
 	public void addPlayer(SabrePlayer player) {
 		this.players.put(player.getID(), player);
-		db.playerInsert(player);
+		plugin.getDataAccess().playerInsert(player);
 	}
 	
 	
@@ -76,7 +62,7 @@ public class PlayerManager {
 	public void removePlayer(SabrePlayer p) {
 		onlinePlayers.remove(p.getID());
 		players.remove(p.getID());
-		db.playerDelete(p);
+		plugin.getDataAccess().playerDelete(p);
 		SabrePlugin.log(Level.INFO, "Removed player: Name=%s, ID=%s", p.getName(), p.getID().toString());
 	}
 	
@@ -192,7 +178,7 @@ public class PlayerManager {
 	 */
 	public void setLastLogin(SabrePlayer p, Date lastLogin) {
 		p.setLastLogin(lastLogin);
-		db.playerUpdateLastLogin(p);
+		plugin.getDataAccess().playerUpdateLastLogin(p);
 	}
 	
 	
@@ -203,7 +189,7 @@ public class PlayerManager {
 	 */
 	public void setAutoJoin(SabrePlayer p, boolean autoJoin) {
 		p.setAutoJoin(autoJoin);
-		db.playerUpdateAutoJoin(p);
+		plugin.getDataAccess().playerUpdateAutoJoin(p);
 	}
 	
 	
@@ -214,7 +200,7 @@ public class PlayerManager {
 	 */
 	public void setFaction(SabrePlayer p, SabreFaction faction) {
 		p.setFaction(faction);
-		db.playerUpdateFaction(p);
+		plugin.getDataAccess().playerUpdateFaction(p);
 	}
 	
 	
@@ -225,7 +211,7 @@ public class PlayerManager {
 	 */
 	public void setDisplayName(SabrePlayer p, String name) {
 		p.setName(name);
-		db.playerUpdateName(p);
+		plugin.getDataAccess().playerUpdateName(p);
 	}
 	
 	
@@ -244,7 +230,7 @@ public class PlayerManager {
 			p.getPlayer().kickPlayer(fullBanMessage);
 		}
 		
-		db.playerUpdateBan(p);
+		plugin.getDataAccess().playerUpdateBan(p);
 	}
 	
 	
@@ -255,7 +241,7 @@ public class PlayerManager {
 	 */
 	public void setFreedOffline(SabrePlayer p, boolean status) {
 		p.setFreedOffline(status);
-		db.playerUpdateFreedOffline(p);
+		plugin.getDataAccess().playerUpdateFreedOffline(p);
 	}
 	
 	/**
@@ -265,7 +251,7 @@ public class PlayerManager {
 	 */
 	public void setBedLocation(SabrePlayer p, Location l) {
 		p.setBedLocation(l);
-		db.playerUpdateBed(p);
+		plugin.getDataAccess().playerUpdateBed(p);
 	}
 	
 	
@@ -276,7 +262,7 @@ public class PlayerManager {
 	 */
 	public void addOfflineMessage(SabrePlayer p, String message) {
 		p.addOfflineMessage(message);
-		db.playerAddOfflineMessage(p, message);
+		plugin.getDataAccess().playerAddOfflineMessage(p, message);
 	}
 	
 	
@@ -286,7 +272,7 @@ public class PlayerManager {
 	 */
 	public void clearOfflineMessages(SabrePlayer p) {
 		p.getOfflineMessages().clear();
-		db.playerClearOfflineMessages(p);
+		plugin.getDataAccess().playerClearOfflineMessages(p);
 	}
 	
 	
@@ -316,6 +302,6 @@ public class PlayerManager {
 	 */
 	public void addPlayTime(SabrePlayer p, long time) {
 		p.addPlayTime(time);
-		db.playerUpdatePlayTime(p);
+		plugin.getDataAccess().playerUpdatePlayTime(p);
 	}
 }

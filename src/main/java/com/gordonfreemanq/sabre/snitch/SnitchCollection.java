@@ -15,7 +15,6 @@ import org.bukkit.util.BlockIterator;
 import com.gordonfreemanq.sabre.SabrePlayer;
 import com.gordonfreemanq.sabre.SabrePlugin;
 import com.gordonfreemanq.sabre.blocks.BlockCollection;
-import com.gordonfreemanq.sabre.blocks.BlockManager;
 import com.gordonfreemanq.sabre.blocks.SabreBlock;
 import com.gordonfreemanq.sabre.snitch.QTBox;
 import com.gordonfreemanq.sabre.snitch.SparseQuadTree;
@@ -154,7 +153,7 @@ public class SnitchCollection extends BlockCollection {
                 continue;
             }
             
-            SabreBlock sb = BlockManager.instance().getBlockAt(block.getLocation());
+            SabreBlock sb = SabrePlugin.instance().getBlockManager().getBlockAt(block.getLocation());
             if (sb instanceof Snitch) {
             	return (Snitch)sb;
             }

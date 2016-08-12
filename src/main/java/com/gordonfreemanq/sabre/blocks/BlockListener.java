@@ -51,8 +51,6 @@ import org.bukkit.material.PistonBaseMaterial;
 import org.bukkit.material.Sign;
 
 import com.gordonfreemanq.sabre.Lang;
-import com.gordonfreemanq.sabre.PlayerManager;
-import com.gordonfreemanq.sabre.SabreConfig;
 import com.gordonfreemanq.sabre.SabrePlayer;
 import com.gordonfreemanq.sabre.SabrePlugin;
 import com.gordonfreemanq.sabre.SabreTweaks;
@@ -67,10 +65,7 @@ import com.gordonfreemanq.sabre.util.SabreUtil;
 @SuppressWarnings("deprecation")
 public class BlockListener implements Listener {
 
-	private final PlayerManager pm;
-	private final BlockManager bm;
-	private final SabreConfig config;
-
+	private final SabrePlugin plugin;
 
 	public static final List<BlockFace> all_sides = Arrays.asList(
 			BlockFace.UP, BlockFace.DOWN, BlockFace.NORTH,
@@ -82,28 +77,23 @@ public class BlockListener implements Listener {
 
 
 	/**
-	 * Creates a  new BlockListener instance
-	 * @param pm The player manager
-	 * @param gm The group manager
-	 * @param bm The block manager
-	 * @param logger The logging class
+	 * Creates a new BlockListener instance
+	 * @param plugin The plugin instance
 	 */
-	public BlockListener(PlayerManager pm, BlockManager bm, SabreConfig config) {
-		this.pm = pm;
-		this.bm = bm;
-		this.config = config;
+	public BlockListener(SabrePlugin plugin) {
+		this.plugin = plugin;
 	}
 
 
 	@EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
 	public void onChunkLoad(ChunkLoadEvent e) {
-		bm.loadChunk(e.getChunk());
+		plugin.getBlockManager().loadChunk(e.getChunk());
 	}
 
 
 	@EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
 	public void onChunkLoad(ChunkUnloadEvent e) {
-		bm.unloadChunk(e.getChunk());
+		plugin.getBlockManager().unloadChunk(e.getChunk());
 	}
 
 
@@ -115,7 +105,7 @@ public class BlockListener implements Listener {
 	public void onBlockPlaceEvent(BlockPlaceEvent e) {
 		try {
 			Reinforcement r = null;
-			SabrePlayer p = pm.getPlayerById(e.getPlayer().getUniqueId());
+			SabrePlayer p = plugin.getPlayerManager().getPlayerById(e.getPlayer().getUniqueId());
 
 			// Create a new block instance and save it if the item in hand has block data
 			SabreBlock b = BlockManager.createBlockFromItem(e.getItemInHand(), e.getBlock().getLocation());
@@ -152,12 +142,12 @@ public class BlockListener implements Listener {
 
 			// Commit the new block record if it exists
 			if (b != null) {
-				bm.addBlock(b);
+				plugin.getBlockManager().addBlock(b);
 				b.onBlockPlaced(p, e);
 			}
 
 			if (r != null) {
-				bm.setReinforcement(b, r);
+				plugin.getBlockManager().setReinforcement(b, r);
 			}
 
 		} catch (Exception ex) {
@@ -178,10 +168,10 @@ public class BlockListener implements Listener {
 		try {
 			Block b = SabreUtil.getRealBlock(e.getBlock());
 			Location l = b.getLocation();
-			SabrePlayer p = pm.getPlayerById(e.getPlayer().getUniqueId());
+			SabrePlayer p = plugin.getPlayerManager().getPlayerById(e.getPlayer().getUniqueId());
 
 			// Find the record for this block location
-			SabreBlock sb = bm.getBlockAt(l);
+			SabreBlock sb = plugin.getBlockManager().getBlockAt(l);
 			if (sb != null) { 
 				sb.onBlockBreaking(p, e);
 			}
@@ -203,11 +193,11 @@ public class BlockListener implements Listener {
 		try {
 			
 			Block b = e.getBlock();
-			SabrePlayer p = pm.getPlayerById(e.getPlayer().getUniqueId());
+			SabrePlayer p = plugin.getPlayerManager().getPlayerById(e.getPlayer().getUniqueId());
 
 			// If it can't find a record, check to see if there's a record for any
 			// attached block for a chest, door etc.
-			SabreBlock sb = bm.getBlockAt(b.getLocation());
+			SabreBlock sb = plugin.getBlockManager().getBlockAt(b.getLocation());
 			if (sb == null) {
 				Block realBlock = SabreUtil.getRealBlock(e.getBlock());
 				if (b.equals(realBlock)) {
@@ -217,7 +207,7 @@ public class BlockListener implements Listener {
 			}
 			
 			// Find the record for this block location
-			sb = bm.getBlockAt(b.getLocation());
+			sb = plugin.getBlockManager().getBlockAt(b.getLocation());
 			if (sb == null) {
 				return;
 			}
@@ -255,7 +245,7 @@ public class BlockListener implements Listener {
 						if (strength > 1) {
 							// Decrement the durability
 							r.setStrength(strength - 1);
-							bm.updateReinforcementStrength(sb);
+							plugin.getBlockManager().updateReinforcementStrength(sb);
 						} else {
 							// Reinforcement is broken, let it break
 							sb.onReinforcementBroken(p, e);
@@ -271,7 +261,7 @@ public class BlockListener implements Listener {
 			if (allowBreak) {
 
 				// Remove the block record
-				bm.removeBlock(sb);
+				plugin.getBlockManager().removeBlock(sb);
 				
 				// Perform any logic for when the block breaks
 				sb.onBlockBroken(p, e);
@@ -321,7 +311,7 @@ public class BlockListener implements Listener {
 
 			Block b = SabreUtil.getRealBlock(e.getClickedBlock());
 			Reinforcement r = null;
-			SabrePlayer p = pm.getPlayerById(e.getPlayer().getUniqueId());
+			SabrePlayer p = plugin.getPlayerManager().getPlayerById(e.getPlayer().getUniqueId());
 			Action a = e.getAction();
 			BuildState state = p.getBuildState();
 			boolean canAccess = false;
@@ -329,13 +319,13 @@ public class BlockListener implements Listener {
 			// Find the record for this block location
 			// If it can't find a record, check to see if there's a record for any
 			// attached block for a chest, door etc.
-			SabreBlock sb = bm.getBlockAt(b.getLocation());
+			SabreBlock sb = plugin.getBlockManager().getBlockAt(b.getLocation());
 			if (sb == null) {
 				Block realBlock = SabreUtil.getRealBlock(b);
 				if (!b.equals(realBlock)) {
 					b = realBlock;
 				}
-				sb = bm.getBlockAt(b.getLocation());
+				sb = plugin.getBlockManager().getBlockAt(b.getLocation());
 			}
 
 			// Ignore anything except left/right clicks
@@ -354,11 +344,11 @@ public class BlockListener implements Listener {
 					// Show the special block name if player interacts with a stick
 					boolean showBlockName = sb.isSpecial() && p.getPlayer().getItemInHand().getType() != Material.STICK;
 					
-					canAccess = bm.playerCanAccessBlock(p, sb);
+					canAccess = plugin.getBlockManager().playerCanAccessBlock(p, sb);
 
 					// Disallow container access for those not in the group
 					if (a.equals(Action.RIGHT_CLICK_BLOCK)) {
-						if (config.blockIsLockable(b.getType()) && !canAccess) {
+						if (plugin.config().blockIsLockable(b.getType()) && !canAccess) {
 							if (p.getAdminBypass()) {
 								p.msg(Lang.adminYouBypassed, sb.getReinforcement().getGroup().getFullName());
 							} else {
@@ -407,7 +397,7 @@ public class BlockListener implements Listener {
 				// Create a new block instance if we have to
 				if (sb == null) {
 					sb = new SabreBlock(b.getLocation());
-					bm.addBlock(sb);
+					plugin.getBlockManager().addBlock(sb);
 				}
 
 				Reinforcement existing = sb.getReinforcement();
@@ -415,7 +405,7 @@ public class BlockListener implements Listener {
 				// Create the new reinforcement
 				r = createReinforcement(p, b, existing, false);
 				if (r != null) {
-					bm.setReinforcement(sb, r);
+					plugin.getBlockManager().setReinforcement(sb, r);
 				}
 
 				e.setCancelled(true);
@@ -436,7 +426,7 @@ public class BlockListener implements Listener {
 					BaseFactory factory = FactoryWorker.getInstance().getRunningByLocation(l);
 					
 					if (factory == null) {
-						factory = (BaseFactory)bm.getFactories().get(l);
+						factory = (BaseFactory)plugin.getBlockManager().getFactories().get(l);
 					}
 					if (factory != null) {
 						if (factory.canPlayerAccess(p)) {
@@ -475,7 +465,7 @@ public class BlockListener implements Listener {
 		for (World w : Bukkit.getWorlds()) {
 			Chunk[] chunks = w.getLoadedChunks();
 			for (int i = 0; i <  chunks.length; i++ ) {
-				bm.loadChunk(chunks[i]);
+				plugin.getBlockManager().loadChunk(chunks[i]);
 			}
 		}
 	}
@@ -510,13 +500,13 @@ public class BlockListener implements Listener {
 			return null;
 		}
 
-		if (config.blockIsNonreinforceable(l.getBlock().getType())) {
+		if (plugin.config().blockIsNonreinforceable(l.getBlock().getType())) {
 			p.msg(Lang.blockNotReinforceable);
 			return null;
 		}
 
 		// Make sure player has permission to modify
-		if (!bm.playerCanModifyBlock(p, b)) {
+		if (!plugin.getBlockManager().playerCanModifyBlock(p, b)) {
 			p.msg(Lang.noPermission);
 			return null;
 		}
@@ -628,7 +618,7 @@ public class BlockListener implements Listener {
 		SabreGroup g = r.getGroup();
 		SabreMember m = g.getMember(p);
 
-		if (config.blockIsLockable(b.getLocation().getBlock().getType())) {
+		if (plugin.config().blockIsLockable(b.getLocation().getBlock().getType())) {
 			verb = "Locked";
 		}
 
@@ -678,7 +668,7 @@ public class BlockListener implements Listener {
 					continue;
 				}
 
-				SabreBlock sb = bm.getBlockAt(adjacent.getLocation());
+				SabreBlock sb = plugin.getBlockManager().getBlockAt(adjacent.getLocation());
 				if (sb != null) {
 					Reinforcement r = sb.getReinforcement();
 					SabreGroup g = r.getGroup();
@@ -695,7 +685,7 @@ public class BlockListener implements Listener {
 					continue;
 				}
 
-				SabreBlock sb = bm.getBlockAt(adjacent.getLocation());
+				SabreBlock sb = plugin.getBlockManager().getBlockAt(adjacent.getLocation());
 				if (sb != null) {
 					Reinforcement r = sb.getReinforcement();
 					if (r != null) {
@@ -715,7 +705,7 @@ public class BlockListener implements Listener {
 				
 				Block realBlock = SabreUtil.getRealBlock(adjacent);
 
-				SabreBlock sb = bm.getBlockAt(realBlock.getLocation());
+				SabreBlock sb = plugin.getBlockManager().getBlockAt(realBlock.getLocation());
 				if (sb != null) {
 					Reinforcement r = sb.getReinforcement();
 					SabreGroup g = r.getGroup();
@@ -728,7 +718,7 @@ public class BlockListener implements Listener {
 
 		else if (block_mat != Material.AIR) {
 
-			SabreBlock sb = bm.getBlockAt(b.getLocation());
+			SabreBlock sb = plugin.getBlockManager().getBlockAt(b.getLocation());
 			if (sb != null) {
 				Reinforcement r = sb.getReinforcement();
 				SabreGroup g = r.getGroup();
@@ -755,7 +745,7 @@ public class BlockListener implements Listener {
 		}
 
 		// Don't let things get washed away!
-		SabreBlock b = bm.getBlockAt(toBlock.getLocation());
+		SabreBlock b = plugin.getBlockManager().getBlockAt(toBlock.getLocation());
 		if (b != null) {
 			e.setCancelled(true);
 		}
@@ -770,7 +760,7 @@ public class BlockListener implements Listener {
 	public void blockBurn(BlockBurnEvent e) {
 
 		// Don't let reinforced blocks burn!
-		SabreBlock b = bm.getBlockAt(e.getBlock().getLocation());
+		SabreBlock b = plugin.getBlockManager().getBlockAt(e.getBlock().getLocation());
 		if (b != null) {
 			e.setCancelled(true);
 		}
@@ -804,7 +794,7 @@ public class BlockListener implements Listener {
 				break;
 			}
 
-			SabreBlock b = bm.getBlockAt(block.getLocation());
+			SabreBlock b = plugin.getBlockManager().getBlockAt(block.getLocation());
 			if (b != null) {
 				e.setCancelled(true);
 				break;
@@ -835,7 +825,7 @@ public class BlockListener implements Listener {
 		// The block that the piston moved
 		Block moved = piston.getRelative(direction, 2);
 
-		SabreBlock b = bm.getBlockAt(moved.getLocation());
+		SabreBlock b = plugin.getBlockManager().getBlockAt(moved.getLocation());
 		if (b != null) {
 			e.setCancelled(true);
 		}
@@ -867,7 +857,7 @@ public class BlockListener implements Listener {
 		}
 
 		// Only care about blocks with reinforcement
-		SabreBlock sb = bm.getBlockAt(block.getLocation());
+		SabreBlock sb = plugin.getBlockManager().getBlockAt(block.getLocation());
 		if (sb == null) {
 			return;
 		}
@@ -926,7 +916,7 @@ public class BlockListener implements Listener {
 		boolean result = false;
 
 		try {
-			for (SabrePlayer p : pm.getOnlinePlayers()) {
+			for (SabrePlayer p : plugin.getPlayerManager().getOnlinePlayers()) {
 				if (p.getPlayer().isDead()) {
 					continue;
 				}
@@ -942,7 +932,7 @@ public class BlockListener implements Listener {
 					continue;
 				}
 
-				if (!bm.playerCanAccessBlock(p, r.getLocation().getBlock()) && !p.getAdminBypass()) {
+				if (!plugin.getBlockManager().playerCanAccessBlock(p, r.getLocation().getBlock()) && !p.getAdminBypass()) {
 					continue;
 				}
 
@@ -972,10 +962,10 @@ public class BlockListener implements Listener {
 				Location l = b.getLocation();
 
 				// Find the record for this block location
-				SabreBlock sb = bm.getBlockAt(l);
+				SabreBlock sb = plugin.getBlockManager().getBlockAt(l);
 
 				if (sb != null) {
-					bm.removeBlock(sb);
+					plugin.getBlockManager().removeBlock(sb);
 
 					// Create a new item stack for this block type
 					ItemStack is = sb.createItemStack(b.getType(), 1);
@@ -999,12 +989,12 @@ public class BlockListener implements Listener {
 	public void onStructureGrow(StructureGrowEvent e) {
 		for (BlockState state : e.getBlocks()) {
 			// Find the record for this block location
-			SabreBlock sb = bm.getBlockAt(state.getLocation());
+			SabreBlock sb = plugin.getBlockManager().getBlockAt(state.getLocation());
 			if (sb != null) {
 	    		if (sb.getReinforcement() != null) {
 	        		e.setCancelled(true);
 	    		} else {
-	    			bm.removeBlock(sb);
+	    			plugin.getBlockManager().removeBlock(sb);
 	    		}
 			}
 		}
@@ -1021,12 +1011,12 @@ public class BlockListener implements Listener {
         if (type != EntityType.IRON_GOLEM && type != EntityType.SNOWMAN) return;
 
         for (Block b : getGolemBlocks(type, e.getLocation().getBlock())) {
-        	SabreBlock sb = bm.getBlockAt(b.getLocation());
+        	SabreBlock sb = plugin.getBlockManager().getBlockAt(b.getLocation());
         	if (sb != null) {
         		if (sb.getReinforcement() != null) {
             		e.setCancelled(true);
         		} else {
-        			bm.removeBlock(sb);
+        			plugin.getBlockManager().removeBlock(sb);
         		}
         	}
         }
@@ -1064,12 +1054,12 @@ public class BlockListener implements Listener {
      */
     @EventHandler(ignoreCancelled = true)
     public void breakDoor(EntityBreakDoorEvent e) {
-    	SabreBlock sb = bm.getBlockAt(e.getBlock().getLocation());
+    	SabreBlock sb = plugin.getBlockManager().getBlockAt(e.getBlock().getLocation());
     	if (sb != null) {
     		if (sb.getReinforcement() != null) {
         		e.setCancelled(true);
     		} else {
-    			bm.removeBlock(sb);
+    			plugin.getBlockManager().removeBlock(sb);
     		}
     	}
     }
@@ -1081,12 +1071,12 @@ public class BlockListener implements Listener {
      */
     @EventHandler(ignoreCancelled = true)
     public void changeBlock(EntityChangeBlockEvent e) {
-    	SabreBlock sb = bm.getBlockAt(e.getBlock().getLocation());
+    	SabreBlock sb = plugin.getBlockManager().getBlockAt(e.getBlock().getLocation());
     	if (sb != null) {
     		if (sb.getReinforcement() != null) {
         		e.setCancelled(true);
     		} else {
-    			bm.removeBlock(sb);
+    			plugin.getBlockManager().removeBlock(sb);
     		}
     	}
     }
@@ -1101,12 +1091,12 @@ public class BlockListener implements Listener {
         Iterator<Block> iterator = eee.blockList().iterator();
         while (iterator.hasNext()) {
             Block b = iterator.next();
-        	SabreBlock sb = bm.getBlockAt(b.getLocation());
+        	SabreBlock sb = plugin.getBlockManager().getBlockAt(b.getLocation());
         	if (sb != null) {
         		if (sb.getReinforcement() != null) {
             		iterator.remove();
         		} else {
-        			bm.removeBlock(sb);
+        			plugin.getBlockManager().removeBlock(sb);
         		}
         	}
         }
@@ -1189,7 +1179,7 @@ public class BlockListener implements Listener {
 			return null;
 		}
 		
-		SabreBlock sb = bm.getBlockAt(loc);
+		SabreBlock sb = plugin.getBlockManager().getBlockAt(loc);
 		if (sb != null) {
 			return sb.getReinforcement();
 		}

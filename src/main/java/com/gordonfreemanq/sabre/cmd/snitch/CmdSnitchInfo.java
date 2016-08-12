@@ -7,7 +7,6 @@ import com.gordonfreemanq.sabre.blocks.AbstractController;
 import com.gordonfreemanq.sabre.snitch.Snitch;
 import com.gordonfreemanq.sabre.cmd.SabreCommand;
 import com.gordonfreemanq.sabre.snitch.SnitchController;
-import com.gordonfreemanq.sabre.snitch.SnitchLogger;
 
 public class CmdSnitchInfo  extends SabreCommand {
 
@@ -52,6 +51,6 @@ public class CmdSnitchInfo  extends SabreCommand {
 			page = Math.max(0, this.argAsInt(0) - 1);
 		}
 		
-		SnitchLogger.getInstance().requestReport(me, snitch, page);
+		plugin.getSnitchLogger().requestReport(me, snitch, page);
 	}
 }

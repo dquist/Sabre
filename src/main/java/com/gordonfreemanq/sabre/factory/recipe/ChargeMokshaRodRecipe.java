@@ -5,7 +5,7 @@ import java.util.List;
 
 import org.bukkit.inventory.ItemStack;
 
-import com.gordonfreemanq.sabre.SabreConfig;
+import com.gordonfreemanq.sabre.SabrePlugin;
 import com.gordonfreemanq.sabre.blocks.CustomItems;
 import com.gordonfreemanq.sabre.blocks.SabreItemStack;
 import com.gordonfreemanq.sabre.customitems.MokshaRod;
@@ -22,7 +22,7 @@ public class ChargeMokshaRodRecipe implements IRecipe {
 
 	private final String name;
 	private final int productionSpeed;
-	private final int costFactor;
+	private int costFactor;
 	
 	private int configFuelCost;
 	private int fuelCost;
@@ -41,7 +41,6 @@ public class ChargeMokshaRodRecipe implements IRecipe {
 	public ChargeMokshaRodRecipe(String name, int productionSpeed, int fuelCost) {
 		this.name = name;
 		this.productionSpeed = productionSpeed;
-		this.costFactor = SabreConfig.instance().getJailbreakCostFactor();
 		this.configFuelCost = fuelCost;
 		this.inputs = new ItemList<SabreItemStack>();
 		this.outputs = new ItemList<SabreItemStack>();
@@ -111,6 +110,8 @@ public class ChargeMokshaRodRecipe implements IRecipe {
 		
 		// Add the pearl to the recipe
 		inputs.add(mokshaStack);
+		
+		costFactor = SabrePlugin.instance().config().getJailbreakCostFactor();
 		
 		// The default recipe requires at least the factor amount of cuendillar
 		SabreItemStack inputCuendillar = CustomItems.getInstance().getByName("Cuendillar");

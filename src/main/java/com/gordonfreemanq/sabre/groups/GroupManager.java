@@ -10,10 +10,8 @@ import org.bukkit.Chunk;
 import org.bukkit.World;
 
 import com.gordonfreemanq.sabre.Lang;
-import com.gordonfreemanq.sabre.PlayerManager;
 import com.gordonfreemanq.sabre.SabrePlayer;
 import com.gordonfreemanq.sabre.SabrePlugin;
-import com.gordonfreemanq.sabre.blocks.BlockManager;
 import com.gordonfreemanq.sabre.blocks.BuildMode;
 import com.gordonfreemanq.sabre.blocks.BuildState;
 import com.gordonfreemanq.sabre.blocks.Reinforcement;
@@ -21,38 +19,20 @@ import com.gordonfreemanq.sabre.blocks.SabreBlock;
 import com.gordonfreemanq.sabre.blocks.SignCollection;
 import com.gordonfreemanq.sabre.chat.GlobalChat;
 import com.gordonfreemanq.sabre.customitems.SecureSign;
-import com.gordonfreemanq.sabre.data.IDataAccess;
 
 public class GroupManager {
-	
-	// The global instance
-	private static GroupManager instance;
 
-	private final PlayerManager pm;
-	private final BlockManager bm;
-	private final IDataAccess db;
+	private final SabrePlugin plugin;
 	private final HashMap<UUID, SabreGroup> groups;
 	
 	/**
-	 * Creates a new GroupManager instace
+	 * Creates a new GroupManager instance
 	 * @param pm The player manager
 	 * @param db The database
 	 */
-	public GroupManager(PlayerManager pm, BlockManager bm, IDataAccess db) {
-		this.pm = pm;
-		this.bm = bm;
-		this.db = db;
+	public GroupManager(SabrePlugin plugin) {
+		this.plugin = plugin;
 		this.groups = new HashMap<UUID, SabreGroup>();
-		
-		instance = this;
-	}
-	
-	
-	/**
-	 * Gets the global instance
-	 */
-	public static GroupManager instance() {
-		return instance;
 	}
 	
 	/**
@@ -61,7 +41,7 @@ public class GroupManager {
 	public void load() {
 		this.groups.clear();
 		
-		for (SabreGroup g : db.groupGetAll()) {
+		for (SabreGroup g : plugin.getDataAccess().groupGetAll()) {
 			this.groups.put(g.getID(), g);
 		}
 	}
@@ -109,7 +89,7 @@ public class GroupManager {
 			throw new RuntimeException(String.format("Tried to add faction '%s' that already exists.", g.getName()));
 		}
 		
-		db.groupInsert(g);
+		plugin.getDataAccess().groupInsert(g);
 		groups.put(g.getID(), g);
 		SabrePlugin.log(Level.INFO, "Added new group '%s'", name);
 	}
@@ -164,7 +144,7 @@ public class GroupManager {
 	 */
 	public void removeGroup(SabreGroup g) {
 		this.groups.remove(g);
-		this.db.groupDelete(g);
+		this.plugin.getDataAccess().groupDelete(g);
 	}
 	
 	
@@ -176,7 +156,7 @@ public class GroupManager {
 	public void renameGroup(SabreGroup g, String n) {
 		this.groups.remove(g);
 		g.setName(n);
-		db.groupUpdateName(g, n);
+		plugin.getDataAccess().groupUpdateName(g, n);
 	}
 	
 	
@@ -226,10 +206,10 @@ public class GroupManager {
 		}
 
 		m = g.addMember(p, Rank.MEMBER);
-		db.groupAddMember(g, m);
+		plugin.getDataAccess().groupAddMember(g, m);
 
 		if (g instanceof SabreFaction) {
-			pm.setFaction(p, (SabreFaction)g);
+			plugin.getPlayerManager().setFaction(p, (SabreFaction)g);
 		}
 		
 		updateGroupSigns(g, p);
@@ -252,10 +232,10 @@ public class GroupManager {
 		}
 		
 		m = g.removePlayer(p);
-		db.groupRemoveMember(g,  m);
+		plugin.getDataAccess().groupRemoveMember(g,  m);
 		
 		if (g instanceof SabreFaction) {
-			pm.setFaction(p, null);
+			plugin.getPlayerManager().setFaction(p, null);
 		}
 		
 		checkRemoveChat(g, p);
@@ -274,7 +254,7 @@ public class GroupManager {
 	public void invitePlayer(SabreGroup g, SabrePlayer p) {
 		if (!g.isMember(p) && !g.isInvited(p)) {
 			g.addInvited(p);
-			db.groupAddInvited(g, p.getID());
+			plugin.getDataAccess().groupAddInvited(g, p.getID());
 		}
 	}
 	
@@ -287,7 +267,7 @@ public class GroupManager {
 	public void uninvitePlayer(SabreGroup g, SabrePlayer p) {
 		if (g.isInvited(p)) {
 			g.removeInvited(p);
-			db.groupRemoveInvited(g, p.getID());
+			plugin.getDataAccess().groupRemoveInvited(g, p.getID());
 		}
 	}
 	
@@ -299,7 +279,7 @@ public class GroupManager {
 	 */
 	public void setPlayerRank(SabreMember m, Rank r) {
 		m.setRank(r);
-		db.groupUpdateMemberRank(m.getGroup(), m);
+		plugin.getDataAccess().groupUpdateMemberRank(m.getGroup(), m);
 	}
 	
 	
@@ -341,7 +321,7 @@ public class GroupManager {
 		SecureSign s;
 		Reinforcement r;
 		
-		SignCollection signs = bm.getSigns();
+		SignCollection signs = plugin.getBlockManager().getSigns();
 		
 		for (int i = -4; i <= 4; i++) {
 			for (int j = -4; j <= 4; j++) {

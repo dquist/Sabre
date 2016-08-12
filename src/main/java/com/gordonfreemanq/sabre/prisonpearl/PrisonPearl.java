@@ -25,7 +25,6 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.util.Vector;
 
-import com.gordonfreemanq.sabre.PlayerManager;
 import com.gordonfreemanq.sabre.SabrePlayer;
 import com.gordonfreemanq.sabre.SabrePlugin;
 import com.gordonfreemanq.sabre.blocks.SabreItemStack;
@@ -106,7 +105,7 @@ public class PrisonPearl {
 	 */
 	public SabrePlayer getPlayer() {
 		if (player == null) {
-			player = PlayerManager.instance().getPlayerById(playerId);
+			player = SabrePlugin.instance().getPlayerManager().getPlayerById(playerId);
 		}
 		return player;
 	}

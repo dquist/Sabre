@@ -8,7 +8,7 @@ import org.bukkit.event.player.PlayerInteractEvent;
 
 import com.gordonfreemanq.sabre.Lang;
 import com.gordonfreemanq.sabre.SabrePlayer;
-import com.gordonfreemanq.sabre.blocks.BlockManager;
+import com.gordonfreemanq.sabre.SabrePlugin;
 import com.gordonfreemanq.sabre.customitems.SpecialBlock;
 import com.gordonfreemanq.sabre.util.SabreUtil;
 import com.mongodb.BasicDBObject;
@@ -35,7 +35,7 @@ public abstract class AbstractWarpDrive extends SpecialBlock {
 			return;
 		}
 		
-		TeleportPad pad = (TeleportPad)BlockManager.instance().getBlockAt(l);
+		TeleportPad pad = (TeleportPad)SabrePlugin.instance().getBlockManager().getBlockAt(l);
 		if (pad == null) {
 			sp.msg(Lang.warpNoPadFound);
 		}

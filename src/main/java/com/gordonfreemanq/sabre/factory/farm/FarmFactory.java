@@ -11,8 +11,8 @@ import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 
-import com.gordonfreemanq.sabre.SabreConfig;
 import com.gordonfreemanq.sabre.SabrePlayer;
+import com.gordonfreemanq.sabre.SabrePlugin;
 import com.gordonfreemanq.sabre.factory.BaseFactory;
 import com.gordonfreemanq.sabre.factory.FactoryWorker;
 import com.gordonfreemanq.sabre.factory.recipe.FarmRecipe;
@@ -27,13 +27,13 @@ import com.mongodb.BasicDBObject;
 public class FarmFactory extends BaseFactory {
 	
 	// How many factory ticks to wait before producing
-	private final int farmProductionTicks;
+	private int farmProductionTicks;
 	
 	// How far away it has to be away from another running farm
-	private final int farmProximity;
+	private int farmProximity;
 	
 	// How many minutes between each survey
-	private final int surveyPeriodMin;
+	private int surveyPeriodMin;
 	
 	// The current production tick counter for when the farm is running
 	private int farmTickCounter;
@@ -71,9 +71,6 @@ public class FarmFactory extends BaseFactory {
 	 */
 	public FarmFactory(Location location, String typeName) {
 		super(location, typeName);
-		this.farmProductionTicks = SabreConfig.instance().getFarmProductionTicks();
-		this.farmProximity = SabreConfig.instance().getFarmProximity();
-		this.surveyPeriodMin = SabreConfig.instance().getFarmSurveyPeriod();
 		this.farmTickCounter = 0;
 		this.layoutFactor = 0.0;
 		this.proximityFactor = 0.0;
@@ -83,6 +80,17 @@ public class FarmFactory extends BaseFactory {
 		this.lastSurvey = new Date(0);
 		this.storageSize = 64;
 		readCustomConfig();
+		readConfigValues();
+	}
+	
+	
+	/**
+	 * Fetch the latest config values
+	 */
+	private void readConfigValues() {
+		this.farmProductionTicks = SabrePlugin.instance().config().getFarmProductionTicks();
+		this.farmProximity = SabrePlugin.instance().config().getFarmProximity();
+		this.surveyPeriodMin = SabrePlugin.instance().config().getFarmSurveyPeriod();
 	}
 	
 	
@@ -135,6 +143,7 @@ public class FarmFactory extends BaseFactory {
 	
 	@Override
 	protected void onPowerOn() {
+		readConfigValues();
 		checkSurvey(true);
 		saveSettings();
 	}

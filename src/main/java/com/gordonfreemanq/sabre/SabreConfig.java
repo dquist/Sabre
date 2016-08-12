@@ -17,9 +17,6 @@ import com.gordonfreemanq.sabre.core.Permission;
 
 public class SabreConfig {
 	
-	// The global instance
-	private static SabreConfig instance;
-	
 	public static int CONFIG_VERSION = 1;
 	
 	private FileConfiguration fc;
@@ -32,8 +29,6 @@ public class SabreConfig {
 	 * Creates a new SabreConfig instance
 	 */
 	public SabreConfig(FileConfiguration fc) {
-		instance = this;
-
 		this.fc = fc;
 		this.DbAddress = "";
 		this.DbPort = 0;
@@ -48,13 +43,6 @@ public class SabreConfig {
 		this.disabledItemDrops = new HashSet<Material>();
 		this.prisonWorld = "world_the_end";
 		this.freeWorld = "world";
-	}
-	
-	/**
-	 * Gets the global instance
-	 */
-	public static SabreConfig instance() {
-		return instance;
 	}
 	
 	/**

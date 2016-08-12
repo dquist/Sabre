@@ -89,7 +89,6 @@ import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.util.Vector;
 
-import com.gordonfreemanq.sabre.prisonpearl.PearlManager;
 import com.gordonfreemanq.sabre.util.CombatInterface;
 import com.gordonfreemanq.sabre.util.SabreUtil;
 import com.gordonfreemanq.sabre.blocks.SabreItemStack;
@@ -244,8 +243,7 @@ public class SabreTweaks implements Listener {
 	@EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
 	public void onFallBelowBedrock(PlayerMoveEvent e) {
 
-		if (e.getPlayer().getWorld()
-				.equals(PearlManager.getInstance().getPrisonWorld())) {
+		if (e.getPlayer().getWorld().equals(SabrePlugin.instance().getPearlManager().getPrisonWorld())) {
 			return;
 		}
 
@@ -278,7 +276,7 @@ public class SabreTweaks implements Listener {
 				// Prevent crafting with lore items
 				for(HumanEntity he : e.getViewers()) {
 					if(he instanceof Player) {
-						PlayerManager.instance().getPlayerById(he.getUniqueId()).msg(Lang.noCraftingLore);
+						SabrePlugin.instance().getPlayerManager().getPlayerById(he.getUniqueId()).msg(Lang.noCraftingLore);
 					}
 				}
 
@@ -294,7 +292,7 @@ public class SabreTweaks implements Listener {
 
 				for(HumanEntity he : e.getViewers()) {
 					if(he instanceof Player) {
-						PlayerManager.instance().getPlayerById(he.getUniqueId()).msg(Lang.recipeDisabled);
+						SabrePlugin.instance().getPlayerManager().getPlayerById(he.getUniqueId()).msg(Lang.recipeDisabled);
 					}
 				}
 				return;

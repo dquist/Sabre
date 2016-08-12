@@ -17,10 +17,8 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
 import com.gordonfreemanq.sabre.Lang;
-import com.gordonfreemanq.sabre.SabreConfig;
 import com.gordonfreemanq.sabre.SabrePlayer;
 import com.gordonfreemanq.sabre.SabrePlugin;
-import com.gordonfreemanq.sabre.data.IDataAccess;
 import com.gordonfreemanq.sabre.prisonpearl.PrisonPearlEvent.Type;
 
 /**
@@ -29,27 +27,17 @@ import com.gordonfreemanq.sabre.prisonpearl.PrisonPearlEvent.Type;
  */
 public class PearlManager {
 
-	private final IDataAccess db;
-	private final SabreConfig config;
+	private final SabrePlugin plugin;
 	private final HashMap<UUID, PrisonPearl> pearls;
-	
-	private static PearlManager instance;
-	
-	public static PearlManager getInstance() {
-		return instance;
-	}
 	
 	
 	/**
 	 * Creates a new PearlManager instance
 	 * @param db The database connector
 	 */
-	public PearlManager(IDataAccess db, SabreConfig config) {
-		this.db = db;
-		this.config = config;
+	public PearlManager(SabrePlugin plugin) {
+		this.plugin = plugin;
 		this.pearls = new HashMap<UUID, PrisonPearl>();
-		
-		instance = this;
 	}
 	
 	
@@ -57,7 +45,7 @@ public class PearlManager {
 	 * Loads all the pearls from the database
 	 */
 	public void load() {
-		for (PrisonPearl p : db.pearlGetall()) {
+		for (PrisonPearl p : plugin.getDataAccess().pearlGetall()) {
 			pearls.put(p.getPlayerID(), p);
 		}
 	}
@@ -141,7 +129,7 @@ public class PearlManager {
 		
 		
 		PrisonPearl pp = new PrisonPearl(imprisoned, imprisoner);
-		pp.setSealStrength(config.getPearlDefaultStrength());
+		pp.setSealStrength(plugin.config().getPearlDefaultStrength());
 		pp.markMove();
 		
 
@@ -153,7 +141,7 @@ public class PearlManager {
 		
 		inv.setItem(pearlnum, pp.createItemStack());
 		pearls.put(pp.getPlayerID(), pp);
-		db.pearlInsert(pp);
+		plugin.getDataAccess().pearlInsert(pp);
 		
 		return pp;
 	}
@@ -170,7 +158,7 @@ public class PearlManager {
 		
 		if (!e.isCancelled()) {
 			pearls.remove(pp.getPlayerID());
-			db.pearlRemove(pp);
+			plugin.getDataAccess().pearlRemove(pp);
 			return true;
 		}
 		return false;
@@ -183,7 +171,7 @@ public class PearlManager {
 	 */
 	public void freePlayer(SabrePlayer p) {
 		PrisonPearl pp = pearls.remove(p.getID());
-		db.pearlRemove(pp);
+		plugin.getDataAccess().pearlRemove(pp);
 	}
 	
 	
@@ -192,7 +180,7 @@ public class PearlManager {
 	 * @param pearl The pearl to update
 	 */
 	public void updatePearl(PrisonPearl pp) {
-		db.pearlUpdate(pp);
+		plugin.getDataAccess().pearlUpdate(pp);
 	}
 	
 	
@@ -203,7 +191,7 @@ public class PearlManager {
 	 */
 	public void setPearlSummoned(PrisonPearl pp, boolean summoned) {
 		pp.setSummoned(summoned);
-		db.pearlUpdateSummoned(pp);
+		plugin.getDataAccess().pearlUpdateSummoned(pp);
 	}
 	
 	
@@ -214,7 +202,7 @@ public class PearlManager {
 	 */
 	public void setReturnLocation(PrisonPearl pp, Location returnLocation) {
 		pp.setReturnLocation(returnLocation);
-		db.pearlUpdateReturnLocation(pp);
+		plugin.getDataAccess().pearlUpdateReturnLocation(pp);
 	}
 	
 	
@@ -230,7 +218,7 @@ public class PearlManager {
     	
     	if (sealStrength > 0) {
     		pp.setSealStrength(sealStrength);
-    		db.pearlUpdateSealStrength(pp);
+    		plugin.getDataAccess().pearlUpdateSealStrength(pp);
     	} else {
     		this.freePearl(pp);
     	}
@@ -335,7 +323,7 @@ public class PearlManager {
 	 * @return The free world
 	 */
 	public World getFreeWorld() {
-		return Bukkit.getWorld(config.getFreeWorldName());
+		return Bukkit.getWorld(plugin.config().getFreeWorldName());
 	}
 	
 	
@@ -344,7 +332,7 @@ public class PearlManager {
 	 * @return The prison world
 	 */
 	public World getPrisonWorld() {
-		return Bukkit.getWorld(config.getPrisonWorldName());
+		return Bukkit.getWorld(plugin.config().getPrisonWorldName());
 	}
 	
 	

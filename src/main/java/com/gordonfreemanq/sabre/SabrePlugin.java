@@ -50,11 +50,11 @@ import com.gordonfreemanq.sabre.cmd.CmdSpeed;
 import com.gordonfreemanq.sabre.cmd.CmdTeleport;
 import com.gordonfreemanq.sabre.cmd.CmdTeleportHere;
 import com.gordonfreemanq.sabre.cmd.CmdTest;
+import com.gordonfreemanq.sabre.cmd.SabreCommand;
 import com.gordonfreemanq.sabre.cmd.factory.CmdFactory;
 import com.gordonfreemanq.sabre.cmd.pearl.CmdPearl;
 import com.gordonfreemanq.sabre.cmd.snitch.CmdSnitch;
 import com.gordonfreemanq.sabre.core.AbstractSabrePlugin;
-import com.gordonfreemanq.sabre.core.SabreBaseCommand;
 import com.gordonfreemanq.sabre.data.IDataAccess;
 import com.gordonfreemanq.sabre.data.MongoConnector;
 import com.gordonfreemanq.sabre.factory.FactoryConfig;
@@ -79,21 +79,28 @@ public class SabrePlugin extends AbstractSabrePlugin
 	// The global instance
 	private static SabrePlugin instance;
 
-	private SabreConfig config;
-	private IDataAccess db;
-	private PlayerManager playerManager;
-	private GroupManager groupManager;
-	private BlockManager blockManager;
-	private HashSet<SabreBaseCommand<?>> baseCommands;
+	private final SabreConfig config = new SabreConfig(this.getConfig());
+	private final IDataAccess db = new MongoConnector(config);
+	private final PlayerManager playerManager = new PlayerManager(this);
+	private final GroupManager groupManager = new GroupManager(this);
+	private final BlockManager blockManager = new BlockManager(this);
+	private final PearlManager pearlManager = new PearlManager(this);
+	private final PlayerListener playerListener = new PlayerListener(this);
+	private final BlockListener blockListener = new BlockListener(this);
+	private final SnitchLogger snitchLogger = new SnitchLogger(this);
+	private final SnitchListener snitchListener = new SnitchListener(this);
+	private final PearlListener pearlListener = new PearlListener(this);
+	private final PlayerSpawner playerSpawner = new PlayerSpawner(this);
+	
+	
+	private HashSet<SabreCommand> baseCommands;
 	private CmdAutoHelp cmdAutoHelp;
 	private GlobalChat globalChat;
 	private ServerBroadcast serverBcast;
-	private PlayerListener playerListener;
-	private BlockListener blockListener;
-	private SnitchLogger snitchLogger;
-	private SnitchListener snitchListener;
-	private PearlManager pearlManager;
-	private PearlListener pearlListener;
+	
+	
+	
+	
 	private SignHandler signHandler;
 	private StatsTracker statsTracker;
 	private SabreTweaks sabreTweaks;
@@ -104,9 +111,9 @@ public class SabrePlugin extends AbstractSabrePlugin
 	private PearlWorker pearlWorker;
 	private CombatInterface combatTag;
 	private VanishApi vanishApi;
-	private PlayerSpawner randomSpawn = new PlayerSpawner();
 	
 	private File serverFolder = new File(System.getProperty("user.dir"));
+	private boolean pluginLoaded = false;
 
 	/**
 	 * Creates a new SabrePlugin instance
@@ -175,22 +182,9 @@ public class SabrePlugin extends AbstractSabrePlugin
 		if (!super.preEnable()) {
 			return;
 		}
-		
-		config = new SabreConfig(this.getConfig());
-		db = new MongoConnector(config);
-		playerManager = new PlayerManager(db);
-		groupManager = new GroupManager(playerManager, blockManager, db);
-		blockManager = new BlockManager(db);
-		pearlManager = new PearlManager(db, config);
+
 		globalChat = new GlobalChat(playerManager, config);
 		serverBcast = new ServerBroadcast(playerManager);
-		
-		playerListener = new PlayerListener(playerManager, globalChat);
-		blockListener = new BlockListener(playerManager, blockManager, config);
-		snitchLogger = new SnitchLogger(db, playerManager);
-		snitchListener = new SnitchListener(playerManager, blockManager, snitchLogger);
-		pearlListener = new PearlListener(pearlManager, playerManager);
-		
 		sabreTweaks = new SabreTweaks(config);
 		factoryListener = new FactoryListener(playerManager, blockManager);
 		factoryConfig = new FactoryConfig();
@@ -205,7 +199,7 @@ public class SabrePlugin extends AbstractSabrePlugin
 		// Try to connect to the database and load the data
 		try {
 			this.loadData();
-			playerListener.setPluginLoaded(true);
+			pluginLoaded = true;
 		} catch(Exception ex) {
 			log(Level.SEVERE, "Failed to connect to MongoDB database!");
 			throw ex;
@@ -213,7 +207,7 @@ public class SabrePlugin extends AbstractSabrePlugin
 
 		// Register Commands
 		cmdAutoHelp = new CmdAutoHelp();
-		baseCommands = new HashSet<SabreBaseCommand<?>>();
+		baseCommands = new HashSet<SabreCommand>();
 		baseCommands.add(new CmdRoot());
 		baseCommands.add(new CmdPearl());
 		baseCommands.add(new CmdFactory());
@@ -274,7 +268,6 @@ public class SabrePlugin extends AbstractSabrePlugin
 
 		postEnable();
 		this.loadSuccessful = true;
-		this.playerListener.setPluginLoaded(true);
 		this.vanishApi = new VanishApi();
 	}
 
@@ -285,8 +278,7 @@ public class SabrePlugin extends AbstractSabrePlugin
 	@Override
 	public void onDisable()
 	{
-		//statsTracker.cancel();
-		playerListener.setPluginLoaded(false);
+		pluginLoaded = false;
 		db.disconect();
 		
 		// Save the config
@@ -299,7 +291,7 @@ public class SabrePlugin extends AbstractSabrePlugin
 	 */
 	public boolean onCommand(CommandSender sender, Command cmd, String alias, String[] args)
 	{		
-		for (SabreBaseCommand<?> c : baseCommands) {
+		for (SabreCommand c : baseCommands) {
 			if (c.aliases.contains(cmd.getLabel())) {
 
 				// Set the label to the default alias
@@ -346,6 +338,14 @@ public class SabrePlugin extends AbstractSabrePlugin
 
         this.serverFolder = newServerFolder;
     }
+    
+    /**
+     * Gets the configuration class
+     * @return The configuration
+     */
+    public SabreConfig config() {
+    	return this.config;
+    }
 	
 	/**
 	 * Gets the player manager
@@ -353,6 +353,22 @@ public class SabrePlugin extends AbstractSabrePlugin
 	 */
 	public PlayerManager getPlayerManager() {
 		return this.playerManager;
+	}
+	
+	/**
+	 * Gets the block manager
+	 * @return The block manager
+	 */
+	public BlockManager getBlockManager() {
+		return this.blockManager;
+	}
+	
+	/**
+	 * Gets the prison pearl manager
+	 * @return The prison pearl manager
+	 */
+	public PearlManager getPearlManager() {
+		return this.pearlManager;
 	}
 
 	/**
@@ -387,7 +403,6 @@ public class SabrePlugin extends AbstractSabrePlugin
 		return this.globalChat;
 	}
 	
-	
 	/**
 	 * Gets the server broadcast instance
 	 * @return the Server broadcast instance
@@ -396,7 +411,6 @@ public class SabrePlugin extends AbstractSabrePlugin
 		return this.serverBcast;
 	}
 
-	
 	/**
 	 * Gets the Data Access Object
 	 * @return The Data Access Object
@@ -405,7 +419,6 @@ public class SabrePlugin extends AbstractSabrePlugin
 		return this.db;
 	}
 
-	
 	/**
 	 * Gets the auto-help command
 	 * @return The auto-help command
@@ -413,7 +426,6 @@ public class SabrePlugin extends AbstractSabrePlugin
 	public CmdAutoHelp getCmdAutoHelp() { 
 		return cmdAutoHelp;
 	}
-
 	
 	/**
 	 * Gets the player listener
@@ -421,5 +433,29 @@ public class SabrePlugin extends AbstractSabrePlugin
 	 */
 	public PlayerListener getPlayerListener() { 
 		return this.playerListener;
+	}
+	
+	/**
+	 * Gets the snitch logger
+	 * @return The snitch logger
+	 */
+	public SnitchLogger getSnitchLogger() {
+		return this.snitchLogger;
+	}
+	
+	/**
+	 * Gets whether the plugin is loaded
+	 * @return true if the plugin is loaded
+	 */
+	public boolean getPluginLoaded() {
+		return this.pluginLoaded;
+	}
+	
+	/**
+	 * Gets the player spawner
+	 * @return The player spawner
+	 */
+	public PlayerSpawner getSpawner() {
+		return this.playerSpawner;
 	}
 }
