@@ -86,8 +86,8 @@ public class FarmSurveyor {
 		this.plantMaterial = plantMaterial;
 		this.coverageFactor = 0.0;
 		this.biomeFactor = 0.0;
-		this.chunkRadius = SabrePlugin.getPlugin().getSabreConfig().getFarmChunkRadius();
-		this.maxSamples = SabrePlugin.getPlugin().getSabreConfig().getFarmSurveySampleSize();
+		this.chunkRadius = SabrePlugin.instance().getSabreConfig().getFarmChunkRadius();
+		this.maxSamples = SabrePlugin.instance().getSabreConfig().getFarmSurveySampleSize();
 		this.squareLength = (chunkRadius * 2 * 16) + 16;
 		this.rand = new Random();
 	}

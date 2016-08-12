@@ -18,7 +18,7 @@ public class StatsTracker implements Runnable {
 	public void start() {
 		enabled = true;
 		lastUpdate = System.currentTimeMillis();
-		Bukkit.getScheduler().scheduleSyncRepeatingTask(SabrePlugin.getPlugin(), this, 0, 200);
+		Bukkit.getScheduler().scheduleSyncRepeatingTask(SabrePlugin.instance(), this, 0, 200);
 	}
 	
 	

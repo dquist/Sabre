@@ -3,7 +3,6 @@ package com.gordonfreemanq.sabre.cmd;
 import java.util.Collection;
 
 import com.gordonfreemanq.sabre.Lang;
-import com.gordonfreemanq.sabre.PlayerManager;
 import com.gordonfreemanq.sabre.SabreConfig;
 import com.gordonfreemanq.sabre.SabrePlayer;
 import com.gordonfreemanq.sabre.SabrePlugin;
@@ -23,23 +22,23 @@ import com.gordonfreemanq.sabre.util.TextUtil;
  */
 public abstract class SabreCommand extends SabreBaseCommand<SabrePlugin>
 {
-	protected GroupManager gm;
+	protected final GroupManager gm;
+	protected final BlockManager bm;
+	protected final PearlManager pearls;
+	protected final SabreConfig config;
 	protected SabreGroup curGroup;
 	protected IChatChannel gc;
-	protected BlockManager bm = BlockManager.getInstance();
-	protected PearlManager pearls;
-	protected SabreConfig config;
 
 	/**
 	 * @brief Constructor
 	 */
 	public SabreCommand()
 	{
-		super(SabrePlugin.getPlugin());
-
-		this.pm = PlayerManager.getInstance();
-		this.gm = GroupManager.getInstance();
-		this.bm = BlockManager.getInstance();
+		super(SabrePlugin.instance());
+		
+		this.gm = GroupManager.instance();
+		this.bm = BlockManager.instance();
+		
 		this.gc = plugin.getGlobalChat();
 		this.config = plugin.getSabreConfig();
 		this.curGroup = null;

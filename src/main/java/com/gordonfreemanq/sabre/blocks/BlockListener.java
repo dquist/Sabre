@@ -56,7 +56,6 @@ import com.gordonfreemanq.sabre.SabreConfig;
 import com.gordonfreemanq.sabre.SabrePlayer;
 import com.gordonfreemanq.sabre.SabrePlugin;
 import com.gordonfreemanq.sabre.SabreTweaks;
-import com.gordonfreemanq.sabre.core.ISabreLog;
 import com.gordonfreemanq.sabre.core.Permission;
 import com.gordonfreemanq.sabre.factory.BaseFactory;
 import com.gordonfreemanq.sabre.factory.FactoryController;
@@ -71,7 +70,6 @@ public class BlockListener implements Listener {
 	private final PlayerManager pm;
 	private final BlockManager bm;
 	private final SabreConfig config;
-	private final ISabreLog logger;
 
 
 	public static final List<BlockFace> all_sides = Arrays.asList(
@@ -90,11 +88,10 @@ public class BlockListener implements Listener {
 	 * @param bm The block manager
 	 * @param logger The logging class
 	 */
-	public BlockListener(PlayerManager pm, BlockManager bm, SabreConfig config, ISabreLog logger) {
+	public BlockListener(PlayerManager pm, BlockManager bm, SabreConfig config) {
 		this.pm = pm;
 		this.bm = bm;
 		this.config = config;
-		this.logger = logger;
 	}
 
 
@@ -164,8 +161,8 @@ public class BlockListener implements Listener {
 			}
 
 		} catch (Exception ex) {
-			e.getPlayer().sendMessage(SabrePlugin.getPlugin().txt.parse(Lang.exceptionGeneral));
-			logger.log(Level.SEVERE, SabreUtil.getExceptionMessage("onBlockPlaceEvent", ex));
+			e.getPlayer().sendMessage(SabrePlugin.instance().txt.parse(Lang.exceptionGeneral));
+			SabrePlugin.log(Level.SEVERE, SabreUtil.getExceptionMessage("onBlockPlaceEvent", ex));
 			e.setCancelled(true);
 			throw ex;
 		}
@@ -190,8 +187,8 @@ public class BlockListener implements Listener {
 			}
 
 		} catch (Exception ex) {
-			e.getPlayer().sendMessage(SabrePlugin.getPlugin().txt.parse(Lang.exceptionGeneral));
-			logger.log(Level.SEVERE, SabreUtil.getExceptionMessage("onBlockBreaking", ex));
+			e.getPlayer().sendMessage(SabrePlugin.instance().txt.parse(Lang.exceptionGeneral));
+			SabrePlugin.log(Level.SEVERE, SabreUtil.getExceptionMessage("onBlockBreaking", ex));
 			throw ex;
 		}
 	}
@@ -303,8 +300,8 @@ public class BlockListener implements Listener {
 				}
 			}
 		} catch (Exception ex) {
-			e.getPlayer().sendMessage(SabrePlugin.getPlugin().txt.parse(Lang.exceptionGeneral));
-			logger.log(Level.SEVERE, SabreUtil.getExceptionMessage("onBlockBreakEvent", ex));
+			e.getPlayer().sendMessage(SabrePlugin.instance().txt.parse(Lang.exceptionGeneral));
+			SabrePlugin.log(Level.SEVERE, SabreUtil.getExceptionMessage("onBlockBreakEvent", ex));
 			throw ex;
 		}
 	}
@@ -464,8 +461,8 @@ public class BlockListener implements Listener {
 			
 
 		} catch (Exception ex) {
-			e.getPlayer().sendMessage(SabrePlugin.getPlugin().txt.parse(Lang.exceptionGeneral));
-			logger.log(Level.SEVERE, SabreUtil.getExceptionMessage("onBlockInteract", ex));
+			e.getPlayer().sendMessage(SabrePlugin.instance().txt.parse(Lang.exceptionGeneral));
+			SabrePlugin.log(Level.SEVERE, SabreUtil.getExceptionMessage("onBlockInteract", ex));
 			throw ex;
 		}
 	}
@@ -956,7 +953,7 @@ public class BlockListener implements Listener {
 				}
 			}
 		} catch (ConcurrentModificationException e) {
-			logger.log(Level.SEVERE, "ConcurrentModificationException at redstonePower() in BlockListener");
+			SabrePlugin.log(Level.SEVERE, "ConcurrentModificationException at redstonePower() in BlockListener");
 		}
 		return result;
 	}

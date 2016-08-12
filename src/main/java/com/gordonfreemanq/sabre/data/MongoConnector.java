@@ -18,10 +18,10 @@ import org.bukkit.inventory.InventoryHolder;
 
 import com.gordonfreemanq.sabre.SabreConfig;
 import com.gordonfreemanq.sabre.SabrePlayer;
+import com.gordonfreemanq.sabre.SabrePlugin;
 import com.gordonfreemanq.sabre.blocks.BlockManager;
 import com.gordonfreemanq.sabre.blocks.Reinforcement;
 import com.gordonfreemanq.sabre.blocks.SabreBlock;
-import com.gordonfreemanq.sabre.core.ISabreLog;
 import com.gordonfreemanq.sabre.groups.SabreMember;
 import com.gordonfreemanq.sabre.groups.Rank;
 import com.gordonfreemanq.sabre.groups.SabreFaction;
@@ -53,7 +53,6 @@ public class MongoConnector implements IDataAccess {
 	private static final String COL_SNITCHES = "snitch_log";
 	private static final String COL_PEARLS = "pearls";
 
-	private final ISabreLog logger;
 	private final SabreConfig config;
 
 	private boolean connected;
@@ -72,12 +71,9 @@ public class MongoConnector implements IDataAccess {
 
 	/**
 	 * Creates a new MongoConnector instance
-	 * @param logger The logging instance
-	 * @param hostAddress The database host address
-	 * @param hostPort The database host port
+	 * @param config The configuration instance
 	 */
-	public MongoConnector(ISabreLog logger, SabreConfig config) {
-		this.logger = logger;
+	public MongoConnector(SabreConfig config) {
 		this.config = config;
 		this.connected = false;
 	}
@@ -212,14 +208,14 @@ public class MongoConnector implements IDataAccess {
 						playerInsert(p);
 					}
 				} catch(Exception ex) {
-					logger.log(Level.WARNING, "Failed to read player record %s", o.toString());
+					SabrePlugin.log(Level.WARNING, "Failed to read player record %s", o.toString());
 				}
 			}
 		} finally {
 			cursor.close();
 		}
 
-		logger.log(Level.INFO, "Loaded %d player records in %dms.", loadedPlayers.size(), getMsElapsed());
+		SabrePlugin.log(Level.INFO, "Loaded %d player records in %dms.", loadedPlayers.size(), getMsElapsed());
 		return loadedPlayers;
 	}
 
@@ -418,7 +414,7 @@ public class MongoConnector implements IDataAccess {
 			while(cursor.hasNext()) {
 				BasicDBObject o = (BasicDBObject)cursor.next();
 
-				//logger.log(Level.INFO, "Loaded group: %s", o.toString());
+				//SabrePlugin.log(Level.INFO, "Loaded group: %s", o.toString());
 
 				try {
 					boolean update = false;
@@ -451,11 +447,11 @@ public class MongoConnector implements IDataAccess {
 									memberPlayer.setFaction((SabreFaction)g);
 								}
 							} else {
-								logger.log(Level.WARNING, "Loaded group member %s with no matching player ID.", id.toString());
+								SabrePlugin.log(Level.WARNING, "Loaded group member %s with no matching player ID.", id.toString());
 							}
 						}
 					} else {
-						logger.log(Level.WARNING, "Loaded group %s with no members.", g.getName());
+						SabrePlugin.log(Level.WARNING, "Loaded group %s with no members.", g.getName());
 					}
 
 					// Load invited players for this group 
@@ -473,14 +469,14 @@ public class MongoConnector implements IDataAccess {
 						groupInsert(g);
 					}
 				} catch(Exception ex) {
-					logger.log(Level.WARNING, "Failed to read group record %s", o.toString());
+					SabrePlugin.log(Level.WARNING, "Failed to read group record %s", o.toString());
 				}
 			}
 		} finally {
 			cursor.close();
 		}
 
-		logger.log(Level.INFO, "Loaded %d group records in %dms.", records.size(), getMsElapsed());
+		SabrePlugin.log(Level.INFO, "Loaded %d group records in %dms.", records.size(), getMsElapsed());
 		return records;
 	}
 
@@ -639,13 +635,13 @@ public class MongoConnector implements IDataAccess {
 		while (cursor.hasNext()) { 
 			BasicDBObject o = (BasicDBObject)cursor.next();
 
-			//logger.log(Level.INFO, "Loaded block: %s", o.toString());
+			//SabrePlugin.log(Level.INFO, "Loaded block: %s", o.toString());
 
 			try {
 				SabreBlock b = readBlockRecord(o);
 				records.put(b.getLocation(), b);
 			} catch(Exception ex) {
-				logger.log(Level.WARNING, "Failed to read block record %s", o.toString());
+				SabrePlugin.log(Level.WARNING, "Failed to read block record %s", o.toString());
 			}
 		}
 		
@@ -665,13 +661,13 @@ public class MongoConnector implements IDataAccess {
 		while (cursor.hasNext()) { 
 			BasicDBObject o = (BasicDBObject)cursor.next();
 
-			//logger.log(Level.INFO, "Loaded block: %s", o.toString());
+			//SabrePlugin.log(Level.INFO, "Loaded block: %s", o.toString());
 
 			try {
 				SabreBlock b = readBlockRecord(o);
 				records.put(b.getLocation(), b);
 			} catch(Exception ex) {
-				logger.log(Level.WARNING, "Failed to read block record %s", o.toString());
+				SabrePlugin.log(Level.WARNING, "Failed to read block record %s", o.toString());
 			}
 		}
 		
@@ -920,7 +916,7 @@ public class MongoConnector implements IDataAccess {
 				records.add(e);
 				
 			} catch (Exception ex) {
-				logger.log(Level.WARNING, "Failed to read snitch record %s", o.toString());
+				SabrePlugin.log(Level.WARNING, "Failed to read snitch record %s", o.toString());
 			}
 		}
 		
@@ -987,7 +983,7 @@ public class MongoConnector implements IDataAccess {
 				records.add(p);
 				
 			} catch (Exception ex) {
-				logger.log(Level.WARNING, "Failed to read pearl record %s", o.toString());
+				SabrePlugin.log(Level.WARNING, "Failed to read pearl record %s", o.toString());
 			}
 		}
 		

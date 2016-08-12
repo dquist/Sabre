@@ -17,9 +17,12 @@ import com.gordonfreemanq.sabre.core.Permission;
 
 public class SabreConfig {
 	
+	// The global instance
+	private static SabreConfig instance;
+	
 	public static int CONFIG_VERSION = 1;
 	
-	private final FileConfiguration fc;
+	private FileConfiguration fc;
 	
 	public static String OVER_WORLD_NAME = "world";
 	public static String NETHER_WORLD_NAME = "world_nether";
@@ -28,8 +31,9 @@ public class SabreConfig {
 	/**
 	 * Creates a new SabreConfig instance
 	 */
-	public SabreConfig(FileConfiguration fc) {
-		this.fc = fc;
+	public SabreConfig() {
+		instance = this;
+				
 		this.DbAddress = "";
 		this.DbPort = 0;
 		this.DbName = "";
@@ -43,7 +47,13 @@ public class SabreConfig {
 		this.disabledItemDrops = new HashSet<Material>();
 		this.prisonWorld = "world_the_end";
 		this.freeWorld = "world";
-		
+	}
+	
+	/**
+	 * Gets the global instance
+	 */
+	public static SabreConfig instance() {
+		return instance;
 	}
 	
 	/**
@@ -129,19 +139,6 @@ public class SabreConfig {
 	private double eggArthropodPercentage = 0.03;
 	private double eggLootingPercentage = 0.02;
 	private List<Short> eggEntityIDList;
-	
-	
-	/**
-	 * Factory method for creating a new config class
-	 * @param fc The file configuration instance
-	 * @return The new configuration class instance
-	 */
-	public static SabreConfig load(FileConfiguration fc) {
-		SabreConfig config = new SabreConfig(fc);
-		config.read();
-		//config.save();
-		return config;
-	}
 	
 	
 	/**

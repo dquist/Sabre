@@ -1,6 +1,13 @@
 package com.gordonfreemanq.sabre;
+import org.bukkit.Bukkit;
+import org.bukkit.permissions.Permission;
+import org.bukkit.plugin.PluginDescriptionFile;
+import org.bukkit.plugin.PluginManager;
 import org.junit.*;
+import org.junit.runner.RunWith;
 import org.mockito.Mockito;
+import org.powermock.core.classloader.annotations.PrepareForTest;
+import org.powermock.modules.junit4.PowerMockRunner;
 
 import static org.junit.Assert.*;
 
@@ -13,7 +20,10 @@ import com.gordonfreemanq.sabre.SabrePlayer;
 import com.gordonfreemanq.sabre.groups.Rank;
 import com.gordonfreemanq.sabre.groups.SabreGroup;
 import com.gordonfreemanq.sabre.groups.SabreMember;
+import com.gordonfreemanq.sabre.util.TestFixture;
 
+@RunWith(PowerMockRunner.class)
+@PrepareForTest({ PluginManager.class, SabrePlugin.class, Permission.class, Bukkit.class, PluginDescriptionFile.class })
 public class SabreGroupTest {
 	
 	private static String OWNER_NAME = "DutOwner";
@@ -21,49 +31,46 @@ public class SabreGroupTest {
 	private static String OFFICER_NAME = "DutOfficer";
 	private static String BUILDER_NAME = "DutBuilder";
 	private static String MEMBER_NAME = "DutMember";
-	
-	private final UUID GroupUuid = UUID.randomUUID();
-	private final String GroupName = "DUT_GROUP";
-	private final SabreGroup group;
-	private final HashMap<SabrePlayer, Rank> groupMembers;
-	private SabrePlayer groupOwner;
-	
 
-	public SabreGroupTest() {
-
+	private static TestFixture testFixture;
+	private static UUID GroupUuid = UUID.randomUUID();
+	private static String GroupName = "DUT_GROUP";
+	private static SabreGroup group;
+	private static HashMap<SabrePlayer, Rank> groupMembers;
+	private static SabrePlayer groupOwner;
+	
+	@BeforeClass
+	public static void setUp() throws Exception {
+		testFixture = TestFixture.instance();
+		testFixture.getPlugin();
+		
 		group = Mockito.spy(new SabreGroup(GroupUuid, GroupName));
 		
 		// Add members to the group
 		groupMembers = new HashMap<SabrePlayer, Rank>();
-		/*
+		
 		groupOwner = new SabrePlayer(UUID.randomUUID(), OWNER_NAME);
 		groupMembers.put(groupOwner, Rank.OWNER);
 		groupMembers.put(new SabrePlayer(UUID.randomUUID(), ADMIN_NAME), Rank.ADMIN);
 		groupMembers.put(new SabrePlayer(UUID.randomUUID(), OFFICER_NAME), Rank.OFFICER);
 		groupMembers.put(new SabrePlayer(UUID.randomUUID(), BUILDER_NAME), Rank.BUILDER);
-		groupMembers.put(new SabrePlayer(UUID.randomUUID(), MEMBER_NAME), Rank.MEMBER);  */
+		groupMembers.put(new SabrePlayer(UUID.randomUUID(), MEMBER_NAME), Rank.MEMBER);
 		
 		for(Entry<SabrePlayer, Rank> entry : groupMembers.entrySet()) {
 			group.addMember(entry.getKey(), entry.getValue());
 		}
 	}
 	
-	@BeforeClass
-	public static void setUp() throws Exception {
-	}
-	
 	@AfterClass
 	public static void tearDown() throws Exception {
 	}
 	
-	@Ignore
 	@Test
 	public void test() throws Exception {
 		assertEquals(group.getID(), GroupUuid);
 		assertFalse(group.isFaction());
 	}
 
-	@Ignore
 	@Test
 	public void testGetSetName() throws Exception {
 		String oldName = group.getName();
@@ -77,8 +84,7 @@ public class SabreGroupTest {
 		// Full name
 		assertEquals(group.getFullName(), String.format("%s#%s", group.getName(), group.getOwner().getName()));
 	}
-
-	@Ignore
+	
 	@Test
 	public void testMembers() throws Exception {
 		
@@ -141,7 +147,6 @@ public class SabreGroupTest {
 		assertFalse(group.isInvited(testPlayer));
 	}
 	
-	@Ignore
 	@Test
 	public void testMessaging() throws Exception {
 		
@@ -161,5 +166,4 @@ public class SabreGroupTest {
 		
 		group.msgAll("Test", true);
 	}
-
 }

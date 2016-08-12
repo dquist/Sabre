@@ -31,23 +31,25 @@ import com.gordonfreemanq.sabre.factory.recipe.SpecialRecipeType;
  */
 public class FactoryConfig {
 
-	private File folder = null;
-	private final SabrePlugin plugin;
-	private HashMap<String, FactoryProperties> factoryProperties;
-	
+	// The global instance
 	private static FactoryConfig instance;
 	
-	public static FactoryConfig getInstance() {
-		return instance;
-	}
+	private File folder = null;
+	private HashMap<String, FactoryProperties> factoryProperties;
 	
 	/**
 	 * Creates a new FactoryConfig instance
 	 */
 	public FactoryConfig() {
-		this.plugin = SabrePlugin.getPlugin();
-		
-		instance = this;
+		instance = this;	
+	}
+	
+	
+	/**
+	 * Gets the global instance
+	 */
+	public static FactoryConfig instance() {
+		return instance;
 	}
 	
 	
@@ -56,7 +58,7 @@ public class FactoryConfig {
 	 */
 	public void reload() {
 	    if (folder == null) {
-	    	folder = new File(plugin.getDataFolder(), "factories");
+	    	folder = new File(SabrePlugin.instance().getDataFolder(), "factories");
 	    }
 	    
 	    factoryProperties = new HashMap<String, FactoryProperties>();
@@ -94,7 +96,7 @@ public class FactoryConfig {
 			    factoryProperties.put(factoryName, fp);
 			    
 	    	} catch (Exception ex) {
-	    		plugin.log(Level.SEVERE, "Failed to read factory config file %s", f.getName());
+	    		SabrePlugin.log(Level.SEVERE, "Failed to read factory config file %s", f.getName());
 	    	}
 	    }
 
@@ -203,7 +205,7 @@ public class FactoryConfig {
 				if (customItem != null) {
 					sabreStack = CustomItems.getInstance().getByName(customItem);
 					if (sabreStack == null) {
-						plugin.getLogger().severe(configItems.getCurrentPath() + " has invalid custom item " + customItem);
+						SabrePlugin.log(Level.SEVERE, configItems.getCurrentPath() + " has invalid custom item " + customItem);
 						return items;
 					}
 					
@@ -215,7 +217,7 @@ public class FactoryConfig {
 					materialName = configItem.getString("material");
 					material = Material.getMaterial(materialName);
 					if (material == null) {
-						plugin.getLogger().severe(configItems.getCurrentPath() + " has invalid material " + materialName);
+						SabrePlugin.log(Level.SEVERE, configItems.getCurrentPath() + " has invalid material " + materialName);
 						return items;
 					}
 					durability = (short)configItem.getInt("durability", 0);
@@ -240,7 +242,7 @@ public class FactoryConfig {
 						String subMaterialName = subItem.getString("material");
 						Material subMaterial = Material.getMaterial(subMaterialName);
 						if (subMaterial == null) {
-							plugin.getLogger().severe(configItems.getCurrentPath() + " has invalid material " + subMaterial);
+							SabrePlugin.log(Level.SEVERE, configItems.getCurrentPath() + " has invalid material " + subMaterial);
 							break;
 						}
 						

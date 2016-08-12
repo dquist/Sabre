@@ -32,7 +32,7 @@ public class DirectWarpDrive extends AbstractWarpDrive {
 		Location sourcePadLocation = sourcePad.getLocation();
 		Location destPadLocation = sourcePad.getDestPadLocation();
 		boolean destIsValid = false;
-		BlockManager bm = BlockManager.getInstance();
+		BlockManager bm = BlockManager.instance();
 		TeleportPad destPad = null;
 		
 		// The drive must be linked to the overworld drive

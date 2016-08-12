@@ -41,7 +41,7 @@ public class ChargeMokshaRodRecipe implements IRecipe {
 	public ChargeMokshaRodRecipe(String name, int productionSpeed, int fuelCost) {
 		this.name = name;
 		this.productionSpeed = productionSpeed;
-		this.costFactor = SabrePlugin.getPlugin().getSabreConfig().getJailbreakCostFactor();
+		this.costFactor = SabrePlugin.instance().getSabreConfig().getJailbreakCostFactor();
 		this.configFuelCost = fuelCost;
 		this.inputs = new ItemList<SabreItemStack>();
 		this.outputs = new ItemList<SabreItemStack>();

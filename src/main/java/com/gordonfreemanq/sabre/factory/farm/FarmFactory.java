@@ -4,7 +4,6 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map.Entry;
 import java.util.concurrent.TimeUnit;
-import java.util.logging.Level;
 
 import org.bukkit.Location;
 import org.bukkit.configuration.ConfigurationSection;
@@ -72,9 +71,9 @@ public class FarmFactory extends BaseFactory {
 	 */
 	public FarmFactory(Location location, String typeName) {
 		super(location, typeName);
-		this.farmProductionTicks = SabrePlugin.getPlugin().getSabreConfig().getFarmProductionTicks();
-		this.farmProximity = SabrePlugin.getPlugin().getSabreConfig().getFarmProximity();
-		this.surveyPeriodMin = SabrePlugin.getPlugin().getSabreConfig().getFarmSurveyPeriod();
+		this.farmProductionTicks = SabrePlugin.instance().getSabreConfig().getFarmProductionTicks();
+		this.farmProximity = SabrePlugin.instance().getSabreConfig().getFarmProximity();
+		this.surveyPeriodMin = SabrePlugin.instance().getSabreConfig().getFarmSurveyPeriod();
 		this.farmTickCounter = 0;
 		this.layoutFactor = 0.0;
 		this.proximityFactor = 0.0;

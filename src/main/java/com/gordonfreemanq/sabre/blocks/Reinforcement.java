@@ -114,7 +114,7 @@ public class Reinforcement {
 	 */
 	public SabreGroup getGroup() {
 		if (group == null) {
-			group = GroupManager.getInstance().getGroupByID(groupID);
+			group = GroupManager.instance().getGroupByID(groupID);
 		}
 		return group;
 	}

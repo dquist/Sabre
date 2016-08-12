@@ -10,36 +10,40 @@ import java.util.logging.Level;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
-import com.gordonfreemanq.sabre.core.ISabreLog;
 import com.gordonfreemanq.sabre.data.IDataAccess;
 import com.gordonfreemanq.sabre.groups.SabreFaction;
 
-
+/**
+ * Class for managing all the player records
+ * @author GFQ
+ */
 public class PlayerManager {
 
-	private final IDataAccess db;
-	private final ISabreLog logger;
-	private final HashMap<UUID, SabrePlayer> players;
-	private final HashMap<UUID, SabrePlayer> onlinePlayers;
-	
+	// Global instance
 	private static PlayerManager instance;
 	
-	public static PlayerManager getInstance() {
-		return instance;
-	}
+	private final IDataAccess db;
+	private final HashMap<UUID, SabrePlayer> players;
+	private final HashMap<UUID, SabrePlayer> onlinePlayers;
+
 	
 	/**
-	 * Constructor
-	 * @param db The data access object
-	 * @param logger The logger
+	 * Creates a new PlayerManager instance 
 	 */
-	public PlayerManager(IDataAccess db, ISabreLog logger) {
+	public PlayerManager(IDataAccess db) {
+		instance = this;
+		
 		this.db = db;
-		this.logger = logger;
 		this.players = new HashMap<UUID, SabrePlayer>();
 		this.onlinePlayers = new HashMap<UUID, SabrePlayer>();
-		
-		instance = this;
+	}
+	
+	
+	/**
+	 * Gets the global instance
+	 */
+	public static PlayerManager instance() {
+		return instance;
 	}
 	
 	
@@ -73,7 +77,7 @@ public class PlayerManager {
 		onlinePlayers.remove(p.getID());
 		players.remove(p.getID());
 		db.playerDelete(p);
-		logger.log(Level.INFO, "Removed player: Name=%s, ID=%s", p.getName(), p.getID().toString());
+		SabrePlugin.log(Level.INFO, "Removed player: Name=%s, ID=%s", p.getName(), p.getID().toString());
 	}
 	
 	
@@ -140,7 +144,7 @@ public class PlayerManager {
 		sp.setFirstLogin(new Date());
 		sp.setName(name);
 		this.addPlayer(sp);
-		logger.log(Level.INFO, "Created new player %s with ID %s", name, sp.getID());
+		SabrePlugin.log(Level.INFO, "Created new player %s with ID %s", name, sp.getID());
 		return sp;
 	}
 	

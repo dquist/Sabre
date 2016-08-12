@@ -102,11 +102,11 @@ public class PrisonPearl {
 
 	/**
 	 * Gets the imprisoned player
-	 * @return The player insatnce
+	 * @return The player instance
 	 */
 	public SabrePlayer getPlayer() {
 		if (player == null) {
-			player = PlayerManager.getInstance().getPlayerById(playerId);
+			player = PlayerManager.instance().getPlayerById(playerId);
 		}
 		return player;
 	}
@@ -403,7 +403,7 @@ public class PrisonPearl {
 
 				sb.append(String.format("PP (%s, %s) passed verification for reason %s: %s",
 						playerId.toString(), this.getName(), reason.toString(), verifier_log.toString()));
-				SabrePlugin.getPlugin().log(Level.INFO, sb.toString());
+				SabrePlugin.log(Level.INFO, sb.toString());
 
 				return true;
 			} else {
@@ -413,7 +413,7 @@ public class PrisonPearl {
 		}
 		sb.append(String.format("PP (%s, %s) failed verification for reason %s: %s",
 				playerId.toString(), this.getName(), failure_reason_log.toString(), verifier_log.toString()));
-		SabrePlugin.getPlugin().log(Level.INFO, sb.toString());
+		SabrePlugin.log(Level.INFO, sb.toString());
 		return false;
 	}
 
@@ -544,7 +544,7 @@ public class PrisonPearl {
 
 
 	protected static String parse(String str) {
-		return TextUtil.txt.parse(str);
+		return TextUtil.instance().parse(str);
 	}
 
 	protected static String parse(String str, Object... args) {

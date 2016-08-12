@@ -40,7 +40,7 @@ public class CmdPearlLocate extends SabreCommand {
 			
 			msg(Lang.pearlPearlIsHeld, name, l.getBlockX(), l.getBlockY(), l.getBlockZ(), l.getWorld().getName());
 			
-			String bcastMsg = SabrePlugin.getPlugin().txt.parse(Lang.pearlBroadcast, me.getName(), 
+			String bcastMsg = SabrePlugin.instance().txt.parse(Lang.pearlBroadcast, me.getName(), 
 					name, l.getBlockX(), l.getBlockY(), l.getBlockZ(), l.getWorld().getName());
 			
 			for(SabrePlayer p : me.getBcastPlayers()) {
@@ -50,7 +50,7 @@ public class CmdPearlLocate extends SabreCommand {
 			}
 			
 		} else {
-			SabrePlugin.getPlugin().log(Level.INFO, "%s is freed because the pearl could not be located.", pp.getLocation());
+			SabrePlugin.log(Level.INFO, "%s is freed because the pearl could not be located.", pp.getLocation());
 			PearlManager.getInstance().freePearl(pp);
 		}
 	}

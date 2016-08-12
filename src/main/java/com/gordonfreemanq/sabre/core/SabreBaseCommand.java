@@ -18,8 +18,7 @@ public abstract class SabreBaseCommand<T extends AbstractSabrePlugin>
 {
 	public T plugin;
 	
-
-	protected PlayerManager pm;
+	protected final PlayerManager pm;
 	
 	// The sub-commands to this command
 	public List<SabreBaseCommand<?>> subCommands;
@@ -77,6 +76,7 @@ public abstract class SabreBaseCommand<T extends AbstractSabrePlugin>
 	public SabreBaseCommand(T p)
 	{
 		this.plugin = p;
+		this.pm = PlayerManager.instance();
 		
 		this.permission = null;
 		
@@ -335,7 +335,7 @@ public abstract class SabreBaseCommand<T extends AbstractSabrePlugin>
 	public void msg(String str, Object... args)
 	{
 		if (senderIsConsole) {
-			String message = SabrePlugin.getPlugin().txt.parse(str, args);
+			String message = SabrePlugin.instance().txt.parse(str, args);
 			sender.sendMessage(message);
 		} else {
 			me.msg(str, args);
@@ -352,7 +352,7 @@ public abstract class SabreBaseCommand<T extends AbstractSabrePlugin>
 	
 	
 	protected static String parse(String str) {
-		return SabrePlugin.getPlugin().txt.parse(str);
+		return SabrePlugin.instance().txt.parse(str);
 	}
 	
 	public static String parse(String str, Object... args) {

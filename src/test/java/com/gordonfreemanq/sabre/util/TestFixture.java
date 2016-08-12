@@ -80,7 +80,7 @@ public class TestFixture {
             when(pdf.getAuthors()).thenReturn(new ArrayList<String>());
 
             sabrePlugin = PowerMockito.spy(new SabrePlugin(pluginLoader, mockServer, pdf, pluginDirectory, new File(pluginDirectory, "testPluginFile")));
-            sabrePlugin.setDataAccess(mockData);
+            //sabrePlugin.setDataAccess(mockData);
 
             // Put all files go to bin/test
             doReturn(pluginDirectory).when(sabrePlugin).getDataFolder();

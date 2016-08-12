@@ -63,7 +63,7 @@ public class BaseFactory extends SpecialBlock {
 		super(location, typeName);
 		
 		// Get the recipes for this factory
-		this.properties = FactoryConfig.getInstance().getFactoryProperties(this.typeName);
+		this.properties = FactoryConfig.instance().getFactoryProperties(this.typeName);
 		
 		List<IRecipe> recipes = properties.getRecipes();
 		
@@ -283,8 +283,8 @@ public class BaseFactory extends SpecialBlock {
 			try {
 				this.powerOn();
 			} catch(Exception ex) {
-				SabrePlugin.getPlugin().log(Level.WARNING, "Failed to power on factory at %s", this.location.toString());
-				SabrePlugin.getPlugin().log(Level.WARNING, ex.getMessage());
+				SabrePlugin.log(Level.WARNING, "Failed to power on factory at %s", this.location.toString());
+				SabrePlugin.log(Level.WARNING, ex.getMessage());
 			}
 		}
 	}
@@ -294,7 +294,7 @@ public class BaseFactory extends SpecialBlock {
 	 * Saves settings for the block
 	 */
 	public void saveSettings() {
-		BlockManager.getInstance().updateSettings(this);
+		BlockManager.instance().updateSettings(this);
 	}
 	
 	
@@ -403,12 +403,12 @@ public class BaseFactory extends SpecialBlock {
 			nextRecipeName = recipes.get(0).getName();
 		}
 		
-		msg(SabrePlugin.getPlugin().txt.titleize("<silver>" + this.name));
+		msg(SabrePlugin.instance().txt.titleize("<silver>" + this.name));
 		//msg("<i>-----------------------------------------------------");
 		msg("<g>Switched recipe to: <c>%s", recipe.getName());
 		msg("<g>Next recipe is: <i><it>%s", nextRecipeName);
 		
-		BlockManager.getInstance().updateSettings(this);
+		BlockManager.instance().updateSettings(this);
 	}
 	
 	
@@ -738,7 +738,7 @@ public class BaseFactory extends SpecialBlock {
 	 */
 	private void performUpgrade() {
 
-		BlockManager bm = BlockManager.getInstance();
+		BlockManager bm = BlockManager.instance();
 		
 		// This is the output item
 		SabreItemStack item = recipe.getOutputs().get(0);

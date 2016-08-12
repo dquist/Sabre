@@ -25,38 +25,28 @@ import com.gordonfreemanq.sabre.groups.SabreMember;
 import com.gordonfreemanq.sabre.snitch.Snitch;
 import com.gordonfreemanq.sabre.snitch.SnitchCollection;
 
+/**
+ * Class for managing the block records
+ * @author GFQ
+ */
 public class BlockManager {
+	
+	// The global instance
+	private static BlockManager instance;
 
 	private final IDataAccess db;
 	private final BlockCollection allBlocks;
 	private final SignCollection secureSigns;
 	private final SnitchCollection snitches;
 	private final FactoryCollection factories;
-	
-	public SignCollection getSigns() {
-		return secureSigns;
-	}
-	
-	public SnitchCollection getSnitches() {
-		return snitches;
-	}
-	
-	public FactoryCollection getFactories() {
-		return factories;
-	}
-	
-	private static BlockManager instance;
-	
-	public static BlockManager getInstance() {
-		return instance;
-	}
 
 
 	/**
 	 * Creates a  new BlockManager instance
-	 * @param db
 	 */
 	public BlockManager(IDataAccess db) {
+		instance = this;
+		
 		this.db = db;
 		this.allBlocks = new BlockCollection();
 		
@@ -67,8 +57,28 @@ public class BlockManager {
 		allBlocks.addSub(secureSigns);
 		allBlocks.addSub(snitches);
 		allBlocks.addSub(factories);
-		
-		instance = this;
+	}
+	
+	/**
+	 * Gets the global instance
+	 */
+	public static BlockManager instance() {
+		return instance;
+	}
+	
+	
+	public SignCollection getSigns() {
+		return secureSigns;
+	}
+	
+	
+	public SnitchCollection getSnitches() {
+		return snitches;
+	}
+	
+	
+	public FactoryCollection getFactories() {
+		return factories;
 	}
 	
 	
@@ -229,7 +239,7 @@ public class BlockManager {
 			return blockInstance;
 			
 		} catch (Exception ex) {
-			SabrePlugin.getPlugin().log(Level.SEVERE, "Failed to create block instance of type %s.", typeName);
+			SabrePlugin.log(Level.SEVERE, "Failed to create block instance of type %s.", typeName);
 			return null;
 		}
 	}

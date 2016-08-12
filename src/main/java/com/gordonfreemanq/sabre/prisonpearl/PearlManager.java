@@ -136,7 +136,7 @@ public class PearlManager {
 		Location l = imprisoner.getPlayer().getLocation();
 		if (dropStack != null) {
 			imprisoner.getPlayer().getWorld().dropItem(l, dropStack);
-			SabrePlugin.getPlugin().log(Level.INFO, l + ", " + dropStack.getAmount());
+			SabrePlugin.log(Level.INFO, l + ", " + dropStack.getAmount());
 		}
 		
 		

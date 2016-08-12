@@ -20,24 +20,33 @@ import com.gordonfreemanq.sabre.customitems.SecureSign;
 import com.gordonfreemanq.sabre.groups.SabreGroup;
 
 public class SignHandler extends PacketAdapter {
+
+	// The global instance
+	private static SignHandler instance;
 	
 	private final PlayerManager pm;
 	private final BlockManager bm;
 	
 	
-	private static SignHandler instance;
-	
-	public static SignHandler getInstance() {
-		return instance;
+	/**
+	 * Creates a new SignHandler instace
+	 * @param pm The player manager
+	 * @param bm The block manager
+	 */
+	public SignHandler(PlayerManager pm, BlockManager bm) {
+		super(SabrePlugin.instance(), PacketType.Play.Server.UPDATE_SIGN);
+		instance = this;
+		
+		this.pm = pm;
+		this.bm = bm;
 	}
 	
-	public SignHandler() {
-		super(SabrePlugin.getPlugin(), PacketType.Play.Server.UPDATE_SIGN);
-		
-		pm = PlayerManager.getInstance();
-		bm = BlockManager.getInstance();
-		
-		instance = this;
+	
+	/**
+	 * Gets the global instance
+	 */
+	public static SignHandler instance() {
+		return instance;
 	}
 	
 

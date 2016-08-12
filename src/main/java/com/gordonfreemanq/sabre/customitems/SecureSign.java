@@ -54,7 +54,7 @@ public class SecureSign extends SpecialBlock {
 		}
 		
 		saveSettings();
-		SignHandler.getInstance().updateSign(this);
+		SignHandler.instance().updateSign(this);
 	}
 	
 	
@@ -80,7 +80,7 @@ public class SecureSign extends SpecialBlock {
 	 * Updates the sign for a given player
 	 */
 	public void updatefor(SabrePlayer p) {
-		SignHandler.getInstance().updateSign(this);
+		SignHandler.instance().updateSign(this);
 	}
 	
 

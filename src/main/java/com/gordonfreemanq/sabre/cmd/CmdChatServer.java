@@ -25,7 +25,7 @@ public class CmdChatServer extends SabreCommand {
 	@Override
 	public void perform() 
 	{
-		me.setChatChannel(SabrePlugin.getPlugin().getServerBroadcast());
+		me.setChatChannel(SabrePlugin.instance().getServerBroadcast());
 		msg(Lang.chatMovedServerBcast);
 	}
 }

@@ -116,9 +116,9 @@ public class SabreTweaks implements Listener {
 		RegisterCustomRecipes();
 		
 		// Combat Tag API
-		combatTag = SabrePlugin.getPlugin().getCombatTag();
+		combatTag = SabrePlugin.instance().getCombatTag();
 		
-	    CACTUS_HIT = new FixedMetadataValue(SabrePlugin.getPlugin(), true);
+	    CACTUS_HIT = new FixedMetadataValue(SabrePlugin.instance(), true);
 	}
 
 
@@ -278,7 +278,7 @@ public class SabreTweaks implements Listener {
 				// Prevent crafting with lore items
 				for(HumanEntity he : e.getViewers()) {
 					if(he instanceof Player) {
-						PlayerManager.getInstance().getPlayerById(he.getUniqueId()).msg(Lang.noCraftingLore);
+						PlayerManager.instance().getPlayerById(he.getUniqueId()).msg(Lang.noCraftingLore);
 					}
 				}
 
@@ -294,7 +294,7 @@ public class SabreTweaks implements Listener {
 
 				for(HumanEntity he : e.getViewers()) {
 					if(he instanceof Player) {
-						PlayerManager.getInstance().getPlayerById(he.getUniqueId()).msg(Lang.recipeDisabled);
+						PlayerManager.instance().getPlayerById(he.getUniqueId()).msg(Lang.recipeDisabled);
 					}
 				}
 				return;
@@ -455,7 +455,7 @@ public class SabreTweaks implements Listener {
 
 	public void registerTimerForPearlCheck() {
 		Bukkit.getScheduler().scheduleSyncRepeatingTask(
-				SabrePlugin.getPlugin(), new Runnable() {
+				SabrePlugin.instance(), new Runnable() {
 
 					@Override
 					public void run() {
@@ -620,7 +620,7 @@ public class SabreTweaks implements Listener {
 		if (face == BlockFace.SELF) {
 			return;
 		}
-		Bukkit.getScheduler().runTask(SabrePlugin.getPlugin(), new Runnable() {
+		Bukkit.getScheduler().runTask(SabrePlugin.instance(), new Runnable() {
 			@Override
 			public void run() {
 				block.setType(Material.AIR);
@@ -736,7 +736,7 @@ public class SabreTweaks implements Listener {
 		// This opens a 1 tick window for a cheater to login and grab
 		// server info, which should be detectable and bannable.
 		final Player loginPlayer = e.getPlayer();
-		Bukkit.getScheduler().runTaskLater(SabrePlugin.getPlugin(),
+		Bukkit.getScheduler().runTaskLater(SabrePlugin.instance(),
 				new Runnable() {
 			@Override
 			public void run() {
@@ -744,7 +744,7 @@ public class SabreTweaks implements Listener {
 					return;
 					
 				}
-				SabrePlugin.getPlugin().getCombatTag().tagPlayer(loginPlayer);
+				SabrePlugin.instance().getCombatTag().tagPlayer(loginPlayer);
 				loginPlayer.sendMessage("You have been Combat Tagged on Login");
 			}
 		}, 2L);
@@ -1053,7 +1053,7 @@ public class SabreTweaks implements Listener {
 		// movement still occurs. With 1 tick it could still occur.
 		final Player player = (Player) passengerEntity;
 		final Location vehicleLoc = vehicle.getLocation();
-		Bukkit.getScheduler().runTaskLater(SabrePlugin.getPlugin(),
+		Bukkit.getScheduler().runTaskLater(SabrePlugin.instance(),
 				new Runnable() {
 			@Override
 			public void run() {
@@ -1079,7 +1079,7 @@ public class SabreTweaks implements Listener {
 		// movement still occurs. With 1 tick it could still occur.
 		final Player player = (Player) passengerEntity;
 		final Location vehicleLoc = vehicle.getLocation();
-		Bukkit.getScheduler().runTaskLater(SabrePlugin.getPlugin(),
+		Bukkit.getScheduler().runTaskLater(SabrePlugin.instance(),
 				new Runnable() {
 			@Override
 			public void run() {
@@ -1185,7 +1185,7 @@ public class SabreTweaks implements Listener {
 	public static void dropItemAtLocation(final Location l, final ItemStack is) {
 		
 		// Schedule the item to drop 1 tick later
-		Bukkit.getScheduler().scheduleSyncDelayedTask(SabrePlugin.getPlugin(), new Runnable() {
+		Bukkit.getScheduler().scheduleSyncDelayedTask(SabrePlugin.instance(), new Runnable() {
 			@Override
 			public void run() {
 				l.getWorld().dropItem(l.add(0.5, 0.5, 0.5), is).setVelocity(new Vector(0, 0.05, 0));
@@ -1457,7 +1457,7 @@ public class SabreTweaks implements Listener {
 			playerLastEat_.put(player, multiplier*12.8);
 		default:
 			playerLastEat_.put(player, multiplier);
-			Bukkit.getServer().getScheduler().runTaskLater(SabrePlugin.getPlugin(), new Runnable() {
+			Bukkit.getServer().getScheduler().runTaskLater(SabrePlugin.instance(), new Runnable() {
 				// In case the player ingested a potion, this removes the
 				// saturation from the list. Unsure if I have every item
 				// listed. There is always the other cases of like food
@@ -1505,7 +1505,7 @@ public class SabreTweaks implements Listener {
 			if (signdata[i] != null && signdata[i].length() > SIGN_LIMIT) {
 				Player p = e.getPlayer();
 				Location location = e.getBlock().getLocation();
-				SabrePlugin.getPlugin().log(Level.WARNING, String.format(
+				SabrePlugin.log(Level.WARNING, String.format(
 						"Player '%s' [%s] attempted to place sign at ([%s] %d, %d, %d) with line %d having length %d > %d. Preventing.", 
 						p.getPlayerListName(), p.getUniqueId(), location.getWorld().getName(), 
 						location.getBlockX(), location.getBlockY(), location.getBlockZ(),
@@ -1542,7 +1542,7 @@ public class SabreTweaks implements Listener {
 				for (int i = 0; i < signdata.length; i++) {
 					if (signdata[i] != null && signdata[i].length() > SIGN_LIMIT) {
 						Location location = sign.getLocation();
-						SabrePlugin.getPlugin().log(Level.WARNING, String.format(
+						SabrePlugin.log(Level.WARNING, String.format(
 								"Line %d in sign at ([%s] %d, %d, %d) is length %d > %d. Curating.", i,
 								world, location.getBlockX(), location.getBlockY(), location.getBlockZ(),
 								signdata[i].length(), SIGN_LIMIT));

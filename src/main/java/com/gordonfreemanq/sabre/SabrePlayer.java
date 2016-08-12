@@ -92,7 +92,7 @@ public class SabrePlayer implements INamed, IChatChannel {
 		this.lastLogin = new Date();
 		this.playTime = 0;
 		this.autoJoin = false;
-		this.chatChannel = SabrePlugin.getPlugin().getGlobalChat();
+		this.chatChannel = SabrePlugin.instance().getGlobalChat();
 		this.lastMessaged = null;
 		this.banned = false;
 		this.banMessage = "";
@@ -357,11 +357,11 @@ public class SabrePlayer implements INamed, IChatChannel {
 	 */
 	public void msg(String str, Object... args)
 	{
-		String msg = SabrePlugin.getPlugin().txt.parse(str, args);
+		String msg = SabrePlugin.instance().txt.parse(str, args);
 		if (this.isOnline()) {
 			this.getPlayer().sendMessage(msg);
 		} else {
-			SabrePlugin.getPlugin().getPlayerManager().addOfflineMessage(this, msg);
+			SabrePlugin.instance().getPlayerManager().addOfflineMessage(this, msg);
 		}
 	}
 
@@ -379,7 +379,7 @@ public class SabrePlayer implements INamed, IChatChannel {
 				
 				// Move to global chat
 				if (sender.getChatChannel().equals(this)) {
-					sender.setChatChannel(SabrePlugin.getPlugin().getGlobalChat());
+					sender.setChatChannel(SabrePlugin.instance().getGlobalChat());
 					sender.msg(Lang.chatMovedGlobal);
 				}
 				return;
@@ -389,13 +389,13 @@ public class SabrePlayer implements INamed, IChatChannel {
 			this.msg("<lp>From %s: %s", sender.getName(), msg);
 			this.setLastMessaged(sender);
 			sender.setLastMessaged(this);
-			SabrePlugin.getPlugin().log(Level.INFO, "%s -> %s: %s", sender.getName(), this.getName(), msg);
+			SabrePlugin.log(Level.INFO, "%s -> %s: %s", sender.getName(), this.getName(), msg);
 		} else {
 			sender.msg(Lang.chatPlayerNowOffline, this.getName());
 			
 			// Move to global chat
 			if (sender.getChatChannel().equals(this)) {
-				sender.setChatChannel(SabrePlugin.getPlugin().getGlobalChat());
+				sender.setChatChannel(SabrePlugin.instance().getGlobalChat());
 				sender.msg(Lang.chatMovedGlobal);
 			}
 		}
@@ -410,7 +410,7 @@ public class SabrePlayer implements INamed, IChatChannel {
 			this.msg("<lp><it>%s %s", sender.getName(), msg);
 			this.setLastMessaged(sender);
 			sender.setLastMessaged(this);
-			SabrePlugin.getPlugin().log(Level.INFO, "%s -> %s: %s", sender.getName(), this.getName(), msg);
+			SabrePlugin.log(Level.INFO, "%s -> %s: %s", sender.getName(), this.getName(), msg);
 		} else {
 			sender.msg(Lang.chatPlayerNowOffline, this.getName());
 			sender.msg(Lang.chatMovedGlobal, this.getName());
@@ -585,5 +585,14 @@ public class SabrePlayer implements INamed, IChatChannel {
 	 */
 	public boolean isAdmin() {
 		return player.hasPermission(Permission.ADMIN.node);
+	}
+	
+	/**
+	 * Teleports the player to a location
+	 * @param l The location
+	 * @return True if successful
+	 */
+	public boolean teleport(Location l) {
+		return player.teleport(l);
 	}
 }

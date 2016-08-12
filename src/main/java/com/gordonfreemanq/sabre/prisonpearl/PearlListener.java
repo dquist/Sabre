@@ -57,6 +57,7 @@ import com.gordonfreemanq.sabre.PlayerManager;
 import com.gordonfreemanq.sabre.SabrePlayer;
 import com.gordonfreemanq.sabre.SabrePlugin;
 import com.gordonfreemanq.sabre.prisonpearl.PrisonPearlEvent.Type;
+import com.gordonfreemanq.sabre.util.PlayerSpawner;
 import com.gordonfreemanq.sabre.util.SabreUtil;
 import com.gordonfreemanq.sabre.util.TextUtil;
 import com.mojang.authlib.GameProfile;
@@ -164,10 +165,10 @@ public class PearlListener implements Listener {
 	 */
 	public void handleNpcDespawn(UUID plruuid, Location loc) {
 		World world = loc.getWorld();
-		Server bukkitServer = SabrePlugin.getPlugin().getServer();
+		Server bukkitServer = SabrePlugin.instance().getServer();
 		Player player = bukkitServer.getPlayer(plruuid);
 		if (player == null) { // If player is offline
-			MinecraftServer server = ((CraftServer)SabrePlugin.getPlugin().getServer()).getServer();
+			MinecraftServer server = ((CraftServer)SabrePlugin.instance().getServer()).getServer();
 			GameProfile prof = new GameProfile(plruuid, null);
 			EntityPlayer entity = new EntityPlayer(
 					server, server.getWorldServer(0), prof,
@@ -211,7 +212,7 @@ public class PearlListener implements Listener {
 	public void onPlayerQuit(PlayerQuitEvent event) {
 		Player imprisoner = event.getPlayer();
 
-		if (SabrePlugin.getPlugin().getCombatTag().isTagged(imprisoner.getUniqueId())) {
+		if (SabrePlugin.instance().getCombatTag().isTagged(imprisoner.getUniqueId())) {
 			return; // if player is tagged
 		}
 
@@ -264,7 +265,7 @@ public class PearlListener implements Listener {
 			return;
 		}
 
-		SabrePlugin.getPlugin().log(Level.INFO, "%s (%s) is being freed. Reason: PrisonPearl combusted(lava/fire).", pp.getName(), pp.getPlayerID());
+		SabrePlugin.log(Level.INFO, "%s (%s) is being freed. Reason: PrisonPearl combusted(lava/fire).", pp.getName(), pp.getPlayerID());
 		pearls.freePearl(pp);
 	}
 
@@ -604,14 +605,11 @@ public class PearlListener implements Listener {
 	 */
 	@EventHandler(priority=EventPriority.HIGHEST, ignoreCancelled = true)
 	public void onPlayerJoin(PlayerJoinEvent e) {
-		SabrePlayer p = pm.getPlayerById(e.getPlayer().getUniqueId());
-		if (p.getFreedOffline()) {
-			
-			Location l = SabreUtil.chooseSpawn(PearlManager.getInstance().getFreeWorld(), 5000);
-			SabreUtil.sendToGround(p.getPlayer(), l);
-			SabreUtil.tryToTeleport(e.getPlayer(), l);
-			
-			pm.setFreedOffline(p, false);
+		SabrePlayer sp = pm.getPlayerById(e.getPlayer().getUniqueId());
+		if (sp.getFreedOffline()) {
+
+			pm.setFreedOffline(sp, false);
+			PlayerSpawner.instance().spawnPlayerBed(sp);
 		}
 	}
 
@@ -623,15 +621,15 @@ public class PearlListener implements Listener {
 	private void prisonMotd(PrisonPearl pp) {
 
 		if (!pp.getSummoned()) {
-			pp.getPlayer().getPlayer().sendMessage(TextUtil.txt.parse(Lang.pearlMotd));
-			pp.getPlayer().getPlayer().sendMessage(TextUtil.txt.parse(Lang.pearlMotd2));
+			pp.getPlayer().getPlayer().sendMessage(TextUtil.instance().parse(Lang.pearlMotd));
+			pp.getPlayer().getPlayer().sendMessage(TextUtil.instance().parse(Lang.pearlMotd2));
 		}
 	}
 
 
 	
 	/**
-	 * Gets where the player should be respawned at
+	 * Gets where the player should be re-spawned at
 	 * @param player The player
 	 * @param curloc
 	 * @return The respawn location, or null
@@ -766,8 +764,7 @@ public class PearlListener implements Listener {
 
 			SabrePlayer imprisoner = pm.getPlayerById(event.getImprisoner().getUniqueId());
 			// Log the capturing PrisonPearl event.
-			String message = String.format("%s has bound %s to a PrisonPearl", imprisoner.getName(), imprisoned.getName());
-			SabrePlugin.getPlugin().log(Level.INFO, message);
+			SabrePlugin.log(Level.INFO, String.format("%s has bound %s to a PrisonPearl", imprisoner.getName(), imprisoned.getName()));
 			
 			imprisoner.msg(Lang.pearlYouBound, imprisoned.getName());
 			imprisoned.msg(Lang.pearlYouWereBound, imprisoner.getName());
@@ -778,7 +775,7 @@ public class PearlListener implements Listener {
 			String name = pp.getHolder().getName();
 			imprisoned.msg(Lang.pearlPearlIsHeld, name, l.getBlockX(), l.getBlockY(), l.getBlockZ(), l.getWorld().getName());	
 			
-			String bcastMsg = SabrePlugin.getPlugin().txt.parse(Lang.pearlBroadcast, imprisoned.getName(), 
+			String bcastMsg = SabrePlugin.instance().txt.parse(Lang.pearlBroadcast, imprisoned.getName(), 
 					name, l.getBlockX(), l.getBlockY(), l.getBlockZ(), l.getWorld().getName());
 			
 			for(SabrePlayer p : imprisoned.getBcastPlayers()) {

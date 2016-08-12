@@ -68,6 +68,7 @@ import com.gordonfreemanq.sabre.snitch.SnitchListener;
 import com.gordonfreemanq.sabre.snitch.SnitchLogger;
 import com.gordonfreemanq.sabre.util.CombatInterface;
 import com.gordonfreemanq.sabre.util.CombatTagPlusManager;
+import com.gordonfreemanq.sabre.util.PlayerSpawner;
 import com.gordonfreemanq.sabre.util.VanishApi;
 
 
@@ -77,10 +78,12 @@ public class SabrePlugin extends AbstractSabrePlugin
 	
 	private static SabrePlugin instance;
 
+	private final SabreConfig config;
+	private final IDataAccess db;
+	
 	private PlayerManager playerManager;
 	private GroupManager groupManager;
 	private BlockManager blockManager;
-	private IDataAccess db;
 	private HashSet<SabreBaseCommand<?>> baseCommands;
 	private CmdAutoHelp cmdAutoHelp;
 	private GlobalChat globalChat;
@@ -91,7 +94,6 @@ public class SabrePlugin extends AbstractSabrePlugin
 	private SnitchListener snitchListener;
 	private PearlManager pearlManager;
 	private PearlListener pearlListener;
-	private SabreConfig config;
 	private SignHandler signHandler;
 	private StatsTracker statsTracker;
 	private SabreTweaks sabreTweaks;
@@ -102,13 +104,36 @@ public class SabrePlugin extends AbstractSabrePlugin
 	private PearlWorker pearlWorker;
 	private CombatInterface combatTag;
 	private VanishApi vanishApi;
+	private PlayerSpawner randomSpawn = new PlayerSpawner();
 	
 	private File serverFolder = new File(System.getProperty("user.dir"));
 
 	/**
-	 * @brief SabrePlugin constructor 
+	 * Creates a new SabrePlugin instance
 	 */
 	public SabrePlugin() {
+		instance = this;
+		
+		config = new SabreConfig();
+		db = new MongoConnector(config);
+		playerManager = new PlayerManager(db);
+		groupManager = new GroupManager(playerManager, blockManager, db);
+		blockManager = new BlockManager(db);
+		pearlManager = new PearlManager(db, config);
+		globalChat = new GlobalChat(playerManager, config);
+		serverBcast = new ServerBroadcast(playerManager);
+		
+		playerListener = new PlayerListener(playerManager, globalChat);
+		blockListener = new BlockListener(playerManager, blockManager, config);
+		snitchLogger = new SnitchLogger(db, playerManager);
+		snitchListener = new SnitchListener(playerManager, blockManager, snitchLogger);
+		pearlListener = new PearlListener(pearlManager, playerManager);
+		
+		sabreTweaks = new SabreTweaks(config);
+		factoryListener = new FactoryListener(playerManager, blockManager);
+		factoryConfig = new FactoryConfig();
+		customItems = new CustomItems();
+		combatTag = new CombatTagPlusManager();
 	}
 	
     /**
@@ -116,10 +141,31 @@ public class SabrePlugin extends AbstractSabrePlugin
      */
     public SabrePlugin(PluginLoader loader, Server server, PluginDescriptionFile description, File dataFolder, File file) {
         super(loader, server, description, dataFolder, file);
+		
+		config = new SabreConfig();
+		db = new MongoConnector(config);
+		playerManager = new PlayerManager(db);
+		groupManager = new GroupManager(playerManager, blockManager, db);
+		blockManager = new BlockManager(db);
+		pearlManager = new PearlManager(db, config);
+		globalChat = new GlobalChat(playerManager, config);
+		serverBcast = new ServerBroadcast(playerManager);
+		
+		playerListener = new PlayerListener(playerManager, globalChat);
+		blockListener = new BlockListener(playerManager, blockManager, config);
+		snitchLogger = new SnitchLogger(db, playerManager);
+		snitchListener = new SnitchListener(playerManager, blockManager, snitchLogger);
+		pearlListener = new PearlListener(pearlManager, playerManager);
+		
+		sabreTweaks = new SabreTweaks(config);
+		factoryListener = new FactoryListener(playerManager, blockManager);
+		factoryConfig = new FactoryConfig();
+		customItems = new CustomItems();
+		combatTag = new CombatTagPlusManager();
     }
 
 
-	public static SabrePlugin getPlugin() { 
+	public static SabrePlugin instance() { 
 		return instance;
 	}
 
@@ -128,21 +174,10 @@ public class SabrePlugin extends AbstractSabrePlugin
 	}
 	
 	
-	/**
-	 * Reloads the file configuration
-	 */
-	public void loadConfig() {
-		config = SabreConfig.load(this.getConfig());
-		saveConfig();
-	}
-	
-	
 	@Override
 	public void saveConfig() {
-		if (config != null) {
-			//config.save();
-			//super.saveConfig();
-		}
+		config.save();
+		super.saveConfig();
 	}
 
 	/**
@@ -176,49 +211,23 @@ public class SabrePlugin extends AbstractSabrePlugin
 			return;
 		}
 		
-		instance = this;
-		
-		// Load config
-		loadConfig();
-		
-		// Create objects
-		if (this.db == null) {
-			this.db = new MongoConnector(this, config);
-		}
-		
-		this.playerManager = new PlayerManager(db, this);
-		this.groupManager = new GroupManager(playerManager, db, this);
-		this.blockManager = new BlockManager(db);
-		this.globalChat = new GlobalChat(playerManager, config);
-		this.serverBcast = new ServerBroadcast(playerManager);
-		this.playerListener = new PlayerListener(playerManager, globalChat, this);
+		// Read config
+		config.read();
 		
 		getServer().getPluginManager().registerEvents(playerListener, this);
-		
-		this.blockListener = new BlockListener(playerManager, blockManager, config, this);
-		this.snitchLogger = new SnitchLogger(db, playerManager);
-		this.snitchListener = new SnitchListener(snitchLogger);
-		this.pearlManager = new PearlManager(db, config);
-		this.pearlListener = new PearlListener(pearlManager, playerManager);
-		this.sabreTweaks = new SabreTweaks(config);
-		this.factoryListener = new FactoryListener(playerManager, blockManager);
-		this.factoryConfig = new FactoryConfig();
-		this.customItems = new CustomItems();
-		this.combatTag = new CombatTagPlusManager();
 		
 		// Try to connect to the database and load the data
 		try {
 			this.loadData();
 			playerListener.setPluginLoaded(true);
 		} catch(Exception ex) {
-			this.log(Level.SEVERE, "Failed to connect to MongoDB database!");
+			log(Level.SEVERE, "Failed to connect to MongoDB database!");
 			throw ex;
 		}
 
-
-		// Add Commands
-		this.cmdAutoHelp = new CmdAutoHelp();
-		this.baseCommands = new HashSet<SabreBaseCommand<?>>();
+		// Register Commands
+		cmdAutoHelp = new CmdAutoHelp();
+		baseCommands = new HashSet<SabreBaseCommand<?>>();
 		baseCommands.add(new CmdRoot());
 		baseCommands.add(new CmdPearl());
 		baseCommands.add(new CmdFactory());
@@ -238,7 +247,6 @@ public class SabrePlugin extends AbstractSabrePlugin
 		baseCommands.add(new CmdBuildAcid());
 		baseCommands.add(new CmdHelp());
 		
-
 		// Admin commands
 		baseCommands.add(new CmdAdminRoot());
 		baseCommands.add(new CmdSpeed());
@@ -257,6 +265,7 @@ public class SabrePlugin extends AbstractSabrePlugin
 		factoryWorker = new FactoryWorker();
 		factoryWorker.start();
 
+		getServer().getPluginManager().registerEvents(playerListener, this);
 		playerListener.handleOnlinePlayers();
 		blockListener.handleLoadedChunks();
 		getServer().getPluginManager().registerEvents(blockListener, this);
@@ -264,7 +273,7 @@ public class SabrePlugin extends AbstractSabrePlugin
 		getServer().getPluginManager().registerEvents(pearlListener, this);
 		getServer().getPluginManager().registerEvents(sabreTweaks, this);
 		getServer().getPluginManager().registerEvents(factoryListener, this);
-		signHandler = new SignHandler();
+		signHandler = new SignHandler(playerManager, blockManager);
 		//ProtocolLibrary.getProtocolManager().addPacketListener(signHandler); // TODO ProtocolLibrary
 		statsTracker = new StatsTracker(playerManager);
 		statsTracker.start();
@@ -417,15 +426,6 @@ public class SabrePlugin extends AbstractSabrePlugin
 	 */
 	public IDataAccess getDataAccess() {
 		return this.db;
-	}
-
-	
-	/**
-	 * Sets the Data Access Object
-	 * @return The Data Access Object
-	 */
-	public void setDataAccess(IDataAccess db) {
-		this.db = db;
 	}
 
 	

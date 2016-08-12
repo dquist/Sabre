@@ -40,14 +40,22 @@ public class SnitchListener implements Listener {
 	private final SnitchCollection snitches;
     private final TreeMap<String, Set<Snitch>> playersInSnitches;
 	
-	public SnitchListener(SnitchLogger snitchLogger) {
-		this.pm = PlayerManager.getInstance();
-		this.bm = BlockManager.getInstance();
+    
+    /**
+     * Creates a new SnitchListener instance
+     * @param pm The player manager
+     * @param bm The block manager
+     * @param snitchLogger The snitch logger
+     */
+	public SnitchListener(PlayerManager pm, BlockManager bm, SnitchLogger snitchLogger) {
+		this.pm = pm;
+		this.bm = bm;
 		this.snitchLogger = snitchLogger;
 		this.snitches = bm.getSnitches();
 		
 		this.playersInSnitches = new TreeMap<String, Set<Snitch>>();
 	}
+	
 	
 	/**
 	 * Handles player login events

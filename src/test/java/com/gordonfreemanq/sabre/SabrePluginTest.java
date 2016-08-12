@@ -34,8 +34,7 @@ import com.gordonfreemanq.sabre.util.MockWorld;
 import com.gordonfreemanq.sabre.util.TestFixture;
 
 @RunWith(PowerMockRunner.class)
-@PrepareForTest({ PluginManager.class, SabrePlugin.class, Permission.class, Bukkit.class, PluginDescriptionFile.class
-})
+@PrepareForTest({ PluginManager.class, SabrePlugin.class, Permission.class, Bukkit.class, PluginDescriptionFile.class })
 public class SabrePluginTest {
 	
 	private static String BAN_MESSAGE = "Test ban message";

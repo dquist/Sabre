@@ -251,7 +251,7 @@ public class SabreBlock {
 	 * @return The parsed string
 	 */
 	protected static String parse(String str) {
-		return SabrePlugin.getPlugin().txt.parse(str);
+		return SabrePlugin.instance().txt.parse(str);
 	}
 	
 	
@@ -297,7 +297,7 @@ public class SabreBlock {
 	 * Saves settings for the block
 	 */
 	public void saveSettings() {
-		BlockManager.getInstance().updateSettings(this);
+		BlockManager.instance().updateSettings(this);
 	}
 	
 	

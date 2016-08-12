@@ -24,25 +24,26 @@ import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.event.player.PlayerKickEvent;
 import org.bukkit.event.player.PlayerRespawnEvent;
 
-import com.gordonfreemanq.sabre.blocks.BlockManager;
-import com.gordonfreemanq.sabre.blocks.SabreBlock;
 import com.gordonfreemanq.sabre.chat.GlobalChat;
 import com.gordonfreemanq.sabre.chat.IChatChannel;
-import com.gordonfreemanq.sabre.core.ISabreLog;
+import com.gordonfreemanq.sabre.util.PlayerSpawner;
 import com.gordonfreemanq.sabre.util.SabreUtil;
 
 public class PlayerListener implements Listener {
 	
 	private final PlayerManager pm;
 	private final GlobalChat globalChat;
-	private final ISabreLog logger;
 	private boolean pluginLoaded;
 	
-	public PlayerListener(PlayerManager pm, GlobalChat globalChat, ISabreLog logger)
-	{
+	
+	/**
+	 * Creates a new PlayerListener instance
+	 * @param pm The player manager
+	 * @param globalChat The global chat instance
+	 */
+	public PlayerListener(PlayerManager pm, GlobalChat globalChat) {
 		this.pm = pm;
 		this.globalChat = globalChat;
-		this.logger = logger;
 		this.pluginLoaded = false;
 	}
 	
@@ -87,7 +88,7 @@ public class PlayerListener implements Listener {
 			e.setResult(PlayerLoginEvent.Result.ALLOWED);
 			e.setKickMessage(null);
 		} catch (Exception ex) {
-			 logger.log(Level.SEVERE, SabreUtil.getExceptionMessage("onPlayerLogin", ex));
+			 SabrePlugin.log(Level.SEVERE, SabreUtil.getExceptionMessage("onPlayerLogin", ex));
 			 throw ex;
 		}
 	}
@@ -127,9 +128,9 @@ public class PlayerListener implements Listener {
 	public void handlePlayerJoin(Player p) {
 		SabrePlayer sp = pm.getPlayerById(p.getUniqueId());
 		if (sp == null) {
-			// This player has never logged in before, make a new instance
+			// This player has never logged in before, make a new instance and spawn them
 			sp = pm.createNewPlayer(p);
-			SabreUtil.doRandomSpawn(p);
+			PlayerSpawner.instance().spawnPlayerRandom(sp);
 		}
 		
 		// Update the player model
@@ -198,8 +199,8 @@ public class PlayerListener implements Listener {
 	        channel.chat(p, e.getMessage());
 			 
 		 } catch (Exception ex) {
-			 e.getPlayer().sendMessage(SabrePlugin.getPlugin().txt.parse(Lang.exceptionGeneral));
-			 logger.log(Level.SEVERE, SabreUtil.getExceptionMessage("onPlayerChatEvent", ex));
+			 e.getPlayer().sendMessage(SabrePlugin.instance().txt.parse(Lang.exceptionGeneral));
+			 SabrePlugin.log(Level.SEVERE, SabreUtil.getExceptionMessage("onPlayerChatEvent", ex));
 			 throw ex;
 		 }
 	 }
@@ -215,30 +216,7 @@ public class PlayerListener implements Listener {
 	@EventHandler(priority=EventPriority.LOWEST, ignoreCancelled = true)
 	public void onPlayerRespawn(PlayerRespawnEvent e) {
 		SabrePlayer sp = pm.getPlayerById(e.getPlayer().getUniqueId());
-		Location l = sp.getBedLocation();
-		boolean useBed = false;
-		
-		if (l != null) {
-			if (l.getBlock().getType() == Material.BED_BLOCK) {
-				SabreBlock b = BlockManager.getInstance().getBlockAt(SabreUtil.getRealBlock(l.getBlock()).getLocation());
-				if (b == null || b.canPlayerAccess(sp)) {
-					useBed = true;
-				}
-			}
-		}
-		
-		if (useBed) {
-			e.getPlayer().setBedSpawnLocation(l, true);
-			e.setRespawnLocation(l);
-		} else {
-			if (l != null) {
-				sp.msg(Lang.playerBedMissing);
-			}
-			
-			pm.setBedLocation(sp, null);
-			e.getPlayer().setBedSpawnLocation(null);
-			SabreUtil.doRandomSpawn(e.getPlayer());
-		}
+		e.setRespawnLocation(PlayerSpawner.instance().spawnPlayerBed(sp));
 	}
 	
 

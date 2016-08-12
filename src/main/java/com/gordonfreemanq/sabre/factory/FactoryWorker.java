@@ -3,7 +3,6 @@ package com.gordonfreemanq.sabre.factory;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
-import java.util.logging.Level;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -44,7 +43,7 @@ public class FactoryWorker implements Runnable {
 	 */
 	public void start() {
 		enabled = true;
-		Bukkit.getScheduler().scheduleSyncRepeatingTask(SabrePlugin.getPlugin(), this, 0, 20);
+		Bukkit.getScheduler().scheduleSyncRepeatingTask(SabrePlugin.instance(), this, 0, 20);
 	}
 	
 	

@@ -12,11 +12,12 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.gordonfreemanq.sabre.SabrePlugin;
 import com.gordonfreemanq.sabre.util.PermUtil;
 import com.gordonfreemanq.sabre.util.TextUtil;
 
 
-public abstract class AbstractSabrePlugin extends JavaPlugin implements ISabreLog
+public abstract class AbstractSabrePlugin extends JavaPlugin
 {
 	// Some utils
 	public TextUtil txt;
@@ -120,41 +121,20 @@ public abstract class AbstractSabrePlugin extends JavaPlugin implements ISabreLo
 		this.txt.tags.put("w", TextUtil.parseColor("<white>"));  // parameter
 		this.txt.tags.put("lp", TextUtil.parseColor("<lpurple>"));
 	}
-	
-	
-	// -------------------------------------------- //
-	// HOOKS
-	// -------------------------------------------- //
-	public void preAutoSave()
-	{
-		
-	}
-	
-	public void postAutoSave()
-	{
-		
-	}
-	
-	// -------------------------------------------- //
-	// LOGGING
-	// -------------------------------------------- //
-	public void log(Object msg)
-	{
+
+	public static void log(Object msg) {
 		log(Level.INFO, msg);
 	}
 
-	public void log(String str, Object... args)
-	{
-		log(Level.INFO, this.txt.parse(str, args));
+	public static void log(String str, Object... args) {
+		log(Level.INFO, TextUtil.instance().parse(str, args));
 	}
 
-	public void log(Level level, String str, Object... args)
-	{
-		log(level, this.txt.parse(str, args));
+	public static void log(Level level, String str, Object... args) {
+		log(level, TextUtil.instance().parse(str, args));
 	}
 
-	public void log(Level level, Object msg)
-	{
-		Bukkit.getLogger().log(level, "["+this.getDescription().getFullName()+"] "+msg);
+	public static void log(Level level, Object msg) {
+		Bukkit.getLogger().log(level, String.format("[%s] %s", SabrePlugin.instance().getDescription().getFullName(), msg));
 	}
 }

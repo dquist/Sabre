@@ -301,12 +301,12 @@ public class SabreGroup implements INamed, IChatChannel {
 
 
 	public void msgAll(String str, boolean isChat, Object... args) {
-		String formatStr = SabrePlugin.getPlugin().txt.parse(str, args);
+		String formatStr = SabrePlugin.instance().txt.parse(str, args);
 		msgAll(formatStr, isChat);
 	}
 
 	public void msgAllBut(SabrePlayer player, String str, Object... args) {
-		String formatStr = SabrePlugin.getPlugin().txt.parse(str, args);
+		String formatStr = SabrePlugin.instance().txt.parse(str, args);
 
 		for (SabreMember m : members) {
 			SabrePlayer p = m.getPlayer();
@@ -319,16 +319,16 @@ public class SabreGroup implements INamed, IChatChannel {
 
 	@Override
 	public void chat(SabrePlayer sender, String msg) {
-		String formatStr = SabrePlugin.getPlugin().txt.parse("<c>[%s] <reset><gold>%s:<w> %s", this.getName(), sender.getName(), msg);
+		String formatStr = SabrePlugin.instance().txt.parse("<c>[%s] <reset><gold>%s:<w> %s", this.getName(), sender.getName(), msg);
 		this.msgAll(formatStr, true);
-		SabrePlugin.getPlugin().log(Level.INFO, formatStr);
+		SabrePlugin.log(Level.INFO, formatStr);
 	}
 	
 	@Override
 	public void chatMe(SabrePlayer sender, String msg) {
-		String formatStr = SabrePlugin.getPlugin().txt.parse("<c>[%s] <gold><it>%s %s", this.getName(), sender.getName(), msg);
+		String formatStr = SabrePlugin.instance().txt.parse("<c>[%s] <gold><it>%s %s", this.getName(), sender.getName(), msg);
 		this.msgAll(formatStr, true);
-		SabrePlugin.getPlugin().log(Level.INFO, formatStr);
+		SabrePlugin.log(Level.INFO, formatStr);
 	}
 	
 	
@@ -338,7 +338,7 @@ public class SabreGroup implements INamed, IChatChannel {
 	 * @param args
 	 */
 	public void msgAllSnitch(String str, Object... args) {
-		String formatStr = SabrePlugin.getPlugin().txt.parse(str, args);
+		String formatStr = SabrePlugin.instance().txt.parse(str, args);
 		
 		for (SabreMember m : members) {
 			SabrePlayer p = m.getPlayer();

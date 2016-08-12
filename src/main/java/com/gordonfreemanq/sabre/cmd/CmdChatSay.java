@@ -31,7 +31,7 @@ public class CmdChatSay extends SabreCommand {
 			sb.append(" ");
 		}
 		
-		String formatted = SabrePlugin.getPlugin().getServerBroadcast().chat("Server", sb.toString().trim());
+		String formatted = SabrePlugin.instance().getServerBroadcast().chat("Server", sb.toString().trim());
 		if (senderIsConsole) {
 			sender.sendMessage(formatted);
 		}

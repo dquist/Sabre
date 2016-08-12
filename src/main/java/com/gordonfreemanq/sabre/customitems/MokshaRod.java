@@ -126,7 +126,7 @@ public class MokshaRod extends SabreItemStack {
 			}
 			
 			if (SabreUtil.loreContainsString(lore, "UUID:")) {
-				created.setBoundPlayer(PlayerManager.getInstance().getPlayerById(SabreUtil.parseLoreId(lore)));
+				created.setBoundPlayer(PlayerManager.instance().getPlayerById(SabreUtil.parseLoreId(lore)));
 			}
 			
 			is.setItemMeta(created.getItemMeta());

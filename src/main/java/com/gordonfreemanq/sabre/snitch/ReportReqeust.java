@@ -53,7 +53,7 @@ public class ReportReqeust implements Runnable {
 		
 		MessageWriter writer = new MessageWriter(p, output);
 
-		Bukkit.getScheduler().runTask(SabrePlugin.getPlugin(), writer);
+		Bukkit.getScheduler().runTask(SabrePlugin.instance(), writer);
 	}
 	
 	

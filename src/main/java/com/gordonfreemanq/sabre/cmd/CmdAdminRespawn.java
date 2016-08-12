@@ -2,7 +2,7 @@ package com.gordonfreemanq.sabre.cmd;
 
 import com.gordonfreemanq.sabre.core.CommandVisibility;
 import com.gordonfreemanq.sabre.core.Permission;
-import com.gordonfreemanq.sabre.util.SabreUtil;
+import com.gordonfreemanq.sabre.util.PlayerSpawner;
 
 
 public class CmdAdminRespawn extends SabreCommand {
@@ -23,6 +23,6 @@ public class CmdAdminRespawn extends SabreCommand {
 	@Override
 	public void perform() 
 	{
-		SabreUtil.doRandomSpawn(me.getPlayer());
+		PlayerSpawner.instance().spawnPlayerRandom(me);
 	}
 }

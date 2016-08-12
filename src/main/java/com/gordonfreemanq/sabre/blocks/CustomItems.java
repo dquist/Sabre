@@ -13,31 +13,34 @@ import org.bukkit.configuration.file.YamlConfiguration;
 import com.gordonfreemanq.sabre.SabrePlugin;
 import com.gordonfreemanq.sabre.customitems.FarmProspector;
 import com.gordonfreemanq.sabre.customitems.MokshaRod;
+import com.gordonfreemanq.sabre.util.TextUtil;
 
 /**
  * Holds the custom item types
  * @author GFQ
  */
 public class CustomItems {
-	
-	private File folder = null;
-	private final SabrePlugin plugin;
-	private HashMap<String, SabreItemStack> customItems;
-	
+
+	// The global instance
 	private static CustomItems instance;
 	
-	public static CustomItems getInstance() {
-		return instance;
-	}
+	private File folder = null;
+	private HashMap<String, SabreItemStack> customItems;
 	
 	
 	/**
 	 * Creates a new CustomItems instance
 	 */
 	public CustomItems() {
-		this.plugin = SabrePlugin.getPlugin();
-		
 		instance = this;
+	}
+	
+	
+	/**
+	 * Gets the global instance
+	 */
+	public static CustomItems getInstance() {
+		return instance;
 	}
 
 	
@@ -46,7 +49,7 @@ public class CustomItems {
 	 */
 	public void reload() {
 	    if (folder == null) {
-	    	folder = new File(plugin.getDataFolder(), "custom_items");
+	    	folder = new File(SabrePlugin.instance().getDataFolder(), "custom_items");
 	    }
 	    
 		this.customItems = new HashMap<String, SabreItemStack>();
@@ -76,7 +79,7 @@ public class CustomItems {
 				Material material = Material.getMaterial(materialName);
 				if (material == null)
 				{
-					plugin.getLogger().severe(f.getName() + " has invalid material " + materialName);
+					SabrePlugin.log(Level.SEVERE, f.getName() + " has invalid material " + materialName);
 					continue;
 				}
 		    	
@@ -85,10 +88,10 @@ public class CustomItems {
 		    	
 		    	List<String> loreStrings = config.getStringList("lore");
 		    	List<String> lore = new ArrayList<String>();
-		    	lore.add(plugin.txt.parse("<l>%s", itemName));
+		    	lore.add(TextUtil.instance().parse("<l>%s", itemName));
 		    	
 		    	for (String s : loreStrings) {
-		    		lore.add(plugin.txt.parse(s));
+		    		lore.add(TextUtil.instance().parse(s));
 		    	}
 		    	
 		    	SabreItemStack item = new SabreItemStack(material, itemName, amount, durability, lore);
@@ -105,7 +108,7 @@ public class CustomItems {
 		    	customItems.put(itemName, item);
 			    
 	    	} catch (Exception ex) {
-	    		plugin.log(Level.SEVERE, "Failed to read item config file %s", f.getName());
+	    		SabrePlugin.log(Level.SEVERE, "Failed to read item config file %s", f.getName());
 	    	}
 	    }
 	}

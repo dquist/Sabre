@@ -154,7 +154,7 @@ public class SnitchCollection extends BlockCollection {
                 continue;
             }
             
-            SabreBlock sb = BlockManager.getInstance().getBlockAt(block.getLocation());
+            SabreBlock sb = BlockManager.instance().getBlockAt(block.getLocation());
             if (sb instanceof Snitch) {
             	return (Snitch)sb;
             }
@@ -175,11 +175,10 @@ public class SnitchCollection extends BlockCollection {
     	if (l.getBlock().getType().equals(Material.JUKEBOX)) {
     		return true;
     	} else if (cleanup) {
-            final SabrePlugin plugin = SabrePlugin.getPlugin();
             int x = l.getBlockX();
             int y = l.getBlockY();
             int z = l.getBlockZ();
-            plugin.log("Removing ghost snitch '" + snitch.getDisplayName() + "' at x:" + x + " y:" + y + " z:" + z);
+            SabrePlugin.log("Removing ghost snitch '" + snitch.getDisplayName() + "' at x:" + x + " y:" + y + " z:" + z);
             this.remove(snitch);
     	}
         return false;

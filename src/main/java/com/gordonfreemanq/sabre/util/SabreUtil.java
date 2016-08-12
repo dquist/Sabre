@@ -1,6 +1,5 @@
 package com.gordonfreemanq.sabre.util;
 
-import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.UUID;
@@ -12,7 +11,6 @@ import org.bukkit.Chunk;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
-import org.bukkit.World.Environment;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.BlockState;
@@ -297,143 +295,26 @@ public class SabreUtil {
 		newloc.add(1.2*Math.cos(rad), 1.2*Math.sin(rad), 0);
 		return newloc;
 	}
-	
-	
-	// *------------------------------------------------------------------------------------------------------------*
-	// | The following chooseSpawn method contains code made by NuclearW                                            |
-	// | based on his SpawnArea plugin:                                                                             |
-	// | http://forums.bukkit.org/threads/tp-spawnarea-v0-1-spawns-targetPlayers-in-a-set-area-randomly-1060.20408/ |
-	// *------------------------------------------------------------------------------------------------------------*
 
-	public static Location chooseSpawn(World world, int distance) {
-
-		List<Integer> blacklist = Arrays.asList(new Integer[]{8,9,10,11,18,51,81});	
-		
-		double xmin = -distance;
-		double xmax = distance;
-		double zmin = -distance;
-		double zmax = distance;
-				
-		// Spawn area thickness near border. If 0 spawns whole area
-		int thickness = 0;
-
-		String type = "circle";
-				
-		double xrand = 0;
-		double zrand = 0;
-		double y = -1;
-		
-		if(type.equalsIgnoreCase("circle")){
-
-			double xcenter = xmin + (xmax - xmin)/2;
-			double zcenter = zmin + (zmax - zmin)/2;
-			
-			do {
-
-				double r = Math.random() * (xmax - xcenter);
-				double phi = Math.random() * 2 * Math.PI;
-
-				xrand = xcenter + Math.cos(phi) * r;
-				zrand = zcenter + Math.sin(phi) * r;
-
-				y = getValidHighestY(world, xrand, zrand, blacklist);
-								
-			} while (y == -1);
-
-
-		} else {
-
-			if(thickness <= 0){
-
-				do {
-					
-					xrand = xmin + Math.random()*(xmax - xmin + 1);
-					zrand = zmin + Math.random()*(zmax - zmin + 1);
-
-					y = getValidHighestY(world, xrand, zrand, blacklist);
-
-				} while (y == -1);
-
-			}else {
-
-				do {
-					
-					int side = (int) (Math.random() * 4d);
-					double borderOffset = Math.random() * (double) thickness;
-					if (side == 0) {
-						xrand = xmin + borderOffset;
-						// Also balancing probability considering thickness
-						zrand = zmin + Math.random() * (zmax - zmin + 1 - 2*thickness) + thickness;
-					}
-					else if (side == 1) {
-						xrand = xmax - borderOffset;
-						zrand = zmin + Math.random() * (zmax - zmin + 1 - 2*thickness) + thickness;
-					}
-					else if (side == 2) {
-						xrand = xmin + Math.random() * (xmax - xmin + 1);
-						zrand = zmin + borderOffset;
-					}
-					else {
-						xrand = xmin + Math.random() * (xmax - xmin + 1);
-						zrand = zmax - borderOffset;
-					}
-
-					y = getValidHighestY(world, xrand, zrand, blacklist);
-
-				} while (y == -1);
-				
-			}
-		}
-	
-		Location location = new Location(world, xrand, y, zrand);
-				
-		return location;
-	}
-
-	private static double getValidHighestY(World world, double x, double z, List<Integer> blacklist) {
-		
-		world.getChunkAt(new Location(world, x, 0, z)).load();
-
-		double y = 0;
-		int blockid = 0;
-
-		if(world.getEnvironment().equals(Environment.NETHER)){
-			int blockYid = world.getBlockAt((int) x, (int) y, (int) z).getTypeId();
-			int blockY2id = world.getBlockAt((int) x, (int) (y+1), (int) z).getTypeId();
-			while(y < 128 && !(blockYid == 0 && blockY2id == 0)){				
-				y++;
-				blockYid = blockY2id;
-				blockY2id = world.getBlockAt((int) x, (int) (y+1), (int) z).getTypeId();
-			}
-			if(y == 127) return -1;
-		}else{
-			y = 257;
-			while(y >= 0 && blockid == 0){
-				y--;
-				blockid = world.getBlockAt((int) x, (int) y, (int) z).getTypeId();
-			}
-			if(y == 0) return -1;
-		}
-
-		if (blacklist.contains(blockid)) return -1;
-		if (blacklist.contains(81) && world.getBlockAt((int) x, (int) (y+1), (int) z).getTypeId() == 81) return -1; // Check for cacti
-
-		return y;
-	}
-
-	// Methods for a save landing :)
-
-	public static void sendToGround(Player player, Location location){
+	/**
+	 * Sends a player to the ground at a specified location
+	 * @param player The player to move
+	 * @param location Their location to move to
+	 * @return The final landing location
+	 */
+	public static Location sendToGround(Player player, Location location){
 
 		location.getChunk().load();
+		Block block = location.getBlock();
 
 		World world = location.getWorld();
 
 		for(int y = 0 ; y <= location.getBlockY() + 2; y++){
-			Block block = world.getBlockAt(location.getBlockX(), y, location.getBlockZ());
+			block = world.getBlockAt(location.getBlockX(), y, location.getBlockZ());
 			player.sendBlockChange(block.getLocation(), block.getType(), block.getData());
 		}
-
+		
+		return block.getLocation();
 	}
 
 	private static String uuidStartString = parse("<a>UUID: <n>");
@@ -527,7 +408,7 @@ public class SabreUtil {
 	
 	
 	protected static String parse(String str) {
-		return SabrePlugin.getPlugin().txt.parse(str);
+		return SabrePlugin.instance().txt.parse(str);
 	}
 	
 	public static String parse(String str, Object... args) {
@@ -610,15 +491,6 @@ public class SabreUtil {
 		} else {
 			return 0.2;
 		}
-	}
-	
-	
-	public static void doRandomSpawn(Player p) {
-		World spawnWorld = Bukkit.getServer().getWorld(SabrePlugin.getPlugin().getSabreConfig().getFreeWorldName());
-		Location spawnLocation = SabreUtil.chooseSpawn(spawnWorld, SabrePlugin.getPlugin().getSabreConfig().getRespawnRadius());
-		SabreUtil.sendToGround(p, spawnLocation);
-		p.teleport(spawnLocation);
-		p.sendMessage("You wake up in an unfamiliar place.");
 	}
 	
 

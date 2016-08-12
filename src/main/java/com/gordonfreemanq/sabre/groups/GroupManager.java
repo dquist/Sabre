@@ -12,6 +12,7 @@ import org.bukkit.World;
 import com.gordonfreemanq.sabre.Lang;
 import com.gordonfreemanq.sabre.PlayerManager;
 import com.gordonfreemanq.sabre.SabrePlayer;
+import com.gordonfreemanq.sabre.SabrePlugin;
 import com.gordonfreemanq.sabre.blocks.BlockManager;
 import com.gordonfreemanq.sabre.blocks.BuildMode;
 import com.gordonfreemanq.sabre.blocks.BuildState;
@@ -19,30 +20,39 @@ import com.gordonfreemanq.sabre.blocks.Reinforcement;
 import com.gordonfreemanq.sabre.blocks.SabreBlock;
 import com.gordonfreemanq.sabre.blocks.SignCollection;
 import com.gordonfreemanq.sabre.chat.GlobalChat;
-import com.gordonfreemanq.sabre.core.ISabreLog;
 import com.gordonfreemanq.sabre.customitems.SecureSign;
 import com.gordonfreemanq.sabre.data.IDataAccess;
 
 public class GroupManager {
+	
+	// The global instance
+	private static GroupManager instance;
 
 	private final PlayerManager pm;
+	private final BlockManager bm;
 	private final IDataAccess db;
-	private final ISabreLog logger;
 	private final HashMap<UUID, SabreGroup> groups;
 	
-	private static GroupManager instance;
-	
-	public static GroupManager getInstance() {
-		return instance;
-	}
-	
-	public GroupManager(PlayerManager pm, IDataAccess db, ISabreLog logger) {
+	/**
+	 * Creates a new GroupManager instace
+	 * @param pm The player manager
+	 * @param db The database
+	 */
+	public GroupManager(PlayerManager pm, BlockManager bm, IDataAccess db) {
 		this.pm = pm;
+		this.bm = bm;
 		this.db = db;
-		this.logger = logger;
 		this.groups = new HashMap<UUID, SabreGroup>();
 		
 		instance = this;
+	}
+	
+	
+	/**
+	 * Gets the global instance
+	 */
+	public static GroupManager instance() {
+		return instance;
 	}
 	
 	/**
@@ -101,7 +111,7 @@ public class GroupManager {
 		
 		db.groupInsert(g);
 		groups.put(g.getID(), g);
-		logger.log(Level.INFO, "Added new group '%s'", name);
+		SabrePlugin.log(Level.INFO, "Added new group '%s'", name);
 	}
 	
 	
@@ -331,7 +341,7 @@ public class GroupManager {
 		SecureSign s;
 		Reinforcement r;
 		
-		SignCollection signs = BlockManager.getInstance().getSigns();
+		SignCollection signs = bm.getSigns();
 		
 		for (int i = -4; i <= 4; i++) {
 			for (int j = -4; j <= 4; j++) {

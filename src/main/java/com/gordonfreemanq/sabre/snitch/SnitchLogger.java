@@ -193,7 +193,7 @@ public class SnitchLogger {
 	
 	public void requestReport(SabrePlayer p, Snitch snitch, int page) {
 		ReportReqeust request = new ReportReqeust(db, pm, p, snitch, page);
-		Bukkit.getScheduler().runTaskAsynchronously(SabrePlugin.getPlugin(), request);
+		Bukkit.getScheduler().runTaskAsynchronously(SabrePlugin.instance(), request);
 	}
 	
 }

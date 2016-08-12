@@ -115,7 +115,7 @@ public class Snitch extends SpecialBlock implements QTBox, Comparable {
 	 */
 	public void setSnitchName(String name) {
 		this.name = name;
-		BlockManager.getInstance().updateSettings(this);
+		BlockManager.instance().updateSettings(this);
 	}
 	
 	
@@ -165,7 +165,7 @@ public class Snitch extends SpecialBlock implements QTBox, Comparable {
 	public void setNotify(boolean notifies) {
 		if (notifies != this.notifies) {
 			this.notifies = notifies;
-			BlockManager.getInstance().updateSettings(this);
+			BlockManager.instance().updateSettings(this);
 		}
 	}
 
@@ -176,7 +176,7 @@ public class Snitch extends SpecialBlock implements QTBox, Comparable {
 	 */
 	public SabrePlayer getPlacedBy() {
 		if (placedBy == null) {
-			placedBy = PlayerManager.getInstance().getPlayerById(placedById);
+			placedBy = PlayerManager.instance().getPlayerById(placedById);
 		}
 		return placedBy;
 	}

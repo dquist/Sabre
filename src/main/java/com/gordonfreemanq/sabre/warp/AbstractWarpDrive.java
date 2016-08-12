@@ -35,7 +35,7 @@ public abstract class AbstractWarpDrive extends SpecialBlock {
 			return;
 		}
 		
-		TeleportPad pad = (TeleportPad)BlockManager.getInstance().getBlockAt(l);
+		TeleportPad pad = (TeleportPad)BlockManager.instance().getBlockAt(l);
 		if (pad == null) {
 			sp.msg(Lang.warpNoPadFound);
 		}

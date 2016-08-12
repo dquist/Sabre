@@ -37,7 +37,7 @@ public class PearlWorker implements Runnable {
 	public void start() {
 		enabled = true;
 		long tickInterval = weakenIntervalMin * TICKS_PER_MINUTE;
-		Bukkit.getScheduler().scheduleSyncRepeatingTask(SabrePlugin.getPlugin(), this, 0, tickInterval);
+		Bukkit.getScheduler().scheduleSyncRepeatingTask(SabrePlugin.instance(), this, 0, tickInterval);
 	}
 	
 	

@@ -11,14 +11,19 @@ import org.bukkit.Material;
 import com.gordonfreemanq.sabre.core.INamed;
 
 public class TextUtil
-{
-	public static TextUtil txt;
+{	
+	public static class TextUtilHolder {
+		public static final TextUtil INSTANCE = new TextUtil();
+	}
+	
+	public static TextUtil instance() {
+		return TextUtilHolder.INSTANCE;
+	}
 	
 	public Map<String, String> tags;
-	public TextUtil()
-	{
+	
+	public TextUtil() {
 		this.tags = new HashMap<String, String>();
-		txt = this;
 	}
 	
 	// -------------------------------------------- //

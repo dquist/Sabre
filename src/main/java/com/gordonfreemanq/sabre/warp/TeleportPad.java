@@ -48,7 +48,7 @@ public class TeleportPad extends SpecialBlock {
 		}
 		
 		Reinforcement r = this.getReinforcement();
-		BlockManager bm = BlockManager.getInstance();
+		BlockManager bm = BlockManager.instance();
 		
 		if (r != null && !r.getGroup().isBuilder(sp)) {
 			sp.msg(Lang.noPermission);
@@ -126,7 +126,7 @@ public class TeleportPad extends SpecialBlock {
 		
 		// Verify warp drive exists
 		if (driveLocation != null) {
-			drive = (AbstractWarpDrive)BlockManager.getInstance().getBlockAt(driveLocation);
+			drive = (AbstractWarpDrive)BlockManager.instance().getBlockAt(driveLocation);
 		}
 		
 		if (!sp.getPlayer().getLocation().getBlock().getRelative(BlockFace.DOWN).equals(this.location.getBlock())) {
