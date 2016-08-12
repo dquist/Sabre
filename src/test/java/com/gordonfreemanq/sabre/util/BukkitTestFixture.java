@@ -39,7 +39,7 @@ import static org.mockito.Mockito.anyBoolean;
 import static org.mockito.Mockito.anyLong;
 import static org.mockito.Mockito.*;
 
-public class TestInstanceCreator {
+public class BukkitTestFixture {
     private SabrePlugin sabrePlugin;
     private Server mockServer;
     private CommandSender commandSender;

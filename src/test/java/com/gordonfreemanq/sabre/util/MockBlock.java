@@ -1,9 +1,12 @@
 package com.gordonfreemanq.sabre.util;
 
+import static org.mockito.Mockito.mock;
+
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.block.Block;
+import org.mockito.Mockito;
 
 public abstract class MockBlock implements Block {
 
@@ -13,8 +16,18 @@ public abstract class MockBlock implements Block {
 	public int Z;
 	public Material type;
 	
-	public void init() {
-		type = Material.AIR;
+	public static MockBlock create(World world, int x, int y, int z, Material type) {
+		MockBlock b = mock(MockBlock.class, Mockito.CALLS_REAL_METHODS);
+		b.world = world;
+		b.X = x;
+		b.Y = y;
+		b.Z = z;
+		b.type = type;
+		return b;
+	}
+	
+	public static MockBlock create(Location l, Material type) {
+		return create(l.getWorld(), l.getBlockX(), l.getBlockY(), l.getBlockZ(), type);
 	}
 	
 	@Override

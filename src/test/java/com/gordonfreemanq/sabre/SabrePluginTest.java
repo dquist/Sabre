@@ -29,7 +29,7 @@ import org.powermock.modules.junit4.PowerMockRunner;
 
 import com.gordonfreemanq.sabre.SabrePlugin;
 import com.gordonfreemanq.sabre.util.MockPlayer;
-import com.gordonfreemanq.sabre.util.TestInstanceCreator;
+import com.gordonfreemanq.sabre.util.BukkitTestFixture;
 
 @RunWith(PowerMockRunner.class)
 @PrepareForTest({ PluginManager.class, SabrePlugin.class, Permission.class, Bukkit.class, PluginDescriptionFile.class
@@ -38,7 +38,7 @@ public class SabrePluginTest {
 	
 	private static String BAN_MESSAGE = "Test ban message";
 	
-    private static TestInstanceCreator creator;
+    private static BukkitTestFixture creator;
     private static SabrePlugin plugin;
     private static PlayerManager pm;
     private static PlayerListener playerListener;
@@ -46,7 +46,7 @@ public class SabrePluginTest {
 	
 	@BeforeClass
 	public static void setUp() throws Exception {
-        creator = new TestInstanceCreator();
+        creator = new BukkitTestFixture();
         assertTrue(creator.setUp());
         plugin = creator.getPlugin();
         
