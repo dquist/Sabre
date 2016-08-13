@@ -24,11 +24,12 @@ import org.powermock.core.classloader.annotations.PrepareForTest;
 
 import org.powermock.modules.junit4.PowerMockRunner;
 
+import com.comphenix.protocol.ProtocolLibrary;
 import com.gordonfreemanq.sabre.SabrePlugin;
 import com.gordonfreemanq.sabre.util.*;
 
 @RunWith(PowerMockRunner.class)
-@PrepareForTest({ SabrePlugin.class, PluginDescriptionFile.class })
+@PrepareForTest({ SabrePlugin.class, PluginDescriptionFile.class, ProtocolLibrary.class })
 public class SabrePluginTest {
 	
 	private static String BAN_MESSAGE = "Test ban message";

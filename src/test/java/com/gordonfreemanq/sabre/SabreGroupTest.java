@@ -1,8 +1,5 @@
 package com.gordonfreemanq.sabre;
-import org.bukkit.Bukkit;
-import org.bukkit.permissions.Permission;
 import org.bukkit.plugin.PluginDescriptionFile;
-import org.bukkit.plugin.PluginManager;
 import org.junit.*;
 import org.junit.runner.RunWith;
 import org.mockito.Mockito;
@@ -16,6 +13,7 @@ import java.util.HashMap;
 import java.util.Map.Entry;
 import java.util.UUID;
 
+import com.comphenix.protocol.ProtocolLibrary;
 import com.gordonfreemanq.sabre.SabrePlayer;
 import com.gordonfreemanq.sabre.groups.Rank;
 import com.gordonfreemanq.sabre.groups.SabreGroup;
@@ -23,7 +21,7 @@ import com.gordonfreemanq.sabre.groups.SabreMember;
 import com.gordonfreemanq.sabre.util.TestFixture;
 
 @RunWith(PowerMockRunner.class)
-@PrepareForTest({ PluginManager.class, SabrePlugin.class, Permission.class, Bukkit.class, PluginDescriptionFile.class })
+@PrepareForTest({ SabrePlugin.class, PluginDescriptionFile.class, ProtocolLibrary.class })
 public class SabreGroupTest {
 	
 	private static String OWNER_NAME = "DutOwner";
@@ -41,6 +39,9 @@ public class SabreGroupTest {
 	
 	@BeforeClass
 	public static void setUp() throws Exception {		
+		testFixture = TestFixture.instance();
+		testFixture.getPlugin();
+		
 		group = Mockito.spy(new SabreGroup(GroupUuid, GroupName));
 		
 		// Add members to the group

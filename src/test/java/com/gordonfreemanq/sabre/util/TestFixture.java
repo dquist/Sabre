@@ -16,6 +16,8 @@ import org.mockito.stubbing.Answer;
 import org.powermock.api.mockito.PowerMockito;
 import org.powermock.core.MockGateway;
 
+import com.comphenix.protocol.ProtocolLibrary;
+import com.comphenix.protocol.ProtocolManager;
 import com.gordonfreemanq.sabre.PlayerListener;
 import com.gordonfreemanq.sabre.PlayerManager;
 import com.gordonfreemanq.sabre.SabreConfig;
@@ -253,6 +255,7 @@ public class TestFixture {
 		// Mock PDF
         PluginDescriptionFile pdf = PowerMockito.spy(new PluginDescriptionFile("Sabre", "0.1.12", "com.gordonfreemanq.sabre.SabrePlugin"));
         when(pdf.getAuthors()).thenReturn(new ArrayList<String>());
+        when(pdf.getPermissions()).thenReturn(new ArrayList<Permission>());
 		
         @SuppressWarnings("deprecation")
 		SabrePlugin plugin = PowerMockito.spy(new SabrePlugin(pluginLoader, mockServer, pdf, pluginDirectory, new File(pluginDirectory, "testPluginFile")));
@@ -366,6 +369,11 @@ public class TestFixture {
         field = SabrePlugin.class.getDeclaredField("perm");
         field.setAccessible(true);
         field.set(plugin, Mockito.spy(new PermUtil(plugin)));
+        
+        // Mock the Protocol Library
+        PowerMockito.mockStatic(ProtocolLibrary.class);
+        ProtocolManager protocolManager = PowerMockito.mock(ProtocolManager.class);
+        when(ProtocolLibrary.getProtocolManager()).thenReturn(protocolManager);
 		
 		return plugin;
 	}

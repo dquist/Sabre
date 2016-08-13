@@ -180,7 +180,7 @@ public class SabrePlugin extends JavaPlugin
 		getServer().getPluginManager().registerEvents(pearlListener, this);
 		getServer().getPluginManager().registerEvents(sabreTweaks, this);
 		getServer().getPluginManager().registerEvents(factoryListener, this);
-		//ProtocolLibrary.getProtocolManager().addPacketListener(signHandler); // TODO ProtocolLibrary
+		ProtocolLibrary.getProtocolManager().addPacketListener(signHandler);
 		
 		// Load running factories - perform this AFTER blockListener.handleLoadedChunks is called
 		blockManager.loadRunningFactories();
