@@ -18,7 +18,7 @@ import com.gordonfreemanq.sabre.groups.SabreFaction;
  */
 public class PlayerManager {
 	
-	private final SabrePlugin plugin;
+	private SabrePlugin plugin;
 	private final HashMap<UUID, SabrePlayer> players;
 	private final HashMap<UUID, SabrePlayer> onlinePlayers;
 
@@ -127,6 +127,7 @@ public class PlayerManager {
 		
 		// Now we should have a unique name for the new player
 		sp = new SabrePlayer(p.getUniqueId(), name);
+		sp.setPlayer(p);
 		sp.setFirstLogin(new Date());
 		sp.setName(name);
 		this.addPlayer(sp);

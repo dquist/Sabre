@@ -8,7 +8,6 @@ import static org.mockito.Mockito.*;
 import java.net.Inet4Address;
 import java.util.ArrayList;
 
-import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.event.entity.PlayerDeathEvent;
@@ -19,22 +18,17 @@ import org.bukkit.event.player.PlayerRespawnEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.material.Bed;
 import org.bukkit.event.player.AsyncPlayerPreLoginEvent.Result;
-import org.bukkit.permissions.Permission;
 import org.bukkit.plugin.PluginDescriptionFile;
-import org.bukkit.plugin.PluginManager;
 import org.junit.runner.RunWith;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 
 import org.powermock.modules.junit4.PowerMockRunner;
 
 import com.gordonfreemanq.sabre.SabrePlugin;
-import com.gordonfreemanq.sabre.util.MockBlock;
-import com.gordonfreemanq.sabre.util.MockPlayer;
-import com.gordonfreemanq.sabre.util.MockWorld;
-import com.gordonfreemanq.sabre.util.TestFixture;
+import com.gordonfreemanq.sabre.util.*;
 
 @RunWith(PowerMockRunner.class)
-@PrepareForTest({ PluginManager.class, SabrePlugin.class, Permission.class, Bukkit.class, PluginDescriptionFile.class })
+@PrepareForTest({ SabrePlugin.class, PluginDescriptionFile.class })
 public class SabrePluginTest {
 	
 	private static String BAN_MESSAGE = "Test ban message";
@@ -48,6 +42,7 @@ public class SabrePluginTest {
 	@BeforeClass
 	public static void setUp() throws Exception {
         testFixture = TestFixture.instance();
+        assertTrue(testFixture.successfulLoad());
         plugin = testFixture.getPlugin();
         
         pm = plugin.getPlayerManager();
@@ -75,7 +70,7 @@ public class SabrePluginTest {
 		// Pre login
 		playerListener.onPlayerPreLogin(playerPreLoginEvent);
 		assertEquals(playerPreLoginEvent.getLoginResult(), Result.ALLOWED);
-		assertEquals(playerPreLoginEvent.getKickMessage(), null);
+		assertEquals(playerPreLoginEvent.getKickMessage(), "");
 		
 		// Player join
 		newPlayer.isOnline = true;

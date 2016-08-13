@@ -51,31 +51,31 @@ public class SabrePlugin extends JavaPlugin
 	// The global instance
 	private static SabrePlugin instance;
 
-	private final SabreConfig config = new SabreConfig(this.getConfig());
-	private final IDataAccess db = new MongoConnector(this);
-	private final PlayerManager playerManager = new PlayerManager(this);
-	private final GroupManager groupManager = new GroupManager(this);
-	private final BlockManager blockManager = new BlockManager(this);
-	private final PearlManager pearlManager = new PearlManager(this);
-	private final PlayerListener playerListener = new PlayerListener(this);
-	private final BlockListener blockListener = new BlockListener(this);
-	private final SnitchLogger snitchLogger = new SnitchLogger(this);
-	private final SnitchListener snitchListener = new SnitchListener(this);
-	private final PearlListener pearlListener = new PearlListener(this);
-	private final PlayerSpawner playerSpawner = new PlayerSpawner(this);
-	private final GlobalChat globalChat = new GlobalChat(this);
-	private final ServerBroadcast serverBcast = new ServerBroadcast(this);
-	private final SabreTweaks sabreTweaks = new SabreTweaks(this);
-	private final FactoryListener factoryListener = new FactoryListener(this);
-	private final FactoryConfig factoryConfig = new FactoryConfig(this);
-	private final CustomItems customItems = new CustomItems(this);
-	private final CombatInterface combatTag = new CombatTagPlusManager();
-	private final StatsTracker statsTracker = new StatsTracker(this);
-	private final SignHandler signHandler = new SignHandler(this);
-	private final FactoryWorker factoryWorker = new FactoryWorker();
-	private final PearlWorker pearlWorker = new PearlWorker(this);
-	private final VanishApi vanishApi = new VanishApi();
-	private final CommandList commandList = new CommandList();
+	private SabreConfig config;
+	private IDataAccess dataAccess;
+	private PlayerManager playerManager;
+	private GroupManager groupManager;
+	private BlockManager blockManager;
+	private PearlManager pearlManager;
+	private PlayerListener playerListener;
+	private BlockListener blockListener;
+	private SnitchLogger snitchLogger;
+	private SnitchListener snitchListener;
+	private PearlListener pearlListener;
+	private PlayerSpawner playerSpawner;
+	private GlobalChat globalChat;
+	private ServerBroadcast serverBcast;
+	private SabreTweaks sabreTweaks;
+	private FactoryListener factoryListener;
+	private FactoryConfig factoryConfig;
+	private CustomItems customItems;
+	private CombatInterface combatTag;
+	private StatsTracker statsTracker;
+	private SignHandler signHandler;
+	private FactoryWorker factoryWorker;
+	private PearlWorker pearlWorker;
+	private VanishApi vanishApi;
+	private CommandList commandList;
 	public final PermUtil perm = new PermUtil(this);
 	public final TextUtil txt = new TextUtil();
 	
@@ -86,7 +86,6 @@ public class SabrePlugin extends JavaPlugin
 	 */
 	public SabrePlugin() {
 		super();
-		instance = this;
 	}
 	
     /**
@@ -96,7 +95,6 @@ public class SabrePlugin extends JavaPlugin
     @Deprecated
     public SabrePlugin(PluginLoader loader, Server server, PluginDescriptionFile description, File dataFolder, File file) {
         super(loader, server, description, dataFolder, file);
-		instance = this;
     }
 
 
@@ -125,7 +123,7 @@ public class SabrePlugin extends JavaPlugin
 			factoryConfig.reload();
 			
 			try {
-				db.connect();
+				dataAccess.connect();
 			} catch (Exception ex) {
 				log(Level.SEVERE, "* * * Failed to connect to MongoDB database! * * * ");
 				pluginLoadError = true;
@@ -137,9 +135,48 @@ public class SabrePlugin extends JavaPlugin
 			
 		} catch(Exception ex) {
 			pluginLoadError = true;
-			log(Level.SEVERE, ex.getMessage());
+			log(Level.SEVERE, ex.toString());
+			ex.printStackTrace();
 		}
 	}
+	
+    @Override
+    public void onLoad() {
+		instance = this;
+        
+		// These objects are all created in the onLoad() method for better unit testing
+		// If they are created in the constructor, PowerMockito can't properly inject the mock objects
+        config = new SabreConfig(this.getConfig());
+    	dataAccess = new MongoConnector(this);
+    	playerManager = new PlayerManager(this);
+    	groupManager = new GroupManager(this);
+    	blockManager = new BlockManager(this);
+    	pearlManager = new PearlManager(this);
+    	playerListener = new PlayerListener(this);
+    	blockListener = new BlockListener(this);
+    	snitchLogger = new SnitchLogger(this);
+    	snitchListener = new SnitchListener(this);
+    	pearlListener = new PearlListener(this);
+    	playerSpawner = new PlayerSpawner(this);
+    	globalChat = new GlobalChat(this);
+    	serverBcast = new ServerBroadcast(this);
+    	sabreTweaks = new SabreTweaks(this);
+    	factoryListener = new FactoryListener(this);
+    	factoryConfig = new FactoryConfig(this);
+    	customItems = new CustomItems(this);
+    	combatTag = new CombatTagPlusManager();
+    	statsTracker = new StatsTracker(this);
+    	signHandler = new SignHandler(this);
+    	factoryWorker = new FactoryWorker();
+    	pearlWorker = new PearlWorker(this);
+    	vanishApi = new VanishApi();
+    	commandList = new CommandList();
+		
+        // Create our DataFolder
+        getDataFolder().mkdirs();
+        
+		pluginLoadError = false;
+    }
 
 
 	/**
@@ -149,10 +186,6 @@ public class SabrePlugin extends JavaPlugin
 	public void onEnable() {
 		log("=== ENABLE START ===");
 		long timeEnableStart = System.currentTimeMillis();
-		pluginLoadError = false;
-		
-		// Ensure base folder exists
-		this.getDataFolder().mkdirs();
 		
 		// Read config and load data
 		loadData();
@@ -195,7 +228,7 @@ public class SabrePlugin extends JavaPlugin
 	 */
 	@Override
 	public void onDisable() {
-		db.disconect();		
+		dataAccess.disconect();		
 		log("=== Sabre Plugin Disabled ===");
 	}
 
@@ -312,7 +345,7 @@ public class SabrePlugin extends JavaPlugin
 	 * @return The Data Access Object
 	 */
 	public IDataAccess getDataAccess() {
-		return this.db;
+		return dataAccess;
 	}
 
 	/**

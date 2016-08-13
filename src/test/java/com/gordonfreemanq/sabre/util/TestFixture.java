@@ -6,11 +6,18 @@ import org.bukkit.World;
 import org.bukkit.WorldCreator;
 import org.bukkit.command.CommandSender;
 import org.bukkit.permissions.Permission;
+import org.bukkit.plugin.PluginDescriptionFile;
+import org.bukkit.plugin.PluginLoader;
 import org.junit.Assert;
 import org.mockito.Matchers;
+import org.mockito.Mockito;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
+import org.powermock.api.mockito.PowerMockito;
 import org.powermock.core.MockGateway;
+
+import com.gordonfreemanq.sabre.SabrePlugin;
+import com.gordonfreemanq.sabre.data.IDataAccess;
 
 import java.io.File;
 import java.lang.reflect.Field;
@@ -24,7 +31,7 @@ import static org.mockito.Mockito.*;
 
 public class TestFixture {
 	
-    private MockPlugin sabrePlugin;
+    private SabrePlugin sabrePlugin;
     private MockServer mockServer;
     private CommandSender commandSender;
     private ArrayList<MockWorld> worlds;
@@ -35,6 +42,7 @@ public class TestFixture {
     public static final File worldsDirectory = new File("bin/test/server");
     
     private boolean isSetUp = false;
+    private boolean successfulLoad = false;
     
     private static class TestFixtureLoader {
         private static final TestFixture INSTANCE = new TestFixture();
@@ -46,14 +54,18 @@ public class TestFixture {
     	}
     	return TestFixtureLoader.INSTANCE;
     }
+    
+    private TestFixture() { }
 
     
     /**
      * Sets up the test fixture
      * @return true if success
      */
-    private boolean setUp() {
+    public boolean setUp() {
 		try {
+			isSetUp = true;
+			
         	// Set up the test directory
             pluginDirectory.mkdirs();
             Assert.assertTrue(pluginDirectory.exists());
@@ -64,8 +76,9 @@ public class TestFixture {
             // Create main mock objects
             mockServer = MockServer.create(this);
             mockPluginManager = MockPluginManager.create(this);
+            sabrePlugin = createPlugin();
+            
             worlds = new ArrayList<MockWorld>();
-            sabrePlugin = MockPlugin.create(this);
             
             // Create default worlds
             createMockWorld(new WorldCreator("world"));
@@ -94,9 +107,10 @@ public class TestFixture {
             Bukkit.setServer(mockServer);
 
             // Load and enable the plugin
-            sabrePlugin.onLoad();
+            //sabrePlugin.onLoad();
             sabrePlugin.onEnable();
 
+            successfulLoad = true;
             return true;
         } catch (Exception e) {
             e.printStackTrace();
@@ -112,6 +126,8 @@ public class TestFixture {
      */
     public boolean tearDown() {
 
+        sabrePlugin.onDisable();
+        
         try {
             Field serverField = Bukkit.class.getDeclaredField("server");
             serverField.setAccessible(true);
@@ -123,21 +139,58 @@ public class TestFixture {
             return false;
         }
 
-        sabrePlugin.onDisable();
-
         FileUtils.deleteFolder(serverDirectory);
         worlds.clear();
         
         Util.log("TEAR DOWN COMPLETE");
         return true;
     }
+    
+    
+    public boolean successfulLoad() {
+    	return this.successfulLoad;
+    }
+    
+    
+    /**
+     * Creates the mock plugin instance
+     * @return the new plugin instance
+     */
+	private SabrePlugin createPlugin() throws Exception {
+		
+		// Mock plugin loader
+		PluginLoader pluginLoader = mock(PluginLoader.class);
+		
+		// Mock PDF
+        PluginDescriptionFile pdf = PowerMockito.spy(new PluginDescriptionFile("Sabre", "0.1.12", "com.gordonfreemanq.sabre.SabrePlugin"));
+        when(pdf.getAuthors()).thenReturn(new ArrayList<String>());
+		
+        @SuppressWarnings("deprecation")
+		SabrePlugin plugin = PowerMockito.spy(new SabrePlugin(pluginLoader, mockServer, pdf, pluginDirectory, new File(pluginDirectory, "testPluginFile")));
+		
+		// Put all files in bin/test
+		doReturn(TestFixture.pluginDirectory).when(plugin).getDataFolder();
+		
+        doReturn(true).when(plugin).isEnabled();
+        doReturn(Util.logger).when(plugin).getLogger();
+        
+        plugin.onLoad();
+        
+        // Set mock database
+        IDataAccess dataAccess = Mockito.spy(new MockDataAccess());
+        Field field = SabrePlugin.class.getDeclaredField("dataAccess");
+        field.setAccessible(true);
+        field.set(plugin, dataAccess);
+		
+		return plugin;
+	}
 
     
     /**
      * Gets the mock plugin instance
      * @return The mock plugin
      */
-    public MockPlugin getPlugin() {
+    public SabrePlugin getPlugin() {
         return this.sabrePlugin;
     }
 

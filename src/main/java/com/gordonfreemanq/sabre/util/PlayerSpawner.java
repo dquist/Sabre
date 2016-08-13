@@ -77,7 +77,7 @@ public class PlayerSpawner {
 			
 			plugin.getPlayerManager().setBedLocation(sp, null);
 			sp.getPlayer().setBedSpawnLocation(null);
-			spawnPlayerRandom(sp, world);
+			l = spawnPlayerRandom(sp, world);
 		}
 
 		lastRandomSpawn.put(sp, new PlayerSpawnResult(l, useBed));

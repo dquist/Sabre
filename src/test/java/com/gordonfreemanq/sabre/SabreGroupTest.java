@@ -40,10 +40,7 @@ public class SabreGroupTest {
 	private static SabrePlayer groupOwner;
 	
 	@BeforeClass
-	public static void setUp() throws Exception {
-		testFixture = TestFixture.instance();
-		testFixture.getPlugin();
-		
+	public static void setUp() throws Exception {		
 		group = Mockito.spy(new SabreGroup(GroupUuid, GroupName));
 		
 		// Add members to the group
