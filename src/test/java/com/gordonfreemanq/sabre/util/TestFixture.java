@@ -16,8 +16,27 @@ import org.mockito.stubbing.Answer;
 import org.powermock.api.mockito.PowerMockito;
 import org.powermock.core.MockGateway;
 
+import com.gordonfreemanq.sabre.PlayerListener;
+import com.gordonfreemanq.sabre.PlayerManager;
+import com.gordonfreemanq.sabre.SabreConfig;
 import com.gordonfreemanq.sabre.SabrePlugin;
-import com.gordonfreemanq.sabre.data.IDataAccess;
+import com.gordonfreemanq.sabre.SabreTweaks;
+import com.gordonfreemanq.sabre.StatsTracker;
+import com.gordonfreemanq.sabre.blocks.BlockListener;
+import com.gordonfreemanq.sabre.blocks.BlockManager;
+import com.gordonfreemanq.sabre.blocks.CustomItems;
+import com.gordonfreemanq.sabre.blocks.SignHandler;
+import com.gordonfreemanq.sabre.chat.GlobalChat;
+import com.gordonfreemanq.sabre.chat.ServerBroadcast;
+import com.gordonfreemanq.sabre.factory.FactoryConfig;
+import com.gordonfreemanq.sabre.factory.FactoryListener;
+import com.gordonfreemanq.sabre.factory.FactoryWorker;
+import com.gordonfreemanq.sabre.groups.GroupManager;
+import com.gordonfreemanq.sabre.prisonpearl.PearlListener;
+import com.gordonfreemanq.sabre.prisonpearl.PearlManager;
+import com.gordonfreemanq.sabre.prisonpearl.PearlWorker;
+import com.gordonfreemanq.sabre.snitch.SnitchListener;
+import com.gordonfreemanq.sabre.snitch.SnitchLogger;
 
 import java.io.File;
 import java.lang.reflect.Field;
@@ -150,40 +169,6 @@ public class TestFixture {
     public boolean successfulLoad() {
     	return this.successfulLoad;
     }
-    
-    
-    /**
-     * Creates the mock plugin instance
-     * @return the new plugin instance
-     */
-	private SabrePlugin createPlugin() throws Exception {
-		
-		// Mock plugin loader
-		PluginLoader pluginLoader = mock(PluginLoader.class);
-		
-		// Mock PDF
-        PluginDescriptionFile pdf = PowerMockito.spy(new PluginDescriptionFile("Sabre", "0.1.12", "com.gordonfreemanq.sabre.SabrePlugin"));
-        when(pdf.getAuthors()).thenReturn(new ArrayList<String>());
-		
-        @SuppressWarnings("deprecation")
-		SabrePlugin plugin = PowerMockito.spy(new SabrePlugin(pluginLoader, mockServer, pdf, pluginDirectory, new File(pluginDirectory, "testPluginFile")));
-		
-		// Put all files in bin/test
-		doReturn(TestFixture.pluginDirectory).when(plugin).getDataFolder();
-		
-        doReturn(true).when(plugin).isEnabled();
-        doReturn(Util.logger).when(plugin).getLogger();
-        
-        plugin.onLoad();
-        
-        // Set mock database
-        IDataAccess dataAccess = Mockito.spy(new MockDataAccess());
-        Field field = SabrePlugin.class.getDeclaredField("dataAccess");
-        field.setAccessible(true);
-        field.set(plugin, dataAccess);
-		
-		return plugin;
-	}
 
     
     /**
@@ -254,4 +239,134 @@ public class TestFixture {
     	worlds.add(mockWorld);
     	return mockWorld;
     }
+    
+    
+    /**
+     * Creates the mock plugin instance
+     * @return the new plugin instance
+     */
+	private SabrePlugin createPlugin() throws Exception {
+		
+		// Mock plugin loader
+		PluginLoader pluginLoader = mock(PluginLoader.class);
+		
+		// Mock PDF
+        PluginDescriptionFile pdf = PowerMockito.spy(new PluginDescriptionFile("Sabre", "0.1.12", "com.gordonfreemanq.sabre.SabrePlugin"));
+        when(pdf.getAuthors()).thenReturn(new ArrayList<String>());
+		
+        @SuppressWarnings("deprecation")
+		SabrePlugin plugin = PowerMockito.spy(new SabrePlugin(pluginLoader, mockServer, pdf, pluginDirectory, new File(pluginDirectory, "testPluginFile")));
+		
+		// Put all files in bin/test
+		doReturn(TestFixture.pluginDirectory).when(plugin).getDataFolder();
+		
+        doReturn(true).when(plugin).isEnabled();
+        doReturn(Util.logger).when(plugin).getLogger();
+        
+        plugin.onLoad();
+        
+        // Need to inject mock instances of all the classes which take SabrePlugin as a dependency
+        // Otherwise they will have a reference to the non-mocked version of the plugin
+        Field field = SabrePlugin.class.getDeclaredField("dataAccess");
+        field.setAccessible(true);
+        field.set(plugin, Mockito.spy(new MockDataAccess()));
+        
+        field = SabrePlugin.class.getDeclaredField("config");
+        field.setAccessible(true);
+        field.set(plugin, Mockito.spy(new SabreConfig(plugin.getConfig())));
+        
+        field = SabrePlugin.class.getDeclaredField("playerManager");
+        field.setAccessible(true);
+        field.set(plugin, Mockito.spy(new PlayerManager(plugin)));
+        
+        field = SabrePlugin.class.getDeclaredField("groupManager");
+        field.setAccessible(true);
+        field.set(plugin, Mockito.spy(new GroupManager(plugin)));
+        
+        field = SabrePlugin.class.getDeclaredField("blockManager");
+        field.setAccessible(true);
+        field.set(plugin, Mockito.spy(new BlockManager(plugin)));
+        
+        field = SabrePlugin.class.getDeclaredField("pearlManager");
+        field.setAccessible(true);
+        field.set(plugin, Mockito.spy(new PearlManager(plugin)));
+        
+        field = SabrePlugin.class.getDeclaredField("playerListener");
+        field.setAccessible(true);
+        field.set(plugin, Mockito.spy(new PlayerListener(plugin)));
+        
+        field = SabrePlugin.class.getDeclaredField("blockListener");
+        field.setAccessible(true);
+        field.set(plugin, Mockito.spy(new BlockListener(plugin)));
+        
+        field = SabrePlugin.class.getDeclaredField("snitchLogger");
+        field.setAccessible(true);
+        field.set(plugin, Mockito.spy(new SnitchLogger(plugin)));
+        
+        field = SabrePlugin.class.getDeclaredField("snitchListener");
+        field.setAccessible(true);
+        field.set(plugin, Mockito.spy(new SnitchListener(plugin)));
+        
+        field = SabrePlugin.class.getDeclaredField("pearlListener");
+        field.setAccessible(true);
+        field.set(plugin, Mockito.spy(new PearlListener(plugin)));
+        
+        field = SabrePlugin.class.getDeclaredField("playerSpawner");
+        field.setAccessible(true);
+        field.set(plugin, Mockito.spy(new PlayerSpawner(plugin)));
+        
+        field = SabrePlugin.class.getDeclaredField("globalChat");
+        field.setAccessible(true);
+        field.set(plugin, Mockito.spy(new GlobalChat(plugin)));
+        
+        field = SabrePlugin.class.getDeclaredField("serverBcast");
+        field.setAccessible(true);
+        field.set(plugin, Mockito.spy(new ServerBroadcast(plugin)));
+        
+        field = SabrePlugin.class.getDeclaredField("sabreTweaks");
+        field.setAccessible(true);
+        field.set(plugin, Mockito.spy(new SabreTweaks(plugin)));
+        
+        field = SabrePlugin.class.getDeclaredField("factoryListener");
+        field.setAccessible(true);
+        field.set(plugin, Mockito.spy(new FactoryListener(plugin)));
+        
+        field = SabrePlugin.class.getDeclaredField("factoryConfig");
+        field.setAccessible(true);
+        field.set(plugin, Mockito.spy(new FactoryConfig(plugin)));
+        
+        field = SabrePlugin.class.getDeclaredField("customItems");
+        field.setAccessible(true);
+        field.set(plugin, Mockito.spy(new CustomItems(plugin)));
+        
+        field = SabrePlugin.class.getDeclaredField("combatTag");
+        field.setAccessible(true);
+        field.set(plugin, Mockito.spy(new CombatTagPlusManager()));
+        
+        field = SabrePlugin.class.getDeclaredField("statsTracker");
+        field.setAccessible(true);
+        field.set(plugin, Mockito.spy(new StatsTracker(plugin)));
+        
+        field = SabrePlugin.class.getDeclaredField("signHandler");
+        field.setAccessible(true);
+        field.set(plugin, Mockito.spy(new SignHandler(plugin)));
+        
+        field = SabrePlugin.class.getDeclaredField("factoryWorker");
+        field.setAccessible(true);
+        field.set(plugin, Mockito.spy(new FactoryWorker()));
+        
+        field = SabrePlugin.class.getDeclaredField("pearlWorker");
+        field.setAccessible(true);
+        field.set(plugin, Mockito.spy(new PearlWorker(plugin)));
+        
+        field = SabrePlugin.class.getDeclaredField("vanishApi");
+        field.setAccessible(true);
+        field.set(plugin, Mockito.spy(new VanishApi()));
+        
+        field = SabrePlugin.class.getDeclaredField("perm");
+        field.setAccessible(true);
+        field.set(plugin, Mockito.spy(new PermUtil(plugin)));
+		
+		return plugin;
+	}
 }
