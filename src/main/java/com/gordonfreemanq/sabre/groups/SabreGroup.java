@@ -5,6 +5,8 @@ import java.util.HashSet;
 import java.util.UUID;
 import java.util.logging.Level;
 
+import org.apache.commons.lang.NullArgumentException;
+
 import com.gordonfreemanq.sabre.SabrePlayer;
 import com.gordonfreemanq.sabre.SabrePlugin;
 import com.gordonfreemanq.sabre.chat.IChatChannel;
@@ -35,6 +37,14 @@ public class SabreGroup implements INamed, IChatChannel {
 	 * @param owner The group owner
 	 */
 	public SabreGroup(UUID id, String name) {
+		if (id == null) {
+			throw new NullArgumentException("id");
+		}
+		
+		if (name == null) {
+			throw new NullArgumentException("name");
+		}
+		
 		this.id = id;
 		this.name = name;
 		this.members = new HashSet<SabreMember>();
@@ -85,6 +95,10 @@ public class SabreGroup implements INamed, IChatChannel {
 	 * @param name The new name of the group
 	 */
 	public void setName(String name) {
+		if (name == null) {
+			throw new NullArgumentException("name");
+		}
+		
 		this.name = name;
 	}
 
@@ -103,6 +117,10 @@ public class SabreGroup implements INamed, IChatChannel {
 	 * @return The group member instance
 	 */
 	public SabreMember getMember(SabrePlayer player) {
+		if (player == null) {
+			throw new NullArgumentException("player");
+		}
+		
 		for (SabreMember m : members) {
 			if (m.getID().equals(player.getID())) {
 				return m;
@@ -116,8 +134,17 @@ public class SabreGroup implements INamed, IChatChannel {
 	/**
 	 * Adds a new group member
 	 * @param player The new player to add
+	 * @throws Exception 
 	 */
 	public SabreMember addMember(SabrePlayer player, Rank rank) {
+		if (player == null) {
+			throw new NullArgumentException("player");
+		}
+		
+		if (rank == null) {
+			throw new NullArgumentException("rank");
+		}
+		
 		SabreMember member = new SabreMember(this, player, rank);
 		members.add(member);
 		return member;
@@ -130,6 +157,10 @@ public class SabreGroup implements INamed, IChatChannel {
 	 * @return The removed member
 	 */
 	public SabreMember removePlayer(SabrePlayer player) {
+		if (player == null) {
+			throw new NullArgumentException("player");
+		}
+		
 		for (SabreMember m : members) {
 			if (m.getID().equals(player.getID())) {
 				members.remove(m);
@@ -146,6 +177,10 @@ public class SabreGroup implements INamed, IChatChannel {
 	 * @return The removed member
 	 */
 	public SabreMember removeMember(SabreMember member) {
+		if (member == null) {
+			throw new NullArgumentException("member");
+		}
+		
 		members.remove(member);
 		return member;
 	}
@@ -153,10 +188,14 @@ public class SabreGroup implements INamed, IChatChannel {
 
 	/**
 	 * Adds a new invited player
-	 * @param id The player ID to invite
+	 * @param uid The player ID to invite
 	 */
-	public void addInvited(UUID id) {
-		invited.add(id);
+	public void addInvited(UUID uid) {
+		if (uid == null) {
+			throw new NullArgumentException("uid");
+		}
+		
+		invited.add(uid);
 	}
 
 
@@ -164,16 +203,24 @@ public class SabreGroup implements INamed, IChatChannel {
 	 * Adds a new invited player
 	 * @param player The player to invite
 	 */
-	public void addInvited(SabrePlayer p) {
-		this.addInvited(p.getID());
+	public void addInvited(SabrePlayer player) {
+		if (player == null) {
+			throw new NullArgumentException("player");
+		}
+		
+		this.addInvited(player.getID());
 	}
 
 	/**
 	 * Removes an invited player
-	 * @param id The player id to un-invite
+	 * @param uid The player id to un-invite
 	 */
-	public void removeInvited(UUID id) {
-		invited.remove(id);
+	public void removeInvited(UUID uid) {
+		if (uid == null) {
+			throw new NullArgumentException("uid");
+		}
+		
+		invited.remove(uid);
 	}
 
 
@@ -181,8 +228,12 @@ public class SabreGroup implements INamed, IChatChannel {
 	 * Removes an invited player
 	 * @param player The player to un-invite
 	 */
-	public void removeInvited(SabrePlayer p) {
-		removeInvited(p.getID());
+	public void removeInvited(SabrePlayer player) {
+		if (player == null) {
+			throw new NullArgumentException("player");
+		}
+		
+		removeInvited(player.getID());
 	}
 
 
@@ -192,6 +243,10 @@ public class SabreGroup implements INamed, IChatChannel {
 	 * @return true if the player has been invited to join this group
 	 */
 	public boolean isInvited(SabrePlayer player) {
+		if (player == null) {
+			throw new NullArgumentException("player");
+		}
+		
 		return invited.contains(player.getID());
 	}
 
@@ -201,8 +256,12 @@ public class SabreGroup implements INamed, IChatChannel {
 	 * @param player The player to check
 	 * @return true if the player is at least a member of the group
 	 */
-	public boolean isMember(SabrePlayer p) {
-		return getMember(p) != null;
+	public boolean isMember(SabrePlayer player) {
+		if (player == null) {
+			throw new NullArgumentException("player");
+		}
+		
+		return getMember(player) != null;
 	}
 	
 	
@@ -211,8 +270,12 @@ public class SabreGroup implements INamed, IChatChannel {
 	 * @param player The player to check
 	 * @return true if the player is at least a builder of the group
 	 */
-	public boolean isBuilder(SabrePlayer p) {
-		return this.isRank(p,  Rank.BUILDER);
+	public boolean isBuilder(SabrePlayer player) {
+		if (player == null) {
+			throw new NullArgumentException("player");
+		}
+		
+		return this.isRank(player, Rank.BUILDER);
 	}
 	
 	
@@ -221,8 +284,12 @@ public class SabreGroup implements INamed, IChatChannel {
 	 * @param player The player to check
 	 * @return true if the player is at least a group officer
 	 */
-	public boolean isOfficer(SabrePlayer p) {
-		return this.isRank(p,  Rank.OFFICER);
+	public boolean isOfficer(SabrePlayer player) {
+		if (player == null) {
+			throw new NullArgumentException("player");
+		}
+		
+		return this.isRank(player, Rank.OFFICER);
 	}
 	
 	
@@ -231,9 +298,17 @@ public class SabreGroup implements INamed, IChatChannel {
 	 * @param player The player to check
 	 * @return true if the player is at least a particular rank
 	 */
-	public boolean isRank(SabrePlayer p, Rank rank) {
+	public boolean isRank(SabrePlayer player, Rank rank) {
+		if (player == null) {
+			throw new NullArgumentException("player");
+		}
+		
+		if (rank == null) {
+			throw new NullArgumentException("rank");
+		}
+		
 		for (SabreMember m : members) {
-			if (m.getID().equals(p.getID())) {
+			if (m.getID().equals(player.getID())) {
 				if (m.getRank().ordinal() >= rank.ordinal()) {
 					return true;
 				} else
@@ -261,6 +336,10 @@ public class SabreGroup implements INamed, IChatChannel {
 	 * @param player The group owner
 	 */
 	public void setOwner(SabrePlayer player) {
+		if (player == null) {
+			throw new NullArgumentException("player");
+		}
+		
 		SabreMember owner = null;
 
 		// Get the owner instance
@@ -288,6 +367,10 @@ public class SabreGroup implements INamed, IChatChannel {
 	 * @param isChat true if it is a chat message
 	 */
 	public void msgAll(String str, boolean isChat) {
+		if (str == null) {
+			throw new NullArgumentException("str");
+		}
+		
 		for (SabreMember m : members) {
 			SabrePlayer p = m.getPlayer();
 			if (p.isOnline()) {
@@ -300,12 +383,20 @@ public class SabreGroup implements INamed, IChatChannel {
 	}
 
 
-	public void msgAll(String str, boolean isChat, Object... args) {
+	public void msgAll(String str, boolean isChat, Object... args) {		
 		String formatStr = SabrePlugin.instance().txt.parse(str, args);
 		msgAll(formatStr, isChat);
 	}
 
 	public void msgAllBut(SabrePlayer player, String str, Object... args) {
+		if (player == null) {
+			throw new NullArgumentException("player");
+		}
+		
+		if (str == null) {
+			throw new NullArgumentException("str");
+		}
+		
 		String formatStr = SabrePlugin.instance().txt.parse(str, args);
 
 		for (SabreMember m : members) {
@@ -325,7 +416,7 @@ public class SabreGroup implements INamed, IChatChannel {
 	}
 	
 	@Override
-	public void chatMe(SabrePlayer sender, String msg) {
+	public void chatMe(SabrePlayer sender, String msg) {		
 		String formatStr = SabrePlugin.instance().txt.parse("<c>[%s] <gold><it>%s %s", this.getName(), sender.getName(), msg);
 		this.msgAll(formatStr, true);
 		SabrePlugin.log(Level.INFO, formatStr);
@@ -338,6 +429,10 @@ public class SabreGroup implements INamed, IChatChannel {
 	 * @param args
 	 */
 	public void msgAllSnitch(String str, Object... args) {
+		if (str == null) {
+			throw new NullArgumentException("str");
+		}
+		
 		String formatStr = SabrePlugin.instance().txt.parse(str, args);
 		
 		for (SabreMember m : members) {
@@ -354,6 +449,10 @@ public class SabreGroup implements INamed, IChatChannel {
 	 * @param sp The player that is muting the group
 	 */
 	public void setChatMutedBy(SabrePlayer sp, boolean muted) {
+		if (sp == null) {
+			throw new NullArgumentException("sp");
+		}
+		
 		if (muted && !mutedFromChat.contains(sp)) {
 			mutedFromChat.add(sp);
 		} else {
@@ -368,6 +467,10 @@ public class SabreGroup implements INamed, IChatChannel {
 	 * @return true if the group is muted by the player
 	 */
 	public boolean isChatMutedBy(SabrePlayer sp) {
+		if (sp == null) {
+			throw new NullArgumentException("sp");
+		}
+		
 		return this.mutedFromChat.contains(sp);
 	}
 	
@@ -377,6 +480,10 @@ public class SabreGroup implements INamed, IChatChannel {
 	 * @param sp The player that is muting the group
 	 */
 	public void setSnitchMutedBy(SabrePlayer sp, boolean muted) {
+		if (sp == null) {
+			throw new NullArgumentException("sp");
+		}
+		
 		if (muted && !mutedFromSnitch.contains(sp)) {
 			mutedFromSnitch.add(sp);
 		} else {
@@ -391,6 +498,10 @@ public class SabreGroup implements INamed, IChatChannel {
 	 * @return true if the group snitches are muted by the player
 	 */
 	public boolean isSnitchMutedBy(SabrePlayer sp) {
+		if (sp == null) {
+			throw new NullArgumentException("sp");
+		}
+		
 		return this.mutedFromSnitch.contains(sp);
 	}
 }

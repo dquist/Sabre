@@ -63,21 +63,7 @@ public class TestFixture {
     public static final File serverDirectory = new File("bin/test/server");
     public static final File worldsDirectory = new File("bin/test/server");
     
-    private boolean isSetUp = false;
-    private boolean successfulLoad = false;
-    
-    private static class TestFixtureLoader {
-        private static final TestFixture INSTANCE = new TestFixture();
-    }
-    
-    public static TestFixture instance() {
-    	if (!TestFixtureLoader.INSTANCE.isSetUp) {
-    		TestFixtureLoader.INSTANCE.setUp();
-    	}
-    	return TestFixtureLoader.INSTANCE;
-    }
-    
-    private TestFixture() { }
+    public TestFixture() { }
 
     
     /**
@@ -85,9 +71,7 @@ public class TestFixture {
      * @return true if success
      */
     public boolean setUp() {
-		try {
-			isSetUp = true;
-			
+		try {			
         	// Set up the test directory
             pluginDirectory.mkdirs();
             Assert.assertTrue(pluginDirectory.exists());
@@ -132,7 +116,6 @@ public class TestFixture {
             //sabrePlugin.onLoad();
             sabrePlugin.onEnable();
 
-            successfulLoad = true;
             return true;
         } catch (Exception e) {
             e.printStackTrace();
@@ -166,11 +149,6 @@ public class TestFixture {
         
         Util.log("TEAR DOWN COMPLETE");
         return true;
-    }
-    
-    
-    public boolean successfulLoad() {
-    	return this.successfulLoad;
     }
 
     

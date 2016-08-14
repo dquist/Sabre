@@ -42,8 +42,8 @@ public class SabrePluginTest {
 	
 	@BeforeClass
 	public static void setUp() throws Exception {
-        testFixture = TestFixture.instance();
-        assertTrue(testFixture.successfulLoad());
+        testFixture = new TestFixture();
+        assertTrue(testFixture.setUp());
         plugin = testFixture.getPlugin();
         
         pm = plugin.getPlayerManager();
@@ -149,5 +149,13 @@ public class SabrePluginTest {
 		 sp = pm.getPlayerById(newPlayer.getUniqueId());
 		assertFalse("Player is offline", pm.getOnlinePlayers().contains(sp));
 		assertFalse("Player is online", sp.isOnline());
+	}
+	
+	public static void newPlayerJoinServer(PlayerListener pl, String name) throws Exception {
+		MockPlayer newPlayer = MockPlayer.create(name);
+		AsyncPlayerPreLoginEvent playerPreLoginEvent = new AsyncPlayerPreLoginEvent(newPlayer.name, Inet4Address.getLocalHost(), newPlayer.ID);
+		PlayerJoinEvent playerJoinEvent = new PlayerJoinEvent(newPlayer, null);
+		pl.onPlayerPreLogin(playerPreLoginEvent);
+		pl.onPlayerJoin(playerJoinEvent);
 	}
 }

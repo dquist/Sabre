@@ -209,7 +209,7 @@ public class PlayerManager {
 	
 	
 	/**
-	 * Sets the player's displayname
+	 * Sets the player's display name
 	 * @param p The player to update
 	 * @param name The new player name
 	 */
