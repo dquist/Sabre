@@ -2,10 +2,10 @@ package com.gordonfreemanq.sabre.cmd.pearl;
 
 import com.gordonfreemanq.sabre.Lang;
 import com.gordonfreemanq.sabre.SabrePlayer;
+import com.gordonfreemanq.sabre.cmd.CommandVisibility;
 import com.gordonfreemanq.sabre.cmd.SabreCommand;
-import com.gordonfreemanq.sabre.core.CommandVisibility;
-import com.gordonfreemanq.sabre.core.Permission;
 import com.gordonfreemanq.sabre.prisonpearl.PrisonPearl;
+import com.gordonfreemanq.sabre.util.Permission;
 
 public class CmdPearlSetStrength extends SabreCommand {
 

@@ -17,7 +17,7 @@ public class ServerBroadcast implements IChatChannel {
 	public void chat(SabrePlayer sender, String msg) {
 		String senderName = sender.getName();
 		
-		String formatted = SabrePlugin.instance().txt.parse("<gold>## %s: <w>%s", senderName, msg);
+		String formatted = SabrePlugin.instance().txt().parse("<gold>## %s: <w>%s", senderName, msg);
 		
 		for (SabrePlayer p : pm.getOnlinePlayers()) {
 			p.getPlayer().sendMessage(formatted);
@@ -28,7 +28,7 @@ public class ServerBroadcast implements IChatChannel {
 	@Override
 	public void chatMe(SabrePlayer sender, String msg) {
 		String senderName = sender.getName();
-		String formatted = SabrePlugin.instance().txt.parse("<h><it>%s %s", senderName, msg);
+		String formatted = SabrePlugin.instance().txt().parse("<h><it>%s %s", senderName, msg);
 		
 		for (SabrePlayer p : pm.getOnlinePlayers()) {
 			p.getPlayer().sendMessage(formatted);
@@ -36,7 +36,7 @@ public class ServerBroadcast implements IChatChannel {
 	}
 	
 	public String chat(String senderName, String msg) {		
-		String formatted = SabrePlugin.instance().txt.parse("<gold>## %s: <w>%s", senderName, msg);
+		String formatted = SabrePlugin.instance().txt().parse("<gold>## %s: <w>%s", senderName, msg);
 		
 		for (SabrePlayer p : pm.getOnlinePlayers()) {
 			p.getPlayer().sendMessage(formatted);

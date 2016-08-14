@@ -13,7 +13,6 @@ import com.gordonfreemanq.sabre.SabrePlayer;
 import com.gordonfreemanq.sabre.SabrePlugin;
 import com.gordonfreemanq.sabre.blocks.BlockManager;
 import com.gordonfreemanq.sabre.chat.IChatChannel;
-import com.gordonfreemanq.sabre.core.CommandVisibility;
 import com.gordonfreemanq.sabre.groups.GroupManager;
 import com.gordonfreemanq.sabre.groups.SabreGroup;
 import com.gordonfreemanq.sabre.groups.SabreMember;
@@ -62,7 +61,7 @@ public abstract class SabreCommand
 	{
 		if (this.helpShort == null)
 		{ 
-			String pdesc = plugin.perm.getPermissionDescription(this.permission);
+			String pdesc = plugin.perms().getPermissionDescription(this.permission);
 			if (pdesc != null)
 			{
 				return pdesc;
@@ -236,7 +235,7 @@ public abstract class SabreCommand
 			return true;
 		}
 		
-		return plugin.perm.has(sender, this.permission, this.visibility, informSenderIfNot);
+		return plugin.perms().has(sender, this.permission, this.visibility, informSenderIfNot);
 	}
 	
 	
@@ -290,7 +289,7 @@ public abstract class SabreCommand
 	public String getUseageTemplate(List<SabreCommand> commandChain, boolean addShortHelp)
 	{
 		StringBuilder ret = new StringBuilder();
-		ret.append(plugin.txt.parseTags("<c>"));
+		ret.append(plugin.txt().parseTags("<c>"));
 		ret.append('/');
 		
 		for (SabreCommand mc : commandChain)
@@ -324,13 +323,13 @@ public abstract class SabreCommand
 		
 		if (args.size() > 0)
 		{
-			ret.append(plugin.txt.parseTags("<p> "));
+			ret.append(plugin.txt().parseTags("<p> "));
 			ret.append(TextUtil.implode(args, " "));
 		}
 		
 		if (addShortHelp)
 		{
-			ret.append(plugin.txt.parseTags(" <i>"));
+			ret.append(plugin.txt().parseTags(" <i>"));
 			ret.append(this.getHelpShort());
 		}
 		
@@ -354,7 +353,7 @@ public abstract class SabreCommand
 	public void msg(String str, Object... args)
 	{
 		if (senderIsConsole) {
-			String message = SabrePlugin.instance().txt.parse(str, args);
+			String message = SabrePlugin.instance().txt().parse(str, args);
 			sender.sendMessage(message);
 		} else {
 			me.msg(str, args);
@@ -371,7 +370,7 @@ public abstract class SabreCommand
 	
 	
 	protected static String parse(String str) {
-		return SabrePlugin.instance().txt.parse(str);
+		return SabrePlugin.instance().txt().parse(str);
 	}
 	
 	public static String parse(String str, Object... args) {

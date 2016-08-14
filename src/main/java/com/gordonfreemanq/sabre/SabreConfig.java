@@ -13,7 +13,7 @@ import org.bukkit.inventory.ItemStack;
 
 import com.gordonfreemanq.sabre.blocks.ReinforcementMaterial;
 import com.gordonfreemanq.sabre.blocks.SabreItemStack;
-import com.gordonfreemanq.sabre.core.Permission;
+import com.gordonfreemanq.sabre.util.Permission;
 
 public class SabreConfig {
 	

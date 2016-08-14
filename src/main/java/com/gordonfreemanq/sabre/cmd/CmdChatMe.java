@@ -1,7 +1,5 @@
 package com.gordonfreemanq.sabre.cmd;
 
-import com.gordonfreemanq.sabre.core.CommandVisibility;
-
 public class CmdChatMe extends SabreCommand {
 
 	public CmdChatMe()

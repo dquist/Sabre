@@ -2,8 +2,6 @@ package com.gordonfreemanq.sabre.cmd;
 
 import java.util.ArrayList;
 
-import com.gordonfreemanq.sabre.core.CommandVisibility;
-
 public class CmdAutoHelp extends SabreCommand
 {
 	public CmdAutoHelp()
@@ -38,6 +36,6 @@ public class CmdAutoHelp extends SabreCommand
 		
 		int page = this.argAsInt(0, 1);
 		
-		msg(plugin.txt.getPage(lines, page, "Help for command \""+cmd.aliases.get(0)+"\""));
+		msg(plugin.txt().getPage(lines, page, "Help for command \""+cmd.aliases.get(0)+"\""));
 	}
 }

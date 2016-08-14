@@ -39,7 +39,7 @@ public class CmdPearlLocate extends SabreCommand {
 			
 			msg(Lang.pearlPearlIsHeld, name, l.getBlockX(), l.getBlockY(), l.getBlockZ(), l.getWorld().getName());
 			
-			String bcastMsg = SabrePlugin.instance().txt.parse(Lang.pearlBroadcast, me.getName(), 
+			String bcastMsg = SabrePlugin.instance().txt().parse(Lang.pearlBroadcast, me.getName(), 
 					name, l.getBlockX(), l.getBlockY(), l.getBlockZ(), l.getWorld().getName());
 			
 			for(SabrePlayer p : me.getBcastPlayers()) {

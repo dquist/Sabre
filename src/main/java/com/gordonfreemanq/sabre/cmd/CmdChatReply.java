@@ -2,7 +2,6 @@ package com.gordonfreemanq.sabre.cmd;
 
 import com.gordonfreemanq.sabre.Lang;
 import com.gordonfreemanq.sabre.SabrePlayer;
-import com.gordonfreemanq.sabre.core.CommandVisibility;
 
 public class CmdChatReply extends SabreCommand {
 

@@ -6,8 +6,7 @@ import org.bukkit.World;
 
 import com.gordonfreemanq.sabre.Lang;
 import com.gordonfreemanq.sabre.SabrePlayer;
-import com.gordonfreemanq.sabre.core.CommandVisibility;
-import com.gordonfreemanq.sabre.core.Permission;
+import com.gordonfreemanq.sabre.util.Permission;
 import com.gordonfreemanq.sabre.util.SabreUtil;
 
 

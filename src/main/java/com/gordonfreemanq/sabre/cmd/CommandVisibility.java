@@ -1,4 +1,4 @@
-package com.gordonfreemanq.sabre.core;
+package com.gordonfreemanq.sabre.cmd;
 
 public enum CommandVisibility
 {

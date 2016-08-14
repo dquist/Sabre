@@ -9,7 +9,7 @@ import org.bukkit.permissions.Permission;
 
 import com.gordonfreemanq.sabre.Lang;
 import com.gordonfreemanq.sabre.SabrePlugin;
-import com.gordonfreemanq.sabre.core.CommandVisibility;
+import com.gordonfreemanq.sabre.cmd.CommandVisibility;
 
 
 public class PermUtil {
@@ -30,7 +30,7 @@ public class PermUtil {
 	
 	public String getForbiddenMessage(String perm)
 	{
-		return plugin.txt.parse(Lang.permForbidden, getPermissionDescription(perm));
+		return plugin.txt().parse(Lang.permForbidden, getPermissionDescription(perm));
 	}
 
 	public String getPermissionDescription (String perm)

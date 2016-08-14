@@ -2,8 +2,7 @@ package com.gordonfreemanq.sabre.cmd;
 
 import com.gordonfreemanq.sabre.Lang;
 import com.gordonfreemanq.sabre.blocks.SabreItemStack;
-import com.gordonfreemanq.sabre.core.CommandVisibility;
-import com.gordonfreemanq.sabre.core.Permission;
+import com.gordonfreemanq.sabre.util.Permission;
 
 
 public class CmdAdminGive extends SabreCommand {

@@ -542,7 +542,7 @@ public class PrisonPearl {
 
 
 	protected static String parse(String str) {
-		return SabrePlugin.instance().txt.parse(str);
+		return SabrePlugin.instance().txt().parse(str);
 	}
 
 	protected static String parse(String str, Object... args) {

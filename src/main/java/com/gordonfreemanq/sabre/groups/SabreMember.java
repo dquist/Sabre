@@ -2,8 +2,10 @@ package com.gordonfreemanq.sabre.groups;
 
 import java.util.UUID;
 
+import org.apache.commons.lang.NullArgumentException;
+
 import com.gordonfreemanq.sabre.SabrePlayer;
-import com.gordonfreemanq.sabre.core.INamed;
+import com.gordonfreemanq.sabre.util.INamed;
 
 /**
  * @brief Represents a member of a sabre group
@@ -22,6 +24,18 @@ public class SabreMember implements INamed {
 	 * @param rank The player group rank
 	 */
 	public SabreMember(SabreGroup group, SabrePlayer player, Rank rank) {
+		if (group == null) {
+			throw new NullArgumentException("group");
+		}
+		
+		if (player == null) {
+			throw new NullArgumentException("player");
+		}
+		
+		if (rank == null) {
+			throw new NullArgumentException("rank");
+		}
+		
 		this.group = group;
 		this.player = player;
 		this.rank = rank;
@@ -78,6 +92,10 @@ public class SabreMember implements INamed {
 	 * @param rank The new rank
 	 */
 	public void setRank(Rank rank) {
+		if (rank == null) {
+			throw new NullArgumentException("rank");
+		}
+		
 		this.rank = rank;
 	}
 	
@@ -88,6 +106,10 @@ public class SabreMember implements INamed {
 	 * @return true if he can be kicked
 	 */
 	public boolean canKickMember(SabreMember other) {
+		if (other == null) {
+			throw new NullArgumentException("other");
+		}
+		
 		if (this.group.equals(other.group)) {
 			int rankMe = rank.ordinal();
 			int rankOther = other.rank.ordinal();

@@ -1,8 +1,5 @@
 package com.gordonfreemanq.sabre.cmd;
 
-import com.gordonfreemanq.sabre.core.CommandVisibility;
-
-
 public class CmdUnknown extends SabreCommand {
 
 	public CmdUnknown()

@@ -3,8 +3,7 @@ package com.gordonfreemanq.sabre.cmd;
 import org.bukkit.GameMode;
 
 import com.gordonfreemanq.sabre.Lang;
-import com.gordonfreemanq.sabre.core.CommandVisibility;
-import com.gordonfreemanq.sabre.core.Permission;
+import com.gordonfreemanq.sabre.util.Permission;
 
 
 public class CmdAdminGamemode extends SabreCommand {

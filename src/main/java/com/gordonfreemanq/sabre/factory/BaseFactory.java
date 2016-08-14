@@ -402,7 +402,7 @@ public class BaseFactory extends SpecialBlock {
 			nextRecipeName = recipes.get(0).getName();
 		}
 		
-		msg(SabrePlugin.instance().txt.titleize("<silver>" + this.name));
+		msg(SabrePlugin.instance().txt().titleize("<silver>" + this.name));
 		//msg("<i>-----------------------------------------------------");
 		msg("<g>Switched recipe to: <c>%s", recipe.getName());
 		msg("<g>Next recipe is: <i><it>%s", nextRecipeName);

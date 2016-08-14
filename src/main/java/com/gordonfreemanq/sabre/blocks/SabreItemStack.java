@@ -183,7 +183,7 @@ public class SabreItemStack extends ItemStack {
 	
 	
 	protected static String parse(String str) {
-		return SabrePlugin.instance().txt.parse(str);
+		return SabrePlugin.instance().txt().parse(str);
 	}
 	
 	public static String parse(String str, Object... args) {

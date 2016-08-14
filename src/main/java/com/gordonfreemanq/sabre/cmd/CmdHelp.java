@@ -26,7 +26,7 @@ public class CmdHelp extends SabreCommand {
 
 		int page = this.argAsInt(0, 1);
 
-		msg(plugin.txt.titleize("Sabre Help ("+page+"/"+helpPages.size()+")"));
+		msg(plugin.txt().titleize("Sabre Help ("+page+"/"+helpPages.size()+")"));
 
 		page -= 1;
 		getUseageTemplate();
@@ -45,10 +45,10 @@ public class CmdHelp extends SabreCommand {
 		ArrayList<String> pageLines;
 
 		pageLines = new ArrayList<String>();
-		pageLines.add( plugin.txt.parse("<i>CivFactions is a server that allows players"));
-		pageLines.add( plugin.txt.parse("<i>to build cities, nations, and civilizations."));
+		pageLines.add( plugin.txt().parse("<i>CivFactions is a server that allows players"));
+		pageLines.add( plugin.txt().parse("<i>to build cities, nations, and civilizations."));
 		pageLines.add( "" );
-		pageLines.add( plugin.txt.parse("<i>Type \"<c>/f <page><i>\" to see the full command list."));
+		pageLines.add( plugin.txt().parse("<i>Type \"<c>/f <page><i>\" to see the full command list."));
 		helpPages.add(pageLines);
 	}
 }

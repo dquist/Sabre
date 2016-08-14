@@ -56,11 +56,11 @@ import com.gordonfreemanq.sabre.SabreConfig;
 import com.gordonfreemanq.sabre.SabrePlayer;
 import com.gordonfreemanq.sabre.SabrePlugin;
 import com.gordonfreemanq.sabre.SabreTweaks;
-import com.gordonfreemanq.sabre.core.Permission;
 import com.gordonfreemanq.sabre.factory.BaseFactory;
 import com.gordonfreemanq.sabre.factory.FactoryController;
 import com.gordonfreemanq.sabre.groups.SabreGroup;
 import com.gordonfreemanq.sabre.groups.SabreMember;
+import com.gordonfreemanq.sabre.util.Permission;
 import com.gordonfreemanq.sabre.util.SabreUtil;
 
 @SuppressWarnings("deprecation")
@@ -158,7 +158,7 @@ public class BlockListener implements Listener {
 			}
 
 		} catch (Exception ex) {
-			e.getPlayer().sendMessage(SabrePlugin.instance().txt.parse(Lang.exceptionGeneral));
+			e.getPlayer().sendMessage(plugin.txt().parse(Lang.exceptionGeneral));
 			SabrePlugin.log(Level.SEVERE, SabreUtil.getExceptionMessage("onBlockPlaceEvent", ex));
 			e.setCancelled(true);
 			throw ex;
@@ -184,7 +184,7 @@ public class BlockListener implements Listener {
 			}
 
 		} catch (Exception ex) {
-			e.getPlayer().sendMessage(SabrePlugin.instance().txt.parse(Lang.exceptionGeneral));
+			e.getPlayer().sendMessage(plugin.txt().parse(Lang.exceptionGeneral));
 			SabrePlugin.log(Level.SEVERE, SabreUtil.getExceptionMessage("onBlockBreaking", ex));
 			throw ex;
 		}
@@ -297,7 +297,7 @@ public class BlockListener implements Listener {
 				}
 			}
 		} catch (Exception ex) {
-			e.getPlayer().sendMessage(SabrePlugin.instance().txt.parse(Lang.exceptionGeneral));
+			e.getPlayer().sendMessage(plugin.txt().parse(Lang.exceptionGeneral));
 			SabrePlugin.log(Level.SEVERE, SabreUtil.getExceptionMessage("onBlockBreakEvent", ex));
 			throw ex;
 		}
@@ -458,7 +458,7 @@ public class BlockListener implements Listener {
 			
 
 		} catch (Exception ex) {
-			e.getPlayer().sendMessage(SabrePlugin.instance().txt.parse(Lang.exceptionGeneral));
+			e.getPlayer().sendMessage(plugin.txt().parse(Lang.exceptionGeneral));
 			SabrePlugin.log(Level.SEVERE, SabreUtil.getExceptionMessage("onBlockInteract", ex));
 			throw ex;
 		}

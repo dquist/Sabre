@@ -775,7 +775,7 @@ public class PearlListener implements Listener {
 			String name = pp.getHolder().getName();
 			imprisoned.msg(Lang.pearlPearlIsHeld, name, l.getBlockX(), l.getBlockY(), l.getBlockZ(), l.getWorld().getName());	
 			
-			String bcastMsg = SabrePlugin.instance().txt.parse(Lang.pearlBroadcast, imprisoned.getName(), 
+			String bcastMsg = plugin.txt().parse(Lang.pearlBroadcast, imprisoned.getName(), 
 					name, l.getBlockX(), l.getBlockY(), l.getBlockZ(), l.getWorld().getName());
 			
 			for(SabrePlayer p : imprisoned.getBcastPlayers()) {

@@ -185,7 +185,7 @@ public class PlayerListener implements Listener {
 	        channel.chat(p, e.getMessage());
 			 
 		 } catch (Exception ex) {
-			 e.getPlayer().sendMessage(SabrePlugin.instance().txt.parse(Lang.exceptionGeneral));
+			 e.getPlayer().sendMessage(plugin.txt().parse(Lang.exceptionGeneral));
 			 SabrePlugin.log(Level.SEVERE, SabreUtil.getExceptionMessage("onPlayerChatEvent", ex));
 			 throw ex;
 		 }

@@ -14,9 +14,9 @@ import org.bukkit.entity.Player;
 
 import com.gordonfreemanq.sabre.blocks.BuildState;
 import com.gordonfreemanq.sabre.chat.IChatChannel;
-import com.gordonfreemanq.sabre.core.INamed;
-import com.gordonfreemanq.sabre.core.Permission;
 import com.gordonfreemanq.sabre.groups.SabreFaction;
+import com.gordonfreemanq.sabre.util.INamed;
+import com.gordonfreemanq.sabre.util.Permission;
 
 /**
  * Represents a player that has joined the server and may or may not be online
@@ -298,6 +298,14 @@ public class SabrePlayer implements INamed, IChatChannel {
 	
 	
 	/**
+	 * Sets the chat channel to global chat
+	 */
+	public void moveToGlobalChat() {
+		this.chatChannel = SabrePlugin.instance().getGlobalChat();
+	}
+	
+	
+	/**
 	 * Sets the last messaged player
 	 * @return The last messaged player
 	 */
@@ -357,7 +365,7 @@ public class SabrePlayer implements INamed, IChatChannel {
 	 */
 	public void msg(String str, Object... args)
 	{
-		String msg = SabrePlugin.instance().txt.parse(str, args);
+		String msg = SabrePlugin.instance().txt().parse(str, args);
 		if (this.isOnline()) {
 			this.getPlayer().sendMessage(msg);
 		} else {

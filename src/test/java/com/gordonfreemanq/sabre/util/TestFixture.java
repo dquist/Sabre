@@ -21,6 +21,7 @@ import com.comphenix.protocol.ProtocolManager;
 import com.gordonfreemanq.sabre.PlayerListener;
 import com.gordonfreemanq.sabre.PlayerManager;
 import com.gordonfreemanq.sabre.SabreConfig;
+import com.gordonfreemanq.sabre.SabreLogger;
 import com.gordonfreemanq.sabre.SabrePlugin;
 import com.gordonfreemanq.sabre.SabreTweaks;
 import com.gordonfreemanq.sabre.StatsTracker;
@@ -264,15 +265,15 @@ public class TestFixture {
         field.setAccessible(true);
         field.set(plugin, playerManager);
         
-        GroupManager groupManager = Mockito.spy(new GroupManager(plugin, dataAccess));
-        field = SabrePlugin.class.getDeclaredField("groupManager");
-        field.setAccessible(true);
-        field.set(plugin, groupManager);
-        
         BlockManager blockManager = Mockito.spy(new BlockManager(plugin, dataAccess));
         field = SabrePlugin.class.getDeclaredField("blockManager");
         field.setAccessible(true);
         field.set(plugin, blockManager);
+        
+        GroupManager groupManager = Mockito.spy(new GroupManager(playerManager, blockManager, dataAccess));
+        field = SabrePlugin.class.getDeclaredField("groupManager");
+        field.setAccessible(true);
+        field.set(plugin, groupManager);
         
         PearlManager pearlManager = Mockito.spy(new PearlManager(plugin, dataAccess));
         field = SabrePlugin.class.getDeclaredField("pearlManager");
@@ -351,9 +352,13 @@ public class TestFixture {
         field.setAccessible(true);
         field.set(plugin, Mockito.spy(new VanishApi()));
         
-        field = SabrePlugin.class.getDeclaredField("perm");
+        field = SabrePlugin.class.getDeclaredField("perms");
         field.setAccessible(true);
         field.set(plugin, Mockito.spy(new PermUtil(plugin)));
+        
+        field = SabrePlugin.class.getDeclaredField("logger");
+        field.setAccessible(true);
+        field.set(plugin, Mockito.spy(new SabreLogger(plugin)));
         
         // Mock the Protocol Library
         PowerMockito.mockStatic(ProtocolLibrary.class);

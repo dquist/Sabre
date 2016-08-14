@@ -251,7 +251,7 @@ public class SabreBlock {
 	 * @return The parsed string
 	 */
 	protected static String parse(String str) {
-		return SabrePlugin.instance().txt.parse(str);
+		return SabrePlugin.instance().txt().parse(str);
 	}
 	
 	

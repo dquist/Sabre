@@ -54,8 +54,8 @@ public class SabrePlugin extends JavaPlugin
 	private final SabreConfig config = new SabreConfig(this.getConfig());
 	private final IDataAccess dataAccess = new MongoConnector(this);
 	private final PlayerManager playerManager = new PlayerManager(dataAccess);
-	private final GroupManager groupManager = new GroupManager(this, dataAccess);
 	private final BlockManager blockManager = new BlockManager(this, dataAccess);
+	private final GroupManager groupManager = new GroupManager(playerManager, blockManager, dataAccess);
 	private final PearlManager pearlManager = new PearlManager(this, dataAccess);
 	private final PlayerListener playerListener = new PlayerListener(this, playerManager);
 	private final BlockListener blockListener = new BlockListener(this, playerManager, blockManager, config);
@@ -76,8 +76,9 @@ public class SabrePlugin extends JavaPlugin
 	private final PearlWorker pearlWorker = new PearlWorker(this, pearlManager, config);
 	private final VanishApi vanishApi = new VanishApi();
 	private final CommandList commandList = new CommandList();
-	public final PermUtil perm = new PermUtil(this);
-	public final TextUtil txt = new TextUtil();
+	private final SabreLogger logger = new SabreLogger(this);
+	private final PermUtil perms = new PermUtil(this);
+	private final TextUtil txt = new TextUtil();
 	
 	private boolean pluginLoadError = false;
 
@@ -391,6 +392,31 @@ public class SabrePlugin extends JavaPlugin
 	public SignHandler getSignHandler() {
 		return this.signHandler;
 	}
+	
+	/**
+	 * Gets the text utility
+	 * @return The text utility
+	 */
+	public TextUtil txt() {
+		return this.txt;
+	}
+	
+	/**
+	 * Gets the perms utility
+	 * @return The perms utility
+	 */
+	public PermUtil perms() {
+		return this.perms;
+	}
+
+	
+	/**
+	 * Gets the logger
+	 * @return The logger
+	 */
+	public SabreLogger logger() {
+		return this.logger;
+	}
 
 
 	public static void log(Object msg) {
@@ -398,11 +424,11 @@ public class SabrePlugin extends JavaPlugin
 	}
 
 	public static void log(String str, Object... args) {
-		log(Level.INFO, SabrePlugin.instance.txt.parse(str, args));
+		log(Level.INFO, instance().txt.parse(str, args));
 	}
 
 	public static void log(Level level, String str, Object... args) {
-		log(level, SabrePlugin.instance.txt.parse(str, args));
+		log(level, instance().txt.parse(str, args));
 	}
 
 	public static void log(Level level, Object msg) {

@@ -6,12 +6,15 @@ import java.util.UUID;
 import java.util.logging.Level;
 import java.util.stream.Collectors;
 
+import org.apache.commons.lang.NullArgumentException;
 import org.bukkit.Chunk;
 import org.bukkit.World;
 
 import com.gordonfreemanq.sabre.Lang;
+import com.gordonfreemanq.sabre.PlayerManager;
 import com.gordonfreemanq.sabre.SabrePlayer;
 import com.gordonfreemanq.sabre.SabrePlugin;
+import com.gordonfreemanq.sabre.blocks.BlockManager;
 import com.gordonfreemanq.sabre.blocks.BuildMode;
 import com.gordonfreemanq.sabre.blocks.BuildState;
 import com.gordonfreemanq.sabre.blocks.Reinforcement;
@@ -22,7 +25,9 @@ import com.gordonfreemanq.sabre.data.IDataAccess;
 
 public class GroupManager {
 
-	private final SabrePlugin plugin;
+	private final PlayerManager pm;
+	private final BlockManager bm;
+	
 	private final IDataAccess db;
 	
 	private final HashMap<UUID, SabreGroup> groups;
@@ -32,8 +37,21 @@ public class GroupManager {
 	 * @param pm The player manager
 	 * @param db The database
 	 */
-	public GroupManager(SabrePlugin plugin, IDataAccess db) {
-		this.plugin = plugin;
+	public GroupManager(PlayerManager pm, BlockManager bm, IDataAccess db) {
+		if (pm == null) {
+			throw new NullArgumentException("pm");
+		}
+		
+		if (bm == null) {
+			throw new NullArgumentException("bm");
+		}
+
+		if (db == null) {
+			throw new NullArgumentException("db");
+		}
+		
+		this.pm = pm;
+		this.bm = bm;
 		this.db = db;
 		
 		this.groups = new HashMap<UUID, SabreGroup>();
@@ -65,6 +83,10 @@ public class GroupManager {
 	 * @return A collection of all the groups the player is on
 	 */
 	public Collection<SabreGroup> getPlayerGroups(SabrePlayer player) {
+		if (player == null) {
+			throw new NullArgumentException("player");
+		}
+		
 		return groups.values().stream().filter(g -> g.isMember(player)).collect(Collectors.toSet());
 	}
 	
@@ -73,8 +95,12 @@ public class GroupManager {
 	 * Gets all the groups that a player is invited to
 	 * @return A collection of all the the player is invited to
 	 */
-	public Collection<SabreGroup> getInvitedGroups(SabrePlayer p) {
-		return groups.values().stream().filter(g -> g.isInvited(p)).collect(Collectors.toSet());
+	public Collection<SabreGroup> getInvitedGroups(SabrePlayer player) {
+		if (player == null) {
+			throw new NullArgumentException("player");
+		}
+		
+		return groups.values().stream().filter(g -> g.isInvited(player)).collect(Collectors.toSet());
 	}
 	
 	
@@ -83,18 +109,26 @@ public class GroupManager {
 	 * @param owner The group owner
 	 * @param group The new group to add
 	 */
-	public void addGroup(SabrePlayer owner, SabreGroup g) {
-		String name = g.getName();
+	public void addGroup(SabrePlayer owner, SabreGroup group) {
+		if (owner == null) {
+			throw new NullArgumentException("owner");
+		}
+		
+		if (group == null) {
+			throw new NullArgumentException("group");
+		}
+		
+		String name = group.getName();
 		if (getGroupByName(owner, name) != null) {
-			throw new RuntimeException(String.format("Tried to add group '%s' for player %s that already exists.", g.getName(), owner.getName()));
+			throw new RuntimeException(String.format("Tried to add group '%s' for player %s that already exists.", group.getName(), owner.getName()));
 		}
 		
-		if (g.isFaction() && getFactionByName(name) != null) {
-			throw new RuntimeException(String.format("Tried to add faction '%s' that already exists.", g.getName()));
+		if (group.isFaction() && getFactionByName(name) != null) {
+			throw new RuntimeException(String.format("Tried to add faction '%s' that already exists.", group.getName()));
 		}
 		
-		db.groupInsert(g);
-		groups.put(g.getID(), g);
+		db.groupInsert(group);
+		groups.put(group.getID(), group);
 		SabrePlugin.log(Level.INFO, "Added new group '%s'", name);
 	}
 	
@@ -104,8 +138,12 @@ public class GroupManager {
 	 * @param id The group id
 	 * @return The group instance if it exists, otherwise null
 	 */
-	public SabreGroup getGroupByID(UUID id) {
-		return groups.get(id);
+	public SabreGroup getGroupByID(UUID uid) {
+		if (uid == null) {
+			throw new NullArgumentException("uid");
+		}
+		
+		return groups.get(uid);
 	}
 	
 	
@@ -116,6 +154,14 @@ public class GroupManager {
 	 * @return The group instance if it exists, otherwise null
 	 */
 	public SabreGroup getGroupByName(SabrePlayer owner, String name) {
+		if (owner == null) {
+			throw new NullArgumentException("owner");
+		}
+		
+		if (name == null) {
+			throw new NullArgumentException("name");
+		}
+		
 		for (SabreGroup g : groups.values()) {
 			if (g.getName().equalsIgnoreCase(name) && g.getOwner().getID().equals(owner.getID())) {
 				return g;
@@ -131,6 +177,10 @@ public class GroupManager {
 	 * @return The faction instance if it exists, otherwise null
 	 */
 	public SabreFaction getFactionByName(String name) {
+		if (name == null) {
+			throw new NullArgumentException("name");
+		}
+		
 		for (SabreGroup g : groups.values()) {
 			if (g.getName().equalsIgnoreCase(name) && g.isFaction() && g instanceof SabreFaction) {
 				return (SabreFaction)g;
@@ -143,24 +193,35 @@ public class GroupManager {
 	
 	/**
 	 * Removes a group from the manager
-	 * @param name The group instance to remove
+	 * @param group The group instance to remove
 	 * @return The group instance that was removed
 	 */
-	public void removeGroup(SabreGroup g) {
-		this.groups.remove(g);
-		this.db.groupDelete(g);
+	public void removeGroup(SabreGroup group) {
+		if (group == null) {
+			throw new NullArgumentException("group");
+		}
+		
+		this.groups.remove(group);
+		this.db.groupDelete(group);
 	}
 	
 	
 	/**
 	 * Renames a group
-	 * @param g The group to rename
+	 * @param group The group to rename
 	 * @param n The new group name
 	 */
-	public void renameGroup(SabreGroup g, String n) {
-		this.groups.remove(g);
-		g.setName(n);
-		db.groupUpdateName(g, n);
+	public void renameGroup(SabreGroup group, String name) {
+		if (group == null) {
+			throw new NullArgumentException("group");
+		}
+		
+		if (name == null) {
+			throw new NullArgumentException("name");
+		}
+		
+		group.setName(name);
+		db.groupUpdateName(group, name);
 	}
 	
 	
@@ -171,6 +232,14 @@ public class GroupManager {
 	 * @return The new group instance
 	 */
 	public SabreGroup createNewGroup(SabrePlayer owner, String name) {
+		if (owner == null) {
+			throw new NullArgumentException("owner");
+		}
+		
+		if (name == null) {
+			throw new NullArgumentException("name");
+		}
+		
 		SabreGroup g = new SabreGroup(UUID.randomUUID(), name);
 		SabreMember member = g.addMember(owner, Rank.OWNER);
 		member.setRank(Rank.OWNER);
@@ -194,29 +263,37 @@ public class GroupManager {
 	
 	/**
 	 * Adds a player to a group
-	 * @param g The group to add to
-	 * @param p The player to add
+	 * @param group The group to add to
+	 * @param player The player to add
 	 * @return The new member instance
 	 */
-	public SabreMember addPlayer(SabreGroup g, SabrePlayer p) {
+	public SabreMember addPlayer(SabreGroup group, SabrePlayer player) {
+		if (group == null) {
+			throw new NullArgumentException("group");
+		}
+		
+		if (player == null) {
+			throw new NullArgumentException("player");
+		}
+		
 		SabreMember m = null;
 		
-		if (g.isMember(p)) {
-			throw new RuntimeException(String.format("Tried to add '%s' to group '%s' but player is already member.", p.getName(), g.getName()));
+		if (group.isMember(player)) {
+			throw new RuntimeException(String.format("Tried to add '%s' to group '%s' but player is already member.", player.getName(), group.getName()));
 		}
 		
-		if (g.isFaction() && p.getFaction() != null) {
-			throw new RuntimeException(String.format("Tried to add '%s' to faction '%s' but player is already in a faction.", p.getName(), g.getName()));
+		if (group.isFaction() && player.getFaction() != null) {
+			throw new RuntimeException(String.format("Tried to add '%s' to faction '%s' but player is already in a faction.", player.getName(), group.getName()));
 		}
 
-		m = g.addMember(p, Rank.MEMBER);
-		db.groupAddMember(g, m);
+		m = group.addMember(player, Rank.MEMBER);
+		db.groupAddMember(group, m);
 
-		if (g instanceof SabreFaction) {
-			plugin.getPlayerManager().setFaction(p, (SabreFaction)g);
+		if (group instanceof SabreFaction) {
+			pm.setFaction(player, (SabreFaction)group);
 		}
 		
-		updateGroupSigns(g, p);
+		updateGroupSigns(group, player);
 		
 		return m;
 	}
@@ -224,27 +301,35 @@ public class GroupManager {
 	
 	/**
 	 * Removes a player from a group
-	 * @param g The group to add to
-	 * @param p The player to add
+	 * @param group The group to add to
+	 * @param player The player to add
 	 * @return The new member instance
 	 */
-	public SabreMember removePlayer(SabreGroup g, SabrePlayer p) {
+	public SabreMember removePlayer(SabreGroup group, SabrePlayer player) {
+		if (group == null) {
+			throw new NullArgumentException("group");
+		}
+		
+		if (player == null) {
+			throw new NullArgumentException("player");
+		}
+		
 		SabreMember m = null;
 		
-		if (!g.isMember(p)) {
-			throw new RuntimeException(String.format("Tried to remove '%s' from group '%s' but player is not a member.", p.getName(), g.getName()));
+		if (!group.isMember(player)) {
+			throw new RuntimeException(String.format("Tried to remove '%s' from group '%s' but player is not a member.", player.getName(), group.getName()));
 		}
 		
-		m = g.removePlayer(p);
-		db.groupRemoveMember(g,  m);
+		m = group.removePlayer(player);
+		db.groupRemoveMember(group,  m);
 		
-		if (g instanceof SabreFaction) {
-			plugin.getPlayerManager().setFaction(p, null);
+		if (group instanceof SabreFaction) {
+			pm.setFaction(player, null);
 		}
 		
-		checkRemoveChat(g, p);
-		checkResetBuildMode(g, p);
-		updateGroupSigns(g, p);
+		checkRemoveChat(group, player);
+		checkResetBuildMode(group, player);
+		updateGroupSigns(group, player);
 		
 		return m;
 	}
@@ -252,80 +337,137 @@ public class GroupManager {
 	
 	/**
 	 * Invites a player to a group
-	 * @param g The group to add to
-	 * @param p The player to add
+	 * @param group The group to add to
+	 * @param player The player to add
 	 */
-	public void invitePlayer(SabreGroup g, SabrePlayer p) {
-		if (!g.isMember(p) && !g.isInvited(p)) {
-			g.addInvited(p);
-			db.groupAddInvited(g, p.getID());
+	public void invitePlayer(SabreGroup group, SabrePlayer player) {
+		if (group == null) {
+			throw new NullArgumentException("group");
+		}
+		
+		if (player == null) {
+			throw new NullArgumentException("player");
+		}
+		
+		if (!group.isMember(player) && !group.isInvited(player)) {
+			group.addInvited(player);
+			db.groupAddInvited(group, player.getID());
 		}
 	}
 	
 	
 	/**
 	 * Uninvites a player from a group
-	 * @param g The group to add to
-	 * @param p The player to remove
+	 * @param group The group to add to
+	 * @param player The player to remove
 	 */
-	public void uninvitePlayer(SabreGroup g, SabrePlayer p) {
-		if (g.isInvited(p)) {
-			g.removeInvited(p);
-			db.groupRemoveInvited(g, p.getID());
+	public void uninvitePlayer(SabreGroup group, SabrePlayer player) {
+		if (group == null) {
+			throw new NullArgumentException("group");
+		}
+		
+		if (player == null) {
+			throw new NullArgumentException("player");
+		}
+		
+		if (group.isInvited(player)) {
+			group.removeInvited(player);
+			db.groupRemoveInvited(group, player.getID());
 		}
 	}
 	
 	
 	/**
 	 * Sets a new rank for a member
-	 * @param m The member
-	 * @param r The new rank
+	 * @param member The member
+	 * @param rank The new rank
 	 */
-	public void setPlayerRank(SabreMember m, Rank r) {
-		m.setRank(r);
-		db.groupUpdateMemberRank(m.getGroup(), m);
+	public void setPlayerRank(SabreMember member, Rank rank) {
+		if (member == null) {
+			throw new NullArgumentException("member");
+		}
+		
+		if (rank == null) {
+			throw new NullArgumentException("rank");
+		}
+		
+		member.setRank(rank);
+		db.groupUpdateMemberRank(member.getGroup(), member);
 	}
 	
 	
-	
-	private void checkRemoveChat(SabreGroup g, SabrePlayer p) {
+	/**
+	 * Removes a player from the chat group
+	 * @param group The group to remove from
+	 * @param player The removed player
+	 */
+	private void checkRemoveChat(SabreGroup group, SabrePlayer player) {
+		if (group == null) {
+			throw new NullArgumentException("group");
+		}
+		
+		if (player == null) {
+			throw new NullArgumentException("player");
+		}
+		
 		// Remove from group chat
-		if(p.getChatChannel().equals(g)) {
-			p.setChatChannel(plugin.getGlobalChat());
-			p.msg(Lang.chatMovedGlobal);
+		if(player.getChatChannel().equals(group)) {
+			player.moveToGlobalChat();
+			player.msg(Lang.chatMovedGlobal);
 		}
 	}
 	
 	
-	private void checkResetBuildMode(SabreGroup g, SabrePlayer p) {
+	/**
+	 * Resets the build mode for a removed player
+	 * @param group The group
+	 * @param player The removed player
+	 */
+	private void checkResetBuildMode(SabreGroup group, SabrePlayer player) {
+		if (group == null) {
+			throw new NullArgumentException("group");
+		}
+		
+		if (player == null) {
+			throw new NullArgumentException("player");
+		}
+		
 		// Reset the build mode for the player
-		BuildState state = p.getBuildState();
+		BuildState state = player.getBuildState();
 		SabreGroup buildGroup = state.getGroup();
-		if (buildGroup != null && buildGroup.equals(g) && !state.equals(BuildMode.OFF)) {
+		if (buildGroup != null && buildGroup.equals(group) && !state.equals(BuildMode.OFF)) {
 			state.reset();
-			p.getBuildState().setMode(BuildMode.OFF);
-			p.msg(Lang.blockBuildMode, BuildMode.OFF);
+			player.getBuildState().setMode(BuildMode.OFF);
+			player.msg(Lang.blockBuildMode, BuildMode.OFF);
 		}
 	}
 	
 	
 	/**
 	 * Updates all the group signs for a player
-	 * @param g The group for the signs
-	 * @param p The player to update
+	 * @param group The group for the signs
+	 * @param player The player to update
 	 */
-	private void updateGroupSigns(SabreGroup g, SabrePlayer p) {
-		if (!p.isOnline()) {
+	private void updateGroupSigns(SabreGroup group, SabrePlayer player) {
+		if (group == null) {
+			throw new NullArgumentException("group");
+		}
+		
+		if (player == null) {
+			throw new NullArgumentException("player");
+		}
+		
+		if (!player.isOnline()) {
 			return;
 		}
 		
-		Chunk chunk = p.getPlayer().getLocation().getChunk();
+		Chunk chunk = player.getPlayer().getLocation().getChunk();
 		World w = chunk.getWorld();
 		Chunk c;
 		SecureSign s;
 		Reinforcement r;
 		
-		SignCollection signs = plugin.getBlockManager().getSigns();
+		SignCollection signs = bm.getSigns();
 		
 		for (int i = -4; i <= 4; i++) {
 			for (int j = -4; j <= 4; j++) {
@@ -340,8 +482,8 @@ public class GroupManager {
 						s = (SecureSign)b;
 						r = b.getReinforcement();
 						
-						if (r != null && r.getGroup().equals(g)) {
-							s.updatefor(p);
+						if (r != null && r.getGroup().equals(group)) {
+							s.updatefor(player);
 						}
 					}
 				}

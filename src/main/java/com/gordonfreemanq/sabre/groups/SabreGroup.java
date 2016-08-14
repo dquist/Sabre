@@ -10,7 +10,7 @@ import org.apache.commons.lang.NullArgumentException;
 import com.gordonfreemanq.sabre.SabrePlayer;
 import com.gordonfreemanq.sabre.SabrePlugin;
 import com.gordonfreemanq.sabre.chat.IChatChannel;
-import com.gordonfreemanq.sabre.core.INamed;
+import com.gordonfreemanq.sabre.util.INamed;
 
 /**
  * Representation of a Sabre group
@@ -384,7 +384,7 @@ public class SabreGroup implements INamed, IChatChannel {
 
 
 	public void msgAll(String str, boolean isChat, Object... args) {		
-		String formatStr = SabrePlugin.instance().txt.parse(str, args);
+		String formatStr = SabrePlugin.instance().txt().parse(str, args);
 		msgAll(formatStr, isChat);
 	}
 
@@ -397,7 +397,7 @@ public class SabreGroup implements INamed, IChatChannel {
 			throw new NullArgumentException("str");
 		}
 		
-		String formatStr = SabrePlugin.instance().txt.parse(str, args);
+		String formatStr = SabrePlugin.instance().txt().parse(str, args);
 
 		for (SabreMember m : members) {
 			SabrePlayer p = m.getPlayer();
@@ -410,14 +410,14 @@ public class SabreGroup implements INamed, IChatChannel {
 
 	@Override
 	public void chat(SabrePlayer sender, String msg) {
-		String formatStr = SabrePlugin.instance().txt.parse("<c>[%s] <reset><gold>%s:<w> %s", this.getName(), sender.getName(), msg);
+		String formatStr = SabrePlugin.instance().txt().parse("<c>[%s] <reset><gold>%s:<w> %s", this.getName(), sender.getName(), msg);
 		this.msgAll(formatStr, true);
 		SabrePlugin.log(Level.INFO, formatStr);
 	}
 	
 	@Override
 	public void chatMe(SabrePlayer sender, String msg) {		
-		String formatStr = SabrePlugin.instance().txt.parse("<c>[%s] <gold><it>%s %s", this.getName(), sender.getName(), msg);
+		String formatStr = SabrePlugin.instance().txt().parse("<c>[%s] <gold><it>%s %s", this.getName(), sender.getName(), msg);
 		this.msgAll(formatStr, true);
 		SabrePlugin.log(Level.INFO, formatStr);
 	}
@@ -433,7 +433,7 @@ public class SabreGroup implements INamed, IChatChannel {
 			throw new NullArgumentException("str");
 		}
 		
-		String formatStr = SabrePlugin.instance().txt.parse(str, args);
+		String formatStr = SabrePlugin.instance().txt().parse(str, args);
 		
 		for (SabreMember m : members) {
 			SabrePlayer p = m.getPlayer();

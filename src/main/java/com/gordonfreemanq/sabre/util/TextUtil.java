@@ -8,8 +8,6 @@ import java.util.regex.Pattern;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 
-import com.gordonfreemanq.sabre.core.INamed;
-
 public class TextUtil
 {	
 	public Map<String, String> tags;

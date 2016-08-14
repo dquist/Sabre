@@ -34,3 +34,4 @@ snitches
 teleports
 logo
 stats
+uninvites

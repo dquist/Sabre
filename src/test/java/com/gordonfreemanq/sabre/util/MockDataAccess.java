@@ -21,22 +21,26 @@ import com.gordonfreemanq.sabre.snitch.SnitchLogEntry;
 
 public class MockDataAccess implements IDataAccess {
 	
-	private boolean isConnected = false;
-	private HashSet<SabrePlayer> players = new HashSet<SabrePlayer>();
-	private HashSet<SabreGroup> groups = new HashSet<SabreGroup>();
-	private HashMap<String, HashSet<SabreBlock>> blocks = new HashMap<String, HashSet<SabreBlock>>();
-	private HashSet<PrisonPearl> pearls = new HashSet<PrisonPearl>();
-	private HashMap<UUID, ArrayList<SnitchLogEntry>> snitchEntries = new HashMap<UUID, ArrayList<SnitchLogEntry>>();
+	public boolean isConnected = false;
+	public final HashSet<SabrePlayer> players = new HashSet<SabrePlayer>();
+	public final HashSet<SabreGroup> groups = new HashSet<SabreGroup>();
+	public final HashMap<String, HashSet<SabreBlock>> blocks = new HashMap<String, HashSet<SabreBlock>>();
+	public final HashSet<PrisonPearl> pearls = new HashSet<PrisonPearl>();
+	public final HashMap<UUID, ArrayList<SnitchLogEntry>> snitchEntries = new HashMap<UUID, ArrayList<SnitchLogEntry>>();
 	
 	
 	
 	public MockDataAccess() { }
 
 	@Override
-	public void connect() throws Exception { }
+	public void connect() throws Exception {
+		isConnected = true;
+	}
 
 	@Override
-	public void disconect() { }
+	public void disconect() {
+		isConnected = false;
+	}
 
 	@Override
 	public boolean isConnected() {

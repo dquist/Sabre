@@ -6,6 +6,7 @@ import static org.junit.Assert.*;
 import static org.mockito.Mockito.*;
 
 import java.net.Inet4Address;
+import java.net.UnknownHostException;
 import java.util.ArrayList;
 
 import org.bukkit.Location;
@@ -136,7 +137,7 @@ public class SabrePluginTest {
 		// Random spawn if bed missing
 		bedBlock.setType(Material.AIR);
 		playerListener.onPlayerRespawn(playerRespawnBedEvent);
-		assertEquals(newPlayer.messages.poll(), plugin.txt.parse(Lang.playerBedMissing));
+		assertEquals(newPlayer.messages.poll(), plugin.txt().parse(Lang.playerBedMissing));
 		assertEquals(newPlayer.messages.poll(), Lang.playerYouWakeUp);
 		
 		// Random spawn again without bed message even if bed is back
@@ -151,9 +152,16 @@ public class SabrePluginTest {
 		assertFalse("Player is online", sp.isOnline());
 	}
 	
-	public static void newPlayerJoinServer(PlayerListener pl, String name) throws Exception {
+	public static void newPlayerJoinServer(PlayerListener pl, String name) {
 		MockPlayer newPlayer = MockPlayer.create(name);
-		AsyncPlayerPreLoginEvent playerPreLoginEvent = new AsyncPlayerPreLoginEvent(newPlayer.name, Inet4Address.getLocalHost(), newPlayer.ID);
+		newPlayer.isOnline = true;
+		AsyncPlayerPreLoginEvent playerPreLoginEvent = null;
+		try {
+			playerPreLoginEvent = new AsyncPlayerPreLoginEvent(newPlayer.name, Inet4Address.getLocalHost(), newPlayer.ID);
+		} catch (UnknownHostException e) {
+			e.printStackTrace();
+		}
+		assertNotNull(playerPreLoginEvent);
 		PlayerJoinEvent playerJoinEvent = new PlayerJoinEvent(newPlayer, null);
 		pl.onPlayerPreLogin(playerPreLoginEvent);
 		pl.onPlayerJoin(playerJoinEvent);

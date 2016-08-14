@@ -6,10 +6,10 @@ import java.util.Collections;
 import java.util.concurrent.TimeUnit;
 
 import com.gordonfreemanq.sabre.Lang;
-import com.gordonfreemanq.sabre.core.NameComparer;
 import com.gordonfreemanq.sabre.groups.Rank;
 import com.gordonfreemanq.sabre.groups.SabreGroup;
 import com.gordonfreemanq.sabre.groups.SabreMember;
+import com.gordonfreemanq.sabre.util.NameComparer;
 
 
 public class CmdGroupStats extends SabreCommand {
@@ -121,7 +121,7 @@ public class CmdGroupStats extends SabreCommand {
 			    TimeUnit.MILLISECONDS.toMinutes(millis) % TimeUnit.HOURS.toMinutes(1));
 		
 		StringBuilder sb = new StringBuilder();
-		sb.append(plugin.txt.titleize(String.format("Stats for player <c>%s<g>:", me.getName())) + "\n");
+		sb.append(plugin.txt().titleize(String.format("Stats for player <c>%s<g>:", me.getName())) + "\n");
 		sb.append(String.format("<a>Player since: <n>%s\n", new SimpleDateFormat("yyyy-MM-dd").format(me.getFirstLogin())));
 		sb.append(String.format("<a>Total playtime: <n>%s\n", timePlayed));
 		
@@ -217,7 +217,7 @@ public class CmdGroupStats extends SabreCommand {
 			groupTypeName = "faction";
 		}
 		
-		stats.append(plugin.txt.titleize(String.format("Stats for %s <c>%s<g>:", groupTypeName, g.getName())) + "\n");
+		stats.append(plugin.txt().titleize(String.format("Stats for %s <c>%s<g>:", groupTypeName, g.getName())) + "\n");
 		stats.append(String.format("<a>OWNER (1): <n>%s\n", ownerName));
 		stats.append(String.format("<a>ADMIN (%d): <n>%s\n", admins.size(), adminNames));
 		stats.append(String.format("<a>OFFICER (%d): <n>%s\n", officers.size(), officerNames));

@@ -78,10 +78,10 @@ public class CustomItems {
 		    	
 		    	List<String> loreStrings = config.getStringList("lore");
 		    	List<String> lore = new ArrayList<String>();
-		    	lore.add(plugin.txt.parse("<l>%s", itemName));
+		    	lore.add(plugin.txt().parse("<l>%s", itemName));
 		    	
 		    	for (String s : loreStrings) {
-		    		lore.add(plugin.txt.parse(s));
+		    		lore.add(plugin.txt().parse(s));
 		    	}
 		    	
 		    	SabreItemStack item = new SabreItemStack(material, itemName, amount, durability, lore);
