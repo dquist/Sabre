@@ -8,8 +8,22 @@ import org.bukkit.Bukkit;
 public class StatsTracker implements Runnable {
 	
 	private final SabrePlugin plugin;
+	private final PlayerManager pm;
+	
 	private long lastUpdate;
 	private boolean enabled;
+	
+	
+	/**
+	 * Creates a new StatsTracker instance
+	 * @param pm
+	 */
+	public StatsTracker(SabrePlugin plugin, PlayerManager pm) {
+		this.plugin = plugin;
+		this.pm = pm;
+		
+		lastUpdate = System.currentTimeMillis();
+	}
 	
 	
 	/**
@@ -18,7 +32,7 @@ public class StatsTracker implements Runnable {
 	public void start() {
 		enabled = true;
 		lastUpdate = System.currentTimeMillis();
-		Bukkit.getScheduler().scheduleSyncRepeatingTask(SabrePlugin.instance(), this, 0, 200);
+		Bukkit.getScheduler().scheduleSyncRepeatingTask(plugin, this, 0, 200);
 	}
 	
 	
@@ -28,16 +42,6 @@ public class StatsTracker implements Runnable {
 	public void stop() {
 		enabled = false;
 	}
-	
-	
-	/**
-	 * Creates a new StatsTracker instance
-	 * @param pm
-	 */
-	public StatsTracker(SabrePlugin plugin) {
-		this.plugin = plugin;
-		lastUpdate = System.currentTimeMillis();
-	}
 
 	@Override
 	public void run() {
@@ -46,7 +50,6 @@ public class StatsTracker implements Runnable {
 			return;
 		}
 		
-		PlayerManager pm = plugin.getPlayerManager();
 		long timeToAdd = System.currentTimeMillis() - lastUpdate;
 		
 		for (SabrePlayer p : pm.getOnlinePlayers()) {

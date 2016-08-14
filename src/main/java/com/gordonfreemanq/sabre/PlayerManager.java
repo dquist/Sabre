@@ -10,6 +10,7 @@ import java.util.logging.Level;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
+import com.gordonfreemanq.sabre.data.IDataAccess;
 import com.gordonfreemanq.sabre.groups.SabreFaction;
 
 /**
@@ -18,7 +19,8 @@ import com.gordonfreemanq.sabre.groups.SabreFaction;
  */
 public class PlayerManager {
 	
-	private SabrePlugin plugin;
+	private final IDataAccess db;
+	
 	private final HashMap<UUID, SabrePlayer> players;
 	private final HashMap<UUID, SabrePlayer> onlinePlayers;
 
@@ -26,8 +28,9 @@ public class PlayerManager {
 	/**
 	 * Creates a new PlayerManager instance 
 	 */
-	public PlayerManager(SabrePlugin plugin) {
-		this.plugin = plugin;
+	public PlayerManager(IDataAccess db) {
+		this.db = db;
+		
 		this.players = new HashMap<UUID, SabrePlayer>();
 		this.onlinePlayers = new HashMap<UUID, SabrePlayer>();
 	}
@@ -39,7 +42,7 @@ public class PlayerManager {
 	public void load() {
 		this.players.clear();
 		
-		for (SabrePlayer p : plugin.getDataAccess().playerGetAll()) {
+		for (SabrePlayer p : db.playerGetAll()) {
 			this.players.put(p.getID(), p);
 		}
 	}
@@ -51,7 +54,7 @@ public class PlayerManager {
 	 */
 	public void addPlayer(SabrePlayer player) {
 		this.players.put(player.getID(), player);
-		plugin.getDataAccess().playerInsert(player);
+		db.playerInsert(player);
 	}
 	
 	
@@ -62,7 +65,7 @@ public class PlayerManager {
 	public void removePlayer(SabrePlayer p) {
 		onlinePlayers.remove(p.getID());
 		players.remove(p.getID());
-		plugin.getDataAccess().playerDelete(p);
+		db.playerDelete(p);
 		SabrePlugin.log(Level.INFO, "Removed player: Name=%s, ID=%s", p.getName(), p.getID().toString());
 	}
 	
@@ -179,7 +182,7 @@ public class PlayerManager {
 	 */
 	public void setLastLogin(SabrePlayer p, Date lastLogin) {
 		p.setLastLogin(lastLogin);
-		plugin.getDataAccess().playerUpdateLastLogin(p);
+		db.playerUpdateLastLogin(p);
 	}
 	
 	
@@ -190,7 +193,7 @@ public class PlayerManager {
 	 */
 	public void setAutoJoin(SabrePlayer p, boolean autoJoin) {
 		p.setAutoJoin(autoJoin);
-		plugin.getDataAccess().playerUpdateAutoJoin(p);
+		db.playerUpdateAutoJoin(p);
 	}
 	
 	
@@ -201,7 +204,7 @@ public class PlayerManager {
 	 */
 	public void setFaction(SabrePlayer p, SabreFaction faction) {
 		p.setFaction(faction);
-		plugin.getDataAccess().playerUpdateFaction(p);
+		db.playerUpdateFaction(p);
 	}
 	
 	
@@ -212,7 +215,7 @@ public class PlayerManager {
 	 */
 	public void setDisplayName(SabrePlayer p, String name) {
 		p.setName(name);
-		plugin.getDataAccess().playerUpdateName(p);
+		db.playerUpdateName(p);
 	}
 	
 	
@@ -231,7 +234,7 @@ public class PlayerManager {
 			p.getPlayer().kickPlayer(fullBanMessage);
 		}
 		
-		plugin.getDataAccess().playerUpdateBan(p);
+		db.playerUpdateBan(p);
 	}
 	
 	
@@ -242,7 +245,7 @@ public class PlayerManager {
 	 */
 	public void setFreedOffline(SabrePlayer p, boolean status) {
 		p.setFreedOffline(status);
-		plugin.getDataAccess().playerUpdateFreedOffline(p);
+		db.playerUpdateFreedOffline(p);
 	}
 	
 	/**
@@ -252,7 +255,7 @@ public class PlayerManager {
 	 */
 	public void setBedLocation(SabrePlayer p, Location l) {
 		p.setBedLocation(l);
-		plugin.getDataAccess().playerUpdateBed(p);
+		db.playerUpdateBed(p);
 	}
 	
 	
@@ -263,7 +266,7 @@ public class PlayerManager {
 	 */
 	public void addOfflineMessage(SabrePlayer p, String message) {
 		p.addOfflineMessage(message);
-		plugin.getDataAccess().playerAddOfflineMessage(p, message);
+		db.playerAddOfflineMessage(p, message);
 	}
 	
 	
@@ -273,7 +276,7 @@ public class PlayerManager {
 	 */
 	public void clearOfflineMessages(SabrePlayer p) {
 		p.getOfflineMessages().clear();
-		plugin.getDataAccess().playerClearOfflineMessages(p);
+		db.playerClearOfflineMessages(p);
 	}
 	
 	
@@ -303,6 +306,6 @@ public class PlayerManager {
 	 */
 	public void addPlayTime(SabrePlayer p, long time) {
 		p.addPlayTime(time);
-		plugin.getDataAccess().playerUpdatePlayTime(p);
+		db.playerUpdatePlayTime(p);
 	}
 }

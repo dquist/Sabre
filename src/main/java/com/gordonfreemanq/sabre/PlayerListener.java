@@ -30,14 +30,16 @@ import com.gordonfreemanq.sabre.util.SabreUtil;
 public class PlayerListener implements Listener {
 	
 	private final SabrePlugin plugin;
+	private final PlayerManager pm;
 	
 	
 	/**
 	 * Creates a new PlayerListener instance
 	 * @param plugin The plugin instance
 	 */
-	public PlayerListener(SabrePlugin plugin) {
+	public PlayerListener(SabrePlugin plugin, PlayerManager pm) {
 		this.plugin = plugin;
+		this.pm = pm;
 	}
 	
 	
@@ -51,7 +53,7 @@ public class PlayerListener implements Listener {
 			return;
 		}
 		
-		SabrePlayer sp = plugin.getPlayerManager().getPlayerById(e.getUniqueId());
+		SabrePlayer sp = pm.getPlayerById(e.getUniqueId());
 		if (sp != null && sp.getBanned()) {
 			e.setLoginResult(Result.KICK_BANNED);
 			String fullBanMessage = String.format("%s\n%s", Lang.youAreBanned, sp.getBanMessage());
@@ -110,26 +112,26 @@ public class PlayerListener implements Listener {
 	 * @param pThe player that is joining
 	 */
 	public void handlePlayerJoin(Player p) {
-		SabrePlayer sp = plugin.getPlayerManager().getPlayerById(p.getUniqueId());
+		SabrePlayer sp = pm.getPlayerById(p.getUniqueId());
 		if (sp == null) {
 			// This player has never logged in before, make a new instance and spawn them
-			sp = plugin.getPlayerManager().createNewPlayer(p);
+			sp = pm.createNewPlayer(p);
 			plugin.getSpawner().spawnPlayerRandom(sp);
 		}
 		
 		// Update the player model
 		sp.setPlayer(p);
-		plugin.getPlayerManager().setLastLogin(sp, new Date());
+		pm.setLastLogin(sp, new Date());
 		
 		// This ensures the player name always stays the same
 		p.setDisplayName(sp.getName());
 		p.setCustomName(sp.getName());
 		p.setPlayerListName(sp.getName());
 		
-		plugin.getPlayerManager().printOfflineMessages(sp);
-		plugin.getPlayerManager().clearOfflineMessages(sp);
+		pm.printOfflineMessages(sp);
+		pm.clearOfflineMessages(sp);
 		
-		plugin.getPlayerManager().onPlayerConnect(sp);
+		pm.onPlayerConnect(sp);
 	}
 	
 	
@@ -138,10 +140,10 @@ public class PlayerListener implements Listener {
 	 * @param p The player that is disconnecting
 	 */
 	public void onPlayerDisconnect(Player p) {
-		SabrePlayer sp = plugin.getPlayerManager().getPlayerById(p.getUniqueId());
+		SabrePlayer sp = pm.getPlayerById(p.getUniqueId());
 		
 		// Removes the player from the online list
-		plugin.getPlayerManager().onPlayerDisconnect(sp);
+		pm.onPlayerDisconnect(sp);
 		
 		// Remove the bukkit player instance from the model
 		sp.setPlayer(null);
@@ -172,7 +174,7 @@ public class PlayerListener implements Listener {
 		 try {
 	        e.setCancelled(true);
 	        
-	        SabrePlayer p = plugin.getPlayerManager().getPlayerById(e.getPlayer().getUniqueId());
+	        SabrePlayer p = pm.getPlayerById(e.getPlayer().getUniqueId());
 	        
 	        IChatChannel channel = p.getChatChannel();
 	        if (channel == null) {
@@ -199,7 +201,7 @@ public class PlayerListener implements Listener {
 	 */
 	@EventHandler(priority=EventPriority.LOWEST, ignoreCancelled = true)
 	public void onPlayerRespawn(PlayerRespawnEvent e) {
-		SabrePlayer sp = plugin.getPlayerManager().getPlayerById(e.getPlayer().getUniqueId());
+		SabrePlayer sp = pm.getPlayerById(e.getPlayer().getUniqueId());
 		e.setRespawnLocation(plugin.getSpawner().spawnPlayerBed(sp));
 	}
 	
@@ -210,12 +212,12 @@ public class PlayerListener implements Listener {
 	 */
 	@EventHandler(priority=EventPriority.HIGHEST, ignoreCancelled = true)
 	public void onPlayerInteract(PlayerInteractEvent e) {
-		SabrePlayer p = plugin.getPlayerManager().getPlayerById(e.getPlayer().getUniqueId());
+		SabrePlayer p = pm.getPlayerById(e.getPlayer().getUniqueId());
 		
 		Action a = e.getAction();
 		if (a.equals(Action.RIGHT_CLICK_BLOCK) && e.getClickedBlock().getType().equals(Material.BED_BLOCK)) {
 			Location l = e.getClickedBlock().getLocation();
-			plugin.getPlayerManager().setBedLocation(p, l);
+			pm.setBedLocation(p, l);
 			p.msg(Lang.playerSetBed);
 			e.getPlayer().setBedSpawnLocation(l, true);
 			e.setCancelled(true);
@@ -235,7 +237,7 @@ public class PlayerListener implements Listener {
         
         Player p = (Player)e.getEntity();
         
-        SabrePlayer sp = plugin.getPlayerManager().getPlayerByName(p.getName());
+        SabrePlayer sp = pm.getPlayerByName(p.getName());
         if (sp == null) {
         	return;
         }
@@ -244,6 +246,4 @@ public class PlayerListener implements Listener {
         	e.setCancelled(true);
         }
 	}
-		
-		
 }

@@ -33,3 +33,4 @@ snitch
 snitches
 teleports
 logo
+stats

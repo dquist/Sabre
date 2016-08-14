@@ -10,13 +10,16 @@ import org.bukkit.World;
 import org.bukkit.World.Environment;
 
 import com.gordonfreemanq.sabre.Lang;
+import com.gordonfreemanq.sabre.PlayerManager;
+import com.gordonfreemanq.sabre.SabreConfig;
 import com.gordonfreemanq.sabre.SabrePlayer;
-import com.gordonfreemanq.sabre.SabrePlugin;
+import com.gordonfreemanq.sabre.blocks.BlockManager;
 import com.gordonfreemanq.sabre.blocks.SabreBlock;
 
 public class PlayerSpawner {	
-	
-	private final SabrePlugin plugin;
+	private final PlayerManager pm;
+	private final BlockManager bm;
+	private final SabreConfig config;
 	
 	// Track the last spawn location for each player
 	private HashMap<SabrePlayer, PlayerSpawnResult> lastRandomSpawn;
@@ -27,8 +30,10 @@ public class PlayerSpawner {
 	/**
 	 * Creates a new PlayerSpawner instance
 	 */
-	public PlayerSpawner(SabrePlugin plugin) {	
-		this.plugin = plugin;
+	public PlayerSpawner(PlayerManager pm, BlockManager bm, SabreConfig config) {
+		this.pm = pm;
+		this.bm = bm;
+		this.config = config;
 		
 		lastRandomSpawn = new HashMap<SabrePlayer, PlayerSpawnResult>();
 		
@@ -61,7 +66,7 @@ public class PlayerSpawner {
 		
 		if (l != null) {
 			if (l.getBlock().getType() == Material.BED_BLOCK) {
-				SabreBlock b = plugin.getBlockManager().getBlockAt(SabreUtil.getRealBlock(l.getBlock()).getLocation());
+				SabreBlock b = bm.getBlockAt(SabreUtil.getRealBlock(l.getBlock()).getLocation());
 				if (b == null || b.canPlayerAccess(sp)) {
 					useBed = true;
 				}
@@ -75,7 +80,7 @@ public class PlayerSpawner {
 				sp.msg(Lang.playerBedMissing);
 			}
 			
-			plugin.getPlayerManager().setBedLocation(sp, null);
+			pm.setBedLocation(sp, null);
 			sp.getPlayer().setBedSpawnLocation(null);
 			l = spawnPlayerRandom(sp, world);
 		}
@@ -90,7 +95,7 @@ public class PlayerSpawner {
 	 * @param p The player to spawn
 	 */
 	public Location spawnPlayerBed(SabrePlayer sp) {
-		return spawnPlayerBed(sp, Bukkit.getServer().getWorld(plugin.config().getFreeWorldName()));
+		return spawnPlayerBed(sp, Bukkit.getServer().getWorld(config.getFreeWorldName()));
 	}
 	
 	
@@ -100,7 +105,7 @@ public class PlayerSpawner {
 	 * @param world The world to use
 	 */
 	public Location spawnPlayerRandom(SabrePlayer sp, World world) {
-		Location spawnLocation = chooseSpawn(world, plugin.config().getRespawnRadius());
+		Location spawnLocation = chooseSpawn(world, config.getRespawnRadius());
 		SabreUtil.sendToGround(sp.getPlayer(), spawnLocation);
 		sp.teleport(spawnLocation);
 		lastRandomSpawn.put(sp, new PlayerSpawnResult(spawnLocation, false));
@@ -114,7 +119,7 @@ public class PlayerSpawner {
 	 * @param p The player to spawn
 	 */
 	public Location spawnPlayerRandom(SabrePlayer sp) {
-		return spawnPlayerRandom(sp, Bukkit.getServer().getWorld(plugin.config().getFreeWorldName()));
+		return spawnPlayerRandom(sp, Bukkit.getServer().getWorld(config.getFreeWorldName()));
 	}
 
 	

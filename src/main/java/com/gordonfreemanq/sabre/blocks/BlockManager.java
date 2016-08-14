@@ -16,6 +16,7 @@ import com.google.common.base.CharMatcher;
 import com.gordonfreemanq.sabre.SabrePlayer;
 import com.gordonfreemanq.sabre.SabrePlugin;
 import com.gordonfreemanq.sabre.customitems.SecureSign;
+import com.gordonfreemanq.sabre.data.IDataAccess;
 import com.gordonfreemanq.sabre.factory.BaseFactory;
 import com.gordonfreemanq.sabre.factory.FactoryCollection;
 import com.gordonfreemanq.sabre.groups.SabreGroup;
@@ -30,6 +31,8 @@ import com.gordonfreemanq.sabre.snitch.SnitchCollection;
 public class BlockManager {
 
 	private final SabrePlugin plugin;
+	private final IDataAccess db;
+	
 	private final BlockCollection allBlocks;
 	private final SignCollection secureSigns;
 	private final SnitchCollection snitches;
@@ -39,9 +42,10 @@ public class BlockManager {
 	/**
 	 * Creates a  new BlockManager instance
 	 */
-	public BlockManager(SabrePlugin plugin) {
-		
+	public BlockManager(SabrePlugin plugin, IDataAccess db) {
 		this.plugin = plugin;
+		this.db = db;
+		
 		this.allBlocks = new BlockCollection();
 		
 		// Holds the secure signs
@@ -80,7 +84,7 @@ public class BlockManager {
 		HashMap<Location, SabreBlock> factories = new HashMap<Location, SabreBlock>();
 		Location l;
 		
-		for (SabreBlock b : plugin.getDataAccess().blockGetChunkRecords(c)) {
+		for (SabreBlock b : db.blockGetChunkRecords(c)) {
 			l = b.getLocation();
 			all.put(l, b);
 			
@@ -115,7 +119,7 @@ public class BlockManager {
 	 * Loads all the running factories from the DB
 	 */
 	public void loadRunningFactories() {
-		for(SabreBlock b : plugin.getDataAccess().blockGetRunningFactories()) {
+		for(SabreBlock b : db.blockGetRunningFactories()) {
 			if (b instanceof BaseFactory) {
 				BaseFactory bf = (BaseFactory)b;
 				if (bf.runUnloaded()) {
@@ -132,7 +136,7 @@ public class BlockManager {
 	 */
 	public void addBlock(SabreBlock b) {
 		allBlocks.add(b);
-		plugin.getDataAccess().blockInsert(b);
+		db.blockInsert(b);
 	}
 
 
@@ -152,7 +156,7 @@ public class BlockManager {
 	 */
 	public void removeBlock(SabreBlock b) {
 		allBlocks.remove(b);
-		plugin.getDataAccess().blockRemove(b);
+		db.blockRemove(b);
 	}
 	
 	
@@ -239,7 +243,7 @@ public class BlockManager {
 	 */
 	public void setReinforcement(SabreBlock b, Reinforcement r) {
 		b.setReinforcement(r);
-		plugin.getDataAccess().blockSetReinforcement(b);
+		db.blockSetReinforcement(b);
 	}
 	
 	
@@ -248,7 +252,7 @@ public class BlockManager {
 	 * @param b The block to update
 	 */
 	public void updateReinforcementStrength(SabreBlock b) {
-		plugin.getDataAccess().blockUpdateReinforcementStrength(b);
+		db.blockUpdateReinforcementStrength(b);
 	}
 	
 	
@@ -257,7 +261,7 @@ public class BlockManager {
 	 * @param b The block to update
 	 */
 	public void updateSettings(SabreBlock b) {
-		plugin.getDataAccess().blockSetSettings(b);
+		db.blockSetSettings(b);
 	}
 	
 	

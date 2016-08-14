@@ -1,14 +1,15 @@
 package com.gordonfreemanq.sabre.chat;
 
+import com.gordonfreemanq.sabre.PlayerManager;
 import com.gordonfreemanq.sabre.SabrePlayer;
 import com.gordonfreemanq.sabre.SabrePlugin;
 
 public class ServerBroadcast implements IChatChannel {
 
-	private final SabrePlugin plugin;
+	private final PlayerManager pm;
 	
-	public ServerBroadcast(SabrePlugin plugin) {
-		this.plugin = plugin;
+	public ServerBroadcast(PlayerManager pm) {
+		this.pm = pm;
 	}
 	
 	
@@ -18,7 +19,7 @@ public class ServerBroadcast implements IChatChannel {
 		
 		String formatted = SabrePlugin.instance().txt.parse("<gold>## %s: <w>%s", senderName, msg);
 		
-		for (SabrePlayer p : plugin.getPlayerManager().getOnlinePlayers()) {
+		for (SabrePlayer p : pm.getOnlinePlayers()) {
 			p.getPlayer().sendMessage(formatted);
 		}
 	}
@@ -29,7 +30,7 @@ public class ServerBroadcast implements IChatChannel {
 		String senderName = sender.getName();
 		String formatted = SabrePlugin.instance().txt.parse("<h><it>%s %s", senderName, msg);
 		
-		for (SabrePlayer p : plugin.getPlayerManager().getOnlinePlayers()) {
+		for (SabrePlayer p : pm.getOnlinePlayers()) {
 			p.getPlayer().sendMessage(formatted);
 		}
 	}
@@ -37,7 +38,7 @@ public class ServerBroadcast implements IChatChannel {
 	public String chat(String senderName, String msg) {		
 		String formatted = SabrePlugin.instance().txt.parse("<gold>## %s: <w>%s", senderName, msg);
 		
-		for (SabrePlayer p : plugin.getPlayerManager().getOnlinePlayers()) {
+		for (SabrePlayer p : pm.getOnlinePlayers()) {
 			p.getPlayer().sendMessage(formatted);
 		}
 		return formatted;

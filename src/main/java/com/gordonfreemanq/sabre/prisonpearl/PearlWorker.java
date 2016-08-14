@@ -2,6 +2,7 @@ package com.gordonfreemanq.sabre.prisonpearl;
 
 import org.bukkit.Bukkit;
 
+import com.gordonfreemanq.sabre.SabreConfig;
 import com.gordonfreemanq.sabre.SabrePlugin;
 
 /**
@@ -11,6 +12,8 @@ import com.gordonfreemanq.sabre.SabrePlugin;
 public class PearlWorker implements Runnable {
 
 	private final SabrePlugin plugin;
+	private final PearlManager pearls;
+	private final SabreConfig config;
 	
 	private boolean enabled = false;
 	
@@ -20,8 +23,10 @@ public class PearlWorker implements Runnable {
 	/**
 	 * Creates a new FactoryWorker instance
 	 */
-	public PearlWorker(SabrePlugin plugin) {
+	public PearlWorker(SabrePlugin plugin, PearlManager pearls, SabreConfig config) {
 		this.plugin = plugin;
+		this.pearls = pearls;
+		this.config = config;
 	}
 	
 	
@@ -30,8 +35,8 @@ public class PearlWorker implements Runnable {
 	 */
 	public void start() {
 		enabled = true;
-		long tickInterval = plugin.config().getPearlWeakenInterval() * TICKS_PER_MINUTE;
-		Bukkit.getScheduler().scheduleSyncRepeatingTask(SabrePlugin.instance(), this, 0, tickInterval);
+		long tickInterval = config.getPearlWeakenInterval() * TICKS_PER_MINUTE;
+		Bukkit.getScheduler().scheduleSyncRepeatingTask(plugin, this, 0, tickInterval);
 	}
 	
 	
@@ -42,10 +47,9 @@ public class PearlWorker implements Runnable {
 			return;
 		}
 		
-		int weakenAmount = plugin.config().getPearlWeakenAmount();
-		int daysInactiveThreshold = plugin.config().getPearlDaysInactiveThreshold();
+		int weakenAmount = config.getPearlWeakenAmount();
+		int daysInactiveThreshold = config.getPearlDaysInactiveThreshold();
 		
-		PearlManager pearls = plugin.getPearlManager();
 		// Iterate through all the pearls and reduce the strength
 		// This will free any pearls that reach zero strength
 		for (PrisonPearl pp : pearls.getPearls()) {

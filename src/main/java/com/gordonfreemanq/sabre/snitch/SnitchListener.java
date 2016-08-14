@@ -25,14 +25,19 @@ import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 
 import com.gordonfreemanq.sabre.Lang;
+import com.gordonfreemanq.sabre.PlayerManager;
 import com.gordonfreemanq.sabre.SabrePlayer;
 import com.gordonfreemanq.sabre.SabrePlugin;
+import com.gordonfreemanq.sabre.blocks.BlockManager;
 import com.gordonfreemanq.sabre.blocks.Reinforcement;
 import com.gordonfreemanq.sabre.blocks.SabreBlock;
 
 public class SnitchListener implements Listener {
 
 	private final SabrePlugin plugin;
+	private final PlayerManager pm;
+	private final BlockManager bm;
+	
 	private final SnitchCollection snitches;
     private final TreeMap<String, Set<Snitch>> playersInSnitches;
 	
@@ -43,9 +48,12 @@ public class SnitchListener implements Listener {
      * @param bm The block manager
      * @param snitchLogger The snitch logger
      */
-	public SnitchListener(SabrePlugin plugin) {
+	public SnitchListener(SabrePlugin plugin,PlayerManager pm, BlockManager bm) {
 		this.plugin = plugin;
-		this.snitches = plugin.getBlockManager().getSnitches();
+		this.pm = pm;
+		this.bm = bm;		
+		
+		this.snitches = bm.getSnitches();
 		this.playersInSnitches = new TreeMap<String, Set<Snitch>>();
 	}
 	
@@ -57,7 +65,7 @@ public class SnitchListener implements Listener {
 	@EventHandler(priority = EventPriority.HIGHEST)
 	public void playerJoinEvent(PlayerJoinEvent e) {
 		
-		SabrePlayer sp = plugin.getPlayerManager().getPlayerById(e.getPlayer().getUniqueId());
+		SabrePlayer sp = pm.getPlayerById(e.getPlayer().getUniqueId());
 		Location l = sp.getPlayer().getLocation();
 		
 		// Ignore vanished players
@@ -98,7 +106,7 @@ public class SnitchListener implements Listener {
 	 * @param event
 	 */
 	public void handlePlayerExit(PlayerEvent e) {
-		SabrePlayer sp = plugin.getPlayerManager().getPlayerById(e.getPlayer().getUniqueId());
+		SabrePlayer sp = pm.getPlayerById(e.getPlayer().getUniqueId());
 		Location l = e.getPlayer().getLocation();
 		
 		// Ignore vanished players
@@ -174,7 +182,7 @@ public class SnitchListener implements Listener {
         }
         
         Player p = e.getPlayer();
-        SabrePlayer sp = plugin.getPlayerManager().getPlayerById(e.getPlayer().getUniqueId());
+        SabrePlayer sp = pm.getPlayerById(e.getPlayer().getUniqueId());
         Location l = p.getLocation();
         String playerName = sp.getName();
         
@@ -233,7 +241,7 @@ public class SnitchListener implements Listener {
      */
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onInventoryOpenEvent(InventoryOpenEvent e) {
-		SabrePlayer sp = plugin.getPlayerManager().getPlayerById(e.getPlayer().getUniqueId());
+		SabrePlayer sp = pm.getPlayerById(e.getPlayer().getUniqueId());
 		Location l = sp.getPlayer().getLocation();
 		
 		// Ignore vanished players
@@ -280,9 +288,9 @@ public class SnitchListener implements Listener {
         }
         
         // Need to get by name here since CombatTag entity doesn't keep UUID
-		SabrePlayer killed = plugin.getPlayerManager().getPlayerByName(e.getEntity().getName());
+		SabrePlayer killed = pm.getPlayerByName(e.getEntity().getName());
 		String killerName = e.getEntity().getKiller().getName();
-		SabrePlayer killer = plugin.getPlayerManager().getPlayerByName(killerName);
+		SabrePlayer killer = pm.getPlayerByName(killerName);
 
 		// Ignore vanished players
 		if (killer.getVanished()) {
@@ -311,7 +319,7 @@ public class SnitchListener implements Listener {
      */
     @EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
     public void playerBreakBlock(BlockBreakEvent e) {
-		SabrePlayer sp = plugin.getPlayerManager().getPlayerById(e.getPlayer().getUniqueId());
+		SabrePlayer sp = pm.getPlayerById(e.getPlayer().getUniqueId());
         Block block = e.getBlock();
 		Location l = e.getBlock().getLocation();
 		
@@ -342,7 +350,7 @@ public class SnitchListener implements Listener {
      */
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void playerPlaceBlock(BlockPlaceEvent e) {
-		SabrePlayer sp = plugin.getPlayerManager().getPlayerById(e.getPlayer().getUniqueId());
+		SabrePlayer sp = pm.getPlayerById(e.getPlayer().getUniqueId());
         Block block = e.getBlock();
 		Location l = e.getBlock().getLocation();
 		
@@ -373,7 +381,7 @@ public class SnitchListener implements Listener {
      */
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void playerFillBucket(PlayerBucketFillEvent e) {
-		SabrePlayer sp = plugin.getPlayerManager().getPlayerById(e.getPlayer().getUniqueId());
+		SabrePlayer sp = pm.getPlayerById(e.getPlayer().getUniqueId());
         Block block = e.getBlockClicked();
 		Location l = block.getLocation();
 		
@@ -404,7 +412,7 @@ public class SnitchListener implements Listener {
      */
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void playerEmptyBucket(PlayerBucketEmptyEvent e) {
-		SabrePlayer sp = plugin.getPlayerManager().getPlayerById(e.getPlayer().getUniqueId());
+		SabrePlayer sp = pm.getPlayerById(e.getPlayer().getUniqueId());
         Block block = e.getBlockClicked();
 		Location l = block.getLocation();
 		
@@ -435,7 +443,7 @@ public class SnitchListener implements Listener {
      */
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onSnitchPlace(BlockPlaceEvent e) {
-    	SabreBlock sb = plugin.getBlockManager().getBlockAt(e.getBlock().getLocation());
+    	SabreBlock sb = bm.getBlockAt(e.getBlock().getLocation());
     	if (sb == null) {
     		return;
     	}

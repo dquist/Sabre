@@ -10,15 +10,19 @@ import org.bukkit.block.Block;
 import org.bukkit.entity.Entity;
 import org.bukkit.inventory.ItemStack;
 
+import com.gordonfreemanq.sabre.PlayerManager;
 import com.gordonfreemanq.sabre.SabrePlayer;
 import com.gordonfreemanq.sabre.SabrePlugin;
+import com.gordonfreemanq.sabre.data.IDataAccess;
 
 public class SnitchLogger {
 	
-	private final SabrePlugin plugin;
+	private final PlayerManager pm;
+	private final IDataAccess db;
 	
-	public SnitchLogger(SabrePlugin plugin) {
-		this.plugin = plugin;
+	public SnitchLogger(PlayerManager pm, IDataAccess db) {
+		this.pm = pm;
+		this.db = db;
 	}
 
 	/**
@@ -85,7 +89,6 @@ public class SnitchLogger {
 	 */
 	public void logLogout(Snitch snitch, SabrePlayer player, Location loc) {
 		this.logInfo(snitch, player.getID(), SnitchAction.LOGOUT, new Date(), loc, null, null, null);
-		
 	}
 
     /**
@@ -97,7 +100,6 @@ public class SnitchLogger {
      */
     public void logBlockBreak(Snitch snitch, SabrePlayer player, Block block) {
 		this.logInfo(snitch, player.getID(), SnitchAction.BLOCK_BREAK, new Date(), block.getLocation(), block.getType(), null, null);
-    	
     }
 
     /**
@@ -159,7 +161,6 @@ public class SnitchLogger {
 	 * @param entity The entity
 	 */
 	public void logInfo(Snitch snitch, UUID player, SnitchAction action, Date date, Location loc, Material material, UUID victim, String entity) {
-		
 		SnitchLogEntry entry = new SnitchLogEntry(snitch.getID(), player, action, date);
 
 		entry.loc = loc;
@@ -167,7 +168,7 @@ public class SnitchLogger {
 		entry.victim = victim;
 		entry.entity = entity;
 		
-		plugin.getDataAccess().snitchMakeLog(entry);
+		db.snitchMakeLog(entry);
 	}
 	
 	
@@ -176,13 +177,12 @@ public class SnitchLogger {
 	 * @param snitch The snitch to clear
 	 */
 	public void clearEntries(Snitch snitch) {
-		plugin.getDataAccess().snitchClear(snitch);
+		db.snitchClear(snitch);
 	}
 	
 	
 	public void requestReport(SabrePlayer p, Snitch snitch, int page) {
-		ReportReqeust request = new ReportReqeust(plugin.getDataAccess(), plugin.getPlayerManager(), p, snitch, page);
+		ReportReqeust request = new ReportReqeust(db, pm, p, snitch, page);
 		Bukkit.getScheduler().runTaskAsynchronously(SabrePlugin.instance(), request);
 	}
-	
 }

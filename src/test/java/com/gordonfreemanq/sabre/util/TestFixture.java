@@ -30,6 +30,7 @@ import com.gordonfreemanq.sabre.blocks.CustomItems;
 import com.gordonfreemanq.sabre.blocks.SignHandler;
 import com.gordonfreemanq.sabre.chat.GlobalChat;
 import com.gordonfreemanq.sabre.chat.ServerBroadcast;
+import com.gordonfreemanq.sabre.data.IDataAccess;
 import com.gordonfreemanq.sabre.factory.FactoryConfig;
 import com.gordonfreemanq.sabre.factory.FactoryListener;
 import com.gordonfreemanq.sabre.factory.FactoryWorker;
@@ -270,69 +271,75 @@ public class TestFixture {
         
         // Need to inject mock instances of all the classes which take SabrePlugin as a dependency
         // Otherwise they will have a reference to the non-mocked version of the plugin
+        IDataAccess dataAccess =  Mockito.spy(new MockDataAccess());
         Field field = SabrePlugin.class.getDeclaredField("dataAccess");
         field.setAccessible(true);
-        field.set(plugin, Mockito.spy(new MockDataAccess()));
+        field.set(plugin, dataAccess);
         
+        SabreConfig config = Mockito.spy(new SabreConfig(plugin.getConfig()));
         field = SabrePlugin.class.getDeclaredField("config");
         field.setAccessible(true);
-        field.set(plugin, Mockito.spy(new SabreConfig(plugin.getConfig())));
+        field.set(plugin, config);
         
+        PlayerManager playerManager = Mockito.spy(new PlayerManager(dataAccess));
         field = SabrePlugin.class.getDeclaredField("playerManager");
         field.setAccessible(true);
-        field.set(plugin, Mockito.spy(new PlayerManager(plugin)));
+        field.set(plugin, playerManager);
         
+        GroupManager groupManager = Mockito.spy(new GroupManager(plugin, dataAccess));
         field = SabrePlugin.class.getDeclaredField("groupManager");
         field.setAccessible(true);
-        field.set(plugin, Mockito.spy(new GroupManager(plugin)));
+        field.set(plugin, groupManager);
         
+        BlockManager blockManager = Mockito.spy(new BlockManager(plugin, dataAccess));
         field = SabrePlugin.class.getDeclaredField("blockManager");
         field.setAccessible(true);
-        field.set(plugin, Mockito.spy(new BlockManager(plugin)));
+        field.set(plugin, blockManager);
         
+        PearlManager pearlManager = Mockito.spy(new PearlManager(plugin, dataAccess));
         field = SabrePlugin.class.getDeclaredField("pearlManager");
         field.setAccessible(true);
-        field.set(plugin, Mockito.spy(new PearlManager(plugin)));
+        field.set(plugin, pearlManager);
         
         field = SabrePlugin.class.getDeclaredField("playerListener");
         field.setAccessible(true);
-        field.set(plugin, Mockito.spy(new PlayerListener(plugin)));
+        field.set(plugin, Mockito.spy(new PlayerListener(plugin, playerManager)));
         
         field = SabrePlugin.class.getDeclaredField("blockListener");
         field.setAccessible(true);
-        field.set(plugin, Mockito.spy(new BlockListener(plugin)));
+        field.set(plugin, Mockito.spy(new BlockListener(plugin, playerManager, blockManager, config)));
         
         field = SabrePlugin.class.getDeclaredField("snitchLogger");
         field.setAccessible(true);
-        field.set(plugin, Mockito.spy(new SnitchLogger(plugin)));
+        field.set(plugin, Mockito.spy(new SnitchLogger(playerManager, dataAccess)));
         
         field = SabrePlugin.class.getDeclaredField("snitchListener");
         field.setAccessible(true);
-        field.set(plugin, Mockito.spy(new SnitchListener(plugin)));
+        field.set(plugin, Mockito.spy(new SnitchListener(plugin, playerManager, blockManager)));
         
         field = SabrePlugin.class.getDeclaredField("pearlListener");
         field.setAccessible(true);
-        field.set(plugin, Mockito.spy(new PearlListener(plugin)));
+        field.set(plugin, Mockito.spy(new PearlListener(plugin, playerManager, pearlManager)));
         
         field = SabrePlugin.class.getDeclaredField("playerSpawner");
         field.setAccessible(true);
-        field.set(plugin, Mockito.spy(new PlayerSpawner(plugin)));
+        field.set(plugin, Mockito.spy(new PlayerSpawner(playerManager, blockManager, config)));
         
         field = SabrePlugin.class.getDeclaredField("globalChat");
         field.setAccessible(true);
-        field.set(plugin, Mockito.spy(new GlobalChat(plugin)));
+        field.set(plugin, Mockito.spy(new GlobalChat(plugin, config)));
         
         field = SabrePlugin.class.getDeclaredField("serverBcast");
         field.setAccessible(true);
-        field.set(plugin, Mockito.spy(new ServerBroadcast(plugin)));
+        field.set(plugin, Mockito.spy(new ServerBroadcast(playerManager)));
         
         field = SabrePlugin.class.getDeclaredField("sabreTweaks");
         field.setAccessible(true);
-        field.set(plugin, Mockito.spy(new SabreTweaks(plugin)));
+        field.set(plugin, Mockito.spy(new SabreTweaks(plugin, config)));
         
         field = SabrePlugin.class.getDeclaredField("factoryListener");
         field.setAccessible(true);
-        field.set(plugin, Mockito.spy(new FactoryListener(plugin)));
+        field.set(plugin, Mockito.spy(new FactoryListener(playerManager, blockManager)));
         
         field = SabrePlugin.class.getDeclaredField("factoryConfig");
         field.setAccessible(true);
@@ -348,7 +355,7 @@ public class TestFixture {
         
         field = SabrePlugin.class.getDeclaredField("statsTracker");
         field.setAccessible(true);
-        field.set(plugin, Mockito.spy(new StatsTracker(plugin)));
+        field.set(plugin, Mockito.spy(new StatsTracker(plugin, playerManager)));
         
         field = SabrePlugin.class.getDeclaredField("signHandler");
         field.setAccessible(true);
@@ -360,7 +367,7 @@ public class TestFixture {
         
         field = SabrePlugin.class.getDeclaredField("pearlWorker");
         field.setAccessible(true);
-        field.set(plugin, Mockito.spy(new PearlWorker(plugin)));
+        field.set(plugin, Mockito.spy(new PearlWorker(plugin, pearlManager, config)));
         
         field = SabrePlugin.class.getDeclaredField("vanishApi");
         field.setAccessible(true);

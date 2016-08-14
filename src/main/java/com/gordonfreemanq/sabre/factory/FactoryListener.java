@@ -14,17 +14,20 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.material.Attachable;
 
 import com.gordonfreemanq.sabre.Lang;
+import com.gordonfreemanq.sabre.PlayerManager;
 import com.gordonfreemanq.sabre.SabrePlayer;
-import com.gordonfreemanq.sabre.SabrePlugin;
 import com.gordonfreemanq.sabre.blocks.AbstractController;
+import com.gordonfreemanq.sabre.blocks.BlockManager;
 import com.gordonfreemanq.sabre.blocks.SabreBlock;
 
 public class FactoryListener implements Listener {
 
-	private final SabrePlugin plugin;
+	private final PlayerManager pm;
+	private final BlockManager bm;
 	
-	public FactoryListener(SabrePlugin plugin) {
-		this.plugin = plugin;
+	public FactoryListener(PlayerManager pm, BlockManager bm) {
+		this.pm = pm;
+		this.bm = bm;
 	}
 	
 
@@ -46,7 +49,7 @@ public class FactoryListener implements Listener {
 		}
 		
 		// Player has clicked a block with a stick, now check if it is a factory block
-		SabreBlock sb = plugin.getBlockManager().getBlockAt(e.getClickedBlock().getLocation());
+		SabreBlock sb = bm.getBlockAt(e.getClickedBlock().getLocation());
 		if (sb == null || !(sb instanceof BaseFactory)) {
 			// No factory block here
 			return;
@@ -82,7 +85,7 @@ public class FactoryListener implements Listener {
 			return;
 		}
 		
-		SabrePlayer p = plugin.getPlayerManager().getPlayerById(e.getPlayer().getUniqueId());
+		SabrePlayer p = pm.getPlayerById(e.getPlayer().getUniqueId());
 
 		// Try to parse a location
 		Location l = FactoryController.parseLocation(p, false);
@@ -92,7 +95,7 @@ public class FactoryListener implements Listener {
 			return;
 		}
 		
-		BaseFactory factory = (BaseFactory)plugin.getBlockManager().getFactories().get(l);
+		BaseFactory factory = (BaseFactory)bm.getFactories().get(l);
 		
 		if (factory == null) {
 			p.msg(Lang.factoryNotFound);
@@ -144,7 +147,7 @@ public class FactoryListener implements Listener {
 		
 		p.msg("<g>Factory configuration complete.");
 		factory.setConfigureMode(false);
-		plugin.getBlockManager().updateSettings(factory);
+		bm.updateSettings(factory);
 	}
 
 	
@@ -182,7 +185,7 @@ public class FactoryListener implements Listener {
 			//Is the block part of a factory?
 			if(block.getType() == Material.FURNACE || block.getType() == Material.BURNING_FURNACE)
 			{
-				BaseFactory factory = (BaseFactory)plugin.getBlockManager().getFactories().get(block.getLocation());
+				BaseFactory factory = (BaseFactory)bm.getFactories().get(block.getLocation());
 				
 				if (factory == null) {
 					return;

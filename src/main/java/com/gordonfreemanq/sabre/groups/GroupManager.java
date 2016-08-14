@@ -18,10 +18,13 @@ import com.gordonfreemanq.sabre.blocks.Reinforcement;
 import com.gordonfreemanq.sabre.blocks.SabreBlock;
 import com.gordonfreemanq.sabre.blocks.SignCollection;
 import com.gordonfreemanq.sabre.customitems.SecureSign;
+import com.gordonfreemanq.sabre.data.IDataAccess;
 
 public class GroupManager {
 
 	private final SabrePlugin plugin;
+	private final IDataAccess db;
+	
 	private final HashMap<UUID, SabreGroup> groups;
 	
 	/**
@@ -29,8 +32,10 @@ public class GroupManager {
 	 * @param pm The player manager
 	 * @param db The database
 	 */
-	public GroupManager(SabrePlugin plugin) {
+	public GroupManager(SabrePlugin plugin, IDataAccess db) {
 		this.plugin = plugin;
+		this.db = db;
+		
 		this.groups = new HashMap<UUID, SabreGroup>();
 	}
 	
@@ -40,7 +45,7 @@ public class GroupManager {
 	public void load() {
 		this.groups.clear();
 		
-		for (SabreGroup g : plugin.getDataAccess().groupGetAll()) {
+		for (SabreGroup g : db.groupGetAll()) {
 			this.groups.put(g.getID(), g);
 		}
 	}
@@ -88,7 +93,7 @@ public class GroupManager {
 			throw new RuntimeException(String.format("Tried to add faction '%s' that already exists.", g.getName()));
 		}
 		
-		plugin.getDataAccess().groupInsert(g);
+		db.groupInsert(g);
 		groups.put(g.getID(), g);
 		SabrePlugin.log(Level.INFO, "Added new group '%s'", name);
 	}
@@ -143,7 +148,7 @@ public class GroupManager {
 	 */
 	public void removeGroup(SabreGroup g) {
 		this.groups.remove(g);
-		this.plugin.getDataAccess().groupDelete(g);
+		this.db.groupDelete(g);
 	}
 	
 	
@@ -155,7 +160,7 @@ public class GroupManager {
 	public void renameGroup(SabreGroup g, String n) {
 		this.groups.remove(g);
 		g.setName(n);
-		plugin.getDataAccess().groupUpdateName(g, n);
+		db.groupUpdateName(g, n);
 	}
 	
 	
@@ -205,7 +210,7 @@ public class GroupManager {
 		}
 
 		m = g.addMember(p, Rank.MEMBER);
-		plugin.getDataAccess().groupAddMember(g, m);
+		db.groupAddMember(g, m);
 
 		if (g instanceof SabreFaction) {
 			plugin.getPlayerManager().setFaction(p, (SabreFaction)g);
@@ -231,7 +236,7 @@ public class GroupManager {
 		}
 		
 		m = g.removePlayer(p);
-		plugin.getDataAccess().groupRemoveMember(g,  m);
+		db.groupRemoveMember(g,  m);
 		
 		if (g instanceof SabreFaction) {
 			plugin.getPlayerManager().setFaction(p, null);
@@ -253,7 +258,7 @@ public class GroupManager {
 	public void invitePlayer(SabreGroup g, SabrePlayer p) {
 		if (!g.isMember(p) && !g.isInvited(p)) {
 			g.addInvited(p);
-			plugin.getDataAccess().groupAddInvited(g, p.getID());
+			db.groupAddInvited(g, p.getID());
 		}
 	}
 	
@@ -266,7 +271,7 @@ public class GroupManager {
 	public void uninvitePlayer(SabreGroup g, SabrePlayer p) {
 		if (g.isInvited(p)) {
 			g.removeInvited(p);
-			plugin.getDataAccess().groupRemoveInvited(g, p.getID());
+			db.groupRemoveInvited(g, p.getID());
 		}
 	}
 	
@@ -278,7 +283,7 @@ public class GroupManager {
 	 */
 	public void setPlayerRank(SabreMember m, Rank r) {
 		m.setRank(r);
-		plugin.getDataAccess().groupUpdateMemberRank(m.getGroup(), m);
+		db.groupUpdateMemberRank(m.getGroup(), m);
 	}
 	
 	
