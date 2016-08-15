@@ -12,6 +12,7 @@ import org.bukkit.entity.Player;
 
 import com.civfactions.sabre.data.IDataAccess;
 import com.civfactions.sabre.groups.SabreFaction;
+import com.civfactions.sabre.util.Guard;
 
 /**
  * Class for managing all the player records
@@ -30,6 +31,9 @@ public class PlayerManager {
 	 * Creates a new PlayerManager instance 
 	 */
 	public PlayerManager(SabrePlugin plugin, IDataAccess db) {
+		Guard.ArgumentNotNull(plugin, "plugin");
+		Guard.ArgumentNotNull(db, "db");
+		
 		this.plugin = plugin;
 		this.db = db;
 		
@@ -51,24 +55,16 @@ public class PlayerManager {
 	
 	
 	/**
-	 * Adds a new player to the player manager
-	 * @param player The new player to add
-	 */
-	public void addPlayer(SabrePlayer player) {
-		this.players.put(player.getID(), player);
-		db.playerInsert(player);
-	}
-	
-	
-	/**
 	 * Removes a player from all records
-	 * @param p
+	 * @param player
 	 */
-	public void removePlayer(SabrePlayer p) {
-		onlinePlayers.remove(p.getID());
-		players.remove(p.getID());
-		db.playerDelete(p);
-		SabrePlugin.log(Level.INFO, "Removed player: Name=%s, ID=%s", p.getName(), p.getID().toString());
+	public void removePlayer(SabrePlayer player) {
+		Guard.ArgumentNotNull(player, "player");
+		
+		onlinePlayers.remove(player.getID());
+		players.remove(player.getID());
+		db.playerDelete(player);
+		SabrePlugin.log(Level.INFO, "Removed player: Name=%s, ID=%s", player.getName(), player.getID().toString());
 	}
 	
 	
@@ -77,11 +73,13 @@ public class PlayerManager {
 	 * @param id The ID of the player
 	 * @return The player instance if it exists
 	 */
-	public SabrePlayer getPlayerById(UUID id) {
+	public SabrePlayer getPlayerById(UUID uid) {
+		Guard.ArgumentNotNull(uid, "uid");
+		
 		// Check online players first
-		SabrePlayer p = onlinePlayers.get(id);
+		SabrePlayer p = onlinePlayers.get(uid);
 		if (p == null) {
-			p = players.get(id);
+			p = players.get(uid);
 		}
 		return p;
 	}
@@ -93,6 +91,8 @@ public class PlayerManager {
 	 * @return The player instance if it exists
 	 */
 	public SabrePlayer getPlayerByName(String name) {
+		Guard.ArgumentNotNullOrEmpty(name, "name");
+		
 		// Check online players first
 		for (SabrePlayer p : onlinePlayers.values()) {
 			if (p.getName().equalsIgnoreCase(name)) {
@@ -113,12 +113,13 @@ public class PlayerManager {
 	
 	/**
 	 * Creates a new player instance
-	 * @param p The bukkit player
+	 * @param player The bukkit player
 	 * @return The new SabrePlayer instance
 	 */
-	public SabrePlayer createNewPlayer(Player p) {
+	public SabrePlayer createNewPlayer(Player player) {
+		Guard.ArgumentNotNull(player, "player");
 		
-		String originalName = p.getName();
+		String originalName = player.getName();
 		String name = originalName;
 		SabrePlayer sp = getPlayerByName(originalName);
 		
@@ -131,11 +132,12 @@ public class PlayerManager {
 		}
 		
 		// Now we should have a unique name for the new player
-		sp = new SabrePlayer(plugin, p.getUniqueId(), name);
-		sp.setPlayer(p);
+		sp = new SabrePlayer(plugin, player.getUniqueId(), name);
+		sp.setPlayer(player);
 		sp.setFirstLogin(new Date());
 		sp.setName(name);
-		this.addPlayer(sp);
+		players.put(sp.getID(), sp);
+		db.playerInsert(sp);
 		SabrePlugin.log(Level.INFO, "Created new player %s with ID %s", name, sp.getID());
 		return sp;
 	}
@@ -143,19 +145,23 @@ public class PlayerManager {
 	
 	/**
 	 * Handles a player connecting
-	 * @param p The player instance
+	 * @param player The player instance
 	 */
-	public void onPlayerConnect(SabrePlayer p) {
-		this.onlinePlayers.put(p.getID(), p);
+	public void onPlayerConnect(SabrePlayer player) {
+		Guard.ArgumentNotNull(player, "player");
+		
+		this.onlinePlayers.put(player.getID(), player);
 	}
 	
 	
 	/**
 	 * Handles a player disconnecting
-	 * @param p The player instance
+	 * @param player The player instance
 	 */
-	public void onPlayerDisconnect(SabrePlayer p) {
-		this.onlinePlayers.remove(p.getID());
+	public void onPlayerDisconnect(SabrePlayer player) {
+		Guard.ArgumentNotNull(player, "player");
+		
+		this.onlinePlayers.remove(player.getID());
 	}
 	
 	
@@ -179,122 +185,149 @@ public class PlayerManager {
 	
 	/**
 	 * Sets the last login time
-	 * @param p The player to update
+	 * @param player The player to update
 	 * @param lastLogin The first login time
 	 */
-	public void setLastLogin(SabrePlayer p, Date lastLogin) {
-		p.setLastLogin(lastLogin);
-		db.playerUpdateLastLogin(p);
+	public void setLastLogin(SabrePlayer player, Date lastLogin) {
+		Guard.ArgumentNotNull(player, "player");
+		Guard.ArgumentNotNull(lastLogin, "lastLogin");
+		
+		
+		player.setLastLogin(lastLogin);
+		db.playerUpdateLastLogin(player);
 	}
 	
 	
 	/**
 	 * Sets the auto-join status
-	 * @param p The player to update
+	 * @param player The player to update
 	 * @param autoJoin The new status
 	 */
-	public void setAutoJoin(SabrePlayer p, boolean autoJoin) {
-		p.setAutoJoin(autoJoin);
-		db.playerUpdateAutoJoin(p);
+	public void setAutoJoin(SabrePlayer player, boolean autoJoin) {
+		Guard.ArgumentNotNull(player, "player");
+		
+		player.setAutoJoin(autoJoin);
+		db.playerUpdateAutoJoin(player);
 	}
 	
 	
 	/**
 	 * Sets the player's faction
-	 * @param p The player to update
+	 * @param player The player to update
 	 * @param faction The new faction
 	 */
-	public void setFaction(SabrePlayer p, SabreFaction faction) {
-		p.setFaction(faction);
-		db.playerUpdateFaction(p);
+	public void setFaction(SabrePlayer player, SabreFaction faction) {
+		Guard.ArgumentNotNull(player, "player");
+		Guard.ArgumentNotNull(faction, "faction");
+		
+		
+		player.setFaction(faction);
+		db.playerUpdateFaction(player);
 	}
 	
 	
 	/**
 	 * Sets the player's display name
-	 * @param p The player to update
+	 * @param player The player to update
 	 * @param name The new player name
 	 */
-	public void setDisplayName(SabrePlayer p, String name) {
-		p.setName(name);
-		db.playerUpdateName(p);
+	public void setDisplayName(SabrePlayer player, String name) {
+		Guard.ArgumentNotNull(player, "player");
+		Guard.ArgumentNotNullOrEmpty(name, "name");
+		
+		
+		player.setName(name);
+		db.playerUpdateName(player);
 	}
 	
 	
 	/**
 	 * Sets the player's ban status
-	 * @param p The player to update
+	 * @param player The player to update
 	 * @param banned The player's ban status
 	 * @param reason The ban reason
 	 */
-	public void setBanStatus(SabrePlayer p, boolean banned, String reason) {
-		p.setBanned(banned);
-		p.setBanMessage(reason);
+	public void setBanStatus(SabrePlayer player, boolean banned, String reason) {
+		Guard.ArgumentNotNull(player, "player");
 		
-		if (banned && p.isOnline()) {
+		player.setBanned(banned);
+		player.setBanMessage(reason);
+		
+		if (banned && player.isOnline()) {
 			String fullBanMessage = String.format("%s\n%s", Lang.youAreBanned, reason);
-			p.getPlayer().kickPlayer(fullBanMessage);
+			player.getPlayer().kickPlayer(fullBanMessage);
 		}
 		
-		db.playerUpdateBan(p);
+		db.playerUpdateBan(player);
 	}
 	
 	
 	/**
 	 * Updates the freed offline status
-	 * @param p The player to update
+	 * @param player The player to update
 	 * @param status The freed offline status
 	 */
-	public void setFreedOffline(SabrePlayer p, boolean status) {
-		p.setFreedOffline(status);
-		db.playerUpdateFreedOffline(p);
+	public void setFreedOffline(SabrePlayer player, boolean status) {
+		Guard.ArgumentNotNull(player, "player");
+		
+		player.setFreedOffline(status);
+		db.playerUpdateFreedOffline(player);
 	}
 	
 	/**
 	 * Updates the bed location
-	 * @param p The player to update
+	 * @param player The player to update
 	 * @param status The freed offline status
 	 */
-	public void setBedLocation(SabrePlayer p, Location l) {
-		p.setBedLocation(l);
-		db.playerUpdateBed(p);
+	public void setBedLocation(SabrePlayer player, Location l) {
+		Guard.ArgumentNotNull(player, "player");
+		
+		player.setBedLocation(l);
+		db.playerUpdateBed(player);
 	}
 	
 	
 	/**
 	 * Adds an offline message for the player
-	 * @param p The player to update
+	 * @param player The player to update
 	 * @param message The message to add
 	 */
-	public void addOfflineMessage(SabrePlayer p, String message) {
-		p.addOfflineMessage(message);
-		db.playerAddOfflineMessage(p, message);
+	public void addOfflineMessage(SabrePlayer player, String message) {
+		Guard.ArgumentNotNull(player, "player");
+		Guard.ArgumentNotNullOrEmpty(message, "message");
+		
+		player.addOfflineMessage(message);
+		db.playerAddOfflineMessage(player, message);
 	}
 	
 	
 	/**
 	 * Clears the offline messages for a player
-	 * @param p The player to update
+	 * @param player The player to update
 	 */
-	public void clearOfflineMessages(SabrePlayer p) {
-		p.getOfflineMessages().clear();
-		db.playerClearOfflineMessages(p);
+	public void clearOfflineMessages(SabrePlayer player) {
+		Guard.ArgumentNotNull(player, "player");
+		
+		player.getOfflineMessages().clear();
+		db.playerClearOfflineMessages(player);
 	}
 	
 	
 	/**
 	 * Print offline messages
-	 * @param p The player to message
+	 * @param player The player to message
 	 */
-	public void printOfflineMessages(SabrePlayer p) {
-		if (p.isOnline()) {
+	public void printOfflineMessages(SabrePlayer player) {
+		Guard.ArgumentNotNull(player, "player");
+		
+		if (player.isOnline()) {
 			
 			// Print the offline messages for the player if there are any
-			List<String> messages = p.getOfflineMessages();
+			List<String> messages = player.getOfflineMessages();
 			if (messages.size() > 0) {
-				p.msg(Lang.chatOfflineActivity);
-				for (String msg : p.getOfflineMessages()) {
-					p.msg(msg);
+				player.msg(Lang.chatOfflineActivity);
+				for (String msg : player.getOfflineMessages()) {
+					player.msg(msg);
 				}
 			}
 		}
@@ -303,11 +336,13 @@ public class PlayerManager {
 	
 	/**
 	 * Adds playtime to the player
-	 * @param p The player to update
+	 * @param player The player to update
 	 * @param time The time to add
 	 */
-	public void addPlayTime(SabrePlayer p, long time) {
-		p.addPlayTime(time);
-		db.playerUpdatePlayTime(p);
+	public void addPlayTime(SabrePlayer player, long time) {
+		Guard.ArgumentNotNull(player, "player");
+		
+		player.addPlayTime(time);
+		db.playerUpdatePlayTime(player);
 	}
 }
