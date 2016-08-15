@@ -1,6 +1,6 @@
 name: Pumpkin Farm 2
 material: FURNACE
-class: com.gordonfreemanq.sabre.factory.farm.FarmFactory
+class: com.civfactions.sabre.factory.farm.FarmFactory
 amount: 1
 lore:
   - '<c>A slightly more advanced pumpkin farm.'

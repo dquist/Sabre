@@ -1,6 +1,6 @@
 name: Secure Sign
 material: SIGN
-class: com.gordonfreemanq.sabre.customitems.SecureSign
+class: com.civfactions.sabre.customitems.SecureSign
 amount: 1
 lore:
   - '<c>When reinforced to a group, the text on this sign will only be visible'

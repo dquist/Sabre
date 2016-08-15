@@ -1,5 +1,5 @@
 name: Sabre
-main: com.gordonfreemanq.sabre.SabrePlugin
+main: com.civfactions.sabre.SabrePlugin
 version: 0.1.12
 description: Sabre plugin
 author: GFQ

@@ -1,6 +1,6 @@
 name: Emerald Cauldron 4
 material: FURNACE
-class: com.gordonfreemanq.sabre.factory.BaseFactory
+class: com.civfactions.sabre.factory.BaseFactory
 amount: 1
 lore:
   - '<c>A very advanced emerald cauldron.'

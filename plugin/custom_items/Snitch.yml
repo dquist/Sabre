@@ -1,6 +1,6 @@
 name: Snitch
 material: JUKEBOX
-class: com.gordonfreemanq.sabre.snitch.Snitch
+class: com.civfactions.sabre.snitch.Snitch
 amount: 1
 lore:
   - '<c>Records player entries and block breaks within an 11m radius.'

@@ -2,6 +2,6 @@ name: Direct Warp Drive
 material: STAINED_GLASS
 durability: 15
 amount: 1
-class: com.gordonfreemanq.sabre.warp.DirectWarpDrive
+class: com.civfactions.sabre.warp.DirectWarpDrive
 lore:
   - '<c>A point-to-point teleportation engine.'

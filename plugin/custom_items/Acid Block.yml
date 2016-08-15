@@ -1,6 +1,6 @@
 name: Acid Block
 material: GOLD_BLOCK
-class: com.gordonfreemanq.sabre.customitems.AcidBlock
+class: com.civfactions.sabre.customitems.AcidBlock
 amount: 1
 lore:
   - '<c>This block can be used to remove other reinforced blocks.'
