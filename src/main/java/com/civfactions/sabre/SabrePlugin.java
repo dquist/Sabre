@@ -3,6 +3,7 @@ package com.civfactions.sabre;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 import java.util.logging.Level;
 
@@ -52,7 +53,7 @@ public class SabrePlugin extends JavaPlugin
 
 	private final SabreConfig config = new SabreConfig(this.getConfig());
 	private final IDataAccess dataAccess = new MongoConnector(this);
-	private final PlayerManager playerManager = new PlayerManager(dataAccess);
+	private final PlayerManager playerManager = new PlayerManager(this, dataAccess);
 	private final BlockManager blockManager = new BlockManager(this, dataAccess);
 	private final GroupManager groupManager = new GroupManager(playerManager, blockManager, dataAccess);
 	private final PearlManager pearlManager = new PearlManager(this, dataAccess);
@@ -399,13 +400,20 @@ public class SabrePlugin extends JavaPlugin
 		return this.statsTracker;
 	}
 	
-	
 	/**
 	 * Gets the text utility
 	 * @return The text utility
 	 */
 	public TextUtil txt() {
 		return this.txt;
+	}
+	
+	/**
+	 * Gets the current time
+	 * @return The current time
+	 */
+	public Date now() {
+		return new Date();
 	}
 
 	

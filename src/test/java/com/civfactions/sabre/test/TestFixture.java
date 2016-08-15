@@ -289,7 +289,7 @@ public class TestFixture {
         field.setAccessible(true);
         field.set(plugin, config);
         
-        PlayerManager playerManager = Mockito.spy(new PlayerManager(dataAccess));
+        PlayerManager playerManager = Mockito.spy(new PlayerManager(plugin, dataAccess));
         field = SabrePlugin.class.getDeclaredField("playerManager");
         field.setAccessible(true);
         field.set(plugin, playerManager);

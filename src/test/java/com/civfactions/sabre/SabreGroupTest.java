@@ -130,7 +130,7 @@ public class SabreGroupTest {
 			assertEquals(groupMembers.get(member.getPlayer()), member.getRank());
 		}
 		
-		SabrePlayer testPlayer = new SabrePlayer(UUID.randomUUID(), "TestPlayer");
+		SabrePlayer testPlayer = new SabrePlayer(plugin, UUID.randomUUID(), "TestPlayer");
 		assertFalse(group.isMember(testPlayer));
 		assertFalse(group.isInvited(testPlayer));
 		

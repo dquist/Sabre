@@ -169,7 +169,7 @@ public class MongoConnector implements IDataAccess {
 					UUID id = UUID.fromString(o.get("_id").toString());
 					String name = o.get("name").toString();
 
-					p = new SabrePlayer(id, name);
+					p = new SabrePlayer(plugin, id, name);
 
 					Date firstLogin = o.getDate("first_login");
 					Date lastLogin = o.getDate("last_login");

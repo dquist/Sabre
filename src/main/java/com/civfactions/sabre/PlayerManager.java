@@ -19,6 +19,7 @@ import com.civfactions.sabre.groups.SabreFaction;
  */
 public class PlayerManager {
 	
+	private final SabrePlugin plugin;
 	private final IDataAccess db;
 	
 	private final HashMap<UUID, SabrePlayer> players;
@@ -28,7 +29,8 @@ public class PlayerManager {
 	/**
 	 * Creates a new PlayerManager instance 
 	 */
-	public PlayerManager(IDataAccess db) {
+	public PlayerManager(SabrePlugin plugin, IDataAccess db) {
+		this.plugin = plugin;
 		this.db = db;
 		
 		this.players = new HashMap<UUID, SabrePlayer>();
@@ -129,7 +131,7 @@ public class PlayerManager {
 		}
 		
 		// Now we should have a unique name for the new player
-		sp = new SabrePlayer(p.getUniqueId(), name);
+		sp = new SabrePlayer(plugin, p.getUniqueId(), name);
 		sp.setPlayer(p);
 		sp.setFirstLogin(new Date());
 		sp.setName(name);
