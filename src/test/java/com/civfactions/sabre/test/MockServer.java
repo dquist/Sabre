@@ -30,7 +30,7 @@ public abstract class MockServer implements Server {
 		MockServer server = mock(MockServer.class, Mockito.CALLS_REAL_METHODS);
 		server.fixture = fixture;
 		server.mockItemFactory = mock(ItemFactory.class);
-		server.mockScheduler = MockScheduler.create();
+		server.mockScheduler = fixture.getMockScheduler();
         when(server.mockItemFactory.getItemMeta(any())).thenReturn(PowerMockito.mock(ItemMeta.class));
         Logger.getLogger("Minecraft").setParent(TestFixture.logger);
 		return server;

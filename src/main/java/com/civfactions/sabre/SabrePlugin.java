@@ -392,6 +392,15 @@ public class SabrePlugin extends JavaPlugin
 	}
 	
 	/**
+	 * Gets the stats tracker
+	 * @return The stats tracker
+	 */
+	public StatsTracker getStatsTracker() {
+		return this.statsTracker;
+	}
+	
+	
+	/**
 	 * Gets the text utility
 	 * @return The text utility
 	 */

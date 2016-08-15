@@ -36,3 +36,4 @@ logo
 stats
 uninvites
 perms
+stats

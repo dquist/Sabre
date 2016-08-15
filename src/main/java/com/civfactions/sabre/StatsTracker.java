@@ -1,15 +1,16 @@
 package com.civfactions.sabre;
 
-import org.bukkit.Bukkit;
-
 /**
  * Runnable class that tracks player stats
  */
 public class StatsTracker implements Runnable {
 	
+	public static int RUN_PERIOD_TICKS = 200;
+	
 	private final SabrePlugin plugin;
 	private final PlayerManager pm;
 	
+	private int taskId;
 	private long lastUpdate;
 	private boolean enabled;
 	
@@ -30,9 +31,11 @@ public class StatsTracker implements Runnable {
 	 * Starts the tracker
 	 */
 	public void start() {
-		enabled = true;
-		lastUpdate = System.currentTimeMillis();
-		Bukkit.getScheduler().scheduleSyncRepeatingTask(plugin, this, 0, 200);
+		if (!enabled) {
+			lastUpdate = System.currentTimeMillis();
+			taskId = plugin.getServer().getScheduler().scheduleSyncRepeatingTask(plugin, this, 0, 200);
+			enabled = true;
+		}
 	}
 	
 	
@@ -40,8 +43,20 @@ public class StatsTracker implements Runnable {
 	 * Stops the tracker
 	 */
 	public void stop() {
-		enabled = false;
+		if (enabled) {
+			plugin.getServer().getScheduler().cancelTask(taskId);
+			enabled = false;
+		}
 	}
+	
+	/**
+	 * Gets whether the service is enabled
+	 * @return true if it's enabled
+	 */
+	public boolean isEnabled() {
+		return this.enabled;
+	}
+	
 
 	@Override
 	public void run() {
@@ -53,7 +68,7 @@ public class StatsTracker implements Runnable {
 		long timeToAdd = System.currentTimeMillis() - lastUpdate;
 		
 		for (SabrePlayer p : pm.getOnlinePlayers()) {
-			pm.addPlayTime(p,  timeToAdd);
+			pm.addPlayTime(p, timeToAdd);
 		}
 		
 		lastUpdate = System.currentTimeMillis();

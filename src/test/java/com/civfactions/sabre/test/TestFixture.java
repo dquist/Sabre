@@ -71,6 +71,7 @@ public class TestFixture {
     private CommandSender commandSender;
     private ArrayList<MockWorld> worlds;
     private MockPluginManager mockPluginManager;
+    private MockScheduler mockScheduler;
 
     public static final File pluginDirectory = new File("bin/test/server/plugins/Sabre");
     public static final File serverDirectory = new File("bin/test/server");
@@ -95,6 +96,7 @@ public class TestFixture {
             MockGateway.MOCK_STANDARD_METHODS = false;
 
             // Create main mock objects
+            mockScheduler = MockScheduler.create();
             mockServer = MockServer.create(this);
             mockPluginManager = MockPluginManager.create(this);
             sabrePlugin = createPlugin();
@@ -192,8 +194,20 @@ public class TestFixture {
     	return this.mockPluginManager;
     }
 
+    /**
+     * Gets the mock command sender
+     * @return The mock command sender
+     */
     public CommandSender getCommandSender() {
         return commandSender;
+    }
+
+    /**
+     * Gets the mock scheduler
+     * @return The mock scheduler
+     */
+    public MockScheduler getMockScheduler() {
+        return mockScheduler;
     }
     
     public ArrayList<MockWorld> getWorlds() {
@@ -217,6 +231,7 @@ public class TestFixture {
     	}
     	return null;
     }
+    
     
     
     /**
