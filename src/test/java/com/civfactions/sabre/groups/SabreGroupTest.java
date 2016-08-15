@@ -1,4 +1,4 @@
-package com.civfactions.sabre;
+package com.civfactions.sabre.groups;
 import org.apache.commons.lang.NullArgumentException;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.PluginDescriptionFile;
@@ -18,6 +18,7 @@ import com.civfactions.sabre.PlayerListener;
 import com.civfactions.sabre.PlayerManager;
 import com.civfactions.sabre.SabrePlayer;
 import com.civfactions.sabre.SabrePlugin;
+import com.civfactions.sabre.SabrePluginTest;
 import com.civfactions.sabre.groups.GroupManager;
 import com.civfactions.sabre.groups.Rank;
 import com.civfactions.sabre.groups.SabreGroup;
@@ -419,13 +420,6 @@ public class SabreGroupTest {
 
 		e = null;
 		try { group.isSnitchMutedBy(null); } catch (Throwable ex) { e = ex; }
-		assertTrue(e instanceof NullArgumentException);
-	}
-	
-	@Test
-	public void testRankExceptions() {		
-		Throwable e = null;
-		try { Rank.fromString(null); } catch (Throwable ex) { e = ex; }
 		assertTrue(e instanceof NullArgumentException);
 	}
 	
