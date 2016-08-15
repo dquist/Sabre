@@ -352,10 +352,6 @@ public class TestFixture {
         field.setAccessible(true);
         field.set(plugin, Mockito.spy(new VanishApi()));
         
-        field = SabrePlugin.class.getDeclaredField("perms");
-        field.setAccessible(true);
-        field.set(plugin, Mockito.spy(new PermUtil(plugin)));
-        
         field = SabrePlugin.class.getDeclaredField("logger");
         field.setAccessible(true);
         field.set(plugin, Mockito.spy(new SabreLogger(plugin)));

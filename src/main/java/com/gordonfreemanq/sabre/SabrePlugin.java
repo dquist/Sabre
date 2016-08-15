@@ -38,7 +38,6 @@ import com.gordonfreemanq.sabre.snitch.SnitchListener;
 import com.gordonfreemanq.sabre.snitch.SnitchLogger;
 import com.gordonfreemanq.sabre.util.CombatInterface;
 import com.gordonfreemanq.sabre.util.CombatTagPlusManager;
-import com.gordonfreemanq.sabre.util.PermUtil;
 import com.gordonfreemanq.sabre.util.PlayerSpawner;
 import com.gordonfreemanq.sabre.util.TextUtil;
 import com.gordonfreemanq.sabre.util.VanishApi;
@@ -77,7 +76,6 @@ public class SabrePlugin extends JavaPlugin
 	private final VanishApi vanishApi = new VanishApi();
 	private final CommandList commandList = new CommandList();
 	private final SabreLogger logger = new SabreLogger(this);
-	private final PermUtil perms = new PermUtil(this);
 	private final TextUtil txt = new TextUtil();
 	
 	private boolean pluginLoadError = false;
@@ -399,14 +397,6 @@ public class SabrePlugin extends JavaPlugin
 	 */
 	public TextUtil txt() {
 		return this.txt;
-	}
-	
-	/**
-	 * Gets the perms utility
-	 * @return The perms utility
-	 */
-	public PermUtil perms() {
-		return this.perms;
 	}
 
 	

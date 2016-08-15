@@ -5,6 +5,7 @@ import java.util.Map.Entry;
 
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.bukkit.permissions.Permission;
 
 import com.gordonfreemanq.sabre.Lang;
 import com.gordonfreemanq.sabre.PlayerManager;
@@ -32,6 +33,8 @@ public abstract class SabreCommand
 	
 	protected SabreGroup curGroup;
 	protected IChatChannel gc;
+	
+	private final Map<String, String> permissionDescriptions = new HashMap<String, String>();
 	
 	
 	// The sub-commands to this command
@@ -61,7 +64,7 @@ public abstract class SabreCommand
 	{
 		if (this.helpShort == null)
 		{ 
-			String pdesc = plugin.perms().getPermissionDescription(this.permission);
+			String pdesc = getPermissionDescription(this.permission);
 			if (pdesc != null)
 			{
 				return pdesc;
@@ -108,6 +111,10 @@ public abstract class SabreCommand
 		this.helpShort = null;
 		this.helpLong = new ArrayList<String>();
 		this.visibility = CommandVisibility.VISIBLE;
+		
+		for(Permission permission : plugin.getDescription().getPermissions()) {
+			this.permissionDescriptions.put(permission.getName(), permission.getDescription());
+		}
 	}
 	
 	// The commandChain is a list of the parent command chain used to get to this command.
@@ -235,7 +242,7 @@ public abstract class SabreCommand
 			return true;
 		}
 		
-		return plugin.perms().has(sender, this.permission, this.visibility, informSenderIfNot);
+		return senderHasPerm(sender, this.permission, this.visibility, informSenderIfNot);
 	}
 	
 	
@@ -574,5 +581,63 @@ public abstract class SabreCommand
 	 */
 	public SabreGroup checkGroupExists(String name, boolean searchSimilar) {
 		return checkGroupExists(me, name, searchSimilar);
+	}
+	
+	
+	public String getForbiddenMessage(String perm)
+	{
+		return plugin.txt().parse(Lang.permForbidden, getPermissionDescription(perm));
+	}
+
+	public String getPermissionDescription (String perm)
+	{
+		String desc = permissionDescriptions.get(perm);
+		if (desc == null)
+		{
+			return Lang.permDoThat;
+		}
+		return desc;
+	}
+	
+	/**
+	 * This method tests if me has a certain permission and returns
+	 * true if me has. Otherwise false
+	 */
+	public boolean senderHasPerm(CommandSender me, String perm)
+	{
+		if (me == null) return false;
+		
+		if ( ! (me instanceof Player))
+		{
+			return me.hasPermission(perm);
+		}
+
+		return me.hasPermission(perm);
+	}
+	
+	public boolean senderHasPerm(CommandSender me, String perm, CommandVisibility visiblity, boolean informSenderIfNot) {
+		if (senderHasPerm(me, perm)) {
+			return true;
+		}
+		else if (visiblity != CommandVisibility.VISIBLE) {
+			me.sendMessage(Lang.unknownCommand);
+		}
+		else if (informSenderIfNot && me != null) {
+			me.sendMessage(this.getForbiddenMessage(perm));
+		}
+		return false;
+	}
+	
+	public <T> T pickFirstVal(CommandSender me, Map<String, T> perm2val)
+	{
+		if (perm2val == null) return null;
+		T ret = null;
+		
+		for ( Entry<String, T> entry : perm2val.entrySet()) {
+			ret = entry.getValue();
+			if (senderHasPerm(me, entry.getKey())) break;
+		}
+		
+		return ret;
 	}
 }
