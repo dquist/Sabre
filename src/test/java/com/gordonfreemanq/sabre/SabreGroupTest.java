@@ -24,6 +24,7 @@ import com.gordonfreemanq.sabre.groups.Rank;
 import com.gordonfreemanq.sabre.groups.SabreGroup;
 import com.gordonfreemanq.sabre.groups.SabreMember;
 import com.gordonfreemanq.sabre.util.MockPlayer;
+import com.gordonfreemanq.sabre.util.MockWorld;
 import com.gordonfreemanq.sabre.util.TestFixture;
 
 import static org.mockito.Mockito.*;
@@ -57,13 +58,14 @@ public class SabreGroupTest {
         pl = plugin.getPlayerListener();
         pm = plugin.getPlayerManager();
         gm = plugin.getGroupManager();
+		MockWorld overWorld = fixture.getWorld(plugin.config().getFreeWorldName());
 		
 		// Add some players to the server
-		SabrePluginTest.newPlayerJoinServer(pl, OWNER_NAME);
-		SabrePluginTest.newPlayerJoinServer(pl, ADMIN_NAME);
-		SabrePluginTest.newPlayerJoinServer(pl, OFFICER_NAME);
-		SabrePluginTest.newPlayerJoinServer(pl, BUILDER_NAME);
-		SabrePluginTest.newPlayerJoinServer(pl, MEMBER_NAME);
+		SabrePluginTest.newPlayerJoinServer(overWorld, pl, OWNER_NAME);
+		SabrePluginTest.newPlayerJoinServer(overWorld, pl, ADMIN_NAME);
+		SabrePluginTest.newPlayerJoinServer(overWorld, pl, OFFICER_NAME);
+		SabrePluginTest.newPlayerJoinServer(overWorld, pl, BUILDER_NAME);
+		SabrePluginTest.newPlayerJoinServer(overWorld, pl, MEMBER_NAME);
 		verify(pm, times(5)).createNewPlayer(any(Player.class));
         
 		// Create the group

@@ -27,7 +27,6 @@ public class GroupManager {
 
 	private final PlayerManager pm;
 	private final BlockManager bm;
-	
 	private final IDataAccess db;
 	
 	private final HashMap<UUID, SabreGroup> groups;
@@ -105,35 +104,6 @@ public class GroupManager {
 	
 	
 	/**
-	 * Adds a new group to the group manager
-	 * @param owner The group owner
-	 * @param group The new group to add
-	 */
-	public void addGroup(SabrePlayer owner, SabreGroup group) {
-		if (owner == null) {
-			throw new NullArgumentException("owner");
-		}
-		
-		if (group == null) {
-			throw new NullArgumentException("group");
-		}
-		
-		String name = group.getName();
-		if (getGroupByName(owner, name) != null) {
-			throw new RuntimeException(String.format("Tried to add group '%s' for player %s that already exists.", group.getName(), owner.getName()));
-		}
-		
-		if (group.isFaction() && getFactionByName(name) != null) {
-			throw new RuntimeException(String.format("Tried to add faction '%s' that already exists.", group.getName()));
-		}
-		
-		db.groupInsert(group);
-		groups.put(group.getID(), group);
-		SabrePlugin.log(Level.INFO, "Added new group '%s'", name);
-	}
-	
-	
-	/**
 	 * Gets a group by id
 	 * @param id The group id
 	 * @return The group instance if it exists, otherwise null
@@ -201,7 +171,7 @@ public class GroupManager {
 			throw new NullArgumentException("group");
 		}
 		
-		this.groups.remove(group);
+		this.groups.remove(group.getID());
 		this.db.groupDelete(group);
 	}
 	
@@ -220,13 +190,17 @@ public class GroupManager {
 			throw new NullArgumentException("name");
 		}
 		
+		if (name == "") {
+			throw new RuntimeException("Group name cannot be empty");
+		}
+		
 		group.setName(name);
 		db.groupUpdateName(group, name);
 	}
 	
 	
 	/**
-	 * Creates a new group instance
+	 * Creates a new group instance and adds it to the database
 	 * @param owner The group owner
 	 * @param name The name of the group
 	 * @return The new group instance
@@ -240,24 +214,46 @@ public class GroupManager {
 			throw new NullArgumentException("name");
 		}
 		
-		SabreGroup g = new SabreGroup(UUID.randomUUID(), name);
-		SabreMember member = g.addMember(owner, Rank.OWNER);
+		if (getGroupByName(owner, name) != null) {
+			throw new RuntimeException(String.format("Tried to add group '%s' for player %s that already exists.", name, owner.getName()));
+		}
+
+		SabreGroup group = new SabreGroup(UUID.randomUUID(), name);
+		SabreMember member = group.addMember(owner, Rank.OWNER);
 		member.setRank(Rank.OWNER);
-		return g;
+		db.groupInsert(group);
+		groups.put(group.getID(), group);
+		SabrePlugin.log(Level.INFO, "Created new group '%s'", name);
+		return group;
 	}
 	
 	
 	/**
-	 * Creates a new faction instance
+	 * Creates a new faction instance and adds it to the database
 	 * @param owner The faction owner
 	 * @param name The name of the faction
 	 * @return The new faction instance
 	 */
 	public SabreFaction createNewFaction(SabrePlayer owner, String name) {
-		SabreFaction g = new SabreFaction(UUID.randomUUID(), name);
-		SabreMember member = g.addMember(owner, Rank.OWNER);
+		if (owner == null) {
+			throw new NullArgumentException("owner");
+		}
+		
+		if (name == null) {
+			throw new NullArgumentException("name");
+		}
+
+		if (getFactionByName(name) != null) {
+			throw new RuntimeException(String.format("Tried to add faction '%s' that already exists.", name));
+		}
+		
+		SabreFaction faction = new SabreFaction(UUID.randomUUID(), name);
+		SabreMember member = faction.addMember(owner, Rank.OWNER);
 		member.setRank(Rank.OWNER);
-		return g;
+		db.groupInsert(faction);
+		groups.put(faction.getID(), faction);
+		SabrePlugin.log(Level.INFO, "Created new faction '%s'", name);
+		return faction;
 	}
 	
 	
@@ -389,6 +385,14 @@ public class GroupManager {
 		
 		if (rank == null) {
 			throw new NullArgumentException("rank");
+		}
+		
+		if (!groups.values().contains(member.getGroup())) {
+			throw new RuntimeException(String.format("Tried to set the rank of non-registered group '%s'.", member.getGroup().getName()));
+		}
+		
+		if (!member.getGroup().isMember(member.getPlayer())) {
+			throw new RuntimeException(String.format("Tried to set the rank of a non group member."));
 		}
 		
 		member.setRank(rank);

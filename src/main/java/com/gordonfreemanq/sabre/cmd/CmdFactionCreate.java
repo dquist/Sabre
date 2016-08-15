@@ -40,7 +40,6 @@ public class CmdFactionCreate extends SabreCommand {
 		
 		// Success
 		faction = gm.createNewFaction(me, factionName);
-		gm.addGroup(me, faction);
 		msg(Lang.groupCreated, factionName);
 	}
 }

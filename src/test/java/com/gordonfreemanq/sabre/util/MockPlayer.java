@@ -21,11 +21,12 @@ public abstract class MockPlayer implements Player {
     public LinkedList<String> messages;
     public Location bedLocation;
     
-    public static MockPlayer create(String name) {
+    public static MockPlayer create(World world, String name) {
     	MockPlayer p = mock(MockPlayer.class, Mockito.CALLS_REAL_METHODS);
 		p.ID = UUID.randomUUID();
     	p.name = name;
     	p.messages = new LinkedList<String>();
+    	p.location = new Location(world, 0, 50, 0);
     	return p;
     }
     

@@ -9,6 +9,7 @@ import java.util.UUID;
 
 import org.apache.commons.lang.NullArgumentException;
 import org.bukkit.plugin.PluginDescriptionFile;
+import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -17,11 +18,14 @@ import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 
 import com.comphenix.protocol.ProtocolLibrary;
+import com.gordonfreemanq.sabre.Lang;
 import com.gordonfreemanq.sabre.PlayerManager;
 import com.gordonfreemanq.sabre.SabrePlayer;
 import com.gordonfreemanq.sabre.SabrePlugin;
 import com.gordonfreemanq.sabre.blocks.BlockManager;
 import com.gordonfreemanq.sabre.util.MockDataAccess;
+import com.gordonfreemanq.sabre.util.MockPlayer;
+import com.gordonfreemanq.sabre.util.MockWorld;
 import com.gordonfreemanq.sabre.util.TestFixture;
 
 @RunWith(PowerMockRunner.class)
@@ -65,6 +69,11 @@ public class GroupManagerTest {
 		assertTrue(e instanceof NullArgumentException);
         
         gm = new GroupManager(pm, bm, db);
+	}
+	
+	@AfterClass
+	public static void tearDown() {
+		fixture.tearDown();
 	}
 	
 	@Before
@@ -158,88 +167,196 @@ public class GroupManagerTest {
 	}
 
 	@Test
-	public void testAddGroup() {
-		SabreGroup addGroup = mock(SabreGroup.class);
-		when(addGroup.getID()).thenReturn(UUID.randomUUID());
-		when(addGroup.getOwner()).thenReturn(player1);
-		when(addGroup.getName()).thenReturn("addGroup");
-		
-		Throwable e = null;
-		try { gm.addGroup(player1, null); } catch (Throwable ex) { e = ex; }
-		assertTrue(e instanceof NullArgumentException);
-		
-		e = null;
-		try { gm.addGroup(null, addGroup); } catch (Throwable ex) { e = ex; }
-		assertTrue(e instanceof NullArgumentException);
-
-		gm.load();
-		
-		gm.addGroup(player1, addGroup);
-		verify(db, times(1)).groupInsert(addGroup);
-		
-		e = null;
-		try { gm.addGroup(player1, addGroup); } catch (Throwable ex) { e = ex; }
-		assertTrue(e instanceof RuntimeException);
-	}
-
-	@Test
 	public void testGetGroupByID() {
-		fail("Not yet implemented");
+		Throwable e = null;
+		try { gm.getGroupByID(null); } catch (Throwable ex) { e = ex; }
+		assertTrue(e instanceof NullArgumentException);
+		
+		gm.load();
+		assertEquals(gm.getGroupByID(group1.getID()), group1);
+		assertEquals(gm.getGroupByID(group2.getID()), group2);
+		assertEquals(gm.getGroupByID(group3.getID()), group3);
 	}
 
 	@Test
 	public void testGetGroupByName() {
-		fail("Not yet implemented");
-	}
-
-	@Test
-	public void testGetFactionByName() {
-		fail("Not yet implemented");
+		Throwable e = null;
+		try { gm.getGroupByName(playerOwner, null); } catch (Throwable ex) { e = ex; }
+		assertTrue(e instanceof NullArgumentException);
+		
+		e = null;
+		try { gm.getGroupByName(null, group1.getName()); } catch (Throwable ex) { e = ex; }
+		assertTrue(e instanceof NullArgumentException);
+		
+		gm.load();
+		assertEquals(gm.getGroupByName(playerOwner, group1.getName()), group1);
+		assertEquals(gm.getGroupByName(playerOwner, group2.getName()), group2);
+		assertEquals(gm.getGroupByName(playerOwner, group3.getName()), group3);
 	}
 
 	@Test
 	public void testRemoveGroup() {
-		fail("Not yet implemented");
+		Throwable e = null;
+		try { gm.removeGroup(null); } catch (Throwable ex) { e = ex; }
+		assertTrue(e instanceof NullArgumentException);
+		
+		gm.load();
+		gm.removeGroup(group1);
+		verify(db, times(1)).groupDelete(group1);
+		assertFalse(db.groups.contains(group1));
+		assertFalse(gm.getAllGroups().contains(group1));
 	}
 
 	@Test
 	public void testRenameGroup() {
-		fail("Not yet implemented");
+		Throwable e = null;
+		try { gm.renameGroup(null, "test"); } catch (Throwable ex) { e = ex; }
+		assertTrue(e instanceof NullArgumentException);
+		
+		e = null;
+		try { gm.renameGroup(group1, null); } catch (Throwable ex) { e = ex; }
+		assertTrue(e instanceof NullArgumentException);
+
+		gm.load();
+		
+		group1 = gm.createNewGroup(playerOwner, "testGroup");
+		
+		e = null;
+		try { gm.renameGroup(group1, ""); } catch (Throwable ex) { e = ex; }
+		assertTrue(e instanceof RuntimeException);
+		
+		String newName = "updatedName";
+		gm.renameGroup(group1, newName);
+		verify(db, times(1)).groupUpdateName(group1, newName);
+		assertEquals(gm.getGroupByName(playerOwner, newName), group1);
 	}
 
 	@Test
 	public void testCreateNewGroup() {
-		fail("Not yet implemented");
+		Throwable e = null;
+		try { gm.createNewGroup(null, "test"); } catch (Throwable ex) { e = ex; }
+		assertTrue(e instanceof NullArgumentException);
+		
+		e = null;
+		try { gm.createNewGroup(player1, null); } catch (Throwable ex) { e = ex; }
+		assertTrue(e instanceof NullArgumentException);
+
+		gm.load();
+		
+		SabreGroup g = gm.createNewGroup(player1, "newGroup");
+		assertNotNull(g);
+		assertEquals(g.getOwner(), player1);
+		assertTrue(g.isMember(player1));
 	}
 
 	@Test
-	public void testCreateNewFaction() {
-		fail("Not yet implemented");
-	}
+	public void testAddRemovePlayer() {
+		MockWorld overWorld = fixture.getWorld(plugin.config().getFreeWorldName());
+		group1 = gm.createNewGroup(playerOwner, "testGroup");
+		MockPlayer testPlayer = MockPlayer.create(overWorld, "testPlayer");
+		testPlayer.isOnline = true;
+		player1 = plugin.getPlayerManager().createNewPlayer(testPlayer);
+		
+		Throwable e = null;
+		try { gm.addPlayer(null, player1); } catch (Throwable ex) { e = ex; }
+		assertTrue(e instanceof NullArgumentException);
+		
+		e = null;
+		try { gm.addPlayer(group1, null); } catch (Throwable ex) { e = ex; }
+		assertTrue(e instanceof NullArgumentException);
 
-	@Test
-	public void testAddPlayer() {
-		fail("Not yet implemented");
-	}
-
-	@Test
-	public void testRemovePlayer() {
-		fail("Not yet implemented");
+		gm.load();
+		
+		assertFalse(group1.isMember(player1));
+		gm.addPlayer(group1, player1);
+		assertTrue(group1.isMember(player1));
+		SabreMember member = group1.getMember(player1);
+		assertNotNull(member);
+		verify(db, times(1)).groupAddMember(group1, member);
+		
+		// Adding twice throws exception
+		e = null;
+		try { gm.addPlayer(group1, player1); } catch (Throwable ex) { e = ex; }
+		assertTrue(e instanceof RuntimeException);
+		
+		player1.setChatChannel(group1);
+		
+		assertEquals(gm.removePlayer(group1, player1), member);
+		assertFalse(group1.isMember(player1));
+		verify(db, times(1)).groupRemoveMember(group1, member);
+		
+		// Player is moved to global chat
+		assertEquals(player1.getChatChannel(), plugin.getGlobalChat());
+		assertEquals(testPlayer.messages.poll(), plugin.txt().parse(Lang.chatMovedGlobal));
+		
+		// Removing twice throws exception
+		e = null;
+		try { gm.removePlayer(group1, player1); } catch (Throwable ex) { e = ex; }
+		assertTrue(e instanceof RuntimeException);
 	}
 
 	@Test
 	public void testInvitePlayer() {
-		fail("Not yet implemented");
-	}
+		Throwable e = null;
+		try { gm.invitePlayer(null, player1); } catch (Throwable ex) { e = ex; }
+		assertTrue(e instanceof NullArgumentException);
+		
+		e = null;
+		try { gm.invitePlayer(group1, null); } catch (Throwable ex) { e = ex; }
+		assertTrue(e instanceof NullArgumentException);
 
-	@Test
-	public void testUninvitePlayer() {
-		fail("Not yet implemented");
+		group1 = gm.createNewGroup(playerOwner, "testGroup");
+		gm.load();
+		
+		gm.uninvitePlayer(group1, player1);
+		verify(db, times(0)).groupRemoveInvited(group1, player1.getID());
+		
+		gm.invitePlayer(group1, player1);
+		verify(db, times(1)).groupAddInvited(group1, player1.getID());
+		
+		gm.uninvitePlayer(group1, player1);
+		verify(db, times(1)).groupRemoveInvited(group1, player1.getID());
 	}
 
 	@Test
 	public void testSetPlayerRank() {
-		fail("Not yet implemented");
+
+		gm.load();
+		group1 = gm.createNewGroup(playerOwner, "TestGroup");
+		SabreMember member = group1.getMember(playerOwner);
+		assertNotNull(member);
+		
+		Throwable e = null;
+		try { gm.setPlayerRank(null, Rank.OFFICER); } catch (Throwable ex) { e = ex; }
+		assertTrue(e instanceof NullArgumentException);
+		
+		e = null;
+		try { gm.setPlayerRank(member, null); } catch (Throwable ex) { e = ex; }
+		assertTrue(e instanceof NullArgumentException);
+		
+		gm.setPlayerRank(member, Rank.ADMIN);
+		verify(db, times(1)).groupUpdateMemberRank(group1, member);
 	}
 
+	@Test
+	public void testCreateNewFaction() {
+		Throwable e = null;
+		try { gm.createNewFaction(null, "testFaction"); } catch (Throwable ex) { e = ex; }
+		assertTrue(e instanceof NullArgumentException);
+		
+		e = null;
+		try { gm.createNewFaction(player1, null); } catch (Throwable ex) { e = ex; }
+		assertTrue(e instanceof NullArgumentException);
+
+		gm.load();
+		
+		SabreFaction f = gm.createNewFaction(player1, "testFaction");
+		assertNotNull(f);
+		assertTrue(f.isFaction());
+		assertEquals(f.getOwner(), player1);
+		assertTrue(f.isMember(player1));
+		
+		SabreFaction f2 = gm.getFactionByName("testFaction");
+		assertEquals(f, f2);
+	}
 }

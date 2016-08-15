@@ -11,6 +11,7 @@ import java.util.ArrayList;
 
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.World;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.AsyncPlayerPreLoginEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
@@ -60,7 +61,7 @@ public class SabrePluginTest {
 	public void testPlayerJoin() throws Exception {
 		
 		MockWorld overWorld = testFixture.getWorld(plugin.config().getFreeWorldName());
-        MockPlayer newPlayer = MockPlayer.create("NewPlayer");
+        MockPlayer newPlayer = MockPlayer.create(overWorld, "NewPlayer");
         
         AsyncPlayerPreLoginEvent playerPreLoginEvent = new AsyncPlayerPreLoginEvent(newPlayer.name, Inet4Address.getLocalHost(), newPlayer.ID);
         PlayerJoinEvent playerJoinEvent = new PlayerJoinEvent(newPlayer, null);
@@ -152,8 +153,8 @@ public class SabrePluginTest {
 		assertFalse("Player is online", sp.isOnline());
 	}
 	
-	public static void newPlayerJoinServer(PlayerListener pl, String name) {
-		MockPlayer newPlayer = MockPlayer.create(name);
+	public static void newPlayerJoinServer(World world, PlayerListener pl, String name) {
+		MockPlayer newPlayer = MockPlayer.create(world, name);
 		newPlayer.isOnline = true;
 		AsyncPlayerPreLoginEvent playerPreLoginEvent = null;
 		try {

@@ -32,7 +32,6 @@ public class CmdGroupCreate extends SabreCommand {
 		
 		// Success
 		g = gm.createNewGroup(me, groupName);
-		gm.addGroup(me, g);
 		msg(Lang.groupCreated, g.getFullName());
 	}
 }
