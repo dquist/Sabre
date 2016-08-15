@@ -74,8 +74,8 @@ public class FarmController extends AbstractController {
 		
 		lore.add(parse(""));
 		lore.add(parse("<l>Commands:"));
-		lore.add(parse(CmdFactory.getInstance().cmdConfigure.getUseageTemplate(true)));
-		lore.add(parse(CmdFactory.getInstance().cmdUpgrade.getUseageTemplate(true)));
+		lore.add(parse(CmdFactory.getInstance().cmdConfigure.getUsageTemplate(true)));
+		lore.add(parse(CmdFactory.getInstance().cmdUpgrade.getUsageTemplate(true)));
 		
 		return lore;
 	}

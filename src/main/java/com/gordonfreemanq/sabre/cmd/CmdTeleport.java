@@ -34,7 +34,7 @@ public class CmdTeleport extends SabreCommand {
 	public void perform() 
 	{
 		if (args.size() == 0) {
-			me.msg(this.getUseageTemplate());
+			me.msg(this.getUsageTemplate());
 			return;
 		}
 		

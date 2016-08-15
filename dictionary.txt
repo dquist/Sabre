@@ -35,3 +35,4 @@ teleports
 logo
 stats
 uninvites
+perms

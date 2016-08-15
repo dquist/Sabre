@@ -29,7 +29,7 @@ public class CmdHelp extends SabreCommand {
 		msg(plugin.txt().titleize("Sabre Help ("+page+"/"+helpPages.size()+")"));
 
 		page -= 1;
-		getUseageTemplate();
+		getUsageTemplate();
 		if (page < 0 || page >= helpPages.size())
 		{
 			msg("<b>This page does not exist");

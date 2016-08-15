@@ -92,8 +92,8 @@ public class MokshaRod extends SabreItemStack {
 		if (CmdPearl.getInstance() != null) {
 			lore.add(parse(""));
 			lore.add(parse("<l>Commands:"));
-			lore.add(parse(CmdPearl.getInstance().cmdMokshaBind.getUseageTemplate(true)));
-			lore.add(parse(CmdPearl.getInstance().cmdMokshaJailbreak.getUseageTemplate(true)));
+			lore.add(parse(CmdPearl.getInstance().cmdMokshaBind.getUsageTemplate(true)));
+			lore.add(parse(CmdPearl.getInstance().cmdMokshaJailbreak.getUsageTemplate(true)));
 		}
 		
 		return lore;

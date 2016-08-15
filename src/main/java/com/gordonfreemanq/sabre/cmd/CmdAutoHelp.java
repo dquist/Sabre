@@ -26,8 +26,7 @@ public class CmdAutoHelp extends SabreCommand
 		
 		lines.addAll(cmd.helpLong);
 		
-		for(SabreCommand c : cmd.subCommands)
-		{
+		for(SabreCommand c : cmd.getSubCommands()) {
 			// Only list help for commands that are visible or the sender has permission for
 			if (c.visibility == CommandVisibility.VISIBLE || (c.visibility == CommandVisibility.SECRET && c.validSenderPermissions(sender, false))) {
 				lines.add(c.getUseageTemplate(this.commandChain, true));

@@ -315,10 +315,10 @@ public class PrisonPearl {
 		lore.add(parse("<a>Pearled on: <n>%s", new SimpleDateFormat("yyyy-MM-dd").format(pearledOn)));
 		lore.add(parse(""));
 		lore.add(parse("<l>Commands:"));
-		lore.add(parse(CmdPearl.getInstance().cmdFree.getUseageTemplate(true)));
-		lore.add(parse(CmdPearl.getInstance().cmdSummon.getUseageTemplate(true)));
-		lore.add(parse(CmdPearl.getInstance().cmdReturn.getUseageTemplate(true)));
-		lore.add(parse(CmdPearl.getInstance().cmdKill.getUseageTemplate(true)));
+		lore.add(parse(CmdPearl.getInstance().cmdFree.getUsageTemplate(true)));
+		lore.add(parse(CmdPearl.getInstance().cmdSummon.getUsageTemplate(true)));
+		lore.add(parse(CmdPearl.getInstance().cmdReturn.getUsageTemplate(true)));
+		lore.add(parse(CmdPearl.getInstance().cmdKill.getUsageTemplate(true)));
 		return lore;
 	}
 

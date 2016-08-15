@@ -25,7 +25,7 @@ public class CmdChatMsg extends SabreCommand {
 	{
 		if (args.size() == 0) {
 			msg(Lang.chatMovedGlobal);
-			me.setChatChannel(gc);
+			me.moveToGlobalChat();
 			return;
 		}
 		
