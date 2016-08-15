@@ -299,7 +299,7 @@ public class TestFixture {
         field.setAccessible(true);
         field.set(plugin, blockManager);
         
-        GroupManager groupManager = Mockito.spy(new GroupManager(playerManager, blockManager, dataAccess));
+        GroupManager groupManager = Mockito.spy(new GroupManager(plugin, playerManager, blockManager, dataAccess));
         field = SabrePlugin.class.getDeclaredField("groupManager");
         field.setAccessible(true);
         field.set(plugin, groupManager);

@@ -425,9 +425,9 @@ public class MongoConnector implements IDataAccess {
 
 					// The group instance
 					if (isFaction) {
-						g = new SabreFaction(id, name);
+						g = new SabreFaction(plugin, id, name);
 					} else {
-						g = new SabreGroup(id, name);
+						g = new SabreGroup(plugin, id, name);
 					}
 					
 

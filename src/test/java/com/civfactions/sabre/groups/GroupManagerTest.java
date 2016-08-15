@@ -62,18 +62,18 @@ public class GroupManagerTest {
         BlockManager bm = mock(BlockManager.class);
 
 		Throwable e = null;
-		try { new GroupManager(null, bm, db); } catch (Throwable ex) { e = ex; }
+		try { new GroupManager(plugin, null, bm, db); } catch (Throwable ex) { e = ex; }
 		assertTrue(e instanceof NullArgumentException);
 		
 		e = null;
-		try { new GroupManager(pm, null, db); } catch (Throwable ex) { e = ex; }
+		try { new GroupManager(plugin, pm, null, db); } catch (Throwable ex) { e = ex; }
 		assertTrue(e instanceof NullArgumentException);
 		
 		e = null;
-		try { new GroupManager(pm, bm, null); } catch (Throwable ex) { e = ex; }
+		try { new GroupManager(plugin, pm, bm, null); } catch (Throwable ex) { e = ex; }
 		assertTrue(e instanceof NullArgumentException);
         
-        gm = new GroupManager(pm, bm, db);
+        gm = new GroupManager(plugin, pm, bm, db);
 	}
 	
 	@AfterClass

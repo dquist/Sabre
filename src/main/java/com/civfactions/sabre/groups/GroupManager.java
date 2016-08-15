@@ -22,9 +22,11 @@ import com.civfactions.sabre.blocks.SabreBlock;
 import com.civfactions.sabre.blocks.SignCollection;
 import com.civfactions.sabre.customitems.SecureSign;
 import com.civfactions.sabre.data.IDataAccess;
+import com.civfactions.sabre.util.Guard;
 
 public class GroupManager {
 
+	private final SabrePlugin plugin;
 	private final PlayerManager pm;
 	private final BlockManager bm;
 	private final IDataAccess db;
@@ -36,19 +38,13 @@ public class GroupManager {
 	 * @param pm The player manager
 	 * @param db The database
 	 */
-	public GroupManager(PlayerManager pm, BlockManager bm, IDataAccess db) {
-		if (pm == null) {
-			throw new NullArgumentException("pm");
-		}
+	public GroupManager(SabrePlugin plugin, PlayerManager pm, BlockManager bm, IDataAccess db) {
+		Guard.ArgumentNotNull(plugin, "plugin");
+		Guard.ArgumentNotNull(pm, "pm");
+		Guard.ArgumentNotNull(bm, "bm");
+		Guard.ArgumentNotNull(db, "db");
 		
-		if (bm == null) {
-			throw new NullArgumentException("bm");
-		}
-
-		if (db == null) {
-			throw new NullArgumentException("db");
-		}
-		
+		this.plugin = plugin;
 		this.pm = pm;
 		this.bm = bm;
 		this.db = db;
@@ -218,7 +214,7 @@ public class GroupManager {
 			throw new RuntimeException(String.format("Tried to add group '%s' for player %s that already exists.", name, owner.getName()));
 		}
 
-		SabreGroup group = new SabreGroup(UUID.randomUUID(), name);
+		SabreGroup group = new SabreGroup(plugin, UUID.randomUUID(), name);
 		SabreMember member = group.addMember(owner, Rank.OWNER);
 		member.setRank(Rank.OWNER);
 		db.groupInsert(group);
@@ -247,7 +243,7 @@ public class GroupManager {
 			throw new RuntimeException(String.format("Tried to add faction '%s' that already exists.", name));
 		}
 		
-		SabreFaction faction = new SabreFaction(UUID.randomUUID(), name);
+		SabreFaction faction = new SabreFaction(plugin, UUID.randomUUID(), name);
 		SabreMember member = faction.addMember(owner, Rank.OWNER);
 		member.setRank(Rank.OWNER);
 		db.groupInsert(faction);

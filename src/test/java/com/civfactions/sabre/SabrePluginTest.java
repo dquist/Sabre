@@ -109,7 +109,7 @@ public class SabrePluginTest {
 		
 		// Player re-join
 		sp.setBanned(false);
-		sp.setBanMessage(null);
+		sp.setBanMessage("");
 		playerListener.onPlayerJoin(playerJoinEvent);
 		 sp = pm.getPlayerById(newPlayer.getUniqueId());
 		assertTrue("Player is online", pm.getOnlinePlayers().contains(sp));

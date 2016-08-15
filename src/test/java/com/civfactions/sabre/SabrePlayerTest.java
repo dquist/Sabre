@@ -93,7 +93,6 @@ public class SabrePlayerTest {
 		assertEquals(p1.getName(), name1);
 		assertEquals(p2.getName(), name2);
 		
-
 		Throwable e = null;
 		try { p1.setName(null); } catch (Throwable ex) { e = ex; }
 		assertTrue(e instanceof NullArgumentException);
@@ -405,15 +404,14 @@ public class SabrePlayerTest {
 
 	@Test
 	public void testGetSetBedLocation() {
-		Throwable e = null;
-		try { p1.setBedLocation(null); } catch (Throwable ex) { e = ex; }
-		assertTrue(e instanceof NullArgumentException);
-		
 		Location l = mock(Location.class);
 		
 		assertEquals(p1.getBedLocation(), null);
 		p1.setBedLocation(l);
 		assertEquals(p1.getBedLocation(), l);
+		
+		p1.setBedLocation(null);
+		assertEquals(p1.getBedLocation(), null);
 	}
 
 	@Test

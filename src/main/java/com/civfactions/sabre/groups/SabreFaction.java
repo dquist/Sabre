@@ -2,10 +2,12 @@ package com.civfactions.sabre.groups;
 
 import java.util.UUID;
 
+import com.civfactions.sabre.SabrePlugin;
+
 public class SabreFaction extends SabreGroup {
 
-	public SabreFaction(UUID id, String name) {
-		super(id, name);
+	public SabreFaction(SabrePlugin plugin, UUID id, String name) {
+		super(plugin, id, name);
 		// TODO Auto-generated constructor stub
 	}
 	

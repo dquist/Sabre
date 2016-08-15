@@ -55,7 +55,7 @@ public class SabrePlugin extends JavaPlugin
 	private final IDataAccess dataAccess = new MongoConnector(this);
 	private final PlayerManager playerManager = new PlayerManager(this, dataAccess);
 	private final BlockManager blockManager = new BlockManager(this, dataAccess);
-	private final GroupManager groupManager = new GroupManager(playerManager, blockManager, dataAccess);
+	private final GroupManager groupManager = new GroupManager(this, playerManager, blockManager, dataAccess);
 	private final PearlManager pearlManager = new PearlManager(this, dataAccess);
 	private final PlayerListener playerListener = new PlayerListener(this, playerManager);
 	private final BlockListener blockListener = new BlockListener(this, playerManager, blockManager, config);

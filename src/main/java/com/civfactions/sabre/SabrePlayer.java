@@ -571,8 +571,6 @@ public class SabrePlayer implements INamed, IChatChannel {
 	 * @param bedLocation The bed location
 	 */
 	public void setBedLocation(Location bedLocation) {
-		Guard.ArgumentNotNull(bedLocation, "bedLocation");
-		
 		this.bedLocation = bedLocation;
 	}
 	
