@@ -28,5 +28,10 @@
 			<attribute name="maven.pomderived" value="true"/>
 		</attributes>
 	</classpathentry>
+	<classpathentry kind="lib" path="C:/Projects/civfactions/eclipse/Sabre/lib/spigot-1.8.8.jar"/>
+	<classpathentry kind="lib" path="C:/Projects/civfactions/eclipse/Sabre/lib/CombatTagPlus.jar"/>
+	<classpathentry kind="lib" path="C:/Projects/civfactions/eclipse/Sabre/lib/mongo-java-driver-2.13.0.jar"/>
+	<classpathentry kind="lib" path="C:/Projects/civfactions/eclipse/Sabre/lib/PacketWrapper.jar"/>
+	<classpathentry kind="lib" path="C:/Projects/civfactions/eclipse/Sabre/lib/ProtocolLib.jar"/>
 	<classpathentry kind="output" path="target/classes"/>
 </classpath>

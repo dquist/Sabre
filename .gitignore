@@ -1,5 +1,6 @@
 /bin
-/target/
+/target
+/lib
 .classpath
 .externalToolBuilders/**
 .settings/**
