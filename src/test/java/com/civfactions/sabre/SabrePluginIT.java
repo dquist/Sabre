@@ -1,9 +1,13 @@
 package com.civfactions.sabre;
 
-import org.junit.*;
-
-import static org.junit.Assert.*;
-import static org.mockito.Mockito.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
+import static org.mockito.Matchers.any;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 
 import java.net.Inet4Address;
 import java.net.UnknownHostException;
@@ -14,29 +18,29 @@ import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.AsyncPlayerPreLoginEvent;
+import org.bukkit.event.player.AsyncPlayerPreLoginEvent.Result;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.event.player.PlayerRespawnEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.material.Bed;
-import org.bukkit.event.player.AsyncPlayerPreLoginEvent.Result;
 import org.bukkit.plugin.PluginDescriptionFile;
+import org.junit.AfterClass;
+import org.junit.BeforeClass;
+import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.powermock.core.classloader.annotations.PrepareForTest;
-
 import org.powermock.modules.junit4.PowerMockRunner;
 
-import com.civfactions.sabre.Lang;
-import com.civfactions.sabre.PlayerListener;
-import com.civfactions.sabre.PlayerManager;
-import com.civfactions.sabre.SabrePlayer;
-import com.civfactions.sabre.SabrePlugin;
-import com.civfactions.sabre.test.*;
+import com.civfactions.sabre.test.MockBlock;
+import com.civfactions.sabre.test.MockPlayer;
+import com.civfactions.sabre.test.MockWorld;
+import com.civfactions.sabre.test.TestFixture;
 import com.comphenix.protocol.ProtocolLibrary;
 
 @RunWith(PowerMockRunner.class)
 @PrepareForTest({ SabrePlugin.class, PluginDescriptionFile.class, ProtocolLibrary.class })
-public class SabrePluginTest {
+public class SabrePluginIT {
 	
 	private static String BAN_MESSAGE = "Test ban message";
 	
