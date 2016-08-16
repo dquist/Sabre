@@ -212,7 +212,7 @@ public class GroupManagerTest {
 		SabreGroup g1 = spy(gm.createNewGroup(p1, "Group1"));
 		
 		assertNotNull(g1);
-		assertEquals(g1.getOwner(), p1);
+		assertEquals(g1.getOwner().getPlayer(), p1);
 		assertTrue(g1.isMember(p1));
 	}
 
@@ -311,7 +311,7 @@ public class GroupManagerTest {
 	public void testSetPlayerRank() {
 		SabreGroup g1 = gm.createNewGroup(p1, "Group1");
 		
-		SabreMember member = g1.getMember(p1);
+		SabreMember member = g1.addMember(p2, Rank.MEMBER);
 		assertNotNull(member);
 		
 		Throwable e = null;
@@ -339,7 +339,7 @@ public class GroupManagerTest {
 		SabreFaction f = gm.createNewFaction(p1, "testFaction");
 		assertNotNull(f);
 		assertTrue(f.isFaction());
-		assertEquals(f.getOwner(), p1);
+		assertEquals(f.getOwner().getPlayer(), p1);
 		assertTrue(f.isMember(p1));
 		
 		SabreFaction f2 = gm.getFactionByName("testFaction");

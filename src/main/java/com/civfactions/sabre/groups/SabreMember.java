@@ -2,9 +2,8 @@ package com.civfactions.sabre.groups;
 
 import java.util.UUID;
 
-import org.apache.commons.lang.NullArgumentException;
-
 import com.civfactions.sabre.SabrePlayer;
+import com.civfactions.sabre.util.Guard;
 import com.civfactions.sabre.util.INamed;
 
 /**
@@ -24,17 +23,9 @@ public class SabreMember implements INamed {
 	 * @param rank The player group rank
 	 */
 	public SabreMember(SabreGroup group, SabrePlayer player, Rank rank) {
-		if (group == null) {
-			throw new NullArgumentException("group");
-		}
-		
-		if (player == null) {
-			throw new NullArgumentException("player");
-		}
-		
-		if (rank == null) {
-			throw new NullArgumentException("rank");
-		}
+		Guard.ArgumentNotNull(group, "group");
+		Guard.ArgumentNotNull(player, "player");
+		Guard.ArgumentNotNull(rank, "rank");
 		
 		this.group = group;
 		this.player = player;
@@ -92,8 +83,25 @@ public class SabreMember implements INamed {
 	 * @param rank The new rank
 	 */
 	public void setRank(Rank rank) {
-		if (rank == null) {
-			throw new NullArgumentException("rank");
+		Guard.ArgumentNotNull(rank, "rank");
+		
+		// Nothing to do
+		if (this.rank == rank) {
+			return;
+		}
+		
+		// Don't allow multiple group owners
+		if (rank == Rank.OWNER) {
+			for(SabreMember m : group.getMembers()) {
+				if (m.getRank() == Rank.OWNER) {
+					throw new RuntimeException(String.format("Tried to set multiple owners for group %s", group.getFullName()));
+				}
+			}
+		}
+		
+		// Don't allow demoting the owner unless the group is unlocked
+		if (this.rank == Rank.OWNER && group.isLocked()) {
+			throw new RuntimeException(String.format("Tried to change rank of owner for locked group %s", group.getFullName()));
 		}
 		
 		this.rank = rank;
@@ -106,9 +114,7 @@ public class SabreMember implements INamed {
 	 * @return true if he can be kicked
 	 */
 	public boolean canKickMember(SabreMember other) {
-		if (other == null) {
-			throw new NullArgumentException("other");
-		}
+		Guard.ArgumentNotNull(other, "other");
 		
 		if (this.group.equals(other.group)) {
 			int rankMe = rank.ordinal();

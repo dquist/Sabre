@@ -1,6 +1,5 @@
 package com.civfactions.sabre.groups;
 import org.apache.commons.lang.NullArgumentException;
-import org.bukkit.entity.Player;
 import org.junit.*;
 import org.junit.runner.RunWith;
 import org.powermock.api.mockito.PowerMockito;
@@ -19,7 +18,6 @@ import com.civfactions.sabre.chat.GlobalChat;
 import com.civfactions.sabre.groups.Rank;
 import com.civfactions.sabre.groups.SabreGroup;
 import com.civfactions.sabre.groups.SabreMember;
-import com.civfactions.sabre.util.TextUtil;
 
 import static org.mockito.Mockito.*;
 
@@ -28,48 +26,43 @@ import static org.mockito.Mockito.*;
 public class SabreGroupTest {
 	
 	private static SabrePlugin plugin;
-	private static TextUtil txt;
 	
-	private static SabreGroup group;
-	
-	private static String groupName = "TestGroup";
-	
-	private static String p1name = "Player1";
-	private static String p2name = "Player2";
-	private static String p3name = "Player3";
-	
-	private static SabrePlayer p1;
-	private static SabrePlayer p2;
-	private static SabrePlayer p3;
+	private SabrePlayer p1;
+	private SabrePlayer p2;
+	private SabrePlayer p3;
+	private SabreGroup group;
 	
 	private static String testMsg = "Test chat message";
-	private static String testSnitchMsg = "Test snitch message";
+	private static String testSnitchMsg = "<c>%s <i>entered snitch.";
 	
 	@BeforeClass
-	public static void setUpClass() {
-		txt = spy(new TextUtil());
-		
+	public static void setUpClass() {		
 		plugin = PowerMockito.mock(SabrePlugin.class);
 		when(plugin.getGlobalChat()).thenReturn(mock(GlobalChat.class));
 		when(plugin.logger()).thenReturn(mock(SabreLogger.class));
 		when(plugin.getPlayerManager()).thenReturn(mock(PlayerManager.class));
-		when(plugin.txt()).thenReturn(txt);
 	}
 	
 	@Before
 	public void setUp() {
-		p1 = spy(new SabrePlayer(plugin, UUID.randomUUID(), p1name));
-		p2 = spy(new SabrePlayer(plugin, UUID.randomUUID(), p2name));
-		p3 = spy(new SabrePlayer(plugin, UUID.randomUUID(), p3name));
+		p1 = mock(SabrePlayer.class);
+		when(p1.getName()).thenReturn("Player1");
+		when(p1.getID()).thenReturn(UUID.randomUUID());
 		
-		group = new SabreGroup(plugin, UUID.randomUUID(), groupName);
+		p2 = mock(SabrePlayer.class);
+		when(p2.getName()).thenReturn("Player2");
+		when(p2.getID()).thenReturn(UUID.randomUUID());
+		
+		p3 = mock(SabrePlayer.class);
+		when(p3.getName()).thenReturn("Player3");
+		when(p3.getID()).thenReturn(UUID.randomUUID());
+		
+		group = new SabreGroup(plugin, UUID.randomUUID(), "testGroup");
 		group.addMember(p1, Rank.OWNER);
-		
 	}
 	
 	@Test
 	public void testGroup() {
-		
 		Throwable e = null;
 		try { new SabreGroup(null, UUID.randomUUID(), "group"); } catch (Throwable ex) { e = ex; }
 		assertTrue(e instanceof NullArgumentException);
@@ -113,13 +106,52 @@ public class SabreGroupTest {
 
 	@Test
 	public void testMembers() {
+		Throwable e = null;
+		try { group.getMember(null); } catch (Throwable ex) { e = ex; }
+		assertTrue(e instanceof NullArgumentException);
+
+		e = null;
+		try { group.addMember(null, Rank.MEMBER); } catch (Throwable ex) { e = ex; }
+		assertTrue(e instanceof NullArgumentException);
+
+		e = null;
+		try { group.addMember(p1, null); } catch (Throwable ex) { e = ex; }
+		assertTrue(e instanceof NullArgumentException);
+
+		e = null;
+		try { group.removePlayer(null); } catch (Throwable ex) { e = ex; }
+		assertTrue(e instanceof NullArgumentException);
+
+		e = null;
+		try { group.removeMember(null); } catch (Throwable ex) { e = ex; }
+		assertTrue(e instanceof NullArgumentException);
+
+		e = null;
+		try { group.isMember(null); } catch (Throwable ex) { e = ex; }
+		assertTrue(e instanceof NullArgumentException);
+
+		e = null;
+		try { group.isBuilder(null); } catch (Throwable ex) { e = ex; }
+		assertTrue(e instanceof NullArgumentException);
+
+		e = null;
+		try { group.isOfficer(null); } catch (Throwable ex) { e = ex; }
+		assertTrue(e instanceof NullArgumentException);
+
+		e = null;
+		try { group.isRank(null, Rank.MEMBER); } catch (Throwable ex) { e = ex; }
+		assertTrue(e instanceof NullArgumentException);
+
+		e = null;
+		try { group.isRank(p1, null); } catch (Throwable ex) { e = ex; }
+		assertTrue(e instanceof NullArgumentException);
 		
 		group.addMember(p2, Rank.ADMIN);
 		
-		Throwable e = null;
+		// Can't add twice
+		e = null;
 		try { group.addMember(p2, Rank.MEMBER); } catch (Throwable ex) { e = ex; }
 		assertTrue(e instanceof RuntimeException);
-		
 		
 		group.addMember(p3, Rank.MEMBER);
 		assertTrue(group.isMember(p3));
@@ -159,28 +191,57 @@ public class SabreGroupTest {
 		
 		group.removeMember(p3Member);
 		assertFalse(group.isMember(p3));
+	}
+	
+	@Test
+	public void testInviteUninvite() {
+		Throwable e = null;
+		try { group.addInvited((UUID)null); } catch (Throwable ex) { e = ex; }
+		assertTrue(e instanceof NullArgumentException);
+
+		e = null;
+		try { group.removeInvited((UUID)null); } catch (Throwable ex) { e = ex; }
+		assertTrue(e instanceof NullArgumentException);
+
+		e = null;
+		try { group.removeInvited((SabrePlayer)null); } catch (Throwable ex) { e = ex; }
+		assertTrue(e instanceof NullArgumentException);
+
+		e = null;
+		try { group.isInvited(null); } catch (Throwable ex) { e = ex; }
+		assertTrue(e instanceof NullArgumentException);
 		
+		assertFalse(group.isInvited(p1));
+		assertFalse(group.isInvited(p3));
+		
+		group.addInvited(p2);
+		assertTrue(group.isInvited(p2));
 		assertFalse(group.isInvited(p3));
 		
 		group.addInvited(p3);
+		assertTrue(group.isInvited(p2));
+		assertTrue(group.isInvited(p3));
+		
+		group.removeInvited(p2);
+		assertFalse(group.isInvited(p2));
 		assertTrue(group.isInvited(p3));
 		
 		group.removeInvited(p3);
+		assertFalse(group.isInvited(p2));
 		assertFalse(group.isInvited(p3));
 	}
 	
 	@Test
-	public void testMessage() {
+	public void testMsgAll() {
+		Throwable e = null;
+		try { group.msgAll(null, false); } catch (Throwable ex) { e = ex; }
+		assertTrue(e instanceof NullArgumentException);
+		
 		group.addMember(p2, Rank.OFFICER);
 		group.addMember(p3, Rank.MEMBER);
 		
-		when(p1.getPlayer()).thenReturn(mock(Player.class));
 		when(p1.isOnline()).thenReturn(true);
-		
-		when(p2.getPlayer()).thenReturn(mock(Player.class));
 		when(p2.isOnline()).thenReturn(true);
-		
-		when(p3.getPlayer()).thenReturn(mock(Player.class));
 		when(p3.isOnline()).thenReturn(true);
 		
 		group.msgAll(testMsg, true);
@@ -190,17 +251,43 @@ public class SabreGroupTest {
 	}
 	
 	@Test
-	public void testMute() {
+	public void testMsgAllBut() {
+		Throwable e = null;
+		try { group.msgAllBut(null, ""); } catch (Throwable ex) { e = ex; }
+		assertTrue(e instanceof NullArgumentException);
+
+		e = null;
+		try { group.msgAllBut(p1, null); } catch (Throwable ex) { e = ex; }
+		assertTrue(e instanceof NullArgumentException);
+
 		group.addMember(p2, Rank.OFFICER);
 		group.addMember(p3, Rank.MEMBER);
 		
-		when(p1.getPlayer()).thenReturn(mock(Player.class));
 		when(p1.isOnline()).thenReturn(true);
-		
-		when(p2.getPlayer()).thenReturn(mock(Player.class));
 		when(p2.isOnline()).thenReturn(true);
+		when(p3.isOnline()).thenReturn(true);
 		
-		when(p3.getPlayer()).thenReturn(mock(Player.class));
+		group.msgAllBut(p3, testMsg);
+		verify(p1).msg(testMsg);
+		verify(p2).msg(testMsg);
+		verify(p3, never()).msg(testMsg);
+	}
+	
+	@Test
+	public void testChatMute() {
+		Throwable e = null;
+		try { group.setChatMutedBy(null, true); } catch (Throwable ex) { e = ex; }
+		assertTrue(e instanceof NullArgumentException);
+
+		e = null;
+		try { group.isChatMutedBy(null); } catch (Throwable ex) { e = ex; }
+		assertTrue(e instanceof NullArgumentException);
+		
+		group.addMember(p2, Rank.OFFICER);
+		group.addMember(p3, Rank.MEMBER);
+		
+		when(p1.isOnline()).thenReturn(true);
+		when(p2.isOnline()).thenReturn(true);
 		when(p3.isOnline()).thenReturn(true);
 		
 		assertFalse(group.isChatMutedBy(p1));
@@ -221,123 +308,53 @@ public class SabreGroupTest {
 	
 	@Test
 	public void testSnitchMute() {
-		group.addMember(p2, Rank.OFFICER);
-		group.addMember(p3, Rank.MEMBER);
-		
-		when(p1.getPlayer()).thenReturn(mock(Player.class));
-		when(p1.isOnline()).thenReturn(true);
-		
-		when(p2.getPlayer()).thenReturn(mock(Player.class));
-		when(p2.isOnline()).thenReturn(true);
-		
-		when(p3.getPlayer()).thenReturn(mock(Player.class));
-		when(p3.isOnline()).thenReturn(true);
-		
-		assertFalse(group.isSnitchMutedBy(p1));
-		group.setSnitchMutedBy(p1, true);
-		assertTrue(group.isSnitchMutedBy(p1));
-		
-		group.msgAllSnitch(testSnitchMsg, true);
-		verify(p1, never()).msg(testSnitchMsg);
-		verify(p2).msg(testSnitchMsg);
-		
-		// unmute
-		group.setSnitchMutedBy(p1, false);
-		assertFalse(group.isSnitchMutedBy(p1));
-		
-		group.msgAllSnitch(testSnitchMsg, true);
-		verify(p1).msg(testSnitchMsg);
-	}
-	
-	@Test
-	public void testGroupExceptions() {
-		
 		Throwable e = null;
-		try { group.getMember(null); } catch (Throwable ex) { e = ex; }
-		assertTrue(e instanceof NullArgumentException);
-
-		e = null;
-		try { group.addMember(null, Rank.MEMBER); } catch (Throwable ex) { e = ex; }
-		assertTrue(e instanceof NullArgumentException);
-
-		e = null;
-		try { group.addMember(p1, null); } catch (Throwable ex) { e = ex; }
-		assertTrue(e instanceof NullArgumentException);
-
-		e = null;
-		try { group.removePlayer(null); } catch (Throwable ex) { e = ex; }
-		assertTrue(e instanceof NullArgumentException);
-
-		e = null;
-		try { group.removeMember(null); } catch (Throwable ex) { e = ex; }
-		assertTrue(e instanceof NullArgumentException);
-
-		e = null;
-		try { group.addInvited((UUID)null); } catch (Throwable ex) { e = ex; }
-		assertTrue(e instanceof NullArgumentException);
-
-		e = null;
-		try { group.removeInvited((UUID)null); } catch (Throwable ex) { e = ex; }
-		assertTrue(e instanceof NullArgumentException);
-
-		e = null;
-		try { group.removeInvited((SabrePlayer)null); } catch (Throwable ex) { e = ex; }
-		assertTrue(e instanceof NullArgumentException);
-
-		e = null;
-		try { group.isInvited(null); } catch (Throwable ex) { e = ex; }
-		assertTrue(e instanceof NullArgumentException);
-
-		e = null;
-		try { group.isMember(null); } catch (Throwable ex) { e = ex; }
-		assertTrue(e instanceof NullArgumentException);
-
-		e = null;
-		try { group.isBuilder(null); } catch (Throwable ex) { e = ex; }
-		assertTrue(e instanceof NullArgumentException);
-
-		e = null;
-		try { group.isOfficer(null); } catch (Throwable ex) { e = ex; }
-		assertTrue(e instanceof NullArgumentException);
-
-		e = null;
-		try { group.isRank(null, Rank.MEMBER); } catch (Throwable ex) { e = ex; }
-		assertTrue(e instanceof NullArgumentException);
-
-		e = null;
-		try { group.isRank(p1, null); } catch (Throwable ex) { e = ex; }
-		assertTrue(e instanceof NullArgumentException);
-
-		e = null;
-		try { group.setOwner(null); } catch (Throwable ex) { e = ex; }
-		assertTrue(e instanceof NullArgumentException);
-
-		e = null;
-		try { group.msgAll(null, false); } catch (Throwable ex) { e = ex; }
-		assertTrue(e instanceof NullArgumentException);
-
-		e = null;
-		try { group.msgAllBut(null, ""); } catch (Throwable ex) { e = ex; }
-		assertTrue(e instanceof NullArgumentException);
-
-		e = null;
-		try { group.msgAllBut(p1, null); } catch (Throwable ex) { e = ex; }
-		assertTrue(e instanceof NullArgumentException);
-
-		e = null;
-		try { group.setChatMutedBy(null, true); } catch (Throwable ex) { e = ex; }
-		assertTrue(e instanceof NullArgumentException);
-
-		e = null;
-		try { group.isChatMutedBy(null); } catch (Throwable ex) { e = ex; }
-		assertTrue(e instanceof NullArgumentException);
-
-		e = null;
 		try { group.setSnitchMutedBy(null, true); } catch (Throwable ex) { e = ex; }
 		assertTrue(e instanceof NullArgumentException);
 
 		e = null;
 		try { group.isSnitchMutedBy(null); } catch (Throwable ex) { e = ex; }
 		assertTrue(e instanceof NullArgumentException);
+		
+		group.addMember(p2, Rank.OFFICER);
+		group.addMember(p3, Rank.MEMBER);
+		
+		when(p1.isOnline()).thenReturn(true);
+		when(p2.isOnline()).thenReturn(true);
+		when(p3.isOnline()).thenReturn(true);
+		
+		assertFalse(group.isSnitchMutedBy(p1));
+		group.setSnitchMutedBy(p1, true);
+		assertTrue(group.isSnitchMutedBy(p1));
+		
+		group.msgAllSnitch(testSnitchMsg, p1);
+		verify(p1, never()).msg(testSnitchMsg);
+		verify(p2).msg(testSnitchMsg, p1);
+		
+		// unmute
+		group.setSnitchMutedBy(p1, false);
+		assertFalse(group.isSnitchMutedBy(p1));
+		
+		group.msgAllSnitch(testSnitchMsg, p1);
+		verify(p1).msg(testSnitchMsg, p1);
+	}
+	
+	@Test
+	public void testTransferTo() {
+		Throwable e = null;
+		try { group.transferTo(null); } catch (Throwable ex) { e = ex; }
+		assertTrue(e instanceof NullArgumentException);
+
+		assertTrue(group.isMember(p1));
+		group.transferTo(p2);
+		assertTrue(group.isMember(p1));
+		assertTrue(group.isMember(p2));
+		assertTrue(group.getMember(p2).getRank() == Rank.OWNER);
+		assertTrue(group.getMember(p1).getRank() == Rank.ADMIN);
+		
+		// Can't transfer to self
+		e = null;
+		try { group.transferTo(p2); } catch (Throwable ex) { e = ex; }
+		assertTrue(e instanceof RuntimeException);
 	}
 }

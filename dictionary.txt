@@ -37,3 +37,6 @@ stats
 uninvites
 perms
 stats
+sabre
+demoting
+demoted

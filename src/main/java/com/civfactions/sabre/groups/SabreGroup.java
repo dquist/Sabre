@@ -31,6 +31,8 @@ public class SabreGroup implements INamed, IChatChannel {
 
 	// Players who have muted snitch reports from this group - non-persistent 
 	protected final HashSet<SabrePlayer> mutedFromSnitch;
+	
+	private boolean isLocked;
 
 	/**
 	 * Constructor
@@ -50,6 +52,7 @@ public class SabreGroup implements INamed, IChatChannel {
 		this.invited = new HashSet<UUID>();
 		this.mutedFromChat = new HashSet<SabrePlayer>();
 		this.mutedFromSnitch = new HashSet<SabrePlayer>();
+		this.isLocked = true;
 	}
 
 
@@ -294,26 +297,29 @@ public class SabreGroup implements INamed, IChatChannel {
 	 * Gets the owner of the group
 	 * @return The group owner
 	 */
-	public SabrePlayer getOwner() {
-		return members.stream().filter(m -> m.getRank() == Rank.OWNER).map(p -> p.getPlayer()).findFirst().orElse(null);
+	public SabreMember getOwner() {
+		SabreMember owner = members.stream().filter(m -> m.getRank() == Rank.OWNER).findFirst().orElse(null);
+		
+		// This is bad...
+		if (owner == null) {
+			plugin.logger().log(Level.SEVERE, String.format("Failed to find owner for group %s - %s", name, uid.toString()));
+		}
+		
+		return owner;
 	}
 
 
 	/**
-	 * Sets the owner of the group
+	 * Transfers the group to a new owner
 	 * @param player The group owner
 	 */
-	public void setOwner(SabrePlayer player) {
+	public void transferTo(SabrePlayer player) {
 		Guard.ArgumentNotNull(player, "player");
 		
-		SabreMember owner = null;
-
-		// Get the owner instance
-		for (SabreMember m : members) {
-			if (m.getRank() == Rank.OWNER) {
-				owner = m;
-				break;
-			}
+		SabreMember owner = this.getOwner();
+		
+		if (owner != null && owner.getPlayer() == player) {
+			throw new RuntimeException(String.format("%s is already the owner of %s.", player.getName(), name));
 		}
 
 		// Get the instance of the other member or create it
@@ -323,7 +329,11 @@ public class SabreGroup implements INamed, IChatChannel {
 		}
 
 		// Out with the old, in with the new
-		owner.setRank(Rank.ADMIN);
+		if (owner != null) {
+			isLocked = false; // Allows the group owner to be demoted
+			owner.setRank(Rank.ADMIN);
+			isLocked = true;
+		}
 		member.setRank(Rank.OWNER);
 	}
 	
@@ -353,13 +363,11 @@ public class SabreGroup implements INamed, IChatChannel {
 	public void msgAllBut(SabrePlayer player, String str, Object... args) {
 		Guard.ArgumentNotNull(player, "player");
 		Guard.ArgumentNotNull(str, "str");
-		
-		String formatStr = plugin.txt().parse(str, args);
 
 		for (SabreMember m : members) {
 			SabrePlayer p = m.getPlayer();
 			if (p.isOnline() && p != player) {
-				p.msg(formatStr);
+				p.msg(str, args);
 			}
 		}
 	}
@@ -388,12 +396,10 @@ public class SabreGroup implements INamed, IChatChannel {
 	public void msgAllSnitch(String str, Object... args) {
 		Guard.ArgumentNotNull(str, "str");
 		
-		String formatStr = plugin.txt().parse(str, args);
-		
 		for (SabreMember m : members) {
 			SabrePlayer p = m.getPlayer();
 			if (p.isOnline() && !mutedFromSnitch.contains(p)) {
-				p.msg(formatStr);
+				p.msg(str, args);
 			}
 		}
 	}
@@ -450,5 +456,13 @@ public class SabreGroup implements INamed, IChatChannel {
 		Guard.ArgumentNotNull(sp, "sp");
 		
 		return this.mutedFromSnitch.contains(sp);
+	}
+	
+	/**
+	 * Gets the lock for certain modifications
+	 * @return true if the group is locked
+	 */
+	public boolean isLocked() {
+		return isLocked;
 	}
 }

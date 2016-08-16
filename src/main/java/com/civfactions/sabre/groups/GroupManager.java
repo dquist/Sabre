@@ -165,7 +165,7 @@ public class GroupManager {
 		Guard.ArgumentNotNull(group, "group");
 		Guard.ArgumentNotNullOrEmpty(name, "name");
 		
-		if (getGroupByName(group.getOwner(), name) != null) {
+		if (getGroupByName(group.getOwner().getPlayer(), name) != null) {
 			throw new RuntimeException(String.format("Tried to rename group '%s' for player %s that already exists.", name, group.getOwner().getName()));
 		}
 		
