@@ -35,7 +35,6 @@ public class CombatTagPlusManager implements CombatInterface {
 	}
 
 	@Override
-	@SuppressWarnings("deprecation")
 	public boolean tagPlayer(String playerName) {
 		Player player = Bukkit.getServer().getPlayer(playerName);
 		if (combatTagEnabled_ && tagManager != null && player!=null) {

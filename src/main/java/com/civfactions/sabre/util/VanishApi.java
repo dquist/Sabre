@@ -1,11 +1,12 @@
 package com.civfactions.sabre.util;
 
-import org.kitteh.vanish.VanishManager;
-import org.kitteh.vanish.VanishPlugin;
+//import org.kitteh.vanish.VanishManager;
+//import org.kitteh.vanish.VanishPlugin;
 
 import com.civfactions.sabre.SabrePlayer;
 
 import org.bukkit.Bukkit;
+import org.bukkit.entity.Player;
 
 /**
  * Interfaces to the VanishNoPacket API
@@ -14,7 +15,25 @@ import org.bukkit.Bukkit;
  */
 public class VanishApi {
 	
+	// Temp
+	private class VanishManager {
+		public void vanish(Player p, boolean arg1, boolean arg2) {
+		}
+		public void reveal(Player p, boolean arg1, boolean arg2) {
+		}
+		public boolean isVanished(Player p) {
+			return false;
+		}
+	}
+	
+	private class VanishPlugin {
+		public VanishManager getManager() {
+			return null;
+		}
+	}
+	
 	private VanishManager vm;
+	
 	
 	
 	/**

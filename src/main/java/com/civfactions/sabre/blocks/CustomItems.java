@@ -39,7 +39,7 @@ public class CustomItems {
 	 */
 	public void reload() {
 	    if (folder == null) {
-	    	folder = new File(plugin.getDataFolder(), "custom_items");
+	    	folder = new File(plugin.getDataFolder(), "items");
 	    }
 	    
 		this.customItems = new HashMap<String, SabreItemStack>();
