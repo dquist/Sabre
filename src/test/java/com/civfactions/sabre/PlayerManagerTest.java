@@ -38,19 +38,18 @@ public class PlayerManagerTest {
 	private PlayerManager pm;
 
 	@BeforeClass
-	public static void setUpBeforeClass() throws Exception {
-		
+	public static void setUpClass() throws Exception {
 		plugin = PowerMockito.mock(SabrePlugin.class);
 		when(plugin.getGlobalChat()).thenReturn(mock(GlobalChat.class));
 		when(plugin.logger()).thenReturn(mock(SabreLogger.class));
 		when(plugin.getPlayerManager()).thenReturn(mock(PlayerManager.class));
 		when(plugin.txt()).thenReturn(new TextUtil());
-		
-		db = spy(new MockDataAccess());
 	}
 
 	@Before
 	public void setUp() throws Exception {
+		
+		db = spy(new MockDataAccess());
 		pm = spy(new PlayerManager(plugin, db));
 		
 		Player mock1 = mock(Player.class);
