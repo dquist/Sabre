@@ -64,7 +64,7 @@ public class PlayerManager {
 		onlinePlayers.remove(player.getID());
 		players.remove(player.getID());
 		db.playerDelete(player);
-		SabrePlugin.log(Level.INFO, "Removed player: Name=%s, ID=%s", player.getName(), player.getID().toString());
+		plugin.logger().log(Level.INFO, "Removed player: Name=%s, ID=%s", player.getName(), player.getID().toString());
 	}
 	
 	
@@ -138,7 +138,7 @@ public class PlayerManager {
 		sp.setName(name);
 		players.put(sp.getID(), sp);
 		db.playerInsert(sp);
-		SabrePlugin.log(Level.INFO, "Created new player %s with ID %s", name, sp.getID());
+		plugin.logger().log(Level.INFO, "Created new player %s with ID %s", name, sp.getID());
 		return sp;
 	}
 	
