@@ -1,7 +1,0 @@
-name: Resource Bastion
-material: STAINED_GLASS
-durability: 5
-amount: 1
-class: com.civfactions.sabre.bastion.ResourceBastion
-lore:
-  - '<c>A remote resource protection mechanism.'

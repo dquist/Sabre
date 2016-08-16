@@ -1,7 +1,0 @@
-name: Keep Bastion
-material: STAINED_GLASS
-durability: 14
-amount: 1
-class: com.civfactions.sabre.bastion.KeepBastion
-lore:
-  - '<c>A central town defense mechanism.'

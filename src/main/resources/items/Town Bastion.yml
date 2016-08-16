@@ -1,7 +1,0 @@
-name: Town Bastion
-material: STAINED_GLASS
-durability: 11
-amount: 1
-class: com.civfactions.sabre.bastion.TownBastion
-lore:
-  - '<c>A distributed town defense mechanism.'

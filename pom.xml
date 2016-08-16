@@ -3,8 +3,15 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>Sabre</groupId>
 	<artifactId>Sabre</artifactId>
-	<version>0.2.0</version>
+	<version>0.2.0-SNAPSHOT</version>
 	<name>Sabre</name>
+	<url>https://github.com/CivFactions/Sabre</url>
+	<organization>
+		<name>CivFactions</name>
+	</organization>
+	<scm>
+		<url>https://github.com/CivFactions/Sabre</url>
+	</scm>
 	
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>

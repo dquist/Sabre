@@ -1,6 +1,0 @@
-name: Civics Factory 1
-material: FURNACE
-class: com.civfactions.sabre.factory.BaseFactory
-amount: 1
-lore:
-  - '<c>A basic civics factory.'

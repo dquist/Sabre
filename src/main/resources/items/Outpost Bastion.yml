@@ -1,7 +1,0 @@
-name: Outpost Bastion
-material: STAINED_GLASS
-durability: 15
-amount: 1
-class: com.civfactions.sabre.bastion.OutpostBastion
-lore:
-  - '<c>A fortified outpost defense mechanism.'
