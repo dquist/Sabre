@@ -3,7 +3,7 @@ package com.civfactions.sabre.warp;
 import org.bukkit.Location;
 
 import com.civfactions.sabre.Lang;
-import com.civfactions.sabre.SabrePlayer;
+import com.civfactions.sabre.IPlayer;
 import com.civfactions.sabre.SabrePlugin;
 import com.civfactions.sabre.blocks.BlockManager;
 import com.civfactions.sabre.blocks.SabreBlock;
@@ -28,7 +28,7 @@ public class DirectWarpDrive extends AbstractWarpDrive {
 	/**
 	 * Performs the warp
 	 */
-	public boolean performWarp(SabrePlayer sp, TeleportPad sourcePad) {
+	public boolean performWarp(IPlayer sp, TeleportPad sourcePad) {
 
 		Location sourcePadLocation = sourcePad.getLocation();
 		Location destPadLocation = sourcePad.getDestPadLocation();

@@ -12,7 +12,7 @@ import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.util.BlockIterator;
 
-import com.civfactions.sabre.SabrePlayer;
+import com.civfactions.sabre.IPlayer;
 import com.civfactions.sabre.SabrePlugin;
 import com.civfactions.sabre.blocks.BlockCollection;
 import com.civfactions.sabre.blocks.SabreBlock;
@@ -144,7 +144,7 @@ public class SnitchCollection extends BlockCollection {
 	 * @param player The player
 	 * @return The snitch if found
 	 */
-    public Snitch getSnitchUnderCursor(SabrePlayer sp) {
+    public Snitch getSnitchUnderCursor(IPlayer sp) {
         Iterator<Block> itr = new BlockIterator(sp.getPlayer(), 40); // Within 2.5 chunks
         while (itr.hasNext()) {
             final Block block = itr.next();
@@ -189,7 +189,7 @@ public class SnitchCollection extends BlockCollection {
      * @param player The player
      * @return The closest snitch, or null if one doesn't exist
      */
-    public Snitch findClosestOwnedSnitch(SabrePlayer sp) {
+    public Snitch findClosestOwnedSnitch(IPlayer sp) {
         Snitch closestSnitch = null;
         double closestDistance = Double.MAX_VALUE;
         Location playerLoc = sp.getPlayer().getLocation();
@@ -213,7 +213,7 @@ public class SnitchCollection extends BlockCollection {
      * @param sp The player
      * @return The snitch if it exists
      */
-    public Snitch findTargetedOwnedSnitch(SabrePlayer sp) {
+    public Snitch findTargetedOwnedSnitch(IPlayer sp) {
         Snitch snitch = getSnitchUnderCursor(sp);
         if (snitch != null && doesSnitchExist(snitch, true) && snitch.canPlayerAccess(sp)) {
             return snitch;

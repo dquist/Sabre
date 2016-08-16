@@ -17,7 +17,7 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
 import com.civfactions.sabre.Lang;
-import com.civfactions.sabre.SabrePlayer;
+import com.civfactions.sabre.IPlayer;
 import com.civfactions.sabre.SabrePlugin;
 import com.civfactions.sabre.data.IDataAccess;
 import com.civfactions.sabre.prisonpearl.PrisonPearlEvent.Type;
@@ -69,7 +69,7 @@ public class PearlManager {
 	 * Imprisons a player
 	 * @param pearl The pearl instance
 	 */
-	public PrisonPearl imprisonPlayer(SabrePlayer imprisoned, SabrePlayer imprisoner) {
+	public PrisonPearl imprisonPlayer(IPlayer imprisoned, IPlayer imprisoner) {
 		
 		if (this.isImprisoned(imprisoned)) {
 			imprisoner.msg(Lang.pearlAlreadyPearled, imprisoned.getName());
@@ -174,7 +174,7 @@ public class PearlManager {
 	 * Removes a player
 	 * @param pearl The player instance to free
 	 */
-	public void freePlayer(SabrePlayer p) {
+	public void freePlayer(IPlayer p) {
 		PrisonPearl pp = pearls.remove(p.getID());
 		db.pearlRemove(pp);
 	}
@@ -318,7 +318,7 @@ public class PearlManager {
 	 * @param p The player to check
 	 * @return true if the player is imprisoned
 	 */
-	public boolean isImprisoned(SabrePlayer p) {
+	public boolean isImprisoned(IPlayer p) {
 		return pearls.get(p.getID()) != null;
 	}
 	
@@ -347,7 +347,7 @@ public class PearlManager {
 	 * @param p The player
 	 * @return true if the player is summoned
 	 */
-	public boolean summonPearl(PrisonPearl pp, SabrePlayer p) {
+	public boolean summonPearl(PrisonPearl pp, IPlayer p) {
 		if (pp.getSummoned()) {
 			p.msg(Lang.pearlAlreadySummoned, pp.getName());
 			return false;
@@ -372,7 +372,7 @@ public class PearlManager {
 	 * @param p The player
 	 * @return true if the player was returned
 	 */
-	public boolean returnPearl(PrisonPearl pp, SabrePlayer p) {
+	public boolean returnPearl(PrisonPearl pp, IPlayer p) {
 		if (!pp.getSummoned()) {
 			p.msg(Lang.pearlNotSummoned, pp.getName());
 			return false;
@@ -396,7 +396,7 @@ public class PearlManager {
 	 * @param p The player
 	 * @return true if the player was kill
 	 */
-	public boolean killPearl(PrisonPearl pp, SabrePlayer p) {
+	public boolean killPearl(PrisonPearl pp, IPlayer p) {
 
 		this.setPearlSummoned(pp, false);
 		

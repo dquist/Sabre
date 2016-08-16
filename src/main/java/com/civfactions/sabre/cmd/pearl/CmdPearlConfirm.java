@@ -1,7 +1,7 @@
 package com.civfactions.sabre.cmd.pearl;
 
 import com.civfactions.sabre.Lang;
-import com.civfactions.sabre.SabrePlayer;
+import com.civfactions.sabre.IPlayer;
 import com.civfactions.sabre.cmd.SabreCommand;
 
 public class CmdPearlConfirm extends SabreCommand {
@@ -19,13 +19,13 @@ public class CmdPearlConfirm extends SabreCommand {
 	@Override
 	public void perform() 
 	{
-		SabrePlayer sp = me.getRequestedBcastPlayer();
+		IPlayer sp = me.getRequestedBcastPlayer();
 		if (sp == null) {
 			me.msg(Lang.pearlNoBcastRequest);
 			return;
 		}
 		
-		sp.getBcastPlayers().add(me);
+		sp.addBcastPlayer(me);
 		me.setRequestedBcastPlayer(null);
 		me.msg(Lang.pearlGettingBcasts, sp.getName());
 	}

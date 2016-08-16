@@ -1,6 +1,6 @@
 package com.civfactions.sabre.chat;
 
-import com.civfactions.sabre.SabrePlayer;
+import com.civfactions.sabre.IPlayer;
 
 /**
  * Represents a chat channel
@@ -8,6 +8,6 @@ import com.civfactions.sabre.SabrePlayer;
  *
  */
 public interface IChatChannel {
-	public void chat(SabrePlayer sender, String msg);
-	public void chatMe(SabrePlayer sender, String msg);
+	public void chat(IPlayer sender, String msg);
+	public void chatMe(IPlayer sender, String msg);
 }

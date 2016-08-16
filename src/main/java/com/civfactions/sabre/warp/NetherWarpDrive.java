@@ -8,7 +8,7 @@ import org.bukkit.block.Block;
 
 import com.civfactions.sabre.Lang;
 import com.civfactions.sabre.SabreConfig;
-import com.civfactions.sabre.SabrePlayer;
+import com.civfactions.sabre.IPlayer;
 import com.civfactions.sabre.SabrePlugin;
 import com.civfactions.sabre.blocks.BlockManager;
 import com.civfactions.sabre.blocks.SabreItemStack;
@@ -49,7 +49,7 @@ public class NetherWarpDrive extends AbstractWarpDrive {
 	 * Performs the warp
 	 */
 	@SuppressWarnings("deprecation")
-	public boolean performWarp(SabrePlayer sp, TeleportPad sourcePad) {
+	public boolean performWarp(IPlayer sp, TeleportPad sourcePad) {
 
 		Location sourcePadLocation = sourcePad.getLocation();
 		Location destPadLocation = sourcePad.getDestPadLocation();

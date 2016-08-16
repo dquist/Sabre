@@ -2,9 +2,9 @@ package com.civfactions.sabre.chat;
 
 import java.util.logging.Level;
 
+import com.civfactions.sabre.IPlayer;
 import com.civfactions.sabre.Lang;
 import com.civfactions.sabre.SabreConfig;
-import com.civfactions.sabre.SabrePlayer;
 import com.civfactions.sabre.SabrePlugin;
 
 public class GlobalChat implements IChatChannel {
@@ -42,13 +42,13 @@ public class GlobalChat implements IChatChannel {
 	
 	
 	@Override
-	public void chat(SabrePlayer sender, String msg) {
+	public void chat(IPlayer sender, String msg) {
 		String senderName = sender.getName();
 		boolean found = false;
 		String formatted = plugin.txt().parse("<w>%s: %s", senderName, msg);
 		SabrePlugin.log(Level.INFO, formatted);
 		
-		for (SabrePlayer p : plugin.getPlayerManager().getOnlinePlayers()) {
+		for (IPlayer p : plugin.getPlayerManager().getOnlinePlayers()) {
 			int distance = p.getDistanceFrom(sender);
 			if (distance >=0 && distance <= getGlobalChatRadius() && p.getPlayer().getWorld().equals(sender.getPlayer().getWorld())) {
 				p.getPlayer().sendMessage(formatted);
@@ -67,12 +67,12 @@ public class GlobalChat implements IChatChannel {
 	
 	
 	@Override
-	public void chatMe(SabrePlayer sender, String msg) {
+	public void chatMe(IPlayer sender, String msg) {
 		String senderName = sender.getName();
 		boolean found = false;
 		String formatted = plugin.txt().parse("<silver><it>%s %s", senderName, msg);
 		
-		for (SabrePlayer p : plugin.getPlayerManager().getOnlinePlayers()) {
+		for (IPlayer p : plugin.getPlayerManager().getOnlinePlayers()) {
 			int distance = p.getDistanceFrom(sender);
 			if (distance >=0 && distance <= getGlobalChatRadius() && p.getPlayer().getWorld().equals(sender.getPlayer().getWorld())) {
 				p.getPlayer().sendMessage(formatted);

@@ -12,7 +12,7 @@ import org.bukkit.World.Environment;
 import com.civfactions.sabre.Lang;
 import com.civfactions.sabre.PlayerManager;
 import com.civfactions.sabre.SabreConfig;
-import com.civfactions.sabre.SabrePlayer;
+import com.civfactions.sabre.IPlayer;
 import com.civfactions.sabre.blocks.BlockManager;
 import com.civfactions.sabre.blocks.SabreBlock;
 
@@ -22,7 +22,7 @@ public class PlayerSpawner {
 	private final SabreConfig config;
 	
 	// Track the last spawn location for each player
-	private HashMap<SabrePlayer, PlayerSpawnResult> lastRandomSpawn;
+	private HashMap<IPlayer, PlayerSpawnResult> lastRandomSpawn;
 	
 	// Blocks that should not be spawned on
 	private HashSet<Material> nospawnBlocks;
@@ -35,7 +35,7 @@ public class PlayerSpawner {
 		this.bm = bm;
 		this.config = config;
 		
-		lastRandomSpawn = new HashMap<SabrePlayer, PlayerSpawnResult>();
+		lastRandomSpawn = new HashMap<IPlayer, PlayerSpawnResult>();
 		
 		nospawnBlocks = new HashSet<Material>();
 		nospawnBlocks.add(Material.WATER);
@@ -60,7 +60,7 @@ public class PlayerSpawner {
 	 * Bed spawns a player in the default world if their bed exists, otherwise random spawns them
 	 * @param p The player to spawn
 	 */
-	public Location spawnPlayerBed(SabrePlayer sp, World world) {
+	public Location spawnPlayerBed(IPlayer sp, World world) {
 		Location l = sp.getBedLocation();
 		boolean useBed = false;
 		
@@ -94,7 +94,7 @@ public class PlayerSpawner {
 	 * Bed spawns a player in the default world if their bed exists, otherwise random spawns them
 	 * @param p The player to spawn
 	 */
-	public Location spawnPlayerBed(SabrePlayer sp) {
+	public Location spawnPlayerBed(IPlayer sp) {
 		return spawnPlayerBed(sp, Bukkit.getServer().getWorld(config.getFreeWorldName()));
 	}
 	
@@ -104,7 +104,7 @@ public class PlayerSpawner {
 	 * @param p The player to spawn
 	 * @param world The world to use
 	 */
-	public Location spawnPlayerRandom(SabrePlayer sp, World world) {
+	public Location spawnPlayerRandom(IPlayer sp, World world) {
 		Location spawnLocation = chooseSpawn(world, config.getRespawnRadius());
 		SabreUtil.sendToGround(sp.getPlayer(), spawnLocation);
 		sp.teleport(spawnLocation);
@@ -118,7 +118,7 @@ public class PlayerSpawner {
 	 * Random spawns a player in the default world
 	 * @param p The player to spawn
 	 */
-	public Location spawnPlayerRandom(SabrePlayer sp) {
+	public Location spawnPlayerRandom(IPlayer sp) {
 		return spawnPlayerRandom(sp, Bukkit.getServer().getWorld(config.getFreeWorldName()));
 	}
 
@@ -202,7 +202,7 @@ public class PlayerSpawner {
 	 * @param sp The player
 	 * @return The last spawn location
 	 */
-	public PlayerSpawnResult getLastSpawnLocation(SabrePlayer sp) {
+	public PlayerSpawnResult getLastSpawnLocation(IPlayer sp) {
 		return lastRandomSpawn.get(sp);
 	}
 }

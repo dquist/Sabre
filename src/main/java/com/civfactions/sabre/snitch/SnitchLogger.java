@@ -11,7 +11,7 @@ import org.bukkit.entity.Entity;
 import org.bukkit.inventory.ItemStack;
 
 import com.civfactions.sabre.PlayerManager;
-import com.civfactions.sabre.SabrePlayer;
+import com.civfactions.sabre.IPlayer;
 import com.civfactions.sabre.SabrePlugin;
 import com.civfactions.sabre.data.IDataAccess;
 
@@ -32,7 +32,7 @@ public class SnitchLogger {
      * @param player - the player that did the killing
      * @param entity - the entity that died
      */
-    public void logEntityKill(Snitch snitch, SabrePlayer player, Entity entity) {
+    public void logEntityKill(Snitch snitch, IPlayer player, Entity entity) {
 		this.logInfo(snitch, player.getID(), SnitchAction.KILL, new Date(), null, null, null, entity.getType().toString());
     }
 
@@ -43,7 +43,7 @@ public class SnitchLogger {
      * @param player - the player that did the killing
      * @param victim - the player that died
      */
-    public void logPlayerKill(Snitch snitch, SabrePlayer player, SabrePlayer victim) {
+    public void logPlayerKill(Snitch snitch, IPlayer player, IPlayer victim) {
 		this.logInfo(snitch, player.getID(), SnitchAction.KILL, new Date(), null, null, victim.getID(), null);
     }
 
@@ -54,7 +54,7 @@ public class SnitchLogger {
      * @param player - the player that did the ignition
      * @param block - the block that was ignited
      */
-    public void logIgnite(Snitch snitch, SabrePlayer player, Block block) {
+    public void logIgnite(Snitch snitch, IPlayer player, Block block) {
 		this.logInfo(snitch, player.getID(), SnitchAction.IGNITED, new Date(), block.getLocation(), block.getType(), null, null);
     }
 
@@ -65,7 +65,7 @@ public class SnitchLogger {
      * @param player - the player that entered the snitch's field
      * @param loc - the location of where the player entered
      */
-    public void logEntry(Snitch snitch, SabrePlayer player, Location loc) {
+    public void logEntry(Snitch snitch, IPlayer player, Location loc) {
 		this.logInfo(snitch, player.getID(), SnitchAction.ENTRY, new Date(), loc, null, null, null);
     }
 
@@ -76,7 +76,7 @@ public class SnitchLogger {
 	 * @param player - the player that logged in in the snitch's field
 	 * @param loc - the location of where the player logged in at
 	 */
-	public void logLogin(Snitch snitch, SabrePlayer player, Location loc) {
+	public void logLogin(Snitch snitch, IPlayer player, Location loc) {
 		this.logInfo(snitch, player.getID(), SnitchAction.LOGIN, new Date(), loc, null, null, null);
 	}
 
@@ -87,7 +87,7 @@ public class SnitchLogger {
 	 * @param player - the player that logged out in the snitch's field
 	 * @param loc - the location of where the player logged out at
 	 */
-	public void logLogout(Snitch snitch, SabrePlayer player, Location loc) {
+	public void logLogout(Snitch snitch, IPlayer player, Location loc) {
 		this.logInfo(snitch, player.getID(), SnitchAction.LOGOUT, new Date(), loc, null, null, null);
 	}
 
@@ -98,7 +98,7 @@ public class SnitchLogger {
      * @param player - the player that broke the block
      * @param block - the block that was broken
      */
-    public void logBlockBreak(Snitch snitch, SabrePlayer player, Block block) {
+    public void logBlockBreak(Snitch snitch, IPlayer player, Block block) {
 		this.logInfo(snitch, player.getID(), SnitchAction.BLOCK_BREAK, new Date(), block.getLocation(), block.getType(), null, null);
     }
 
@@ -109,7 +109,7 @@ public class SnitchLogger {
      * @param player - the player that placed the block
      * @param block - the block that was placed
      */
-    public void logBlockPlace(Snitch snitch, SabrePlayer player, Block block) {
+    public void logBlockPlace(Snitch snitch, IPlayer player, Block block) {
 		this.logInfo(snitch, player.getID(), SnitchAction.BLOCK_PLACE, new Date(), block.getLocation(), block.getType(), null, null);
     }
 
@@ -122,7 +122,7 @@ public class SnitchLogger {
      * @param item - the ItemStack representing the bucket that the player
      * emptied
      */
-    public void logBucketEmpty(Snitch snitch, SabrePlayer player, Location loc, ItemStack item) {
+    public void logBucketEmpty(Snitch snitch, IPlayer player, Location loc, ItemStack item) {
 		this.logInfo(snitch, player.getID(), SnitchAction.BUCKET_EMPTY, new Date(), loc, item.getType(), null, null);
     }
 
@@ -133,7 +133,7 @@ public class SnitchLogger {
      * @param player - the player that filled the bucket
      * @param block - the block that was 'put into' the bucket
      */
-    public void logBucketFill(Snitch snitch, SabrePlayer player, Block block) {
+    public void logBucketFill(Snitch snitch, IPlayer player, Block block) {
 		this.logInfo(snitch, player.getID(), SnitchAction.BUCKET_FILL, new Date(), block.getLocation(), block.getType(), null, null);
     }
 	
@@ -144,7 +144,7 @@ public class SnitchLogger {
      * @param player - the player that used something
      * @param block - the block that was used
      */
-	public void logUsed(Snitch snitch, SabrePlayer player, Block block) {
+	public void logUsed(Snitch snitch, IPlayer player, Block block) {
 		this.logInfo(snitch, player.getID(), SnitchAction.USED, new Date(), block.getLocation(), block.getType(), null, null);
     }
 	
@@ -181,7 +181,7 @@ public class SnitchLogger {
 	}
 	
 	
-	public void requestReport(SabrePlayer p, Snitch snitch, int page) {
+	public void requestReport(IPlayer p, Snitch snitch, int page) {
 		ReportReqeust request = new ReportReqeust(db, pm, p, snitch, page);
 		Bukkit.getScheduler().runTaskAsynchronously(SabrePlugin.instance(), request);
 	}

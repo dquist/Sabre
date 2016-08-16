@@ -12,7 +12,7 @@ import org.bukkit.block.Block;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
-import com.civfactions.sabre.SabrePlayer;
+import com.civfactions.sabre.IPlayer;
 import com.civfactions.sabre.SabrePlugin;
 import com.civfactions.sabre.customitems.SecureSign;
 import com.civfactions.sabre.data.IDataAccess;
@@ -271,7 +271,7 @@ public class BlockManager {
 	 * @param b The block to check
 	 * @return true if access is permitted
 	 */
-	public boolean playerCanAccessBlock(SabrePlayer p, SabreBlock b) {
+	public boolean playerCanAccessBlock(IPlayer p, SabreBlock b) {
 		if (b == null) {
 			return true;
 		}
@@ -296,7 +296,7 @@ public class BlockManager {
 	 * @param b The block to check
 	 * @return true if access is permitted
 	 */
-	public boolean playerCanAccessBlock(SabrePlayer p, Block b) {
+	public boolean playerCanAccessBlock(IPlayer p, Block b) {
 		return this.playerCanAccessBlock(p, getBlockAt(b.getLocation()));
 	}
 	
@@ -307,7 +307,7 @@ public class BlockManager {
 	 * @param b The block to check
 	 * @return true if access is permitted
 	 */
-	public boolean playerCanBreakBlock(SabrePlayer p, SabreBlock b) {
+	public boolean playerCanBreakBlock(IPlayer p, SabreBlock b) {
 		if (b == null) {
 			return true;
 		}
@@ -332,7 +332,7 @@ public class BlockManager {
 	 * @param b The block to check
 	 * @return true if access is permitted
 	 */
-	public boolean playerCanModifyBlock(SabrePlayer p, Block b) {
+	public boolean playerCanModifyBlock(IPlayer p, Block b) {
 		return this.playerCanBreakBlock(p, getBlockAt(b.getLocation()));
 	}
 	

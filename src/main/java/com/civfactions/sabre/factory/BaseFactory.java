@@ -22,7 +22,7 @@ import org.bukkit.material.MaterialData;
 import org.bukkit.material.DirectionalContainer;
 
 import com.civfactions.sabre.Lang;
-import com.civfactions.sabre.SabrePlayer;
+import com.civfactions.sabre.IPlayer;
 import com.civfactions.sabre.SabrePlugin;
 import com.civfactions.sabre.blocks.BlockManager;
 import com.civfactions.sabre.blocks.SabreBlock;
@@ -50,7 +50,7 @@ public class BaseFactory extends SpecialBlock {
 	protected int energyTimer;
 	protected List<FactoryFuel> fuels;
 	protected FactoryFuel curFuel;
-	protected SabrePlayer runner;
+	protected IPlayer runner;
 	protected boolean upgradeMode;
 	
 
@@ -301,7 +301,7 @@ public class BaseFactory extends SpecialBlock {
 	 * Handles interaction
 	 * @param p The player interacting
 	 */
-	public void onInteract(PlayerInteractEvent e, SabrePlayer p) {
+	public void onInteract(PlayerInteractEvent e, IPlayer p) {
 		if (e.getAction().equals(Action.RIGHT_CLICK_BLOCK) && !p.getPlayer().isSneaking()) {
 			e.setCancelled(true);
 		}
@@ -313,7 +313,7 @@ public class BaseFactory extends SpecialBlock {
 	 * @param p The player interacting
 	 */
 	@Override
-	public void onStickInteract(PlayerInteractEvent e, SabrePlayer sp) {
+	public void onStickInteract(PlayerInteractEvent e, IPlayer sp) {
 		
 		// Create a controller if it doesn't exist
 		if (this.canPlayerModify(sp)) {
@@ -337,7 +337,7 @@ public class BaseFactory extends SpecialBlock {
 	 * Handles the block breaking, low priority event
 	 * @param e The event args
 	 */
-	public void onBlockBreaking(SabrePlayer p, BlockBreakEvent e) {
+	public void onBlockBreaking(IPlayer p, BlockBreakEvent e) {
 		if (running) {
 			powerOff();
 		}
@@ -348,7 +348,7 @@ public class BaseFactory extends SpecialBlock {
 	 * Creates the factory controller
 	 * @param sp The player
 	 */
-	public void createController(SabrePlayer sp) {
+	public void createController(IPlayer sp) {
 		int amount = sp.getPlayer().getItemInHand().getAmount();
 		ItemStack is = (new FactoryController(this)).toItemStack();
 		is.setAmount(amount);
@@ -361,7 +361,7 @@ public class BaseFactory extends SpecialBlock {
 	 * Cycles the recipe
 	 * @param sp The player
 	 */
-	protected void cycleRecipe(SabrePlayer runner) {
+	protected void cycleRecipe(IPlayer runner) {
 		
 		this.runner = runner;
 		
@@ -414,7 +414,7 @@ public class BaseFactory extends SpecialBlock {
 	/**
 	 * Cycles power on the factory
 	 */
-	public void cyclePower(SabrePlayer runner) {
+	public void cyclePower(IPlayer runner) {
 		this.runner = runner;
 		
 		if (running) {

@@ -8,7 +8,7 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 
 import com.civfactions.sabre.Lang;
-import com.civfactions.sabre.SabrePlayer;
+import com.civfactions.sabre.IPlayer;
 import com.civfactions.sabre.SabrePlugin;
 import com.civfactions.sabre.blocks.BlockManager;
 import com.civfactions.sabre.blocks.Reinforcement;
@@ -41,7 +41,7 @@ public class TeleportPad extends SpecialBlock {
 	 * Allows the player to link the teleport pad with a warp drive
 	 */
 	@Override
-	public void onStickInteract(PlayerInteractEvent e, SabrePlayer sp) {
+	public void onStickInteract(PlayerInteractEvent e, IPlayer sp) {
 		
 		if (e.getAction().equals(Action.LEFT_CLICK_BLOCK)) {
 			return;
@@ -101,7 +101,7 @@ public class TeleportPad extends SpecialBlock {
 	 * Teleport the player
 	 * @param p The player interacting
 	 */
-	public void onInteract(PlayerInteractEvent e, SabrePlayer sp) {
+	public void onInteract(PlayerInteractEvent e, IPlayer sp) {
 		
 		if (e.getAction().equals(Action.RIGHT_CLICK_BLOCK)) {
 			return;

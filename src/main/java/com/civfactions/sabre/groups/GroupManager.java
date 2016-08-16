@@ -11,7 +11,7 @@ import org.bukkit.World;
 
 import com.civfactions.sabre.Lang;
 import com.civfactions.sabre.PlayerManager;
-import com.civfactions.sabre.SabrePlayer;
+import com.civfactions.sabre.IPlayer;
 import com.civfactions.sabre.SabrePlugin;
 import com.civfactions.sabre.blocks.BlockManager;
 import com.civfactions.sabre.blocks.BuildMode;
@@ -76,7 +76,7 @@ public class GroupManager {
 	 * Gets all the groups a player is on
 	 * @return A collection of all the groups the player is on
 	 */
-	public Collection<SabreGroup> getPlayerGroups(SabrePlayer player) {
+	public Collection<SabreGroup> getPlayerGroups(IPlayer player) {
 		Guard.ArgumentNotNull(player, "player");
 		
 		return groups.values().stream().filter(g -> g.isMember(player)).collect(Collectors.toSet());
@@ -87,7 +87,7 @@ public class GroupManager {
 	 * Gets all the groups that a player is invited to
 	 * @return A collection of all the the player is invited to
 	 */
-	public Collection<SabreGroup> getInvitedGroups(SabrePlayer player) {
+	public Collection<SabreGroup> getInvitedGroups(IPlayer player) {
 		Guard.ArgumentNotNull(player, "player");
 		
 		return groups.values().stream().filter(g -> g.isInvited(player)).collect(Collectors.toSet());
@@ -112,7 +112,7 @@ public class GroupManager {
 	 * @param name The name of the group
 	 * @return The group instance if it exists, otherwise null
 	 */
-	public SabreGroup getGroupByName(SabrePlayer owner, String name) {
+	public SabreGroup getGroupByName(IPlayer owner, String name) {
 		Guard.ArgumentNotNull(owner, "owner");
 		Guard.ArgumentNotNull(name, "name");
 		
@@ -180,7 +180,7 @@ public class GroupManager {
 	 * @param name The name of the group
 	 * @return The new group instance
 	 */
-	public SabreGroup createNewGroup(SabrePlayer owner, String name) {
+	public SabreGroup createNewGroup(IPlayer owner, String name) {
 		Guard.ArgumentNotNull(owner, "owner");
 		Guard.ArgumentNotNullOrEmpty(name, "name");
 		
@@ -204,7 +204,7 @@ public class GroupManager {
 	 * @param name The name of the faction
 	 * @return The new faction instance
 	 */
-	public SabreFaction createNewFaction(SabrePlayer owner, String name) {
+	public SabreFaction createNewFaction(IPlayer owner, String name) {
 		Guard.ArgumentNotNull(owner, "owner");
 		Guard.ArgumentNotNullOrEmpty(name, "name");
 
@@ -228,7 +228,7 @@ public class GroupManager {
 	 * @param player The player to add
 	 * @return The new member instance
 	 */
-	public SabreMember addPlayer(SabreGroup group, SabrePlayer player) {
+	public SabreMember addPlayer(SabreGroup group, IPlayer player) {
 		Guard.ArgumentNotNull(group, "group");
 		Guard.ArgumentNotNull(player, "player");
 		
@@ -261,7 +261,7 @@ public class GroupManager {
 	 * @param player The player to add
 	 * @return The new member instance
 	 */
-	public SabreMember removePlayer(SabreGroup group, SabrePlayer player) {
+	public SabreMember removePlayer(SabreGroup group, IPlayer player) {
 		Guard.ArgumentNotNull(group, "group");
 		Guard.ArgumentNotNull(player, "player");
 		
@@ -291,7 +291,7 @@ public class GroupManager {
 	 * @param group The group to add to
 	 * @param player The player to add
 	 */
-	public void invitePlayer(SabreGroup group, SabrePlayer player) {
+	public void invitePlayer(SabreGroup group, IPlayer player) {
 		Guard.ArgumentNotNull(group, "group");
 		Guard.ArgumentNotNull(player, "player");
 		
@@ -307,7 +307,7 @@ public class GroupManager {
 	 * @param group The group to add to
 	 * @param player The player to remove
 	 */
-	public void uninvitePlayer(SabreGroup group, SabrePlayer player) {
+	public void uninvitePlayer(SabreGroup group, IPlayer player) {
 		Guard.ArgumentNotNull(group, "group");
 		Guard.ArgumentNotNull(player, "player");
 		
@@ -345,7 +345,7 @@ public class GroupManager {
 	 * @param group The group to remove from
 	 * @param player The removed player
 	 */
-	private void checkRemoveChat(SabreGroup group, SabrePlayer player) {
+	private void checkRemoveChat(SabreGroup group, IPlayer player) {
 		Guard.ArgumentNotNull(group, "group");
 		Guard.ArgumentNotNull(player, "player");
 		
@@ -362,7 +362,7 @@ public class GroupManager {
 	 * @param group The group
 	 * @param player The removed player
 	 */
-	private void checkResetBuildMode(SabreGroup group, SabrePlayer player) {		
+	private void checkResetBuildMode(SabreGroup group, IPlayer player) {		
 		// Reset the build mode for the player
 		BuildState state = player.getBuildState();
 		SabreGroup buildGroup = state.getGroup();
@@ -379,7 +379,7 @@ public class GroupManager {
 	 * @param group The group for the signs
 	 * @param player The player to update
 	 */
-	private void updateGroupSigns(SabreGroup group, SabrePlayer player) {		
+	private void updateGroupSigns(SabreGroup group, IPlayer player) {		
 		if (!player.isOnline()) {
 			return;
 		}

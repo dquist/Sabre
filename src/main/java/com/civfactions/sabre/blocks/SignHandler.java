@@ -6,7 +6,7 @@ import org.bukkit.Location;
 import org.bukkit.block.BlockState;
 import org.bukkit.block.Sign;
 
-import com.civfactions.sabre.SabrePlayer;
+import com.civfactions.sabre.IPlayer;
 import com.civfactions.sabre.SabrePlugin;
 import com.civfactions.sabre.customitems.SecureSign;
 import com.civfactions.sabre.groups.SabreGroup;
@@ -57,7 +57,7 @@ public class SignHandler extends PacketAdapter {
 		// Are we a SecureSign?
 		if (b instanceof SecureSign) {
 			SecureSign sign = (SecureSign)b;
-			SabrePlayer p = plugin.getPlayerManager().getPlayerById(e.getPlayer().getUniqueId());
+			IPlayer p = plugin.getPlayerManager().getPlayerById(e.getPlayer().getUniqueId());
 			updateSignPacket(w, sign, p);	
 		}
 	}
@@ -70,7 +70,7 @@ public class SignHandler extends PacketAdapter {
 	public void updateSign(SecureSign sign) {
 		
 		Location l = sign.getLocation();
-		for (SabrePlayer p : plugin.getPlayerManager().getOnlinePlayers()) {
+		for (IPlayer p : plugin.getPlayerManager().getOnlinePlayers()) {
 			
 			if (p.getPlayer().getLocation().distance(l) < 64) {
 				WrapperPlayServerUpdateSign w = new WrapperPlayServerUpdateSign();
@@ -90,7 +90,7 @@ public class SignHandler extends PacketAdapter {
 	 * @param sign The sign instance
 	 * @param p The player
 	 */
-	private void updateSignPacket(WrapperPlayServerUpdateSign w, SecureSign sign, SabrePlayer p) {
+	private void updateSignPacket(WrapperPlayServerUpdateSign w, SecureSign sign, IPlayer p) {
 
 		Reinforcement r = sign.getReinforcement();
 		if (r == null) {

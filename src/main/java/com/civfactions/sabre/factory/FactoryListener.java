@@ -15,7 +15,7 @@ import org.bukkit.material.Attachable;
 
 import com.civfactions.sabre.Lang;
 import com.civfactions.sabre.PlayerManager;
-import com.civfactions.sabre.SabrePlayer;
+import com.civfactions.sabre.IPlayer;
 import com.civfactions.sabre.blocks.AbstractController;
 import com.civfactions.sabre.blocks.BlockManager;
 import com.civfactions.sabre.blocks.SabreBlock;
@@ -85,7 +85,7 @@ public class FactoryListener implements Listener {
 			return;
 		}
 		
-		SabrePlayer p = pm.getPlayerById(e.getPlayer().getUniqueId());
+		IPlayer p = pm.getPlayerById(e.getPlayer().getUniqueId());
 
 		// Try to parse a location
 		Location l = FactoryController.parseLocation(p, false);

@@ -16,6 +16,7 @@ import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.inventory.InventoryHolder;
 
+import com.civfactions.sabre.IPlayer;
 import com.civfactions.sabre.SabreConfig;
 import com.civfactions.sabre.SabrePlayer;
 import com.civfactions.sabre.SabrePlugin;
@@ -225,7 +226,7 @@ public class MongoConnector implements IDataAccess {
 	 * @param p The player to insert
 	 */
 	@Override
-	public void playerInsert(SabrePlayer p) {
+	public void playerInsert(IPlayer p) {
 		BasicDBObject doc = new BasicDBObject()
 		.append("_id", p.getID().toString())
 		.append("name", p.getName())
@@ -243,7 +244,7 @@ public class MongoConnector implements IDataAccess {
 	 * @param p The player instance to update
 	 */
 	@Override
-	public void playerUpdateLastLogin(SabrePlayer p) {
+	public void playerUpdateLastLogin(IPlayer p) {
 		updatePlayerRecordValue(p, "last_login", p.getLastLogin());
 	}
 
@@ -253,7 +254,7 @@ public class MongoConnector implements IDataAccess {
 	 * @param p The player instance to update
 	 */
 	@Override
-	public void playerUpdateAutoJoin(SabrePlayer p) {
+	public void playerUpdateAutoJoin(IPlayer p) {
 		updatePlayerRecordValue(p, "auto_join", p.getAutoJoin());
 	}
 
@@ -263,7 +264,7 @@ public class MongoConnector implements IDataAccess {
 	 * @param p The player instance to update
 	 */
 	@Override
-	public void playerUpdateFaction(SabrePlayer p) {
+	public void playerUpdateFaction(IPlayer p) {
 		if (p.getFaction() == null) {
 			updatePlayerRecordValue(p, "factionId", null);
 		} else {
@@ -277,7 +278,7 @@ public class MongoConnector implements IDataAccess {
 	 * @param p The player instance to update
 	 */
 	@Override
-	public void playerUpdateName(SabrePlayer p) {
+	public void playerUpdateName(IPlayer p) {
 		updatePlayerRecordValue(p, "name", p.getName());
 	}
 
@@ -287,7 +288,7 @@ public class MongoConnector implements IDataAccess {
 	 * @param p The player instance to update
 	 */
 	@Override
-	public void playerUpdateBan(SabrePlayer p) {
+	public void playerUpdateBan(IPlayer p) {
 		updatePlayerRecordValue(p, "banned", p.getBanned());
 		updatePlayerRecordValue(p, "ban_message", p.getBanMessage());
 	}
@@ -297,7 +298,7 @@ public class MongoConnector implements IDataAccess {
 	 * @param p The player instance to update
 	 */
 	@Override
-	public void playerUpdatePlayTime(SabrePlayer p) {
+	public void playerUpdatePlayTime(IPlayer p) {
 		updatePlayerRecordValue(p, "play_time", p.getPlaytime());
 	}
 	
@@ -307,7 +308,7 @@ public class MongoConnector implements IDataAccess {
 	 * @param p The player instance to update
 	 */
 	@Override
-	public void playerUpdateFreedOffline(SabrePlayer p) {
+	public void playerUpdateFreedOffline(IPlayer p) {
 		updatePlayerRecordValue(p, "freed_offline", p.getFreedOffline());
 	}
 	
@@ -317,7 +318,7 @@ public class MongoConnector implements IDataAccess {
 	 * @param p The player instance to update
 	 */
 	@Override
-	public void playerUpdateBed(SabrePlayer p) {
+	public void playerUpdateBed(IPlayer p) {
 		Location l = p.getBedLocation();
 		if (l != null) {
 			updatePlayerRecordValue(p, "bed", SabreUtil.serializeLocation(l));
@@ -329,7 +330,7 @@ public class MongoConnector implements IDataAccess {
 	 * @param p The player instance to delete
 	 */
 	@Override
-	public void playerDelete(SabrePlayer p) {
+	public void playerDelete(IPlayer p) {
 		BasicDBObject where = new BasicDBObject();
 		where.append("_id", p.getID().toString());
 
@@ -343,7 +344,7 @@ public class MongoConnector implements IDataAccess {
 	 * @param The player to update
 	 * @message The message to add
 	 */
-	public void playerAddOfflineMessage(SabrePlayer p, String message) {
+	public void playerAddOfflineMessage(IPlayer p, String message) {
 		BasicDBObject doc = new BasicDBObject()
 		.append("$push", new BasicDBObject("messages", message));
 
@@ -358,7 +359,7 @@ public class MongoConnector implements IDataAccess {
 	 * Clears all offline messages for the player
 	 * @param The player to update
 	 */
-	public void playerClearOfflineMessages(SabrePlayer p) {
+	public void playerClearOfflineMessages(IPlayer p) {
 		BasicDBObject doc = new BasicDBObject()
 		.append("$set", new BasicDBObject("messages", new BasicDBObject()));
 
@@ -374,7 +375,7 @@ public class MongoConnector implements IDataAccess {
 	 * @param p The player to search for
 	 * @param doc The document values to update
 	 */
-	private void updatePlayerRecordValue(SabrePlayer p, String key, Object val) {
+	private void updatePlayerRecordValue(IPlayer p, String key, Object val) {
 		BasicDBObject doc = new BasicDBObject()
 		.append("$set", new BasicDBObject().append(key, val));
 

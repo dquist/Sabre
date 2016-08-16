@@ -25,7 +25,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.util.Vector;
 
-import com.civfactions.sabre.SabrePlayer;
+import com.civfactions.sabre.IPlayer;
 import com.civfactions.sabre.SabrePlugin;
 import com.civfactions.sabre.blocks.SabreItemStack;
 import com.civfactions.sabre.cmd.pearl.CmdPearl;
@@ -41,7 +41,7 @@ public class PrisonPearl {
 	public static String ITEM_NAME = "Prison Pearl";
 
 	private final UUID playerId;
-	private SabrePlayer player;
+	private IPlayer player;
 	private IItemHolder holder;
 	private Date pearledOn;
 	private LinkedBlockingQueue<IItemHolder> holders;
@@ -73,7 +73,7 @@ public class PrisonPearl {
 	 * @param playerId The pearled player id
 	 * @param holder The holder instance
 	 */
-	public PrisonPearl(SabrePlayer player, IItemHolder holder) {
+	public PrisonPearl(IPlayer player, IItemHolder holder) {
 		this(player.getID(), holder);
 		this.player = player;
 	}
@@ -83,7 +83,7 @@ public class PrisonPearl {
 	 * @param playerId The pearled player id
 	 * @param holder The holder instance
 	 */
-	public PrisonPearl(SabrePlayer player, SabrePlayer holder) {
+	public PrisonPearl(IPlayer player, IPlayer holder) {
 		this(player.getID(), new PlayerHolder(holder));
 		this.player = player;
 	}
@@ -102,7 +102,7 @@ public class PrisonPearl {
 	 * Gets the imprisoned player
 	 * @return The player instance
 	 */
-	public SabrePlayer getPlayer() {
+	public IPlayer getPlayer() {
 		if (player == null) {
 			player = SabrePlugin.instance().getPlayerManager().getPlayerById(playerId);
 		}
@@ -168,7 +168,7 @@ public class PrisonPearl {
 	 * Sets the pearl holder to a player
 	 * @param holder The new pearl holder
 	 */
-	public void setHolder(SabrePlayer p) {
+	public void setHolder(IPlayer p) {
 		this.setHolder(new PlayerHolder(p));
 	}
 
@@ -464,7 +464,7 @@ public class PrisonPearl {
 			feedback.append("On ground not in chunk");
 			return HolderVerReason.ENTITY_NOT_IN_CHUNK;
 		} else if (holder instanceof PlayerHolder) {
-			SabrePlayer sp = ((PlayerHolder)holder).getPlayer();
+			IPlayer sp = ((PlayerHolder)holder).getPlayer();
 			Player p = sp.getPlayer();
 			
 			// Is the holder online?

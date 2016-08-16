@@ -15,7 +15,7 @@ import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.inventory.meta.ItemMeta;
 
 import com.civfactions.sabre.Lang;
-import com.civfactions.sabre.SabrePlayer;
+import com.civfactions.sabre.IPlayer;
 import com.civfactions.sabre.SabrePlugin;
 
 public abstract class AbstractController {
@@ -89,7 +89,7 @@ public abstract class AbstractController {
 	 * @param p The player holding the controller
 	 * @return The target location if it exists
 	 */
-	public static Location parseControllerLocation(SabrePlayer p, String name, boolean warn) {
+	public static Location parseControllerLocation(IPlayer p, String name, boolean warn) {
 		
 		try {
 			List<String> lore = checkControllerLore(p, name);
@@ -140,7 +140,7 @@ public abstract class AbstractController {
 	 * @param name The controller name
 	 * @return The lore if the checks pass
 	 */
-	public static List<String> checkControllerLore(SabrePlayer p, String name) {
+	public static List<String> checkControllerLore(IPlayer p, String name) {
 		ItemStack is = p.getPlayer().getInventory().getItemInHand();
 		
 		if (!is.getType().equals(Material.STICK)) {
@@ -173,7 +173,7 @@ public abstract class AbstractController {
 	 * Turns a held controller into a normal stick
 	 * @param p The player holding the stick
 	 */
-	public static void normalizeHeldController(SabrePlayer p) {
+	public static void normalizeHeldController(IPlayer p) {
 
 		PlayerInventory inv = p.getPlayer().getInventory();
 		ItemStack is = inv.getItemInHand();

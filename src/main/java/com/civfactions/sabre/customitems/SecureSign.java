@@ -7,7 +7,7 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 
 import com.civfactions.sabre.Lang;
-import com.civfactions.sabre.SabrePlayer;
+import com.civfactions.sabre.IPlayer;
 import com.civfactions.sabre.SabrePlugin;
 import com.civfactions.sabre.SabreTweaks;
 import com.civfactions.sabre.blocks.Reinforcement;
@@ -32,7 +32,7 @@ public class SecureSign extends SpecialBlock {
 	 * Toggles the secure status of the sign
 	 */
 	@Override
-	public void onStickInteract(PlayerInteractEvent e, SabrePlayer sp) {
+	public void onStickInteract(PlayerInteractEvent e, IPlayer sp) {
 		
 		Reinforcement r = this.getReinforcement();
 		if (r == null) {
@@ -79,7 +79,7 @@ public class SecureSign extends SpecialBlock {
 	/**
 	 * Updates the sign for a given player
 	 */
-	public void updatefor(SabrePlayer p) {
+	public void updatefor(IPlayer p) {
 		SabrePlugin.instance().getSignHandler().updateSign(this);
 	}
 	
@@ -113,7 +113,7 @@ public class SecureSign extends SpecialBlock {
 	 * @param e The event args
 	 */
 	@Override
-	public void onReinforcementBroken(SabrePlayer p, BlockBreakEvent e) {
+	public void onReinforcementBroken(IPlayer p, BlockBreakEvent e) {
 		// If the reinforcement is broken, this will make it so a normal
 		// sign is dropped instead of a Secure Sign
 		dropsBlock = false;
@@ -127,7 +127,7 @@ public class SecureSign extends SpecialBlock {
 	 * @param e The event args
 	 */
 	@Override
-	public void onBlockBroken(SabrePlayer p, BlockBreakEvent e) {
+	public void onBlockBroken(IPlayer p, BlockBreakEvent e) {
 		if (!dropsBlock) {
 			SabreTweaks.dropItemAtLocation(this.location, new ItemStack(Material.SIGN, 1));
 		}

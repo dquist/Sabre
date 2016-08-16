@@ -3,7 +3,7 @@ package com.civfactions.sabre.util;
 //import org.kitteh.vanish.VanishManager;
 //import org.kitteh.vanish.VanishPlugin;
 
-import com.civfactions.sabre.SabrePlayer;
+import com.civfactions.sabre.IPlayer;
 
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -58,7 +58,7 @@ public class VanishApi {
 	 * Vanishes a player
 	 * @param sp The player
 	 */
-	public void vanish(SabrePlayer sp) {
+	public void vanish(IPlayer sp) {
 		if (vm == null) {
 			return;
 		}
@@ -71,7 +71,7 @@ public class VanishApi {
 	 * Unvanishes a player
 	 * @param sp The player
 	 */
-	public void unVanish(SabrePlayer sp) {
+	public void unVanish(IPlayer sp) {
 		if (vm == null) {
 			return;
 		}
@@ -85,7 +85,7 @@ public class VanishApi {
 	 * @param sp The player
 	 * @return true if the player is vanished
 	 */
-	public boolean isVanished(SabrePlayer sp) {
+	public boolean isVanished(IPlayer sp) {
 		if (vm == null) {
 			return false;
 		}

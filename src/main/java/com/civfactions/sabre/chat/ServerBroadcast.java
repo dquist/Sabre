@@ -1,7 +1,7 @@
 package com.civfactions.sabre.chat;
 
 import com.civfactions.sabre.PlayerManager;
-import com.civfactions.sabre.SabrePlayer;
+import com.civfactions.sabre.IPlayer;
 import com.civfactions.sabre.SabrePlugin;
 
 public class ServerBroadcast implements IChatChannel {
@@ -14,23 +14,23 @@ public class ServerBroadcast implements IChatChannel {
 	
 	
 	@Override
-	public void chat(SabrePlayer sender, String msg) {
+	public void chat(IPlayer sender, String msg) {
 		String senderName = sender.getName();
 		
 		String formatted = SabrePlugin.instance().txt().parse("<gold>## %s: <w>%s", senderName, msg);
 		
-		for (SabrePlayer p : pm.getOnlinePlayers()) {
+		for (IPlayer p : pm.getOnlinePlayers()) {
 			p.getPlayer().sendMessage(formatted);
 		}
 	}
 	
 	
 	@Override
-	public void chatMe(SabrePlayer sender, String msg) {
+	public void chatMe(IPlayer sender, String msg) {
 		String senderName = sender.getName();
 		String formatted = SabrePlugin.instance().txt().parse("<h><it>%s %s", senderName, msg);
 		
-		for (SabrePlayer p : pm.getOnlinePlayers()) {
+		for (IPlayer p : pm.getOnlinePlayers()) {
 			p.getPlayer().sendMessage(formatted);
 		}
 	}
@@ -38,7 +38,7 @@ public class ServerBroadcast implements IChatChannel {
 	public String chat(String senderName, String msg) {		
 		String formatted = SabrePlugin.instance().txt().parse("<gold>## %s: <w>%s", senderName, msg);
 		
-		for (SabrePlayer p : pm.getOnlinePlayers()) {
+		for (IPlayer p : pm.getOnlinePlayers()) {
 			p.getPlayer().sendMessage(formatted);
 		}
 		return formatted;

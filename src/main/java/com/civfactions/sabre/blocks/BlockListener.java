@@ -53,7 +53,7 @@ import org.bukkit.material.Sign;
 import com.civfactions.sabre.Lang;
 import com.civfactions.sabre.PlayerManager;
 import com.civfactions.sabre.SabreConfig;
-import com.civfactions.sabre.SabrePlayer;
+import com.civfactions.sabre.IPlayer;
 import com.civfactions.sabre.SabrePlugin;
 import com.civfactions.sabre.SabreTweaks;
 import com.civfactions.sabre.factory.BaseFactory;
@@ -112,7 +112,7 @@ public class BlockListener implements Listener {
 	public void onBlockPlaceEvent(BlockPlaceEvent e) {
 		try {
 			Reinforcement r = null;
-			SabrePlayer p = pm.getPlayerById(e.getPlayer().getUniqueId());
+			IPlayer p = pm.getPlayerById(e.getPlayer().getUniqueId());
 
 			// Create a new block instance and save it if the item in hand has block data
 			SabreBlock b = bm.createBlockFromItem(e.getItemInHand(), e.getBlock().getLocation());
@@ -175,7 +175,7 @@ public class BlockListener implements Listener {
 		try {
 			Block b = SabreUtil.getRealBlock(e.getBlock());
 			Location l = b.getLocation();
-			SabrePlayer p = pm.getPlayerById(e.getPlayer().getUniqueId());
+			IPlayer p = pm.getPlayerById(e.getPlayer().getUniqueId());
 
 			// Find the record for this block location
 			SabreBlock sb = bm.getBlockAt(l);
@@ -200,7 +200,7 @@ public class BlockListener implements Listener {
 		try {
 			
 			Block b = e.getBlock();
-			SabrePlayer p = pm.getPlayerById(e.getPlayer().getUniqueId());
+			IPlayer p = pm.getPlayerById(e.getPlayer().getUniqueId());
 
 			// If it can't find a record, check to see if there's a record for any
 			// attached block for a chest, door etc.
@@ -318,7 +318,7 @@ public class BlockListener implements Listener {
 
 			Block b = SabreUtil.getRealBlock(e.getClickedBlock());
 			Reinforcement r = null;
-			SabrePlayer p = pm.getPlayerById(e.getPlayer().getUniqueId());
+			IPlayer p = pm.getPlayerById(e.getPlayer().getUniqueId());
 			Action a = e.getAction();
 			BuildState state = p.getBuildState();
 			boolean canAccess = false;
@@ -487,7 +487,7 @@ public class BlockListener implements Listener {
 	 * @param blockPlace whether this is a block place operation
 	 * @return The new instance if it success
 	 */
-	public Reinforcement createReinforcement(SabrePlayer p, Block b, Reinforcement existing, boolean blockPlace) {
+	public Reinforcement createReinforcement(IPlayer p, Block b, Reinforcement existing, boolean blockPlace) {
 
 		Location l = b.getLocation();
 		BuildState state = p.getBuildState();
@@ -605,7 +605,7 @@ public class BlockListener implements Listener {
 	 * @param p The player that is checking
 	 * @param b The block to check
 	 */
-	private void showBlockInfo(SabrePlayer p, SabreBlock b) {
+	private void showBlockInfo(IPlayer p, SabreBlock b) {
 		Reinforcement r = b.getReinforcement();
 		String typeName = b.getTypeName();
 		boolean special = false;
@@ -665,7 +665,7 @@ public class BlockListener implements Listener {
 	 * @param player
 	 * @return
 	 */
-	private boolean canPlace(Block b, SabrePlayer p) {
+	private boolean canPlace(Block b, IPlayer p) {
 		Material block_mat = b.getType();
 
 		if (block_mat == Material.HOPPER || block_mat == Material.DROPPER){
@@ -923,7 +923,7 @@ public class BlockListener implements Listener {
 		boolean result = false;
 
 		try {
-			for (SabrePlayer p : pm.getOnlinePlayers()) {
+			for (IPlayer p : pm.getOnlinePlayers()) {
 				if (p.getPlayer().isDead()) {
 					continue;
 				}

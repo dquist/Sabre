@@ -1,7 +1,7 @@
 package com.civfactions.sabre.cmd;
 
 import com.civfactions.sabre.Lang;
-import com.civfactions.sabre.SabrePlayer;
+import com.civfactions.sabre.IPlayer;
 import com.civfactions.sabre.util.Permission;
 
 
@@ -27,7 +27,7 @@ public class CmdAdminBan extends SabreCommand {
 	{
 		String playerName = this.argAsString(0);
 		
-		SabrePlayer p = pm.getPlayerByName(playerName);
+		IPlayer p = pm.getPlayerByName(playerName);
 		
 		if (p == null) {
 			msg(Lang.unknownPlayer, playerName);

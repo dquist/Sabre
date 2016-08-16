@@ -1,7 +1,7 @@
 package com.civfactions.sabre.cmd;
 
 import com.civfactions.sabre.Lang;
-import com.civfactions.sabre.SabrePlayer;
+import com.civfactions.sabre.IPlayer;
 import com.civfactions.sabre.groups.SabreGroup;
 import com.civfactions.sabre.groups.SabreMember;
 
@@ -26,7 +26,7 @@ public class CmdGroupKick extends SabreCommand {
 	{
 		String groupName = this.argAsString(0);
 		String playerName = this.argAsString(1);
-		SabrePlayer p = this.argAsPlayer(1);
+		IPlayer p = this.argAsPlayer(1);
 
 		SabreGroup g = checkGroupExists(groupName, true);
 		if (g == null) {

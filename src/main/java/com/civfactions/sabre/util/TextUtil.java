@@ -318,7 +318,7 @@ public class TextUtil
 	// -------------------------------------------- //
 	
 	@SuppressWarnings("unchecked")
-	public static <T extends INamed> T getBestNamedMatch(Collection<? extends INamed> candidates, String start, String exclude)
+	public static <T extends INamed> T getBestNamedMatch(Iterable<? extends INamed> candidates, String start, String exclude)
 	{
 		INamed ret = null;
 		int best = 0;

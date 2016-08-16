@@ -1,7 +1,7 @@
 package com.civfactions.sabre.cmd;
 
 import com.civfactions.sabre.Lang;
-import com.civfactions.sabre.SabrePlayer;
+import com.civfactions.sabre.IPlayer;
 import com.civfactions.sabre.blocks.BuildMode;
 import com.civfactions.sabre.blocks.BuildState;
 import com.civfactions.sabre.groups.Rank;
@@ -33,7 +33,7 @@ public class CmdGroupSetRank extends SabreCommand {
 		String playerName = this.argAsString(1);
 		String rankName = this.argAsString(2);
 		Rank rank = Rank.fromString(rankName);
-		SabrePlayer p = this.argAsPlayer(1);
+		IPlayer p = this.argAsPlayer(1);
 
 		SabreGroup g = checkGroupExists(groupName, true);
 		if (g == null) {
@@ -100,7 +100,7 @@ public class CmdGroupSetRank extends SabreCommand {
 		msg(Lang.groupSetRank, memberTarget.getName(), rank.toString());
 		
 		// Reset the build mode for the player
-		SabrePlayer other = memberTarget.getPlayer();
+		IPlayer other = memberTarget.getPlayer();
 		BuildState state = other.getBuildState();
 		SabreGroup buildGroup = state.getGroup();
 		if (!memberTarget.canBuild() && buildGroup != null &&buildGroup.equals(g) && !state.getMode().equals(BuildMode.OFF)) {

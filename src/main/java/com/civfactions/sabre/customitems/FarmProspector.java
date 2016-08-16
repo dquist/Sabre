@@ -7,7 +7,7 @@ import org.bukkit.Material;
 import org.bukkit.event.player.PlayerInteractEvent;
 
 import com.civfactions.sabre.Lang;
-import com.civfactions.sabre.SabrePlayer;
+import com.civfactions.sabre.IPlayer;
 import com.civfactions.sabre.blocks.SabreItemStack;
 import com.civfactions.sabre.util.SabreUtil;
 
@@ -37,7 +37,7 @@ public class FarmProspector extends SabreItemStack {
 	
 	
 	@Override
-	public void onPlayerInteract(SabrePlayer sp, PlayerInteractEvent e) {
+	public void onPlayerInteract(IPlayer sp, PlayerInteractEvent e) {
 		double fertility = SabreUtil.getChunkFertility(e.getPlayer().getLocation());
 		
 		sp.msg(Lang.factoryFertility, Math.round(fertility * 100.0));

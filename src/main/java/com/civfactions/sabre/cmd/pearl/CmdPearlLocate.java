@@ -5,7 +5,7 @@ import java.util.logging.Level;
 import org.bukkit.Location;
 
 import com.civfactions.sabre.Lang;
-import com.civfactions.sabre.SabrePlayer;
+import com.civfactions.sabre.IPlayer;
 import com.civfactions.sabre.SabrePlugin;
 import com.civfactions.sabre.cmd.SabreCommand;
 import com.civfactions.sabre.prisonpearl.PrisonPearl;
@@ -42,7 +42,7 @@ public class CmdPearlLocate extends SabreCommand {
 			String bcastMsg = SabrePlugin.instance().txt().parse(Lang.pearlBroadcast, me.getName(), 
 					name, l.getBlockX(), l.getBlockY(), l.getBlockZ(), l.getWorld().getName());
 			
-			for(SabrePlayer p : me.getBcastPlayers()) {
+			for(IPlayer p : me.getBcastPlayers()) {
 				if (p.isOnline()) {
 					p.msg(bcastMsg);
 				}

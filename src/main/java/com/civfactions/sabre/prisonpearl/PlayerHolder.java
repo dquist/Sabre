@@ -2,13 +2,13 @@ package com.civfactions.sabre.prisonpearl;
 
 import org.bukkit.Location;
 
-import com.civfactions.sabre.SabrePlayer;
+import com.civfactions.sabre.IPlayer;
 
 public class PlayerHolder implements IItemHolder {
 
-	private final SabrePlayer p;
+	private final IPlayer p;
 	
-	public PlayerHolder(SabrePlayer p) {
+	public PlayerHolder(IPlayer p) {
 		this.p = p;
 	}
 
@@ -23,7 +23,7 @@ public class PlayerHolder implements IItemHolder {
 	}
 	
 	
-	public SabrePlayer getPlayer() {
+	public IPlayer getPlayer() {
 		return this.p;
 	}
 }

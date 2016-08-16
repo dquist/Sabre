@@ -3,9 +3,9 @@ package com.civfactions.sabre;
 import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.List;
 import java.util.UUID;
 import java.util.logging.Level;
+import java.util.stream.Collectors;
 
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
@@ -56,10 +56,11 @@ public class PlayerManager {
 	
 	/**
 	 * Removes a player from all records
-	 * @param player
+	 * @param player The player to remove
 	 */
-	public void removePlayer(SabrePlayer player) {
+	public void removePlayer(IPlayer player) {
 		Guard.ArgumentNotNull(player, "player");
+		assertValidPlayer(player);
 		
 		onlinePlayers.remove(player.getID());
 		players.remove(player.getID());
@@ -73,7 +74,7 @@ public class PlayerManager {
 	 * @param id The ID of the player
 	 * @return The player instance if it exists
 	 */
-	public SabrePlayer getPlayerById(UUID uid) {
+	public IPlayer getPlayerById(UUID uid) {
 		Guard.ArgumentNotNull(uid, "uid");
 		
 		// Check online players first
@@ -90,7 +91,7 @@ public class PlayerManager {
 	 * @param id The name of the player
 	 * @return The player instance if it exists
 	 */
-	public SabrePlayer getPlayerByName(String name) {
+	public IPlayer getPlayerByName(String name) {
 		Guard.ArgumentNotNullOrEmpty(name, "name");
 		
 		// Check online players first
@@ -116,12 +117,12 @@ public class PlayerManager {
 	 * @param player The bukkit player
 	 * @return The new SabrePlayer instance
 	 */
-	public SabrePlayer createNewPlayer(Player player) {
+	public IPlayer createNewPlayer(Player player) {
 		Guard.ArgumentNotNull(player, "player");
 		
 		String originalName = player.getName();
 		String name = originalName;
-		SabrePlayer sp = getPlayerByName(originalName);
+		IPlayer sp = getPlayerByName(originalName);
 		
 		// If there is a conflict, add numbers to the end to get a name
 		// that hasn't been used before
@@ -132,14 +133,14 @@ public class PlayerManager {
 		}
 		
 		// Now we should have a unique name for the new player
-		sp = new SabrePlayer(plugin, player.getUniqueId(), name);
-		sp.setPlayer(player);
-		sp.setFirstLogin(new Date());
-		sp.setName(name);
-		players.put(sp.getID(), sp);
-		db.playerInsert(sp);
-		plugin.logger().log(Level.INFO, "Created new player %s with ID %s", name, sp.getID());
-		return sp;
+		SabrePlayer sPlayer = new SabrePlayer(plugin, player.getUniqueId(), name);
+		sPlayer.setPlayer(player);
+		sPlayer.setFirstLogin(new Date());
+		sPlayer.setName(name);
+		players.put(sPlayer.getID(), sPlayer);
+		db.playerInsert(sPlayer);
+		plugin.logger().log(Level.INFO, "Created new player %s with ID %s", name, sPlayer.getID());
+		return sPlayer;
 	}
 	
 	
@@ -147,10 +148,11 @@ public class PlayerManager {
 	 * Handles a player connecting
 	 * @param player The player instance
 	 */
-	public void onPlayerConnect(SabrePlayer player) {
+	public void onPlayerConnect(IPlayer player) {
 		Guard.ArgumentNotNull(player, "player");
+		SabrePlayer sp = assertValidPlayer(player);
 		
-		this.onlinePlayers.put(player.getID(), player);
+		this.onlinePlayers.put(sp.getID(), sp);
 	}
 	
 	
@@ -158,28 +160,11 @@ public class PlayerManager {
 	 * Handles a player disconnecting
 	 * @param player The player instance
 	 */
-	public void onPlayerDisconnect(SabrePlayer player) {
+	public void onPlayerDisconnect(IPlayer player) {
 		Guard.ArgumentNotNull(player, "player");
+		SabrePlayer sp = assertValidPlayer(player);
 		
-		this.onlinePlayers.remove(player.getID());
-	}
-	
-	
-	/**
-	 * Gets the collection of all players ever
-	 * @return All the players
-	 */
-	public Collection<SabrePlayer> getPlayers() {
-		return this.players.values();
-	}
-	
-	
-	/**
-	 * Gets the collection of online players
-	 * @return The online players
-	 */
-	public Collection<SabrePlayer> getOnlinePlayers() {
-		return this.onlinePlayers.values();
+		this.onlinePlayers.remove(sp.getID());
 	}
 	
 	
@@ -188,13 +173,13 @@ public class PlayerManager {
 	 * @param player The player to update
 	 * @param lastLogin The first login time
 	 */
-	public void setLastLogin(SabrePlayer player, Date lastLogin) {
+	public void setLastLogin(IPlayer player, Date lastLogin) {
 		Guard.ArgumentNotNull(player, "player");
 		Guard.ArgumentNotNull(lastLogin, "lastLogin");
+		SabrePlayer sp = assertValidPlayer(player);
 		
-		
-		player.setLastLogin(lastLogin);
-		db.playerUpdateLastLogin(player);
+		sp.setLastLogin(lastLogin);
+		db.playerUpdateLastLogin(sp);
 	}
 	
 	
@@ -203,11 +188,12 @@ public class PlayerManager {
 	 * @param player The player to update
 	 * @param autoJoin The new status
 	 */
-	public void setAutoJoin(SabrePlayer player, boolean autoJoin) {
+	public void setAutoJoin(IPlayer player, boolean autoJoin) {
 		Guard.ArgumentNotNull(player, "player");
+		SabrePlayer sp = assertValidPlayer(player);
 		
-		player.setAutoJoin(autoJoin);
-		db.playerUpdateAutoJoin(player);
+		sp.setAutoJoin(autoJoin);
+		db.playerUpdateAutoJoin(sp);
 	}
 	
 	
@@ -216,13 +202,13 @@ public class PlayerManager {
 	 * @param player The player to update
 	 * @param faction The new faction
 	 */
-	public void setFaction(SabrePlayer player, SabreFaction faction) {
+	public void setFaction(IPlayer player, SabreFaction faction) {
 		Guard.ArgumentNotNull(player, "player");
 		Guard.ArgumentNotNull(faction, "faction");
+		SabrePlayer sp = assertValidPlayer(player);
 		
-		
-		player.setFaction(faction);
-		db.playerUpdateFaction(player);
+		sp.setFaction(faction);
+		db.playerUpdateFaction(sp);
 	}
 	
 	
@@ -231,13 +217,13 @@ public class PlayerManager {
 	 * @param player The player to update
 	 * @param name The new player name
 	 */
-	public void setDisplayName(SabrePlayer player, String name) {
+	public void setDisplayName(IPlayer player, String name) {
 		Guard.ArgumentNotNull(player, "player");
 		Guard.ArgumentNotNullOrEmpty(name, "name");
+		SabrePlayer sp = assertValidPlayer(player);
 		
-		
-		player.setName(name);
-		db.playerUpdateName(player);
+		sp.setName(name);
+		db.playerUpdateName(sp);
 	}
 	
 	
@@ -247,18 +233,19 @@ public class PlayerManager {
 	 * @param banned The player's ban status
 	 * @param reason The ban reason
 	 */
-	public void setBanStatus(SabrePlayer player, boolean banned, String reason) {
+	public void setBanStatus(IPlayer player, boolean banned, String reason) {
 		Guard.ArgumentNotNull(player, "player");
+		SabrePlayer sp = assertValidPlayer(player);
 		
-		player.setBanned(banned);
-		player.setBanMessage(reason);
+		sp.setBanned(banned);
+		sp.setBanMessage(reason);
 		
 		if (banned && player.isOnline()) {
 			String fullBanMessage = String.format("%s\n%s", Lang.youAreBanned, reason);
 			player.getPlayer().kickPlayer(fullBanMessage);
 		}
 		
-		db.playerUpdateBan(player);
+		db.playerUpdateBan(sp);
 	}
 	
 	
@@ -267,11 +254,12 @@ public class PlayerManager {
 	 * @param player The player to update
 	 * @param status The freed offline status
 	 */
-	public void setFreedOffline(SabrePlayer player, boolean status) {
+	public void setFreedOffline(IPlayer player, boolean status) {
 		Guard.ArgumentNotNull(player, "player");
+		SabrePlayer sp = assertValidPlayer(player);
 		
-		player.setFreedOffline(status);
-		db.playerUpdateFreedOffline(player);
+		sp.setFreedOffline(status);
+		db.playerUpdateFreedOffline(sp);
 	}
 	
 	/**
@@ -279,11 +267,12 @@ public class PlayerManager {
 	 * @param player The player to update
 	 * @param status The freed offline status
 	 */
-	public void setBedLocation(SabrePlayer player, Location l) {
+	public void setBedLocation(IPlayer player, Location l) {
 		Guard.ArgumentNotNull(player, "player");
+		SabrePlayer sp = assertValidPlayer(player);
 		
-		player.setBedLocation(l);
-		db.playerUpdateBed(player);
+		sp.setBedLocation(l);
+		db.playerUpdateBed(sp);
 	}
 	
 	
@@ -292,12 +281,13 @@ public class PlayerManager {
 	 * @param player The player to update
 	 * @param message The message to add
 	 */
-	public void addOfflineMessage(SabrePlayer player, String message) {
+	public void addOfflineMessage(IPlayer player, String message) {
 		Guard.ArgumentNotNull(player, "player");
 		Guard.ArgumentNotNullOrEmpty(message, "message");
+		SabrePlayer sp = assertValidPlayer(player);
 		
-		player.addOfflineMessage(message);
-		db.playerAddOfflineMessage(player, message);
+		sp.addOfflineMessage(message);
+		db.playerAddOfflineMessage(sp, message);
 	}
 	
 	
@@ -305,11 +295,12 @@ public class PlayerManager {
 	 * Clears the offline messages for a player
 	 * @param player The player to update
 	 */
-	public void clearOfflineMessages(SabrePlayer player) {
+	public void clearOfflineMessages(IPlayer player) {
 		Guard.ArgumentNotNull(player, "player");
+		SabrePlayer sp = assertValidPlayer(player);
 		
-		player.getOfflineMessages().clear();
-		db.playerClearOfflineMessages(player);
+		sp.getOfflineMessages().clear();
+		db.playerClearOfflineMessages(sp);
 	}
 	
 	
@@ -317,13 +308,14 @@ public class PlayerManager {
 	 * Print offline messages
 	 * @param player The player to message
 	 */
-	public void printOfflineMessages(SabrePlayer player) {
+	public void printOfflineMessages(IPlayer player) {
 		Guard.ArgumentNotNull(player, "player");
+		assertValidPlayer(player);
 		
 		if (player.isOnline()) {
 			
 			// Print the offline messages for the player if there are any
-			List<String> messages = player.getOfflineMessages();
+			Collection<String> messages = player.getOfflineMessages();
 			if (messages.size() > 0) {
 				player.msg(Lang.chatOfflineActivity);
 				for (String msg : player.getOfflineMessages()) {
@@ -339,10 +331,43 @@ public class PlayerManager {
 	 * @param player The player to update
 	 * @param time The time to add
 	 */
-	public void addPlayTime(SabrePlayer player, long time) {
+	public void addPlayTime(IPlayer player, long time) {
 		Guard.ArgumentNotNull(player, "player");
+		SabrePlayer sp = assertValidPlayer(player);
 		
-		player.addPlayTime(time);
-		db.playerUpdatePlayTime(player);
+		sp.addPlayTime(time);
+		db.playerUpdatePlayTime(sp);
+	}
+	
+	/**
+	 * Validates that a player instance is registered in the manager
+	 * @param p The player to validate
+	 * @return The matching SabrePlayer instance
+	 */
+	private SabrePlayer assertValidPlayer(IPlayer p) {
+		UUID uid = p.getID();
+		
+		// Check online players first
+		SabrePlayer player = onlinePlayers.get(uid);
+		
+		// Then check all players
+		if (player == null) {
+			player = players.get(uid);
+		}
+		
+		if (player == null) {
+			throw new RuntimeException(String.format("Tried to access invalid player '%s' with ID %s", p.getName(), p.getID()));
+		}
+		
+		return player;
+	}
+
+	public Collection<IPlayer> getPlayers() {
+		return this.players.values().stream().map(p -> (IPlayer)p).collect(Collectors.toList());
+	}
+
+
+	public Iterable<IPlayer> getOnlinePlayers() {
+		return this.onlinePlayers.values().stream().map(p -> (IPlayer)p).collect(Collectors.toList());
 	}
 }

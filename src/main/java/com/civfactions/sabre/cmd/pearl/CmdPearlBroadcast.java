@@ -1,7 +1,7 @@
 package com.civfactions.sabre.cmd.pearl;
 
 import com.civfactions.sabre.Lang;
-import com.civfactions.sabre.SabrePlayer;
+import com.civfactions.sabre.IPlayer;
 import com.civfactions.sabre.cmd.SabreCommand;
 
 public class CmdPearlBroadcast extends SabreCommand {
@@ -27,7 +27,7 @@ public class CmdPearlBroadcast extends SabreCommand {
 		}
 		
 		String playerName = args.get(0);
-		SabrePlayer p = pm.getPlayerByName(playerName);
+		IPlayer p = pm.getPlayerByName(playerName);
 		if (p == null || !p.isOnline()) {
 			msg(Lang.pearlNoPlayer);
 			return;

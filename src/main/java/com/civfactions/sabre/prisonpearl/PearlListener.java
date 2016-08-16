@@ -54,7 +54,7 @@ import org.bukkit.craftbukkit.v1_8_R3.CraftServer;
 
 import com.civfactions.sabre.Lang;
 import com.civfactions.sabre.PlayerManager;
-import com.civfactions.sabre.SabrePlayer;
+import com.civfactions.sabre.IPlayer;
 import com.civfactions.sabre.SabrePlugin;
 import com.civfactions.sabre.prisonpearl.PrisonPearlEvent.Type;
 import com.civfactions.sabre.util.SabreUtil;
@@ -559,10 +559,10 @@ public class PearlListener implements Listener {
 
 		Player killer = player.getKiller();
 		if (killer != null) {
-			SabrePlayer imprisoner = pm.getPlayerById(killer.getUniqueId());
+			IPlayer imprisoner = pm.getPlayerById(killer.getUniqueId());
 			
 			// Need to get by name b/c of combat tag entity
-			SabrePlayer imprisoned = pm.getPlayerByName(e.getEntity().getName());
+			IPlayer imprisoned = pm.getPlayerByName(e.getEntity().getName());
 
 			int firstpearl = Integer.MAX_VALUE;
 			for (Entry<Integer, ? extends ItemStack> entry : killer.getInventory().all(Material.ENDER_PEARL).entrySet()) {
@@ -605,7 +605,7 @@ public class PearlListener implements Listener {
 	 */
 	@EventHandler(priority=EventPriority.HIGHEST, ignoreCancelled = true)
 	public void onPlayerJoin(PlayerJoinEvent e) {
-		SabrePlayer sp = pm.getPlayerById(e.getPlayer().getUniqueId());
+		IPlayer sp = pm.getPlayerById(e.getPlayer().getUniqueId());
 		if (sp.getFreedOffline()) {
 
 			pm.setFreedOffline(sp, false);
@@ -758,11 +758,11 @@ public class PearlListener implements Listener {
 	public void onPrisonPearlEvent(PrisonPearlEvent event) {
 		
 		PrisonPearl pp = event.getPrisonPearl();
-		SabrePlayer imprisoned = pm.getPlayerById(pp.getPlayerID());
+		IPlayer imprisoned = pm.getPlayerById(pp.getPlayerID());
 		
 		if (event.getType() == PrisonPearlEvent.Type.NEW) {
 
-			SabrePlayer imprisoner = pm.getPlayerById(event.getImprisoner().getUniqueId());
+			IPlayer imprisoner = pm.getPlayerById(event.getImprisoner().getUniqueId());
 			// Log the capturing PrisonPearl event.
 			SabrePlugin.log(Level.INFO, String.format("%s has bound %s to a PrisonPearl", imprisoner.getName(), imprisoned.getName()));
 			
@@ -778,7 +778,7 @@ public class PearlListener implements Listener {
 			String bcastMsg = plugin.txt().parse(Lang.pearlBroadcast, imprisoned.getName(), 
 					name, l.getBlockX(), l.getBlockY(), l.getBlockZ(), l.getWorld().getName());
 			
-			for(SabrePlayer p : imprisoned.getBcastPlayers()) {
+			for(IPlayer p : imprisoned.getBcastPlayers()) {
 				if (p.isOnline()) {
 					p.msg(bcastMsg);
 				}
@@ -848,7 +848,7 @@ public class PearlListener implements Listener {
 	public void onSummonEvent(SummonEvent e) {
 		
 		PrisonPearl pp = e.getPrisonPearl();
-		SabrePlayer p = pp.getPlayer();
+		IPlayer p = pp.getPlayer();
 		if (p == null) {
 			return;
 		}

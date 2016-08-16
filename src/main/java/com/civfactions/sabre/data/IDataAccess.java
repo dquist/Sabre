@@ -6,6 +6,7 @@ import java.util.UUID;
 
 import org.bukkit.Chunk;
 
+import com.civfactions.sabre.IPlayer;
 import com.civfactions.sabre.SabrePlayer;
 import com.civfactions.sabre.blocks.SabreBlock;
 import com.civfactions.sabre.groups.SabreGroup;
@@ -21,18 +22,18 @@ public interface IDataAccess {
 	
 	// Players
 	public Collection<SabrePlayer> playerGetAll();
-	public void playerInsert(SabrePlayer p);
-	public void playerUpdateLastLogin(SabrePlayer p);
-	public void playerUpdateAutoJoin(SabrePlayer p);
-	public void playerUpdateFaction(SabrePlayer p);
-	public void playerUpdateName(SabrePlayer p);
-	public void playerUpdateBan(SabrePlayer p);
-	public void playerUpdatePlayTime(SabrePlayer p);
-	public void playerUpdateFreedOffline(SabrePlayer p);
-	public void playerUpdateBed(SabrePlayer p);
-	public void playerDelete(SabrePlayer p);
-	public void playerAddOfflineMessage(SabrePlayer p, String message);
-	public void playerClearOfflineMessages(SabrePlayer p);
+	public void playerInsert(IPlayer p);
+	public void playerUpdateLastLogin(IPlayer p);
+	public void playerUpdateAutoJoin(IPlayer p);
+	public void playerUpdateFaction(IPlayer p);
+	public void playerUpdateName(IPlayer p);
+	public void playerUpdateBan(IPlayer p);
+	public void playerUpdatePlayTime(IPlayer p);
+	public void playerUpdateFreedOffline(IPlayer p);
+	public void playerUpdateBed(IPlayer p);
+	public void playerDelete(IPlayer p);
+	public void playerAddOfflineMessage(IPlayer p, String message);
+	public void playerClearOfflineMessages(IPlayer p);
 	
 	
 	// Groups

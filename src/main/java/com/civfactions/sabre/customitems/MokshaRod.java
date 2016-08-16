@@ -9,7 +9,7 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
-import com.civfactions.sabre.SabrePlayer;
+import com.civfactions.sabre.IPlayer;
 import com.civfactions.sabre.SabrePlugin;
 import com.civfactions.sabre.blocks.SabreItemStack;
 import com.civfactions.sabre.cmd.pearl.CmdPearl;
@@ -20,7 +20,7 @@ public class MokshaRod extends SabreItemStack {
 	public static final String itemName = "Moksha Rod";
 	
 	private int strength;
-	private SabrePlayer boundPlayer;
+	private IPlayer boundPlayer;
 	
 	public MokshaRod() {
 		super(Material.BLAZE_ROD, itemName, 1);
@@ -52,7 +52,7 @@ public class MokshaRod extends SabreItemStack {
 	 * Gets the bound player
 	 * @return The bound player
 	 */
-	public SabrePlayer getPlayer() {
+	public IPlayer getPlayer() {
 		return this.boundPlayer;
 	}
 	
@@ -61,7 +61,7 @@ public class MokshaRod extends SabreItemStack {
 	 * Sets the bound player
 	 * @param boundPlayer The bound player
 	 */
-	public void setBoundPlayer(SabrePlayer boundPlayer) {
+	public void setBoundPlayer(IPlayer boundPlayer) {
 		this.boundPlayer = boundPlayer;
 		this.updateLore();
 	}

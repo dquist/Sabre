@@ -1,7 +1,7 @@
 package com.civfactions.sabre.cmd;
 
 import com.civfactions.sabre.Lang;
-import com.civfactions.sabre.SabrePlayer;
+import com.civfactions.sabre.IPlayer;
 
 public class CmdChatReply extends SabreCommand {
 
@@ -22,7 +22,7 @@ public class CmdChatReply extends SabreCommand {
 	@Override
 	public void perform() 
 	{
-		SabrePlayer p = me.getLastMessaged();
+		IPlayer p = me.getLastMessaged();
 		
 		if (p == null) {
 			msg(Lang.chatNoReply);

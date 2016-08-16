@@ -1,6 +1,7 @@
 package com.civfactions.sabre;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
@@ -16,14 +17,13 @@ import com.civfactions.sabre.blocks.BuildState;
 import com.civfactions.sabre.chat.IChatChannel;
 import com.civfactions.sabre.groups.SabreFaction;
 import com.civfactions.sabre.util.Guard;
-import com.civfactions.sabre.util.INamed;
 import com.civfactions.sabre.util.Permission;
 
 /**
  * Represents a player that has joined the server and may or may not be online
  * @author GFQ
  */
-public class SabrePlayer implements INamed, IChatChannel {
+public class SabrePlayer implements IPlayer {
 	
 	public static final String ADMIN_NODE = Permission.ADMIN.node;
 
@@ -55,7 +55,7 @@ public class SabrePlayer implements INamed, IChatChannel {
 	private IChatChannel chatChannel;
 	
 	// The player last messaged, used for replying
-	private SabrePlayer lastMessaged;
+	private IPlayer lastMessaged;
 	
 	// Pending offline messages for the player
 	private List<String> offlineMessages;
@@ -76,13 +76,13 @@ public class SabrePlayer implements INamed, IChatChannel {
 	private Location bedLocation;
 	
 	// Other players that are being ignored by this player
-	private Set<SabrePlayer> ignoredPlayers;
+	private Set<IPlayer> ignoredPlayers;
 	
 	// Players that are receiving prison pearl broadcast messages
-	private Set<SabrePlayer> bcastPlayers;
+	private Set<IPlayer> bcastPlayers;
 	
 	// The last player who requested a prison pearl broadcast
-	private SabrePlayer broadcastRequestPlayer;
+	private IPlayer broadcastRequestPlayer;
 	
 	
 	/**
@@ -111,8 +111,8 @@ public class SabrePlayer implements INamed, IChatChannel {
 		this.adminBypass = false;
 		this.vanished = false;
 		this.freedOffline = false;
-		this.ignoredPlayers = new HashSet<SabrePlayer>();
-		this.bcastPlayers = new HashSet<SabrePlayer>();
+		this.ignoredPlayers = new HashSet<IPlayer>();
+		this.bcastPlayers = new HashSet<IPlayer>();
 		this.broadcastRequestPlayer = null;
 		this.faction = null;
 	}
@@ -122,6 +122,7 @@ public class SabrePlayer implements INamed, IChatChannel {
 	 * Gets the player ID
 	 * @return The player ID
 	 */
+	@Override
 	public UUID getID() {
 		return this.uid;
 	}
@@ -131,6 +132,7 @@ public class SabrePlayer implements INamed, IChatChannel {
 	 * Gets the player name
 	 * @return The player name
 	 */
+	@Override
 	public String getName() {
 		return this.name;
 	}
@@ -157,6 +159,7 @@ public class SabrePlayer implements INamed, IChatChannel {
 	 * Gets the Bukkit player instance
 	 * @return The Bukkit player instance
 	 */
+	@Override
 	public Player getPlayer() {
 		return this.player;
 	}
@@ -166,6 +169,7 @@ public class SabrePlayer implements INamed, IChatChannel {
 	 * Sets the player instance
 	 * @param player The player instance
 	 */
+	@Override
 	public void setPlayer(Player player) {
 		this.player = player;
 	}
@@ -175,6 +179,7 @@ public class SabrePlayer implements INamed, IChatChannel {
 	 * Gets the player's faction
 	 * @return The player's faction
 	 */
+	@Override
 	public SabreFaction getFaction() {
 		return this.faction;
 	}
@@ -193,6 +198,7 @@ public class SabrePlayer implements INamed, IChatChannel {
 	 * Gets whether the player is online
 	 * @return true if the player is online
 	 */
+	@Override
 	public boolean isOnline() {
 		return player != null && player.isOnline();
 	}
@@ -202,6 +208,7 @@ public class SabrePlayer implements INamed, IChatChannel {
 	 * Gets the first login time
 	 * @return The first login time
 	 */
+	@Override
 	public Date getFirstLogin() {
 		return this.firstLogin;
 	}
@@ -222,6 +229,7 @@ public class SabrePlayer implements INamed, IChatChannel {
 	 * Gets the last login time
 	 * @return The first login time
 	 */
+	@Override
 	public Date getLastLogin() {
 		return this.lastLogin;
 	}
@@ -242,6 +250,7 @@ public class SabrePlayer implements INamed, IChatChannel {
 	 * Gets the number of days since last login
 	 * @return The number of days since last login
 	 */
+	@Override
 	public int getDaysSinceLastLogin() {
 		Date now = plugin.now();
 		long timeDiff = now.getTime() - lastLogin.getTime();
@@ -254,6 +263,7 @@ public class SabrePlayer implements INamed, IChatChannel {
 	 * Gets the total play time
 	 * @return The total play time
 	 */
+	@Override
 	public long getPlaytime() {
 		return this.playTime;
 	}
@@ -281,6 +291,7 @@ public class SabrePlayer implements INamed, IChatChannel {
 	 * Gets the auto-join status
 	 * @return The auto-join status
 	 */
+	@Override
 	public boolean getAutoJoin() {
 		return this.autoJoin;
 	}
@@ -299,6 +310,7 @@ public class SabrePlayer implements INamed, IChatChannel {
 	 * Gets the current chat channel
 	 * @return The current chat channel
 	 */
+	@Override
 	public IChatChannel getChatChannel() {
 		return this.chatChannel;
 	}
@@ -308,6 +320,7 @@ public class SabrePlayer implements INamed, IChatChannel {
 	 * Sets the chat channel
 	 * @param chatChannel The new chat channel
 	 */
+	@Override
 	public void setChatChannel(IChatChannel chatChannel) {
 		Guard.ArgumentNotNull(chatChannel, "chatChannel");
 		Guard.ArgumentNotEquals(chatChannel, "chatChannel", this, "self");
@@ -319,6 +332,7 @@ public class SabrePlayer implements INamed, IChatChannel {
 	/**
 	 * Sets the chat channel to global chat
 	 */
+	@Override
 	public void moveToGlobalChat() {
 		this.chatChannel = plugin.getGlobalChat();
 	}
@@ -328,7 +342,8 @@ public class SabrePlayer implements INamed, IChatChannel {
 	 * Sets the last messaged player
 	 * @return The last messaged player
 	 */
-	public SabrePlayer getLastMessaged() {
+	@Override
+	public IPlayer getLastMessaged() {
 		return this.lastMessaged;
 	}
 	
@@ -337,7 +352,8 @@ public class SabrePlayer implements INamed, IChatChannel {
 	 * Sets the last messaged player
 	 * @param lastMessaged The last messaged player
 	 */
-	public void setLastMessaged(SabrePlayer lastMessaged) {		
+	@Override
+	public void setLastMessaged(IPlayer lastMessaged) {		
 		this.lastMessaged = lastMessaged;
 	}
 	
@@ -346,6 +362,7 @@ public class SabrePlayer implements INamed, IChatChannel {
 	 * Gets the ban status
 	 * @param banned Whether the player is banned
 	 */
+	@Override
 	public boolean getBanned() {
 		return this.banned;
 	}
@@ -364,6 +381,7 @@ public class SabrePlayer implements INamed, IChatChannel {
 	 * Gets the ban message
 	 * @param The ban message
 	 */
+	@Override
 	public String getBanMessage() {
 		return this.banMessage;
 	}
@@ -384,6 +402,7 @@ public class SabrePlayer implements INamed, IChatChannel {
 	 * @param str
 	 * @param args
 	 */
+	@Override
 	public void msg(String str, Object... args) {
 		Guard.ArgumentNotNull(str, "str");
 		
@@ -402,7 +421,7 @@ public class SabrePlayer implements INamed, IChatChannel {
 	 * @param msg The message
 	 */
 	@Override
-	public void chat(SabrePlayer sender, String msg) {
+	public void chat(IPlayer sender, String msg) {
 		Guard.ArgumentNotNull(sender, "sender");
 		Guard.ArgumentNotNull(msg, "msg");
 		
@@ -437,7 +456,7 @@ public class SabrePlayer implements INamed, IChatChannel {
 	
 	
 	@Override
-	public void chatMe(SabrePlayer sender, String msg) {		
+	public void chatMe(IPlayer sender, String msg) {		
 		Guard.ArgumentNotNull(sender, "sender");
 		Guard.ArgumentNotNull(msg, "msg");
 		
@@ -459,7 +478,8 @@ public class SabrePlayer implements INamed, IChatChannel {
 	 * @param p The player to check
 	 * @return The distance the players are away from each other
 	 */
-	public int getDistanceFrom(SabrePlayer other) {
+	@Override
+	public int getDistanceFrom(IPlayer other) {
 		Guard.ArgumentNotNull(other, "other");
 		
 		if (!isOnline() || !other.isOnline()) {
@@ -477,7 +497,8 @@ public class SabrePlayer implements INamed, IChatChannel {
 	 * Gets the offline messages for the player
 	 * @return The offline messages
 	 */
-	public List<String> getOfflineMessages() {
+	@Override
+	public Collection<String> getOfflineMessages() {
 		return this.offlineMessages;
 	}
 	
@@ -497,6 +518,7 @@ public class SabrePlayer implements INamed, IChatChannel {
 	 * Gets the build state
 	 * @return The current build state
 	 */
+	@Override
 	public BuildState getBuildState() {
 		return this.buildState;
 	}
@@ -506,6 +528,7 @@ public class SabrePlayer implements INamed, IChatChannel {
 	 * Gets the admin bypass status
 	 * @return true if bypass is enabled
 	 */
+	@Override
 	public boolean getAdminBypass() {
 		return this.adminBypass;
 	}
@@ -515,6 +538,7 @@ public class SabrePlayer implements INamed, IChatChannel {
 	 * Sets the ban status
 	 * @param adminBypass The new bypass state
 	 */
+	@Override
 	public void setAdminBypass(boolean adminBypass) {
 		this.adminBypass = adminBypass;
 	}
@@ -524,6 +548,7 @@ public class SabrePlayer implements INamed, IChatChannel {
 	 * Gets the admin vanished status
 	 * @return true if the player is vanished
 	 */
+	@Override
 	public boolean getVanished() {
 		return this.vanished;
 	}
@@ -533,6 +558,7 @@ public class SabrePlayer implements INamed, IChatChannel {
 	 * Sets the vanished status
 	 * @param vanished The new vanished state
 	 */
+	@Override
 	public void setVanished(boolean vanished) {
 		this.vanished = vanished;
 	}
@@ -542,6 +568,7 @@ public class SabrePlayer implements INamed, IChatChannel {
 	 * Gets whether the player was freed offline
 	 * @return true if the player was freed offline
 	 */
+	@Override
 	public boolean getFreedOffline() {
 		return this.freedOffline;
 	}
@@ -560,6 +587,7 @@ public class SabrePlayer implements INamed, IChatChannel {
 	 * Gets the player bed location
 	 * @return the bed location
 	 */
+	@Override
 	public Location getBedLocation() {
 		return this.bedLocation;
 	}
@@ -579,7 +607,8 @@ public class SabrePlayer implements INamed, IChatChannel {
 	 * @param sp The player to set
 	 * @param ignored The ignored status
 	 */
-	public void setIgnored(SabrePlayer sp, boolean ignored) {
+	@Override
+	public void setIgnored(IPlayer sp, boolean ignored) {
 		Guard.ArgumentNotNull(sp, "sp");
 		
 		if (ignored && !ignoredPlayers.contains(sp)) {
@@ -594,7 +623,8 @@ public class SabrePlayer implements INamed, IChatChannel {
 	 * Gets whether a player is ignored
 	 * @return Whether the player is ignored
 	 */
-	public boolean isIgnoring(SabrePlayer sp) {
+	@Override
+	public boolean isIgnoring(IPlayer sp) {
 		Guard.ArgumentNotNull(sp, "sp");
 		
 		return ignoredPlayers.contains(sp);
@@ -605,8 +635,19 @@ public class SabrePlayer implements INamed, IChatChannel {
 	 * Gets the broadcasting players
 	 * @return The broadcast players
 	 */
-	public Set<SabrePlayer> getBcastPlayers() {
+	@Override
+	public Set<IPlayer> getBcastPlayers() {
 		return this.bcastPlayers;
+	}
+	
+	
+	/**
+	 * Adds a broadcast player
+	 * @param sp The broadcast player
+	 */
+	@Override
+	public void addBcastPlayer(IPlayer sp) {
+		this.bcastPlayers.add(sp);
 	}
 	
 	
@@ -614,7 +655,8 @@ public class SabrePlayer implements INamed, IChatChannel {
 	 * Gets the player requested to broadcast pearl location
 	 * @return the requested broadcast player
 	 */
-	public SabrePlayer getRequestedBcastPlayer() {
+	@Override
+	public IPlayer getRequestedBcastPlayer() {
 		return this.broadcastRequestPlayer;
 	}
 	
@@ -623,7 +665,8 @@ public class SabrePlayer implements INamed, IChatChannel {
 	 * Sets the requested broadcast player
 	 * @param broadcastRequestPlayer the requested broadcast player
 	 */
-	public void setRequestedBcastPlayer(SabrePlayer broadcastRequestPlayer) {
+	@Override
+	public void setRequestedBcastPlayer(IPlayer broadcastRequestPlayer) {
 		this.broadcastRequestPlayer = broadcastRequestPlayer;
 	}
 	
@@ -631,6 +674,7 @@ public class SabrePlayer implements INamed, IChatChannel {
 	/**
 	 * Gets whether the player has admin permissions
 	 */
+	@Override
 	public boolean isAdmin() {
 		return isOnline() && player.hasPermission(ADMIN_NODE);
 	}
@@ -640,6 +684,7 @@ public class SabrePlayer implements INamed, IChatChannel {
 	 * @param l The location
 	 * @return True if successful
 	 */
+	@Override
 	public boolean teleport(Location location) {
 		Guard.ArgumentNotNull(location, "location");
 		

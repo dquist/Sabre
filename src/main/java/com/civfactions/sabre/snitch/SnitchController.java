@@ -6,7 +6,7 @@ import java.util.List;
 
 import org.bukkit.Location;
 
-import com.civfactions.sabre.SabrePlayer;
+import com.civfactions.sabre.IPlayer;
 import com.civfactions.sabre.blocks.AbstractController;
 import com.civfactions.sabre.cmd.snitch.CmdSnitch;
 
@@ -46,7 +46,7 @@ public class SnitchController extends AbstractController {
 	}
 	
 	
-	public static Location parseLocation(SabrePlayer p, boolean warn) {
+	public static Location parseLocation(IPlayer p, boolean warn) {
 		return parseControllerLocation(p, name, warn);
 	}
 }

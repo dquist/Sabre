@@ -5,7 +5,7 @@ import org.bukkit.Location;
 import org.bukkit.World;
 
 import com.civfactions.sabre.Lang;
-import com.civfactions.sabre.SabrePlayer;
+import com.civfactions.sabre.IPlayer;
 import com.civfactions.sabre.util.Permission;
 import com.civfactions.sabre.util.SabreUtil;
 
@@ -71,7 +71,7 @@ public class CmdTeleport extends SabreCommand {
 		} else {
 			String playerName = this.argAsString(0);
 			
-			SabrePlayer p = this.strAsPlayer(playerName);
+			IPlayer p = this.strAsPlayer(playerName);
 			if (p == null) {
 				me.msg(Lang.unknownPlayer, playerName);
 				return;

@@ -2,7 +2,7 @@ package com.civfactions.sabre.groups;
 
 import java.util.UUID;
 
-import com.civfactions.sabre.SabrePlayer;
+import com.civfactions.sabre.IPlayer;
 import com.civfactions.sabre.util.Guard;
 import com.civfactions.sabre.util.INamed;
 
@@ -13,7 +13,7 @@ import com.civfactions.sabre.util.INamed;
 public class SabreMember implements INamed {
 
 	private final SabreGroup group;
-	private final SabrePlayer player;
+	private final IPlayer player;
 	private Rank rank;
 	
 	/**
@@ -22,7 +22,7 @@ public class SabreMember implements INamed {
 	 * @param player The player instance
 	 * @param rank The player group rank
 	 */
-	public SabreMember(SabreGroup group, SabrePlayer player, Rank rank) {
+	public SabreMember(SabreGroup group, IPlayer player, Rank rank) {
 		Guard.ArgumentNotNull(group, "group");
 		Guard.ArgumentNotNull(player, "player");
 		Guard.ArgumentNotNull(rank, "rank");
@@ -37,7 +37,7 @@ public class SabreMember implements INamed {
 	 * Gets the player instance
 	 * @return The player instance
 	 */
-	public SabrePlayer getPlayer() {
+	public IPlayer getPlayer() {
 		return this.player;
 	}
 	

@@ -349,7 +349,7 @@ public class SabreConfig {
 	 * @param m The material to check
 	 * @return The reinforcement material instance
 	 */
-	public ReinforcementMaterial getReinforcementMaterial(SabrePlayer sp, Material m, short durability) {		
+	public ReinforcementMaterial getReinforcementMaterial(IPlayer sp, Material m, short durability) {		
 		for (ReinforcementMaterial r : reinforcementMaterials) {
 			if (r.material.equals(m) && r.durability == durability) {
 				if (!r.admin || sp.getPlayer().hasPermission(Permission.ADMIN.node)) {
@@ -366,7 +366,7 @@ public class SabreConfig {
 	 * @param m The material to check
 	 * @return The reinforcement material instance
 	 */
-	public ReinforcementMaterial getReinforcementMaterial(SabrePlayer sp, ItemStack is) {		
+	public ReinforcementMaterial getReinforcementMaterial(IPlayer sp, ItemStack is) {		
 		return getReinforcementMaterial(sp, is.getType(), is.getDurability());		
 	}
 	

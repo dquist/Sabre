@@ -11,7 +11,7 @@ import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 
-import com.civfactions.sabre.SabrePlayer;
+import com.civfactions.sabre.IPlayer;
 import com.civfactions.sabre.SabrePlugin;
 import com.civfactions.sabre.SabreTweaks;
 import com.mongodb.BasicDBObject;
@@ -184,7 +184,7 @@ public class SabreBlock {
 	 * @param p The player to check
 	 * @return true if the player can access it
 	 */
-	public boolean canPlayerAccess(SabrePlayer p) {
+	public boolean canPlayerAccess(IPlayer p) {
 		if (this.reinforcememnt != null) {
 			return this.reinforcememnt.getGroup().isMember(p);
 		}
@@ -197,7 +197,7 @@ public class SabreBlock {
 	 * @param p The player to check
 	 * @return true if the player can access it
 	 */
-	public boolean canPlayerModify(SabrePlayer p) {
+	public boolean canPlayerModify(IPlayer p) {
 		if (this.reinforcememnt != null) {
 			return this.reinforcememnt.getGroup().isBuilder(p);
 		}
@@ -305,7 +305,7 @@ public class SabreBlock {
 	 * Handles interaction
 	 * @param p The player interacting
 	 */
-	public void onInteract(PlayerInteractEvent e, SabrePlayer p) {
+	public void onInteract(PlayerInteractEvent e, IPlayer p) {
 		// Do nothing
 	}
 	
@@ -314,7 +314,7 @@ public class SabreBlock {
 	 * Handles interacting with a stick
 	 * @param p The player interacting
 	 */
-	public void onStickInteract(PlayerInteractEvent e, SabrePlayer p) {
+	public void onStickInteract(PlayerInteractEvent e, IPlayer p) {
 		// Do nothing
 	}
 	
@@ -324,7 +324,7 @@ public class SabreBlock {
 	 * @param p The player placing the block
 	 * @param e The event args
 	 */
-	public void onBlockPlaced(SabrePlayer p, BlockPlaceEvent e) {
+	public void onBlockPlaced(IPlayer p, BlockPlaceEvent e) {
 		// Do nothing
 	}
 	
@@ -334,7 +334,7 @@ public class SabreBlock {
 	 * @param p The player breaking the block
 	 * @param e The event args
 	 */
-	public void onBlockBreaking(SabrePlayer p, BlockBreakEvent e) {
+	public void onBlockBreaking(IPlayer p, BlockBreakEvent e) {
 		// Do nothing
 	}
 	
@@ -346,7 +346,7 @@ public class SabreBlock {
 	 * @param p The player that broke the block
 	 * @param e The event args
 	 */
-	public void onReinforcementBroken(SabrePlayer p, BlockBreakEvent e) {
+	public void onReinforcementBroken(IPlayer p, BlockBreakEvent e) {
 		// Do nothing
 	}
 	
@@ -357,7 +357,7 @@ public class SabreBlock {
 	 * @param p The player that broke the block
 	 * @param e The event args
 	 */
-	public void onBlockBroken(SabrePlayer p, BlockBreakEvent e) {
+	public void onBlockBroken(IPlayer p, BlockBreakEvent e) {
 		// Do nothing
 	}
 	

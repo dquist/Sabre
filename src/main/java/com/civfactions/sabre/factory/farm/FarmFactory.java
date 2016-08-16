@@ -11,7 +11,7 @@ import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 
-import com.civfactions.sabre.SabrePlayer;
+import com.civfactions.sabre.IPlayer;
 import com.civfactions.sabre.SabrePlugin;
 import com.civfactions.sabre.factory.BaseFactory;
 import com.civfactions.sabre.factory.recipe.FarmRecipe;
@@ -108,7 +108,7 @@ public class FarmFactory extends BaseFactory {
 	 * @param p The player interacting
 	 */
 	@Override
-	public void onStickInteract(PlayerInteractEvent e, SabrePlayer sp) {
+	public void onStickInteract(PlayerInteractEvent e, IPlayer sp) {
 		
 		Action a = e.getAction();
 		if (a == Action.RIGHT_CLICK_BLOCK) {
@@ -158,7 +158,7 @@ public class FarmFactory extends BaseFactory {
 	 * @param sp The player
 	 */
 	@Override
-	public void createController(SabrePlayer sp) {
+	public void createController(IPlayer sp) {
 		ItemStack is = (new FarmController(this)).toItemStack();
 		sp.getPlayer().getInventory().setItemInHand(is);
 	}

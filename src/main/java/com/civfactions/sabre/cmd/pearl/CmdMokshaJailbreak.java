@@ -1,7 +1,7 @@
 package com.civfactions.sabre.cmd.pearl;
 
 import com.civfactions.sabre.Lang;
-import com.civfactions.sabre.SabrePlayer;
+import com.civfactions.sabre.IPlayer;
 import com.civfactions.sabre.cmd.SabreCommand;
 import com.civfactions.sabre.customitems.MokshaRod;
 import com.civfactions.sabre.prisonpearl.PrisonPearl;
@@ -26,7 +26,7 @@ public class CmdMokshaJailbreak extends SabreCommand {
 			return;
 		}
 		
-		SabrePlayer p = rod.getPlayer();
+		IPlayer p = rod.getPlayer();
 		if (p == null) {
 			msg(Lang.pearlMokshaNotBound);
 			return;

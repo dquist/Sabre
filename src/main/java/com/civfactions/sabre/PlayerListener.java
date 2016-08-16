@@ -53,7 +53,7 @@ public class PlayerListener implements Listener {
 			return;
 		}
 		
-		SabrePlayer sp = pm.getPlayerById(e.getUniqueId());
+		IPlayer sp = pm.getPlayerById(e.getUniqueId());
 		if (sp != null && sp.getBanned()) {
 			e.setLoginResult(Result.KICK_BANNED);
 			String fullBanMessage = String.format("%s\n%s", Lang.youAreBanned, sp.getBanMessage());
@@ -112,7 +112,7 @@ public class PlayerListener implements Listener {
 	 * @param pThe player that is joining
 	 */
 	public void handlePlayerJoin(Player p) {
-		SabrePlayer sp = pm.getPlayerById(p.getUniqueId());
+		IPlayer sp = pm.getPlayerById(p.getUniqueId());
 		if (sp == null) {
 			// This player has never logged in before, make a new instance and spawn them
 			sp = pm.createNewPlayer(p);
@@ -140,7 +140,7 @@ public class PlayerListener implements Listener {
 	 * @param p The player that is disconnecting
 	 */
 	public void onPlayerDisconnect(Player p) {
-		SabrePlayer sp = pm.getPlayerById(p.getUniqueId());
+		IPlayer sp = pm.getPlayerById(p.getUniqueId());
 		
 		// Removes the player from the online list
 		pm.onPlayerDisconnect(sp);
@@ -174,7 +174,7 @@ public class PlayerListener implements Listener {
 		 try {
 	        e.setCancelled(true);
 	        
-	        SabrePlayer p = pm.getPlayerById(e.getPlayer().getUniqueId());
+	        IPlayer p = pm.getPlayerById(e.getPlayer().getUniqueId());
 	        
 	        IChatChannel channel = p.getChatChannel();
 	        if (channel == null) {
@@ -201,7 +201,7 @@ public class PlayerListener implements Listener {
 	 */
 	@EventHandler(priority=EventPriority.LOWEST, ignoreCancelled = true)
 	public void onPlayerRespawn(PlayerRespawnEvent e) {
-		SabrePlayer sp = pm.getPlayerById(e.getPlayer().getUniqueId());
+		IPlayer sp = pm.getPlayerById(e.getPlayer().getUniqueId());
 		e.setRespawnLocation(plugin.getSpawner().spawnPlayerBed(sp));
 	}
 	
@@ -212,7 +212,7 @@ public class PlayerListener implements Listener {
 	 */
 	@EventHandler(priority=EventPriority.HIGHEST, ignoreCancelled = true)
 	public void onPlayerInteract(PlayerInteractEvent e) {
-		SabrePlayer p = pm.getPlayerById(e.getPlayer().getUniqueId());
+		IPlayer p = pm.getPlayerById(e.getPlayer().getUniqueId());
 		
 		Action a = e.getAction();
 		if (a.equals(Action.RIGHT_CLICK_BLOCK) && e.getClickedBlock().getType().equals(Material.BED_BLOCK)) {
@@ -237,7 +237,7 @@ public class PlayerListener implements Listener {
         
         Player p = (Player)e.getEntity();
         
-        SabrePlayer sp = pm.getPlayerByName(p.getName());
+        IPlayer sp = pm.getPlayerByName(p.getName());
         if (sp == null) {
         	return;
         }

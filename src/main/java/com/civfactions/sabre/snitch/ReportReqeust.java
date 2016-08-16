@@ -11,7 +11,7 @@ import org.bukkit.ChatColor;
 import org.bukkit.Material;
 
 import com.civfactions.sabre.PlayerManager;
-import com.civfactions.sabre.SabrePlayer;
+import com.civfactions.sabre.IPlayer;
 import com.civfactions.sabre.SabrePlugin;
 import com.civfactions.sabre.data.IDataAccess;
 
@@ -19,7 +19,7 @@ public class ReportReqeust implements Runnable {
 
 	private final IDataAccess db;
 	private final PlayerManager pm;
-	private final SabrePlayer p;
+	private final IPlayer p;
 	private final Snitch snitch;
 	private final int page;
 	
@@ -29,7 +29,7 @@ public class ReportReqeust implements Runnable {
 	private List<SnitchLogEntry> reportItems;
 	private  String output = "";
 	
-	public ReportReqeust(IDataAccess db, PlayerManager pm, SabrePlayer p, Snitch snitch, int page) {
+	public ReportReqeust(IDataAccess db, PlayerManager pm, IPlayer p, Snitch snitch, int page) {
 		this.db = db;
 		this.pm = pm;
 		this.p = p;
@@ -177,7 +177,7 @@ public class ReportReqeust implements Runnable {
 		try {
 			
 			String initiator = "?";
-			SabrePlayer p = pm.getPlayerById(entry.player);
+			IPlayer p = pm.getPlayerById(entry.player);
         	if (p != null) {
         		initiator = p.getName();
         	}
@@ -293,11 +293,11 @@ public class ReportReqeust implements Runnable {
 	 */
 	private class MessageWriter implements Runnable {
 
-		private final SabrePlayer p;
+		private final IPlayer p;
 		private final String message;
 		
 		
-		public MessageWriter(SabrePlayer p, String message) {
+		public MessageWriter(IPlayer p, String message) {
 			this.p = p;
 			this.message = message;
 		}

@@ -10,7 +10,7 @@ import org.bukkit.permissions.Permission;
 import com.civfactions.sabre.Lang;
 import com.civfactions.sabre.PlayerManager;
 import com.civfactions.sabre.SabreConfig;
-import com.civfactions.sabre.SabrePlayer;
+import com.civfactions.sabre.IPlayer;
 import com.civfactions.sabre.SabrePlugin;
 import com.civfactions.sabre.blocks.BlockManager;
 import com.civfactions.sabre.groups.GroupManager;
@@ -60,7 +60,7 @@ public abstract class SabreCommand
 	
 	// Information available on execution of the command
 	public CommandSender sender; // Will always be set
-	public SabrePlayer me; // Will only be set when the sender is a player
+	public IPlayer me; // Will only be set when the sender is a player
 	public boolean senderIsConsole;
 	public List<String> args; // Will contain the arguments, or and empty list if there are none.
 	public List<SabreCommand> commandChain = new ArrayList<SabreCommand>(); // The command chain used to execute this command
@@ -515,8 +515,8 @@ public abstract class SabreCommand
 	 * @param name The name to find
 	 * @return The best match player instance
 	 */
-	protected SabrePlayer strAsPlayer(String name) {
-		SabrePlayer ret = null;
+	protected IPlayer strAsPlayer(String name) {
+		IPlayer ret = null;
 
 		if (name != null) {
 			// Try to get exact player
@@ -551,7 +551,7 @@ public abstract class SabreCommand
 	 * @param index The argument index
 	 * @return The player instance
 	 */
-	protected SabrePlayer argAsPlayer(int index) {
+	protected IPlayer argAsPlayer(int index) {
 		return this.strAsPlayer(argAsString(index));
 	}
 	
@@ -562,7 +562,7 @@ public abstract class SabreCommand
 	 * @param name The group name
 	 * @return The group instance if it exists, otherwise null
 	 */
-	public SabreGroup checkGroupExists(SabrePlayer owner, String searchName, boolean searchSimilar) {
+	public SabreGroup checkGroupExists(IPlayer owner, String searchName, boolean searchSimilar) {
 		String groupName = searchName;
 		
 		// If the search name contains the '#' character, split up the group name and owner name
@@ -572,7 +572,7 @@ public abstract class SabreCommand
 				groupName = split[0];
 			}
 			if (split.length > 1) {
-				SabrePlayer searchOwner = pm.getPlayerByName(split[1]);
+				IPlayer searchOwner = pm.getPlayerByName(split[1]);
 				if (searchOwner != null) {
 					owner = searchOwner;
 				}

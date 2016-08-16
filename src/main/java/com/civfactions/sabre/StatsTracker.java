@@ -67,7 +67,7 @@ public class StatsTracker implements Runnable {
 		
 		long timeToAdd = System.currentTimeMillis() - lastUpdate;
 		
-		for (SabrePlayer p : pm.getOnlinePlayers()) {
+		for (IPlayer p : pm.getOnlinePlayers()) {
 			pm.addPlayTime(p, timeToAdd);
 		}
 		

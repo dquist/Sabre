@@ -5,7 +5,7 @@ import java.util.HashSet;
 import java.util.UUID;
 import java.util.logging.Level;
 
-import com.civfactions.sabre.SabrePlayer;
+import com.civfactions.sabre.IPlayer;
 import com.civfactions.sabre.SabrePlugin;
 import com.civfactions.sabre.chat.IChatChannel;
 import com.civfactions.sabre.util.Guard;
@@ -27,10 +27,10 @@ public class SabreGroup implements INamed, IChatChannel {
 	protected final HashSet<UUID> invited;
 	
 	// Players who have muted chat from this group - non-persistent 
-	protected final HashSet<SabrePlayer> mutedFromChat;
+	protected final HashSet<IPlayer> mutedFromChat;
 
 	// Players who have muted snitch reports from this group - non-persistent 
-	protected final HashSet<SabrePlayer> mutedFromSnitch;
+	protected final HashSet<IPlayer> mutedFromSnitch;
 	
 	private boolean isLocked;
 
@@ -50,8 +50,8 @@ public class SabreGroup implements INamed, IChatChannel {
 		this.members = new HashSet<SabreMember>();
 
 		this.invited = new HashSet<UUID>();
-		this.mutedFromChat = new HashSet<SabrePlayer>();
-		this.mutedFromSnitch = new HashSet<SabrePlayer>();
+		this.mutedFromChat = new HashSet<IPlayer>();
+		this.mutedFromSnitch = new HashSet<IPlayer>();
 		this.isLocked = true;
 	}
 
@@ -115,7 +115,7 @@ public class SabreGroup implements INamed, IChatChannel {
 	 * @param player The player
 	 * @return The group member instance
 	 */
-	public SabreMember getMember(SabrePlayer player) {
+	public SabreMember getMember(IPlayer player) {
 		Guard.ArgumentNotNull(player, "player");
 		
 		for (SabreMember m : members) {
@@ -133,7 +133,7 @@ public class SabreGroup implements INamed, IChatChannel {
 	 * @param player The new player to add
 	 * @throws Exception 
 	 */
-	public SabreMember addMember(SabrePlayer player, Rank rank) {
+	public SabreMember addMember(IPlayer player, Rank rank) {
 		Guard.ArgumentNotNull(player, "player");
 		Guard.ArgumentNotNull(rank, "rank");
 		
@@ -152,7 +152,7 @@ public class SabreGroup implements INamed, IChatChannel {
 	 * @param player The player to remove
 	 * @return The removed member
 	 */
-	public SabreMember removePlayer(SabrePlayer player) {
+	public SabreMember removePlayer(IPlayer player) {
 		Guard.ArgumentNotNull(player, "player");
 		
 		for (SabreMember m : members) {
@@ -193,7 +193,7 @@ public class SabreGroup implements INamed, IChatChannel {
 	 * Adds a new invited player
 	 * @param player The player to invite
 	 */
-	public void addInvited(SabrePlayer player) {
+	public void addInvited(IPlayer player) {
 		Guard.ArgumentNotNull(player, "player");
 		
 		this.addInvited(player.getID());
@@ -214,7 +214,7 @@ public class SabreGroup implements INamed, IChatChannel {
 	 * Removes an invited player
 	 * @param player The player to un-invite
 	 */
-	public void removeInvited(SabrePlayer player) {
+	public void removeInvited(IPlayer player) {
 		Guard.ArgumentNotNull(player, "player");
 		
 		removeInvited(player.getID());
@@ -226,7 +226,7 @@ public class SabreGroup implements INamed, IChatChannel {
 	 * @param player The player to check
 	 * @return true if the player has been invited to join this group
 	 */
-	public boolean isInvited(SabrePlayer player) {
+	public boolean isInvited(IPlayer player) {
 		Guard.ArgumentNotNull(player, "player");
 		
 		return invited.contains(player.getID());
@@ -238,7 +238,7 @@ public class SabreGroup implements INamed, IChatChannel {
 	 * @param player The player to check
 	 * @return true if the player is at least a member of the group
 	 */
-	public boolean isMember(SabrePlayer player) {
+	public boolean isMember(IPlayer player) {
 		Guard.ArgumentNotNull(player, "player");
 		
 		return getMember(player) != null;
@@ -250,7 +250,7 @@ public class SabreGroup implements INamed, IChatChannel {
 	 * @param player The player to check
 	 * @return true if the player is at least a builder of the group
 	 */
-	public boolean isBuilder(SabrePlayer player) {
+	public boolean isBuilder(IPlayer player) {
 		Guard.ArgumentNotNull(player, "player");
 		
 		return this.isRank(player, Rank.BUILDER);
@@ -262,7 +262,7 @@ public class SabreGroup implements INamed, IChatChannel {
 	 * @param player The player to check
 	 * @return true if the player is at least a group officer
 	 */
-	public boolean isOfficer(SabrePlayer player) {
+	public boolean isOfficer(IPlayer player) {
 		Guard.ArgumentNotNull(player, "player");
 		
 		return this.isRank(player, Rank.OFFICER);
@@ -274,7 +274,7 @@ public class SabreGroup implements INamed, IChatChannel {
 	 * @param player The player to check
 	 * @return true if the player is at least a particular rank
 	 */
-	public boolean isRank(SabrePlayer player, Rank rank) {
+	public boolean isRank(IPlayer player, Rank rank) {
 		Guard.ArgumentNotNull(player, "player");
 		Guard.ArgumentNotNull(rank, "rank");
 		
@@ -313,7 +313,7 @@ public class SabreGroup implements INamed, IChatChannel {
 	 * Transfers the group to a new owner
 	 * @param player The group owner
 	 */
-	public void transferTo(SabrePlayer player) {
+	public void transferTo(IPlayer player) {
 		Guard.ArgumentNotNull(player, "player");
 		
 		SabreMember owner = this.getOwner();
@@ -346,7 +346,7 @@ public class SabreGroup implements INamed, IChatChannel {
 		Guard.ArgumentNotNull(str, "str");
 		
 		for (SabreMember m : members) {
-			SabrePlayer p = m.getPlayer();
+			IPlayer p = m.getPlayer();
 			if (!p.isOnline() || (isChat && mutedFromChat.contains(p))) {
 				continue; // ignore muted players if chat
 			}
@@ -360,12 +360,12 @@ public class SabreGroup implements INamed, IChatChannel {
 		msgAll(formatStr, isChat);
 	}
 
-	public void msgAllBut(SabrePlayer player, String str, Object... args) {
+	public void msgAllBut(IPlayer player, String str, Object... args) {
 		Guard.ArgumentNotNull(player, "player");
 		Guard.ArgumentNotNull(str, "str");
 
 		for (SabreMember m : members) {
-			SabrePlayer p = m.getPlayer();
+			IPlayer p = m.getPlayer();
 			if (p.isOnline() && p != player) {
 				p.msg(str, args);
 			}
@@ -374,14 +374,14 @@ public class SabreGroup implements INamed, IChatChannel {
 
 
 	@Override
-	public void chat(SabrePlayer sender, String msg) {
+	public void chat(IPlayer sender, String msg) {
 		String formatStr = plugin.txt().parse("<c>[%s] <reset><gold>%s:<w> %s", this.getName(), sender.getName(), msg);
 		this.msgAll(formatStr, true);
 		plugin.logger().log(Level.INFO, formatStr);
 	}
 	
 	@Override
-	public void chatMe(SabrePlayer sender, String msg) {		
+	public void chatMe(IPlayer sender, String msg) {		
 		String formatStr = plugin.txt().parse("<c>[%s] <gold><it>%s %s", this.getName(), sender.getName(), msg);
 		this.msgAll(formatStr, true);
 		plugin.logger().log(Level.INFO, formatStr);
@@ -397,7 +397,7 @@ public class SabreGroup implements INamed, IChatChannel {
 		Guard.ArgumentNotNull(str, "str");
 		
 		for (SabreMember m : members) {
-			SabrePlayer p = m.getPlayer();
+			IPlayer p = m.getPlayer();
 			if (p.isOnline() && !mutedFromSnitch.contains(p)) {
 				p.msg(str, args);
 			}
@@ -409,7 +409,7 @@ public class SabreGroup implements INamed, IChatChannel {
 	 * Mutes the group chat for a player
 	 * @param sp The player that is muting the group
 	 */
-	public void setChatMutedBy(SabrePlayer sp, boolean muted) {
+	public void setChatMutedBy(IPlayer sp, boolean muted) {
 		Guard.ArgumentNotNull(sp, "sp");
 		
 		if (muted && !mutedFromChat.contains(sp)) {
@@ -425,7 +425,7 @@ public class SabreGroup implements INamed, IChatChannel {
 	 * @param sp The player to check
 	 * @return true if the group is muted by the player
 	 */
-	public boolean isChatMutedBy(SabrePlayer sp) {
+	public boolean isChatMutedBy(IPlayer sp) {
 		Guard.ArgumentNotNull(sp, "sp");
 		
 		return this.mutedFromChat.contains(sp);
@@ -436,7 +436,7 @@ public class SabreGroup implements INamed, IChatChannel {
 	 * Mutes the group chat for a player
 	 * @param sp The player that is muting the group
 	 */
-	public void setSnitchMutedBy(SabrePlayer sp, boolean muted) {
+	public void setSnitchMutedBy(IPlayer sp, boolean muted) {
 		Guard.ArgumentNotNull(sp, "sp");
 		
 		if (muted && !mutedFromSnitch.contains(sp)) {
@@ -452,7 +452,7 @@ public class SabreGroup implements INamed, IChatChannel {
 	 * @param sp The player to check
 	 * @return true if the group snitches are muted by the player
 	 */
-	public boolean isSnitchMutedBy(SabrePlayer sp) {
+	public boolean isSnitchMutedBy(IPlayer sp) {
 		Guard.ArgumentNotNull(sp, "sp");
 		
 		return this.mutedFromSnitch.contains(sp);

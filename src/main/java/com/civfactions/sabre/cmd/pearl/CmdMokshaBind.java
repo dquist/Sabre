@@ -1,7 +1,7 @@
 package com.civfactions.sabre.cmd.pearl;
 
 import com.civfactions.sabre.Lang;
-import com.civfactions.sabre.SabrePlayer;
+import com.civfactions.sabre.IPlayer;
 import com.civfactions.sabre.cmd.SabreCommand;
 import com.civfactions.sabre.customitems.MokshaRod;
 
@@ -24,11 +24,10 @@ public class CmdMokshaBind extends SabreCommand {
 	{
 		MokshaRod rod = MokshaRod.getRodFromItem(me.getPlayer().getItemInHand());
 		if (rod == null) {
-			msg(Lang.pearlNotHoldingMoksha);
 			return;
 		}
 		
-		SabrePlayer p = this.argAsPlayer(0);
+		IPlayer p = this.argAsPlayer(0);
 		if (p == null) {
 			msg(Lang.unknownPlayer, this.argAsString(0));
 			return;

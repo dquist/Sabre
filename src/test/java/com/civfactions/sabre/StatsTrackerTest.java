@@ -37,7 +37,7 @@ public class StatsTrackerTest {
 		
 		pm = mock(PlayerManager.class);
 		
-		ArrayList<SabrePlayer> onlinePlayers = new ArrayList<SabrePlayer>();
+		ArrayList<IPlayer> onlinePlayers = new ArrayList<IPlayer>();
 		onlinePlayers.add(mock(SabrePlayer.class));
 		onlinePlayers.add(mock(SabrePlayer.class));
 		when(pm.getOnlinePlayers()).thenReturn(onlinePlayers);

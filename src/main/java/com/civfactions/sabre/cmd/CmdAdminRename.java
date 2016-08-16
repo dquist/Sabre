@@ -1,7 +1,7 @@
 package com.civfactions.sabre.cmd;
 
 import com.civfactions.sabre.Lang;
-import com.civfactions.sabre.SabrePlayer;
+import com.civfactions.sabre.IPlayer;
 
 
 public class CmdAdminRename extends SabreCommand {
@@ -23,7 +23,7 @@ public class CmdAdminRename extends SabreCommand {
 		String playerName = this.argAsString(0);
 		String newName = this.argAsString(1);
 		
-		SabrePlayer p = pm.getPlayerByName(playerName);
+		IPlayer p = pm.getPlayerByName(playerName);
 		
 		if (p == null) {
 			msg(Lang.unknownPlayer, playerName);
@@ -31,7 +31,7 @@ public class CmdAdminRename extends SabreCommand {
 		}
 		
 		// Try to get an exact match for the new name
-		SabrePlayer existing = pm.getPlayerByName(newName);
+		IPlayer existing = pm.getPlayerByName(newName);
 		
 		if (existing != null && !p.equals(existing)) {
 			msg(Lang.adminNameExists, newName);

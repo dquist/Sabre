@@ -12,7 +12,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.util.Vector;
 
 import com.civfactions.sabre.Lang;
-import com.civfactions.sabre.SabrePlayer;
+import com.civfactions.sabre.IPlayer;
 import com.civfactions.sabre.SabrePlugin;
 import com.civfactions.sabre.blocks.Reinforcement;
 import com.civfactions.sabre.customitems.SpecialBlock;
@@ -25,7 +25,7 @@ public class Snitch extends SpecialBlock implements QTBox, Comparable {
 	private String name;
 	private boolean notifies;
 	private UUID placedById;
-	private SabrePlayer placedBy;
+	private IPlayer placedBy;
 	private Date placedOn;
 	private UUID ID; 
 
@@ -173,7 +173,7 @@ public class Snitch extends SpecialBlock implements QTBox, Comparable {
 	 * Gets the player to placed the snitch
 	 * @return The player who placed it
 	 */
-	public SabrePlayer getPlacedBy() {
+	public IPlayer getPlacedBy() {
 		if (placedBy == null) {
 			placedBy =SabrePlugin.instance().getPlayerManager().getPlayerById(placedById);
 		}
@@ -186,7 +186,7 @@ public class Snitch extends SpecialBlock implements QTBox, Comparable {
 	 * @return The name of the player if known
 	 */
 	public String getPlacedByName() {
-		SabrePlayer p = this.getPlacedBy();
+		IPlayer p = this.getPlacedBy();
 		if (p != null) {
 			return p.getName();
 		}
@@ -226,7 +226,7 @@ public class Snitch extends SpecialBlock implements QTBox, Comparable {
 	 * Handles the stick click event
 	 */
 	@Override
-	public void onStickInteract(PlayerInteractEvent e, SabrePlayer sp) {
+	public void onStickInteract(PlayerInteractEvent e, IPlayer sp) {
 		createSnitchController(sp);
 	}
 	
@@ -235,7 +235,7 @@ public class Snitch extends SpecialBlock implements QTBox, Comparable {
 	 * Creates a snitch controller from the held item
 	 * @param sp The player
 	 */
-	public void createSnitchController(SabrePlayer sp) {
+	public void createSnitchController(IPlayer sp) {
 		Reinforcement r = this.getReinforcement();
 		if (r != null && !r.getGroup().isMember(sp)) {
 			sp.msg(Lang.noPermission);
@@ -403,8 +403,8 @@ public class Snitch extends SpecialBlock implements QTBox, Comparable {
 	 * @param e The event args
 	 */
     @Override
-	public void onBlockBroken(SabrePlayer p, BlockBreakEvent e) {
-    	SabrePlayer sp = this.getPlacedBy();
+	public void onBlockBroken(IPlayer p, BlockBreakEvent e) {
+    	IPlayer sp = this.getPlacedBy();
     	String user = "?";
     	
     	if (sp != null) {

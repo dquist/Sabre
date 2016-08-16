@@ -26,7 +26,7 @@ import org.bukkit.event.player.PlayerQuitEvent;
 
 import com.civfactions.sabre.Lang;
 import com.civfactions.sabre.PlayerManager;
-import com.civfactions.sabre.SabrePlayer;
+import com.civfactions.sabre.IPlayer;
 import com.civfactions.sabre.SabrePlugin;
 import com.civfactions.sabre.blocks.BlockManager;
 import com.civfactions.sabre.blocks.Reinforcement;
@@ -65,7 +65,7 @@ public class SnitchListener implements Listener {
 	@EventHandler(priority = EventPriority.HIGHEST)
 	public void playerJoinEvent(PlayerJoinEvent e) {
 		
-		SabrePlayer sp = pm.getPlayerById(e.getPlayer().getUniqueId());
+		IPlayer sp = pm.getPlayerById(e.getPlayer().getUniqueId());
 		Location l = sp.getPlayer().getLocation();
 		
 		// Ignore vanished players
@@ -106,7 +106,7 @@ public class SnitchListener implements Listener {
 	 * @param event
 	 */
 	public void handlePlayerExit(PlayerEvent e) {
-		SabrePlayer sp = pm.getPlayerById(e.getPlayer().getUniqueId());
+		IPlayer sp = pm.getPlayerById(e.getPlayer().getUniqueId());
 		Location l = e.getPlayer().getLocation();
 		
 		// Ignore vanished players
@@ -182,7 +182,7 @@ public class SnitchListener implements Listener {
         }
         
         Player p = e.getPlayer();
-        SabrePlayer sp = pm.getPlayerById(e.getPlayer().getUniqueId());
+        IPlayer sp = pm.getPlayerById(e.getPlayer().getUniqueId());
         Location l = p.getLocation();
         String playerName = sp.getName();
         
@@ -241,7 +241,7 @@ public class SnitchListener implements Listener {
      */
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onInventoryOpenEvent(InventoryOpenEvent e) {
-		SabrePlayer sp = pm.getPlayerById(e.getPlayer().getUniqueId());
+		IPlayer sp = pm.getPlayerById(e.getPlayer().getUniqueId());
 		Location l = sp.getPlayer().getLocation();
 		
 		// Ignore vanished players
@@ -288,9 +288,9 @@ public class SnitchListener implements Listener {
         }
         
         // Need to get by name here since CombatTag entity doesn't keep UUID
-		SabrePlayer killed = pm.getPlayerByName(e.getEntity().getName());
+		IPlayer killed = pm.getPlayerByName(e.getEntity().getName());
 		String killerName = e.getEntity().getKiller().getName();
-		SabrePlayer killer = pm.getPlayerByName(killerName);
+		IPlayer killer = pm.getPlayerByName(killerName);
 
 		// Ignore vanished players
 		if (killer.getVanished()) {
@@ -319,7 +319,7 @@ public class SnitchListener implements Listener {
      */
     @EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
     public void playerBreakBlock(BlockBreakEvent e) {
-		SabrePlayer sp = pm.getPlayerById(e.getPlayer().getUniqueId());
+		IPlayer sp = pm.getPlayerById(e.getPlayer().getUniqueId());
         Block block = e.getBlock();
 		Location l = e.getBlock().getLocation();
 		
@@ -350,7 +350,7 @@ public class SnitchListener implements Listener {
      */
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void playerPlaceBlock(BlockPlaceEvent e) {
-		SabrePlayer sp = pm.getPlayerById(e.getPlayer().getUniqueId());
+		IPlayer sp = pm.getPlayerById(e.getPlayer().getUniqueId());
         Block block = e.getBlock();
 		Location l = e.getBlock().getLocation();
 		
@@ -381,7 +381,7 @@ public class SnitchListener implements Listener {
      */
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void playerFillBucket(PlayerBucketFillEvent e) {
-		SabrePlayer sp = pm.getPlayerById(e.getPlayer().getUniqueId());
+		IPlayer sp = pm.getPlayerById(e.getPlayer().getUniqueId());
         Block block = e.getBlockClicked();
 		Location l = block.getLocation();
 		
@@ -412,7 +412,7 @@ public class SnitchListener implements Listener {
      */
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void playerEmptyBucket(PlayerBucketEmptyEvent e) {
-		SabrePlayer sp = pm.getPlayerById(e.getPlayer().getUniqueId());
+		IPlayer sp = pm.getPlayerById(e.getPlayer().getUniqueId());
         Block block = e.getBlockClicked();
 		Location l = block.getLocation();
 		
