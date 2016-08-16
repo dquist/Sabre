@@ -12,37 +12,27 @@ import org.bukkit.entity.Player;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.powermock.api.mockito.PowerMockito;
-import org.powermock.core.classloader.annotations.PrepareForTest;
-import org.powermock.modules.junit4.PowerMockRunner;
 
 import com.civfactions.sabre.chat.GlobalChat;
 import com.civfactions.sabre.groups.SabreFaction;
 import com.civfactions.sabre.test.MockDataAccess;
 import com.civfactions.sabre.util.TextUtil;
 
-@RunWith(PowerMockRunner.class)
-@PrepareForTest({ SabrePlugin.class })
 public class PlayerManagerTest {
 	
 	private static SabrePlugin plugin;
 	private static MockDataAccess db;
 	
-	private static String p1name = "Player1";
-	private static String p2name = "Player2";
-	
-	private static SabrePlayer p1;
-	private static SabrePlayer p2;
+	private SabrePlayer p1;
+	private SabrePlayer p2;
 	
 	private PlayerManager pm;
 
 	@BeforeClass
 	public static void setUpClass() throws Exception {
-		plugin = PowerMockito.mock(SabrePlugin.class);
+		plugin = mock(SabrePlugin.class);
 		when(plugin.getGlobalChat()).thenReturn(mock(GlobalChat.class));
 		when(plugin.logger()).thenReturn(mock(SabreLogger.class));
-		when(plugin.getPlayerManager()).thenReturn(mock(PlayerManager.class));
 		when(plugin.txt()).thenReturn(new TextUtil());
 	}
 
@@ -51,22 +41,22 @@ public class PlayerManagerTest {
 		
 		db = spy(new MockDataAccess());
 		pm = spy(new PlayerManager(plugin, db));
+		when(plugin.getPlayerManager()).thenReturn(pm);
 		
 		Player mock1 = mock(Player.class);
-		when(mock1.getName()).thenReturn(p1name);
+		when(mock1.getName()).thenReturn("Player1");
 		when(mock1.getUniqueId()).thenReturn(UUID.randomUUID());
 		
 		Player mock2 = mock(Player.class);
-		when(mock2.getName()).thenReturn(p2name);
+		when(mock2.getName()).thenReturn("Player2");
 		when(mock2.getUniqueId()).thenReturn(UUID.randomUUID());
 		
-		p1 = pm.createNewPlayer(mock1);
-		p2 = pm.createNewPlayer(mock2);
+		p1 = spy(new SabrePlayer(plugin, mock1.getUniqueId(), "Player1"));
+		p1.setPlayer(mock1);
+		when(p1.getPlayer()).thenReturn(mock1);
 		
-		assertNotNull(p1);
-		assertNotNull(p2);
-		verify(db).playerInsert(p1);
-		verify(db).playerInsert(p2);
+		p2 = spy(new SabrePlayer(plugin, mock2.getUniqueId(), "Player2"));
+		p2.setPlayer(mock2);
 	}
 
 	@Test
@@ -95,6 +85,9 @@ public class PlayerManagerTest {
 
 	@Test
 	public void testRemovePlayer() {
+		db.players.add(p1);
+		pm.load();
+		
 		assertTrue(pm.getPlayers().contains(p1));
 		pm.removePlayer(p1);
 		verify(db).playerDelete(p1);
@@ -103,6 +96,10 @@ public class PlayerManagerTest {
 
 	@Test
 	public void testGetPlayerById() {
+		db.players.add(p1);
+		db.players.add(p2);
+		pm.load();
+		
 		assertEquals(pm.getPlayerById(p1.getID()), p1);
 		assertEquals(pm.getPlayerById(p2.getID()), p2);
 		assertNotEquals(pm.getPlayerById(p1.getID()), p2);
@@ -110,6 +107,10 @@ public class PlayerManagerTest {
 
 	@Test
 	public void testGetPlayerByName() {
+		db.players.add(p1);
+		db.players.add(p2);
+		pm.load();
+		
 		assertEquals(pm.getPlayerByName(p1.getName()), p1);
 		assertEquals(pm.getPlayerByName(p2.getName()), p2);
 		assertNotEquals(pm.getPlayerByName(p1.getName()), p2);
@@ -117,6 +118,9 @@ public class PlayerManagerTest {
 
 	@Test
 	public void testOnPlayerConnectDisconnect() {
+		db.players.add(p1);
+		pm.load();
+		
 		assertFalse(pm.getOnlinePlayers().contains(p1));
 		pm.onPlayerConnect(p1);
 		assertTrue(pm.getOnlinePlayers().contains(p1));

@@ -490,7 +490,6 @@ public class SabrePlayer implements INamed, IChatChannel {
 		Guard.ArgumentNotNullOrEmpty(message, "message");
 		
 		this.offlineMessages.add(message);
-		plugin.getPlayerManager().addOfflineMessage(this, message);
 	}
 	
 	
