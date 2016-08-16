@@ -1,16 +1,11 @@
 package com.civfactions.sabre.groups;
 import org.apache.commons.lang.NullArgumentException;
 import org.junit.*;
-import org.junit.runner.RunWith;
-import org.powermock.api.mockito.PowerMockito;
-import org.powermock.core.classloader.annotations.PrepareForTest;
-import org.powermock.modules.junit4.PowerMockRunner;
 
 import static org.junit.Assert.*;
 
 import java.util.UUID;
 
-import com.civfactions.sabre.PlayerManager;
 import com.civfactions.sabre.SabreLogger;
 import com.civfactions.sabre.SabrePlayer;
 import com.civfactions.sabre.SabrePlugin;
@@ -21,8 +16,6 @@ import com.civfactions.sabre.groups.SabreMember;
 
 import static org.mockito.Mockito.*;
 
-@RunWith(PowerMockRunner.class)
-@PrepareForTest({ SabrePlugin.class })
 public class SabreGroupTest {
 	
 	private static SabrePlugin plugin;
@@ -37,10 +30,9 @@ public class SabreGroupTest {
 	
 	@BeforeClass
 	public static void setUpClass() {		
-		plugin = PowerMockito.mock(SabrePlugin.class);
+		plugin = mock(SabrePlugin.class);
 		when(plugin.getGlobalChat()).thenReturn(mock(GlobalChat.class));
 		when(plugin.logger()).thenReturn(mock(SabreLogger.class));
-		when(plugin.getPlayerManager()).thenReturn(mock(PlayerManager.class));
 	}
 	
 	@Before

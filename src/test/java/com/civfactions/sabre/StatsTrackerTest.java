@@ -17,34 +17,29 @@ import static org.mockito.Mockito.*;
 import java.util.ArrayList;
 
 @RunWith(PowerMockRunner.class)
-@PrepareForTest({ SabrePlugin.class, Server.class })
+@PrepareForTest({ SabrePlugin.class })
 public class StatsTrackerTest {
 	
 	private static MockScheduler scheduler;
 	private static StatsTracker tracker;
 	private static PlayerManager pm;
 	
-	private static SabrePlayer player1;
-	private static SabrePlayer player2;
-	
 	@BeforeClass
 	public static void setUpClass() {
 		
 		scheduler = MockScheduler.create();
-		Server server = PowerMockito.mock(Server.class);
+		Server server = mock(Server.class);
 		when(server.getScheduler()).thenReturn(scheduler);
 		
+		// Need to use PowerMock because getServer() is a final method
 		SabrePlugin plugin = PowerMockito.mock(SabrePlugin.class);
 		when(plugin.getServer()).thenReturn(server);
 		
 		pm = mock(PlayerManager.class);
 		
-		player1 = mock(SabrePlayer.class);
-		player2 = mock(SabrePlayer.class);
-		
 		ArrayList<SabrePlayer> onlinePlayers = new ArrayList<SabrePlayer>();
-		onlinePlayers.add(player1);
-		onlinePlayers.add(player2);
+		onlinePlayers.add(mock(SabrePlayer.class));
+		onlinePlayers.add(mock(SabrePlayer.class));
 		when(pm.getOnlinePlayers()).thenReturn(onlinePlayers);
 		
         tracker = spy(new StatsTracker(plugin, pm));

@@ -10,17 +10,11 @@ import org.apache.commons.lang.NullArgumentException;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.powermock.api.mockito.PowerMockito;
-import org.powermock.core.classloader.annotations.PrepareForTest;
-import org.powermock.modules.junit4.PowerMockRunner;
 
 import com.civfactions.sabre.SabreLogger;
 import com.civfactions.sabre.SabrePlayer;
 import com.civfactions.sabre.SabrePlugin;
 
-@RunWith(PowerMockRunner.class)
-@PrepareForTest({ SabrePlugin.class })
 public class SabreMemberTest {
 	
 	private static SabrePlugin plugin;
@@ -37,7 +31,7 @@ public class SabreMemberTest {
 	
 	@BeforeClass
 	public static void setUpClass() {		
-		plugin = PowerMockito.mock(SabrePlugin.class);
+		plugin = mock(SabrePlugin.class);
 		when(plugin.logger()).thenReturn(mock(SabreLogger.class));
 	}
 
