@@ -23,8 +23,8 @@ public class PlayerManagerTest {
 	private static SabrePlugin plugin;
 	private static MockDataAccess db;
 	
-	private SabrePlayer p1;
-	private SabrePlayer p2;
+	private IPlayer p1;
+	private IPlayer p2;
 	
 	private PlayerManager pm;
 
@@ -51,12 +51,8 @@ public class PlayerManagerTest {
 		when(mock2.getName()).thenReturn("Player2");
 		when(mock2.getUniqueId()).thenReturn(UUID.randomUUID());
 		
-		p1 = spy(new SabrePlayer(plugin, mock1.getUniqueId(), "Player1"));
-		p1.setPlayer(mock1);
-		when(p1.getPlayer()).thenReturn(mock1);
-		
-		p2 = spy(new SabrePlayer(plugin, mock2.getUniqueId(), "Player2"));
-		p2.setPlayer(mock2);
+		p1 = pm.createNewPlayer(mock1);
+		p2 = pm.createNewPlayer(mock2);
 	}
 
 	@Test
@@ -67,27 +63,37 @@ public class PlayerManagerTest {
 		
 		try { new PlayerManager(plugin, null); } catch (Throwable ex) { e = ex; }
 		assertTrue(e instanceof NullArgumentException);
+		
+		try { pm.getOnlinePlayers().clear(); } catch (Throwable ex) { e = ex; }
+		assertTrue(e instanceof UnsupportedOperationException);
+		
+		try { pm.getOnlinePlayers().remove(p1); } catch (Throwable ex) { e = ex; }
+		assertTrue(e instanceof UnsupportedOperationException);
+		
+		try { pm.getPlayers().clear(); } catch (Throwable ex) { e = ex; }
+		assertTrue(e instanceof UnsupportedOperationException);
+		
+		try { pm.getPlayers().remove(p1); } catch (Throwable ex) { e = ex; }
+		assertTrue(e instanceof UnsupportedOperationException);
 	}
 
 	@Test
 	public void testLoad() {
-		db.players.add(p1);
+		SabrePlayer p3 = new SabrePlayer(plugin, UUID.randomUUID(), "P3");
+		db.players.add(p3);
+		
 		pm.load();
 		verify(db).playerGetAll();
 		assertTrue(pm.getPlayers().contains(p1));
 		
 		db.players.clear();
-		db.players.add(p2);
 		pm.load();
 		assertFalse(pm.getPlayers().contains(p1));
-		assertTrue(pm.getPlayers().contains(p2));
+		assertFalse(pm.getPlayers().contains(p2));
 	}
 
 	@Test
-	public void testRemovePlayer() {
-		db.players.add(p1);
-		pm.load();
-		
+	public void testRemovePlayer() {		
 		assertTrue(pm.getPlayers().contains(p1));
 		pm.removePlayer(p1);
 		verify(db).playerDelete(p1);
@@ -95,32 +101,21 @@ public class PlayerManagerTest {
 	}
 
 	@Test
-	public void testGetPlayerById() {
-		db.players.add(p1);
-		db.players.add(p2);
-		pm.load();
-		
+	public void testGetPlayerById() {		
 		assertEquals(pm.getPlayerById(p1.getID()), p1);
 		assertEquals(pm.getPlayerById(p2.getID()), p2);
 		assertNotEquals(pm.getPlayerById(p1.getID()), p2);
 	}
 
 	@Test
-	public void testGetPlayerByName() {
-		db.players.add(p1);
-		db.players.add(p2);
-		pm.load();
-		
+	public void testGetPlayerByName() {		
 		assertEquals(pm.getPlayerByName(p1.getName()), p1);
 		assertEquals(pm.getPlayerByName(p2.getName()), p2);
 		assertNotEquals(pm.getPlayerByName(p1.getName()), p2);
 	}
 
 	@Test
-	public void testOnPlayerConnectDisconnect() {
-		db.players.add(p1);
-		pm.load();
-		
+	public void testOnPlayerConnectDisconnect() {		
 		assertFalse(pm.getOnlinePlayers().contains(p1));
 		pm.onPlayerConnect(p1);
 		assertTrue(pm.getOnlinePlayers().contains(p1));

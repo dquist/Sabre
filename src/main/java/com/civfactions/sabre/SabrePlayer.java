@@ -28,6 +28,7 @@ public class SabrePlayer implements IPlayer {
 	public static final String ADMIN_NODE = Permission.ADMIN.node;
 
 	private final SabrePlugin plugin;
+	private final PlayerManager pm;
 	
 	// Unique ID of the player
 	private final UUID uid;
@@ -94,8 +95,10 @@ public class SabrePlayer implements IPlayer {
 		Guard.ArgumentNotNull(plugin, "plugin");
 		Guard.ArgumentNotNull(uid, "uid");
 		Guard.ArgumentNotNullOrEmpty(name, "name");
+		Guard.ArgumentNotNull(plugin.getPlayerManager(), "plugin.getPlayerManager()");
 		
 		this.plugin = plugin;
+		this.pm = plugin.getPlayerManager();
 		this.uid = uid;
 		this.name = name;
 		this.firstLogin = plugin.now();

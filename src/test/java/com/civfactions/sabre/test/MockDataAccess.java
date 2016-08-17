@@ -9,6 +9,7 @@ import java.util.stream.Collectors;
 
 import org.bukkit.Chunk;
 
+import com.civfactions.sabre.IPlayer;
 import com.civfactions.sabre.SabrePlayer;
 import com.civfactions.sabre.blocks.SabreBlock;
 import com.civfactions.sabre.data.IDataAccess;
@@ -54,44 +55,44 @@ public class MockDataAccess implements IDataAccess {
 	}
 
 	@Override
-	public void playerInsert(SabrePlayer p) {
-		players.add(p);
+	public void playerInsert(IPlayer p) {
+		players.add((SabrePlayer)p);
 	}
 
 	@Override
-	public void playerUpdateLastLogin(SabrePlayer p) { }
+	public void playerUpdateLastLogin(IPlayer p) { }
 
 	@Override
-	public void playerUpdateAutoJoin(SabrePlayer p) { }
+	public void playerUpdateAutoJoin(IPlayer p) { }
 
 	@Override
-	public void playerUpdateFaction(SabrePlayer p) { }
+	public void playerUpdateFaction(IPlayer p) { }
 
 	@Override
-	public void playerUpdateName(SabrePlayer p) { }
+	public void playerUpdateName(IPlayer p) { }
 
 	@Override
-	public void playerUpdateBan(SabrePlayer p) { }
+	public void playerUpdateBan(IPlayer p) { }
 
 	@Override
-	public void playerUpdatePlayTime(SabrePlayer p) { }
+	public void playerUpdatePlayTime(IPlayer p) { }
 
 	@Override
-	public void playerUpdateFreedOffline(SabrePlayer p) { }
+	public void playerUpdateFreedOffline(IPlayer p) { }
 
 	@Override
-	public void playerUpdateBed(SabrePlayer p) { }
+	public void playerUpdateBed(IPlayer p) { }
 
 	@Override
-	public void playerDelete(SabrePlayer p) {
+	public void playerDelete(IPlayer p) {
 		players.remove(p);
 	}
 
 	@Override
-	public void playerAddOfflineMessage(SabrePlayer p, String message) { }
+	public void playerAddOfflineMessage(IPlayer p, String message) { }
 
 	@Override
-	public void playerClearOfflineMessages(SabrePlayer p) { }
+	public void playerClearOfflineMessages(IPlayer p) { }
 
 	@Override
 	public Collection<SabreGroup> groupGetAll() {

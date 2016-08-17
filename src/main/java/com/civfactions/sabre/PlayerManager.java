@@ -1,8 +1,10 @@
 package com.civfactions.sabre;
 
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Set;
 import java.util.UUID;
 import java.util.logging.Level;
 import java.util.stream.Collectors;
@@ -363,11 +365,13 @@ public class PlayerManager {
 	}
 
 	public Collection<IPlayer> getPlayers() {
-		return this.players.values().stream().map(p -> (IPlayer)p).collect(Collectors.toList());
+		Set<IPlayer> players = this.players.values().stream().map(p -> (IPlayer)p).collect(Collectors.toSet());
+		return Collections.unmodifiableSet(players);
 	}
 
 
-	public Iterable<IPlayer> getOnlinePlayers() {
-		return this.onlinePlayers.values().stream().map(p -> (IPlayer)p).collect(Collectors.toList());
+	public Collection<IPlayer> getOnlinePlayers() {
+		Set<IPlayer> onlinePlayers = this.onlinePlayers.values().stream().map(p -> (IPlayer)p).collect(Collectors.toSet());
+		return Collections.unmodifiableSet(onlinePlayers);
 	}
 }
